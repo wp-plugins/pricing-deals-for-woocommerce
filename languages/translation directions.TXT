@@ -1,0 +1,5 @@
+plesae refer to the excellent tutorial at:
+
+http://www.inkthemes.com/how-to-create-a-po-file-of-your-themes-i-e-translation-of-wordpress-theme-in-multiple-languages/02/
+
+http://betterwp.net/wordpress-tips/create-pot-file-using-poedit/

@@ -1,0 +1,49 @@
+
+     #includeOrExclude_areaID
+     {margin: 10px 0 15px 20px;
+      padding: 10px;
+      background-color: #F9F9F9;
+      border-color: #CCCCCC;
+      border-radius: 3px 3px 3px 3px;
+      border-style: solid;
+      border-width: 1px;
+      font-size:1.1em; 
+      width:57%;   
+     }
+     #includeOrExclude-all {margin-left:20px;margin-bottom:20px;}
+     #includeOrExclude-checklist 
+     {margin-left:20px;
+      padding:10px 10px 15px 10px;
+      border-color: #CCCCCC;
+      border-radius: 3px 3px 3px 3px;
+      border-style: solid;
+      border-width: 1px;
+      width: 90%;
+     }
+     #includeOrExclude-area-title2 {margin-left:20px;}
+      /*   TOOLTIP stuff */
+      a.tooltip {color:#c00;/*float:left;*/margin:4px 6px 0 0;}
+      a.tooltip b {display:none;}
+      a.tooltip:hover {border:0; position:relative; z-index:500; text-decoration:none; cursor:pointer;}
+      a.tooltip:hover b {display:block; position:absolute; top:20px; left:-200px;/*left:5px;*/ padding:5px; font-weight:normal; color:#000; border:1px solid #888; background-color: #FFFFFF !important; width:250px;-moz-border-radius: 5px;border-radius: 5px;font-size:14px;}
+      a.tooltip:hover b em {position:absolute; left:20px; top:-6px; width:11px; height:6px; background:#fff url(tooltip.gif) 0 0; display:block; font-size:1px;}
+      a.tooltip .tooltip-underline:hover {text-decoration:underline;} 
+      a.tooltipWide:hover b {width:500px;background-color:#ccc;}  /*overrides normal tooltip width*/
+      a.tooltipTitleSpacing {margin: 0 0 0 20px;} /*overrides tooltip '?' margin location for title*/
+      
+     /*(inserted via js*/
+     div#vtprd-redirect {
+       background-color: #FFFFFF;
+       padding-bottom: 15px;
+       width: 100%;
+       margin-bottom: 15px; 
+     }
+     div#vtprd-redirect h3 {margin-bottom:10px;}
+     a#vtprd-redirect-anchor {font-weight:bold;padding:10px 0 10px 10px;}
+          
+    .helpImg {
+        height: 12px;
+        margin-left: 3px;
+        width: 12px;
+    }
+    .hideMe {display:none;}

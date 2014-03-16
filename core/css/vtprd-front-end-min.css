@@ -1,0 +1,34 @@
+             /* ************************ */
+            /*Theme Message CSS         */
+            /* ************************ */ 
+            
+            /* Checkout Table */
+            table.vtprd_shop_table th.product-name {
+              min-width: 190px;
+            }
+            table.vtprd_shop_table th.product-quantity {
+              min-width: 80px;
+              text-align:center;
+            }            
+            table.vtprd_shop_table th.product-subtotal {
+              min-width: 120px;
+            }
+            table.vtprd_shop_table td.product-quantity {
+              text-align:center;
+            }  
+          .vtprd-product-name-widget,
+          .vtprd-product-name-span {
+             color: #1982D1;
+          }
+          .vtprd-discount-msg-widget {
+             color: #555555;
+          }
+          .vtprd-rule_msg {
+            color: gray;
+          }
+          
+            
+            /*at checkout, block the 'remove' URL from appearing next to a pricing deal Deal!!*/
+            tr.coupon-deals a {display:none;}
+                    
+  /*  color: #85AD74;   */ 

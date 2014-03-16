@@ -1,0 +1,129 @@
+      .form-table th {
+          width: 350px;
+          padding: 10px 10px 20px 0;
+      }
+      .form-table td {
+          padding: 8px 30px;
+      }
+      #help-all {font-size: 12px; text-decoration:none; border: 1px solid #DFDFDF; padding:3px;}
+      #help-all span {font-style:normal; text-decoration:underline; font-weight:normal;}
+      .help-anchor {margin-left:15px;float:none;}
+      .help-text {
+          float:left;
+          display:none; 
+          font-style:italic; 
+          border: 1px solid #21759B;
+          padding: 5px;
+          box-shadow: 1px 1px 1px #AAAAAA;
+          border-radius: 0.2em 0.2em 0.2em 0.2em;
+          margin-top:10px;
+       }
+       .doc-text {
+       font-style:normal;
+       padding:15px;
+          border: 2px solid #21759B;
+          border-radius: 0.2em 0.2em 0.2em 0.2em;
+          box-shadow: 5px 5px 5px #AAAAAA;
+          margin-left: -30%;
+       }
+       .doc-anchor {margin-left:10px;}
+       h3 {margin-top:40px;color:#21759B;}
+       h4 {font-style:italic;color:gray;}
+      .form-table, h4 {margin-left:30px;font-size:14px;}
+       h4.displaySubTitle {margin-left: 0px; color:gray;}
+      #subTitle {margin-left:30px;margin-top:-10px;}
+      .form-table td p {width: 95%;margin-top: 10px;}
+      .smallText {width:35px;height:20px;}
+      .mediumText {width:160px;height:20px;}
+      select, .smallText, #discount_floor_pct_msg, #custom_checkout_css {border-color: #bbb !important;}  
+      .nuke_buttons  {color:red; margin-left:50px}
+      .nuke_buttons:hover  {cursor:pointer; font-weight:bold;}
+      
+      #system-info-title {float:left; margin-top:70px;}
+      .system-info-subtitle {clear:left;float:left;}
+      .system-info {float:left;margin-bottom:15px; margin-left:30px;}
+      .system-info-line {width:95%; float:left; margin-bottom:10px;}
+      .system-info-label {width:40%; float:left; font-style:italic;}
+      .system-info-data  {width:60%; float:left; font-weight:bold;} 
+      #custom_checkout_css, #lifetime_purchase_button_error_msg {width:500px;height:100px;}
+      
+      #system-buttons {margin-top:80px;}
+      .system-buttons-h4 {margin-top:25px;margin-bottom:5px;}
+      
+      
+        #gmtError {color:red !important;font-weight:bold;;margin-left: -20%;} 
+        
+        /*Back to the Top , in the resources metabox*/  
+        #floating-buttons {
+        -moz-box-sizing: border-box;
+        background: none repeat scroll 0 0 #CCC; 
+        border: 1px solid #000;
+        border-radius: 3px 3px 3px 3px;
+        bottom: -50px;
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+        display: block;
+        padding: 0px 10px 15px;
+        position: fixed;
+        right: 70px;
+        z-index: 100;
+        text-decoration: none;
+      }
+      #floating-buttons.show-buttons { bottom: 150px;}
+      span#floating-buttons.show-buttons p.submit {text-align:center;}
+      #floating-buttons:hover { box-shadow: 2px 2px 10px gray !important;}
+      .extra-intro {margin-left: -40%; margin-top: 40px !important;}
+
+      #vtprd-options-menu {
+          clear: both;
+          margin-left: 0;
+          margin-top: 10px;
+          padding: 1px 5px 5px 10px;
+          width: auto;
+      }      
+      #vtprd-options-menu ul {
+          list-style-type: none;
+          padding-top: 7px;
+      }
+      #vtprd-options-menu li {
+          display: inline;
+          margin: 0;
+          padding: 0;
+      }
+      #vtprd-options-menu a {
+          font-size: 9pt;
+          padding:  0.5em;
+          width: auto;
+        /*  background: linear-gradient(to top, #ECECEC, #F9F9F9) repeat scroll 0 0 #F1F1F1; */
+      }
+      #vtprd-options-menu span {
+          color: #202020;
+          font-size: 6pt;
+          /*margin: 0.5em;*/
+      }
+      #vtprd-options-menu a:hover {
+          color: green;
+      }
+      #pricing-deal-title-more, #pricing-deal-title-less { margin-bottom: 10px;font-size:1.2em;}
+      /*override panel css*/
+      div.selection-panel-0 {min-width: 90%;max-width: 95%;}
+      div.selection-panel-0 .vtprd-intro-info h4 { width: 90%;font-size:1.2em;}
+      /**/
+      #vtprd-set-gmt {background-color: #DDDDDD;
+          color: red;
+          font-size: 1.3em;
+          margin-top: 15px;
+          padding: 15px;
+          padding-right: 15px;
+       /*   width: 63%; */
+          }
+      #vtprd-note-with-set-gmt {padding:15px;color:black;text-decoration:none;font-size: 1.2em;}
+      #pricing-deal-title-more, #pricing-deal-title-less {margin-right: 9%;}
+      
+      /*override 'get pro' look*/
+      #upgrade-title-area .group-power-msg {font-weight: bold;margin-right: 9%;}
+      #upgrade-title-area .buy-button {
+        background-color: #28A4D7;
+        color: #FFFFFF;
+        opacity:1;
+        border: 1px solid #268A16;
+        }
