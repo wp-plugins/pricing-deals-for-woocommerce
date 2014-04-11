@@ -140,7 +140,7 @@ class VTPRD_Parent_Definitions {
         'purch_hist_product_qty_total'  => '',          
         'get_purchaser_info' => '',          
         'purch_hist_done' => '', 
-        'purchaser_ip_address' => $wpdb->escape($_SERVER['REMOTE_ADDR']),
+        'purchaser_ip_address' => esc_sql($_SERVER['REMOTE_ADDR']),
         'default_short_msg' => $default_short_msg,
         'default_full_msg'  => $default_full_msg
 

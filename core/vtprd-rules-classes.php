@@ -405,6 +405,7 @@ class VTPRD_Rule {
      public  $actionPop_rule_yousave_amt;
      public  $actionPop_rule_yousave_qty;
      public  $actionPop_rule_yousave_pct;
+     public  $end_of_actionPop_reached;
      
      public  $buy_amt_process_status;
  
@@ -531,6 +532,7 @@ class VTPRD_Rule {
 
      $this->amtSelectedOut; //quantity or currency 
      $this->actionPop_threshHold_amt;
+     $this->end_of_actionPop_reached;
           
      //******************************************
      //END actionPop 

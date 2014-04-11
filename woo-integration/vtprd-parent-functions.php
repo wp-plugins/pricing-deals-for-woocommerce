@@ -58,7 +58,7 @@
                   $vtprd_cart_item->db_unit_price          =  $vtprd_info['product_session_info']['product_unit_price'];
 
                   $vtprd_cart_item->db_unit_price_special  =  $vtprd_info['product_session_info']['product_special_price']; 
-                  $vtprd_cart_item->db_unit_price_list     =  $vtprd_info['product_session_info']['product_list_price'];
+                  $vtprd_cart_item->db_unit_price_list     =  $vtprd_info['product_session_info']['product_list_price'];     
               } else {              
               //vat_exempt seems to be the same as tax exempt, using the same field???
               //  how does this work with taxes included in price?
@@ -267,8 +267,8 @@
    //      $vtprd_cart->cart_items[0]->product_discount_price_html_woo = 
    //         '<del>' . $db_unit_price_list_html_woo . '</del><ins>' . $discount_price_html_woo . '</ins>'; 
       } else {
-         $db_unit_price_list_html_woo;
-         $discount_price_html_woo;
+         $db_unit_price_list_html_woo = '';
+         $discount_price_html_woo = '';
          $vtprd_cart->cart_items[0]->product_discount_price_html_woo = '';      
       }
 
@@ -1873,6 +1873,8 @@
       if ( ( ($current_time_in_seconds - $vtprd_info['product_session_info']['session_timestamp_in_seconds']) > '3600' ) ||     //session data older than 60 minutes
            (  $user_role != $vtprd_info['product_session_info']['user_role']) ) {    //current user role not the same as prev
         vtprd_apply_rules_to_single_product($product_id, $price);
+        //reset user role info, in case it changed
+        $vtprd_info['product_session_info']['user_role'] = $user_role;
       }         
     } else { 
        //First time obtaining the info, also moves the data to $vtprd_info       
@@ -1920,10 +1922,10 @@
       if ( ( ($current_time_in_seconds - $vtprd_info['product_session_info']['session_timestamp_in_seconds']) > '3600' ) ||     //session data older than 60 minutes
            (  $user_role != $vtprd_info['product_session_info']['user_role']) ) {    //current user role not the same as prev
         vtprd_apply_rules_to_single_product($product_id, $price);
+        //reset stored role to current
+        $vtprd_info['product_session_info']['user_role'] = $user_role;        
       }        
     }
-
-      return;
 
     return;
   }  
@@ -1988,6 +1990,8 @@
       if ( ( ($current_time_in_seconds - $vtprd_info['product_session_info']['session_timestamp_in_seconds']) > '3600' ) ||     //session data older than 60 minutes
            (  $user_role != $vtprd_info['product_session_info']['user_role']) ) {    //current user role not the same as prev
         vtprd_apply_rules_to_single_product($product_id, $price);
+        //reset stored role to current
+        $vtprd_info['product_session_info']['user_role'] = $user_role;        
       }        
     } else { 
        //First time obtaining the info, also moves the data to $vtprd_info       
@@ -2234,6 +2238,7 @@
   /* ************************************************
   **  Disable draggable metabox in the rule custom post type
   *************************************************** */
+/*
   function vtprd_disable_drag_metabox() {
      $screen = get_current_screen();
      if  ( 'vtprd-rule' == $screen->post_type ) { 
@@ -2241,11 +2246,14 @@
      }
   }
   add_action( 'admin_init', 'vtprd_disable_drag_metabox' ); 
+*/
   
   /* ************************************************
   **  Display DB queries, time spent and memory consumption  IF  debugging_mode_on
   *************************************************** */
+/*
   function vtprd_performance( $visible = false ) {
+    global  $vtprd_setup_options;
     if ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ){ 
       $stat = sprintf(  '%d queries in %.3f seconds, using %.2fMB memory',
           get_num_queries(),
@@ -2256,7 +2264,7 @@
     }
 }
  add_action( 'wp_footer', 'vtprd_performance', 20 );
- 
+*/ 
  
   /* ************************************************
   **  W# Total Cache Special Flush for Custom Post type

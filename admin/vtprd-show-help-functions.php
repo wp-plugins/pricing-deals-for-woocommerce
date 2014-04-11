@@ -2315,30 +2315,33 @@
    ?>                           
          <div class="hoverHelp hideMe"> 
             <?php vtprd_show_object_hover_small_text($context); ?> 
-            <div class="wizard-links clear-left">  
-              <a id="more-info1<?php echo '-' .$context; ?>"  target="_blank" class="wizard-more-info" href="<?php vtprd_get_more_info_url($context); ?>">
-                  <h3>More Info</h3>
-              </a>
-          </div>                     
+            <?php if ($context != 'hover-help') { //don't show buttons in this case ?>
+                <div class="wizard-links clear-left">  
+                  <a id="more-info1<?php echo '-' .$context; ?>"  target="_blank" class="wizard-more-info" href="<?php vtprd_get_more_info_url($context); ?>">
+                      <h4>More Info</h4>
+                  </a>
+                </div>  
+            <?php } ?>                     
          </div>
                  
    <?php 
       } else { ?>       
          <div class="wizardHelp wizardToolTip hideMe"> 
          
-            <?php vtprd_show_object_hover_wizard_text($context); ?>
-            
-            <div class="wizard-links clear-left">  
-                <a id="more-info2<?php echo '-' .$context; ?>"  target="_blank" class="wizard-more-info" href="<?php vtprd_get_more_info_url($context); ?>">
-                    <h3>More Info</h3>
-                </a>
-                 <!-- 
-                <span class="wizard-pipe">|</span> --> 
-                <a id="more-info<?php echo '-' .$context; ?>" class="wizard-turn-hover-help-off" href="javascript:void(0);">
-                    <h3>Turn off Hover Help Wizard</h3>
-                </a>           
-    
-            </div>          
+           <?php vtprd_show_object_hover_wizard_text($context); ?>
+              
+              <div class="wizard-links clear-left">  
+                  <a id="more-info2<?php echo '-' .$context; ?>"  target="_blank" class="wizard-more-info" href="<?php vtprd_get_more_info_url($context); ?>">
+                      <h4>More Info</h4>
+                  </a>
+                   <!-- 
+                  <span class="wizard-pipe">|</span> --> 
+                  <a id="more-info<?php echo '-' .$context; ?>" class="wizard-turn-hover-help-off" href="javascript:void(0);">
+                      <h4>Turn off Hover Help Wizard</h4>
+                  </a>           
+      
+              </div>  
+                 
          </div>                     
    <?php
     }  
@@ -2550,7 +2553,23 @@
 
           <?php             
         break; 
-                
+         
+      case 'hover-help':
+          ?>       
+            <p class="narrower-paragraph">
+               <ul class="">
+                  <li><em>- Turn on Hover Help Wizard</em></li> 
+                  <li>&nbsp;</li> 
+                  <li><b>Hover over the Label Names </li> 
+                  <li>&nbsp;&nbsp;&nbsp; in the Left Column</b></li> 
+                  <li>&nbsp;</li>
+                  <li>&nbsp;&nbsp;&nbsp; to see Hover Wizard Help</li>            
+               </ul> 
+            </p> 
+ 
+          <?php             
+        break;
+                           
       case 'rule-type-select':
           ?>  
           
@@ -3090,21 +3109,21 @@
                 <strong>What kind of Pricing Deal do you want to offer?</strong>
                <ul class="">
                   <li><em>Just Discount the Items</em>                
-                      <br>strong> - "10% Off All Laptops"</strong>
+                      <br><strong> - "10% Off All Laptops"</strong>
                   </li>
                   <li><em>Buy One Get One &nbsp;&nbsp;(Bogo)</em>                
-                      <br>strong> - "Buy 1 Apple, get 1 50% off"</strong>
-                      <br>strong> - "Buy a Laptop, get a mouse free"</strong>
+                      <br><strong> - "Buy 1 Apple, get 1 50% off"</strong>
+                      <br><strong> - "Buy a Laptop, get a mouse free"</strong>
                   </li>
                   <li><em>Package Pricing</em>                                     
-                      <br>strong> - "Buy 5 Apples for $5"</strong>
-                      <br>strong> - "Buy 5 Vegetables for the price of 4"</strong>
+                      <br><strong> - "Buy 5 Apples for $5"</strong>
+                      <br><strong> - "Buy 5 Vegetables for the price of 4"</strong>
                   </li> 
                   <li><em>Discount Cheapest / Most Expensive</em>                
-                      <br>strong> - "Buy 2 Laptops, get 20% off Most Expensive"</strong>
+                      <br><strong> - "Buy 2 Laptops, get 20% off Most Expensive"</strong>
                   </li>
                   <li><em>Whole Store / Catalog on Sale</em>                
-                      <br>strong> - (Just what it says!)</strong>
+                      <br><strong> - (Just what it says!)</strong>
                   </li>
               
                </ul>            
@@ -3198,7 +3217,7 @@
  
           <?php             
         break;
-        
+    
       case 'rule-type-select':
           ?>  
           

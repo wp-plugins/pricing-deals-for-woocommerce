@@ -1224,7 +1224,7 @@ action amt condition can be an amt or $$
         inpop and actionpop are treated as a single group ('sameAsInPop'), and the 'ball' bounces between them.
      //**********************************************************
         //logic from apply-rules.php:
-        switch( $vtprd_rules_set[$i]->inpop ) {
+        switch( $vtprd_rules_set[$i]->inPop ) {
           case 'wholeStore':
           case 'cart':        //in these cases, inpop/actionpop treated as 'sameAsInPop'                                                                               
               if ( ($vtprd_rules_set[$i]->actionPop == 'sameAsInPop') ||              

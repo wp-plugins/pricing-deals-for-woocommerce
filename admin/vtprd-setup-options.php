@@ -787,7 +787,33 @@ function vtprd_initialize_options() {
 			 __( 'HTML cart widget colspan value', 'vtprd' )
 		)
 	);
- */  
+ */ 
+ 
+  //****************************
+  //  Discount Catalog Display - Strikethrough
+  //****************************
+
+	// First, we register a section. This is necessary since all future options must belong to a 
+	add_settings_section(
+		'catalog_settings_section',			// ID used to identify this section and with which to register options
+		__( 'Catalog Price Display<span id="vtprd-catalog-options-anchor"></span>', 'vtprd' ),	// Title to be displayed on the administration page
+		array(&$this, 'vtprd_catalog_options_callback'),	// Callback used to render the description of the section
+		'vtprd_setup_options_page'		// Page on which to add this section of options
+	);
+
+ 
+    add_settings_field(	         //opt47
+		'show_catalog_price_crossout',						// ID used to identify the field throughout the theme
+		__( 'Show Catalog Discount Price Crossout', 'vtprd' ),	// The label to the left of the option interface element
+		array(&$this, 'vtprd_show_catalog_price_crossout_callback'), // The name of the function responsible for rendering the option interface
+		'vtprd_setup_options_page',	// The page on which this option will be displayed
+		'catalog_settings_section',			// The name of the section to which this field belongs
+		array(								// The array of arguments to pass to the callback. In this case, just a description.
+			 __( 'Do we show the original price with a crossout, followed by the sale price?', 'vtprd' )
+		)
+	);
+ 
+  
   //****************************
   //  Discount Messaging for Theme Area
   //****************************
@@ -1108,7 +1134,7 @@ function vtprd_set_default_options() {
           'max_purch_rule_lifetime_limit_by_shipto_name' => 'yes',  //opt17
           'max_purch_rule_lifetime_limit_by_shipto_addr' => 'yes',   //opt18                    
           'use_plugin_front_end_css'  => 'yes',  //opt19  allows the user to shut off msg css and put their own into their own theme
-          'use_this_timeZone'  => 'none',  //opt20 set store timezone relative to gmt 
+          'use_this_timeZone'  => 'keep',  //opt20 set store timezone relative to gmt 
 //          'nanosecond_delay_for_add_to_cart_processing' => '1000', //opt46 "1000" = 1 second
           'bogo_auto_add_the_same_product_type' => 'allAdds', //opt47  values: allAdds / fitInto
           'show_checkout_discount_details_grouped_by_what'  => 'rule',  //opt21
@@ -1136,7 +1162,8 @@ function vtprd_set_default_options() {
           'checkout_new_subtotal_line' => 'yes', //opt43  
           'checkout_new_subtotal_label' => 'Subtotal with Discount:', //opt44
           'cartWidget_new_subtotal_line' => 'yes', //opt45  
-          'cartWidget_new_subtotal_label' => 'Subtotal with Discount:' //opt46
+          'cartWidget_new_subtotal_label' => 'Subtotal with Discount:', //opt46
+          'show_catalog_price_crossout' => 'no' //opt47
      );
      return $options;
 }
@@ -1207,16 +1234,11 @@ function vtprd_nav_callback () {
     
     <?php 
     $options = get_option( 'vtprd_setup_options' );	
-    if ( $options['use_this_timeZone'] == 'none') {
+    /*  scaring the punters
+    if ( $options['use_this_timeZone'] == 'none') {  ...
+    */
     ?>
-      <div class="vtprd-error">
-        <h3 id="vtprd-set-gmt"><?php // _e('Web Host Time Zone initial setup: ', 'vtprd'); ?>
-          <a  href="#vtprd-system-options"  title="select"><?php _e('Please - Click Here - to Set the Store GMT Time Zone', 'vtprd'); ?></a>
-        </h3>       
-      </div>
-    <?php 
-    } 
-    ?>
+
     
          <div id="vtprd-options-menu">        
               <ul>                                                           
@@ -1224,17 +1246,22 @@ function vtprd_nav_callback () {
                   <b>JUMP TO: </b>
                 </li>
                 <li>
-                  <a href="#vtprd-checkout-reporting-anchor" title="Discount Checkout Display"><?php _e('Discount Checkout Display', 'vtprd'); ?></a>
+                  <a href="#vtprd-checkout-reporting-anchor" title="Discount Checkout Display"><?php _e('Checkout Display', 'vtprd'); ?></a>
                 </li>  
                 <span>|
                 </span>
                 <li>
-                  <a href="#vtprd-cartWidget-options-anchor" title="Discount Cart Widget Display"><?php _e('Discount Cart Widget Display', 'vtprd'); ?></a>
+                  <a href="#vtprd-cartWidget-options-anchor" title="Discount Cart Widget Display"><?php _e('Cart Widget Display', 'vtprd'); ?></a>
                 </li>  
                 <span>|
                 </span>
                 <li>
-                  <a href="#vtprd-discount-messaging-anchor" title="Discount Theme Messaging"><?php _e('Sell Your Deal Messages', 'vtprd'); ?></a>
+                  <a href="#vtprd-catalog-options-anchor" title="Discount Catalog Display"><?php _e('Catalog Price Display', 'vtprd'); ?></a>
+                </li>  
+                <span>|
+                </span>
+                <li>
+                  <a href="#vtprd-discount-messaging-anchor" title="Discount Theme Messaging"><?php _e('Messages', 'vtprd'); ?></a>
                 </li> 
                 <span>|
                 </span>                
@@ -1244,12 +1271,12 @@ function vtprd_nav_callback () {
                 <span>|
                 </span>
                 <li>
-                  <a href="#vtprd-lifetime-options-anchor" title="Lifetime Discount Options"><?php _e('Customer Rule Limit Options', 'vtprd'); ?></a>
+                  <a href="#vtprd-lifetime-options-anchor" title="Lifetime Discount Options"><?php _e('Customer Limit Options', 'vtprd'); ?></a>
                 </li>  
                 <span>|
                 </span>
                 <li>
-                  <a href="#vtprd-system-options-anchor" title="System and Debug Options"><?php _e('System and Debug Options', 'vtprd'); ?></a>
+                  <a href="#vtprd-system-options-anchor" title="System and Debug Options"><?php _e('System Options', 'vtprd'); ?></a>
                 </li>  
                 <span>|
                 </span>
@@ -1265,6 +1292,16 @@ function vtprd_nav_callback () {
               </ul>   
             </div>            
     <?php
+}
+
+function vtprd_catalog_options_callback () {
+                                          
+    ?>                                   
+    <h4 id="vtprd-discount-messaging"><?php esc_attr_e('These options control Catalog Discount Display in the Theme.', 'vtprd'); ?> 
+
+    </h4> 
+    <?php    
+    
 }
 
 function vtprd_general_options_callback () {
@@ -1343,6 +1380,25 @@ function vtprd_show_rule_msgs_callback () {   //opt36   documentation only, no s
 	echo $html;
 }
 
+
+function vtprd_show_catalog_price_crossout_callback () {   //opt47
+	$options = get_option( 'vtprd_setup_options' );	
+	$html = '<select id="show_catalog_price_crossout" name="vtprd_setup_options[show_catalog_price_crossout]">';	
+  $html .= '<option value="yes"' . selected( $options['show_catalog_price_crossout'], 'yes', false) . '>'   . __('Yes', 'vtprd') .  '&nbsp;</option>';
+  $html .= '<option value="no"'  . selected( $options['show_catalog_price_crossout'], 'no', false)  . '>'   . __('No', 'vtprd') . '</option>';
+	$html .= '</select>';
+  $html .= '<a id="help47" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
+  $html .= '<p><em>&nbsp;&nbsp;';
+  $html .= __('For a Catalog Template Rule, Do we show the original price with a crossout, followed by the sale price?', 'vtprd');
+  $html .=  '</em></p>';	
+  $html .= '<p id="help47-text" class = "help-text" >'; 
+  $html .= __('Useful if an item or group of items are on sale, independant of wholesale pricing...', 'vtprd'); 
+  $html .= '</p>';
+  
+	echo $html;
+}
+
+
 function vtprd_show_yousave_one_some_msg_callback () {   //opt34
 	$options = get_option( 'vtprd_setup_options' );	
 	$html = '<select id="show_yousave_one_some_msg" name="vtprd_setup_options[show_yousave_one_some_msg]">';	
@@ -1368,13 +1424,16 @@ function vtprd_show_yousave_one_some_msg_callback () {   //opt34
 
 function vtprd_use_this_timeZone_callback() {    //opt20                                 
 	$options = get_option( 'vtprd_setup_options' );	
-	if ( $options['use_this_timeZone'] == 'none') {
+	/*scares the punters
+  if ( $options['use_this_timeZone'] == 'none') {
       echo '<span id="gmtError">';
       echo __('Please Select the Store GMT Time Zone. Your Web Host Server can have a different date than your Store, which can throw off Pricing Deal Rules begin/end dates.', 'vtprd');
       echo '</span><br>'; 
   }
+  */
   $html = '<select id="use_this_timeZone" name="vtprd_setup_options[use_this_timeZone]">';
-	$html .= '<option value="none"'                   .  selected( $options['use_this_timeZone'], 'none', false)                    . '> &nbsp;&nbsp;' . __(' - Please Select the Store Time Zone - ', 'vtprd') . '</option>';
+//was scaring the punters
+//	$html .= '<option value="none"'                   .  selected( $options['use_this_timeZone'], 'none', false)                    . '> &nbsp;&nbsp;' . __(' - Please Select the Store Time Zone - ', 'vtprd') . '</option>';
   $html .= '<option value="keep"'                   .  selected( $options['use_this_timeZone'], 'keep', false)                    . '>' . __('Host Server already in the correct Time Zone', 'vtprd') . '</option>';
   $html .= '<option value="Europe/London"'          .  selected( $options['use_this_timeZone'], 'Europe/London', false)           . '>GMT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Europe/London</option>';
   $html .= '<option value="Europe/Paris"'           .  selected( $options['use_this_timeZone'], 'Europe/Paris', false)            . '>GMT+1 &nbsp;&nbsp;&nbsp; Europe/Paris</option>';

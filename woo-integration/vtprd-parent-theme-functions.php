@@ -1224,7 +1224,8 @@ function vtprd_the_product_price_display( $args = array() ) {
       
       //compute yousave_pct
       $computed_pct =  $vtprd_info['product_session_info']['product_discount_price'] /  $orig_price ;
-      $computed_pct_2decimals = bcdiv($vtprd_info['product_session_info']['product_discount_price'] , $orig_price , 2); 
+     // $computed_pct_2decimals = bcdiv($vtprd_info['product_session_info']['product_discount_price'] , $orig_price , 2); 
+      $computed_pct_2decimals = round( ($vtprd_info['product_session_info']['product_discount_price'] / $orig_price ) , 2); 
       $remainder = $computed_pct - $computed_pct_2decimals;
       if ($remainder > 0.005) {
         $yousave_pct = ($computed_pct_2decimals + .01) * 100;

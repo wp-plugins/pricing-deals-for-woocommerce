@@ -10,12 +10,13 @@ class VTPRD_Cart {
     public $yousave_cart_total_qty;
     public $yousave_cart_total_pct;
     public $cart_discount_subtotal;
-
+    public $error_messages; 
+    public $error_messages_processed;  
     
     public $current_processing_request_type; //at catalog display time 'display'/ cart processing 'cart'
         
     public $at_least_one_rule_actionPop_product_found;
-    //error messages at rule application time
+    
     public $cart_level_status;
     //flag to prevent multiple processing iterations
     public $cart_level_auditTrail_msg; 
@@ -104,7 +105,8 @@ class VTPRD_Cart_Item {
     public $rule_cat_list;
     public $prod_rule_include_only_list;  //from product screen
     public $prod_rule_exclusion_list;  //from product screen
-    
+    public $rule_applied_tracking; 
+       
     //used during rule process logic
     public $rules_changed_product_price_count; 
     public $cartAuditTrail;
@@ -145,7 +147,7 @@ class VTPRD_Cart_Item {
     $this->db_unit_price = 0.00;
     $this->db_unit_price_list = 0.00;
     $this->db_unit_price_special = 0.00;
-    $this->product_is_on_special;
+    $this->product_is_on_special; 
     
     //Running totals and processing switches
     $this->original_quantity = 0.00;

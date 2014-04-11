@@ -3489,8 +3489,8 @@ DITTO ie10!!
                                 //    at: 'bottom right' //points to where on the object
                                     
  
-                                    my: 'top center',  //location of pointer on tooltip
-                                    at: 'bottom center' //points to where on the object
+                                    my: 'top left',  //location of pointer on tooltip
+                                    at: 'bottom right' //points to where on the object
                                                                         
                                 }                                    
                                 

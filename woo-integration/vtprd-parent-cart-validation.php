@@ -87,8 +87,13 @@ class VTPRD_Parent_Cart_Validation {
     add_filter('woocommerce_price_html',                  array(&$this, 'vtprd_maybe_catalog_price_html'), 10, 2);
  
     add_filter('woocommerce_empty_price_html',            array(&$this, 'vtprd_maybe_catalog_price_html'), 10, 2);
-    
-    add_filter('woocommerce_cart_item_price_html',        array(&$this, 'vtprd_maybe_cart_item_price_html'), 10, 3); 
+
+    $current_version =  WOOCOMMERCE_VERSION;
+    if( (version_compare(strval('2.1.0'), strval($current_version), '>') == 1) ) {   //'==1' = 2nd value is lower     
+      add_filter('woocommerce_cart_item_price_html',        array(&$this, 'vtprd_maybe_cart_item_price_html'), 10, 3);
+    } else {
+      add_filter('woocommerce_cart_item_price',             array(&$this, 'vtprd_maybe_cart_item_price_html'), 10, 3);
+    }
 
     // =====================++++++++++
     add_filter('woocommerce_get_price',                   array(&$this, 'vtprd_maybe_get_price'), 10, 2);
@@ -451,7 +456,7 @@ class VTPRD_Parent_Cart_Validation {
         2nd-nth path length is as short as possible.        
   *************************************************** */
 	public function vtprd_get_product_catalog_price_new($price, $product_id = null){     //passed data from wpsc_price
-    global $post, $vtprd_info;
+    global $post, $vtprd_info, $vtprd_setup_options;
 
  //echo '001a in catalog_price_new' .'<br>';
 //			 wp_die( __('<strong>DIED in vtprd_get_product_catalog_price_new.</strong>', 'vtprd'), __('VT Pricing Deals not compatible - WP', 'vtprd'), array('back_link' => true));
@@ -515,7 +520,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 
 
 	public function vtprd_maybe_grouped_price_html($price_html, $product_info){   
-    global $post, $vtprd_info; 
+    global $post, $vtprd_info, $vtprd_setup_options; 
     
     //in place of is_admin, which doesn't work in AJAX...
      if ( function_exists( 'get_current_screen' ) ) {  // get_current_screen ONLY exists in ADMIN!!!   
@@ -594,9 +599,8 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
     }
  */
 
-    $use_crossouts = $this->vtprd_test_for_html_crossout_use();
     if ($vtprd_info['product_session_info']['product_discount_price'] > 0)  {
-      if ($use_crossouts) {
+      if ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes')  {
         $price_html = '<del>' . $vtprd_info['product_session_info']['product_list_price_html_woo']  . '</del><ins>' .$from. ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'] . '</ins>'; 
       } else {
         $price_html = $from. ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'];
@@ -610,7 +614,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 
 
 	public function vtprd_maybe_variable_sale_price_html($price_html, $product_info){    
-    global $post, $vtprd_info;
+    global $post, $vtprd_info, $vtprd_setup_options;
 
     //in place of is_admin, which doesn't work in AJAX...
      if ( function_exists( 'get_current_screen' ) ) {  // get_current_screen ONLY exists in ADMIN!!!   
@@ -690,9 +694,8 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
     }
  */
 
-    $use_crossouts = $this->vtprd_test_for_html_crossout_use();
     if ($vtprd_info['product_session_info']['product_discount_price'] > 0)  {
-      if ($use_crossouts) {
+      if ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes')  {
         $price_html = '<del>' . $vtprd_info['product_session_info']['product_list_price_html_woo']  . '</del><ins>' .$from.  ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'] . '</ins>'; 
       } else {
         $price_html = $from. ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'];
@@ -707,7 +710,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
   Used by AJAX to get variation prices during catalog display!!!
   */
 	public function vtprd_maybe_catalog_price_html($price_html, $product_info){    
-    global $post, $vtprd_info;
+    global $post, $vtprd_info, $vtprd_setup_options;
 
     //in place of is_admin, which doesn't work in AJAX...
      if ( function_exists( 'get_current_screen' ) ) {  // get_current_screen ONLY exists in ADMIN!!!   
@@ -755,9 +758,8 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 //return $price ; //mwnprice 
  
     $from = strstr($price_html, 'From') !== false ? ' From ' : ' '; 
-    $use_crossouts = $this->vtprd_test_for_html_crossout_use();
     if ($vtprd_info['product_session_info']['product_discount_price'] > 0)  {
-      if ($use_crossouts) {     
+      if ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes')  {     
         $price_html = '<del>' . $vtprd_info['product_session_info']['product_list_price_html_woo']  . '</del><ins>' .$from.  ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'] . '</ins>'; 
       } else {
         $price_html = $from.  ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'];
@@ -772,7 +774,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 
 	public function vtprd_maybe_cart_item_price_html($price_html, $cart_item, $cart_item_key){    
 //return 444; //mwnprice
-    global $post, $vtprd_info;
+    global $post, $vtprd_info, $vtprd_setup_options;
   /* 
      session_start();    //mwntest
     echo 'SESSION data <pre>'.print_r($_SESSION, true).'</pre>' ; 
@@ -801,10 +803,8 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
     //vtprd_maybe_get_discount_catalog_session_price($product_id, $price);
     vtprd_maybe_get_price_single_product($product_id, $price);
 
-    
-    $use_crossouts = $this->vtprd_test_for_html_crossout_use();
     if ($vtprd_info['product_session_info']['product_discount_price'] > 0)  {
-      if ($use_crossouts) {
+      if ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes')  {
         $price_html = '<del>' . $vtprd_info['product_session_info']['product_list_price_html_woo']  . '</del><ins>' . $vtprd_info['product_session_info']['product_discount_price_html_woo'] . '</ins>'; 
     } else {
         $price_html = $vtprd_info['product_session_info']['product_discount_price_html_woo'];
@@ -962,7 +962,10 @@ public function vtprd_get_product_catalog_price_add_to_cart( $product_id, $param
   *************************************************** */
 	public function vtprd_test_for_html_crossout_use(){
     global $vtprd_setup_options;
-    if ( $vtprd_setup_options['use_html_crossouts'] != 'yes') {
+    
+    //replaced by using this instead:  ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes') 
+    
+    if ( $vtprd_setup_options['show_catalog_price_crossout'] != 'yes') {
       return false;
     }
        
@@ -1166,15 +1169,6 @@ echo '$woocommerce->cart->applied_coupons= <pre>'.print_r($woocommerce->cart->ap
       $this->vtprd_maybe_clear_auto_add_session_vars();	
     }
  
-      
- //echo '<br>After Process Discount: FROM parent-cart-validation  function cart-updated<br>' ;
- //echo '$woocommerce= <pre>'.print_r($woocommerce, true).'</pre>' ;
-      session_start();       
- //echo '$_SESSION= <pre>'.print_r($_SESSION, true).'</pre>' ;
- //echo '$vtprd_cart= <pre>'.print_r($vtprd_cart, true).'</pre>' ; 
- //echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
-
-//wp_die( __('<strong>After Process Discount.</strong>', 'vtprd'), __('VT Pricing Deals not compatible - WP', 'vtprd'), array('back_link' => true));
 
       return;
       //return $cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data;
@@ -1258,7 +1252,8 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
           $do_nothing;
        } else {
           $woocommerce->cart->add_discount($coupon_title);
-          //Remove add coupons success msg if there...  otherwise it may display and confuse the customer 
+//echo '$woocommerce->messages BEFORE= <pre>'.print_r($woocommerce->messages, true).'</pre>' ;  
+          //Remove add coupons success msg if there...  otherwise it may display and confuse the customer => "Coupon code applied successfully"
           $coupon_succss_msg = __( 'Coupon code applied successfully.', 'vtprd' );
           $sizeof_messages = sizeof($woocommerce->messages);
           for($y=0; $y < $sizeof_messages; $y++) { 
@@ -1266,7 +1261,10 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
                 unset ( $woocommerce->messages[$y] );
                 break;
              }
-          }       
+          } 
+          
+//echo '$woocommerce->messages AFTER= <pre>'.print_r($woocommerce->messages, true).'</pre>' ;  
+                
        }
       
     } else {
@@ -1913,10 +1911,15 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
       *************************************************   */
       global $vtprd_rules_set, $vtprd_cart;
       
-       $data_chain = array();
-          
-      if ($vtprd_rules_set == '') {
+      //mwn0402
+      if (isset($_SESSION['data_chain'])) {
         $data_chain      = unserialize($_SESSION['data_chain']);
+      } else {
+        $data_chain = array();
+      }
+      
+          
+      if ($vtprd_rules_set == '') {        
         $vtprd_rules_set = $data_chain[0];
         $vtprd_cart      = $data_chain[1];
       }

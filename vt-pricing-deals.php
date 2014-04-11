@@ -3,18 +3,11 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.0
+Version: 1.0.1
 Author: Vark
 Author URI: http://varktech.com
 */
 
-/*
-== Changelog ==
-
-= 1.0 - 2014-03-15 =
-* Initial Public Release - beta
-
-*/
 /*  ******************* *******************
 =====================
 ASK YOUR HOST TO TURN OFF magic_quotes_gpc !!!!!
@@ -50,9 +43,9 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.0');
-    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2014-03-15');
+		define('VTPRD_VERSION',                               '1.0.1');
+    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.1');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2014-04-10');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
@@ -631,7 +624,8 @@ $vtprd_controller = new VTPRD_Controller;
 //has to be out here, accessing the plugin instance
 if (is_admin()){
   register_activation_hook(__FILE__, array($vtprd_controller, 'vtprd_activation_hook'));
-  register_uninstall_hook (__FILE__, array($vtprd_controller, 'vtprd_uninstall_hook'));
+//mwn0405
+//  register_uninstall_hook (__FILE__, array($vtprd_controller, 'vtprd_uninstall_hook'));
 }
 
   

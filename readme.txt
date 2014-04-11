@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/wp-e-commerce/pricing-deals-for-woocommerce
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 3.8.1
-Stable tag: 1.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -43,6 +43,12 @@ Pricing Deals does more than offer discounting functions:
 *   Pricing Deals of any sort, by Role/Membership
 *   Pretty much any deal you can think of, you’ll be able to do!
 
+[Visit the Documentation](http://www.varktech.com/documentation/pricing-deals/introrule/)
+
+= Pricing Deals is the Swiss Army Knife of Deals...  to focus on the basic functionality, try these plugins: =
+1. [Wholesale Pricing for WooCommerce](http://wordpress.org/extend/plugins/wholesale-pricing-for-woocommerce) .. (wholesale only - skinnier pricing deals plugin)
+1. [Cart Deals for WooCommerce](http://wordpress.org/extend/plugins/cart-deals-for-woocommerce)  .. (just the basic Cart discounts, please - skinnier pricing deals plugin)
+1. (Pricing Deals itself **already contains** the Wholesale Pricing and Cart Deals functionality)
 
 = The Details =
  
@@ -50,6 +56,9 @@ Pricing Deals is many plugins in one!
 
 *   *Catalog Pricing*
      - Show the discount in the catalog pricing. (by Logged-in Role (Wholesaler, Membership), Category, and others). 
+*   *Sale Pricing*
+     - Use a single rule to put an entire Category (or other group) on sale.  Just like having a sale price on a product, except
+     -    a single rule can apply to a big group, without updating each product individually!!!      
 *   *Cart Discounts*
      - Dynamic pricing in the cart, by just about any grouping or deal you can think of. 
 *   *Marketing*
@@ -110,6 +119,8 @@ The Pro version  gives you incredible control over rule groups - by category, pr
 
 
 = Additional Plugins by VarkTech.com =
+1. [Wholesale Pricing for WooCommerce](http://wordpress.org/extend/plugins/wholesale-pricing-for-woocommerce) .. (skinnier pricing deals plugin)
+1. [Cart Deals for WooCommerce](http://wordpress.org/extend/plugins/cart-deals-for-woocommerce) ..  (skinnier pricing deals plugin)
 1. [Minimum Purchase for WooCommerce](http://wordpress.org/extend/plugins/minimum-purchase-for-woocommerce)
 1. [Maximum Purchase for WooCommerce](http://wordpress.org/extend/plugins/maximum-purchase-for-woocommerce) 
 1. [Min or Max Purchase for WooCommerce](http://wordpress.org/extend/plugins/min-or-max-purchase-for-woocommerce)   
@@ -151,10 +162,29 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.1 - 2014-04-10 =
+* Fix - warning on install in front end if no rule
+* Fix - removed red notices to change host timezone on install
+* Fix - removed deprecated WOO hook
+* Fix - BOGO 'discount this' fix
+* Fix - replace bcdiv with round
+* Fix - BOGO missing method in free apply
+* Enhancement - reformatted the rule screen, hover help now applies to Label, rather than data field 
+
 = 1.0 - 2014-03-15 =
 * Initial Public Release
 
+
 == Upgrade Notice ==
+
+= 1.0.1 - 2014-04-10 =
+* Fix - warning on install in front end if no rule
+* Fix - removed red notices to change host timezone on install
+* Fix - removed deprecated WOO hook
+* Fix - BOGO 'discount this' fix
+* Fix - replace bcdiv with round
+* Fix - BOGO missing method in free apply
+* Enhancement - reformatted the rule screen, hover help now applies to Label, rather than data field 
 
 = 1.0 - 2014-03-15 =
 * Initial Public Release

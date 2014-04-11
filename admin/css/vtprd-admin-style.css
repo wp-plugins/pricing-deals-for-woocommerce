@@ -153,11 +153,13 @@
             .top-box  #wizard-select-area  select {
                 color: #666;
             }
+            
             #cart-or-catalog-select,
             #pricing-type-select,
             #minimum-purchase-select {
-                width: 415px !important;
+                width: 50%;
             }
+            
             #lower-screen-wrapper input {padding-left:2px;}
              #first-blue-line select,
             #second-blue-line select,
@@ -179,9 +181,11 @@
               border: 1px solid #0077BB;
              /* background-color: #F5F5F5;  */
               }    
+            /*
             select#minimum-purchase-select  {
             width: 100%;
             }
+            */
             #rule-type-info:hover,
             input:hover,
             textarea:hover {
@@ -193,7 +197,7 @@
             .top-box option {
                 color: #0077BB;
                 font-family: Arial,Helvetica,sans-serif;
-                font-size: 15px;
+               /* font-size: 15px;*/
                 font-weight: normal;
                 line-height: 1.6;
                 margin: 0;
@@ -236,7 +240,7 @@
             
             .blue-dropdown label {
                 color: #2D4F5D;
-                font-size: 12px;
+                font-size: 11px;
                /* text-transform: uppercase;  */
                 padding-bottom:2px;
                 padding-left: 2px;
@@ -249,14 +253,13 @@
             .scheduling-label {}
             .date-line {margin-left:2px;} 
             .scheduling-group {width: auto; margin-right:0px;}
-            #wizard-select-area {float: right; width: auto;}
+            #wizard-select-area {float: left; width: auto;margin-left: 20px;}
             #wizard-on-off-sw-select {margin-top:-2px;font-weight: normal;}
             .scheduling-label {margin-bottom:-5px;}
             .begin-date, .end-date {color:#517E99;} 
-            #rule-on-off-sw-select {
-               /* border: 1px solid #B7D8E7;
-                width: 100%; */
-            }
+            #rule-on-off-sw-select { margin-top:27px;}
+            #buy_group_filter_comment { margin-top:22px;}
+            #scheduling-label-item   { margin-top:24px;}
             .on-off-switch {
                float:left;
                margin-left:20px;
@@ -312,12 +315,12 @@
             .third-in-line-label {
               padding: 3px 2px 0 0;
             } 
-            .date-line span input {color:#0077BB;/*border: 1px solid #B7D8E7 !important;*/font-size: 1.05em;height: 25px;}
+            .date-line span input {color:#0077BB;/*border: 1px solid #B7D8E7 !important;*/font-size: 1.05em;height: 29px;}
              date-line {margin-top:5px;}
             .template-area {padding-left:5px;width: 100%}
             .basic-end-date-area {margin-left:10px;}
             .data-line-indent {float:left; margin-left:20px;} 
-            #begin-date-label-0, #end-date-label-0 {margin-top:2px;color: #888 !important;margin-right: 2px;}         
+            #begin-date-label-0, #end-date-label-0 {margin-top:2px;color: #888 !important;margin-right: 2px;font-size:11px;}         
             #date-begin-0, #date-end-0 {font-family: Arial,Helvetica,sans-serif;background-color:white;font-size: 12px;}
                  
             .msg-text { margin:5px 0; border-color: #BBBBBB !important;height:25px;}
@@ -371,11 +374,12 @@
                 padding: 20px 0 20px 15px;
                 width: 99.6%;
             } 
-            #first-blue-line {width:100%;margin-left: 2%;}
+            #first-blue-line {width:98%;margin-left: 2%;}
             #second-blue-line{margin-top:20px;width:100%}
             #third-blue-line {margin-top:18px;width:100%}
-            .blue-line  {margin-top:12px;width:98%;margin-left: 2%;}
-            .blue-line-left-column {width:45%;}  
+            .blue-line  {margin-top:15px;width:98%;margin-left: 2%;}
+            .blue-line-left-column {width:45%;} 
+            .blue-line-less-top {margin-top: 5px;} 
             .column-width1  {width:260px;}
             .column-width2  {width:420px;}
             .column-width2a {width:418px;}
@@ -445,15 +449,17 @@
                 float: left;
                 font-size: 0.9em;
                 margin-left: 10%;
-                margin-top: 20px;
+              /*  margin-top: 20px;  */
                 line-height: 1.5em;
             } 
+            /*
             .shortComment2 {
                 margin-top: 17px !important;
             }
-         
+            */
             .commentURL {
-               color:#444 !important;               
+               color:#444 !important; 
+               font-size: 10px;              
             }
             .commentURL:hover {
                color:blue !important;               
@@ -1930,6 +1936,7 @@ div#advanced-data-area:hover {
 .left-column-less-padding-top  {padding-top:0px;/*margin-top: -5px*/} 
 .left-column-less-padding-top2 {padding-top:0px;margin-top: 5px}
 .left-column-less-padding-top3 {padding-top: 5px}
+.left-column-nothing-on-top {padding-top:0px;margin-top:0px;}
 
 .right-column { float: left;  width: 80%;}
 #discount_amt_type_dropdown_0 { width: 80%;}
@@ -2001,13 +2008,15 @@ div#inPop-varProdID-cntl, div#actionPop-varProdID-cntl {
     border: 1px solid #9CBAC4;
     color: #444;
 }
-#advancedSelected {margin-left: 12px;}
+#advancedSelected {margin-left: 5px;}
 #basicSelected, #advancedSelected {margin-right: 0;}
 
 
 .required-asterisk{padding-left:3px;}
-#basicSelected-label, #advancedSelected-label {color:#004AFF;}  /*#0077BB;*/
-
+#basicSelected-label, #advancedSelected-label {color:#004AFF;font-family:Arial,Helvetica,sans-serif;font-size:12px !important;}  /*#0077BB;*/
+.wizard-on-off-sw-select {font-size:12px !important;}
+.hasWizardHelpRight:hover {color:blue;text-decoration:underline;}
+.rule-type-label {font-size:13px !important;}
 #cart-or-catalog-Choose, #minimum-purchase-Choose, #pricing-type-Choose{font-style:italic; color:grey;}
 .discount_auto_add_free_product_label_caution{clear:left;font-style:italic; color:#555353; font-size:12px;}
 
@@ -2071,6 +2080,7 @@ div#inPop-varProdID-cntl, div#actionPop-varProdID-cntl {
 .wizard-turn-hover-help-off {float:left;}
 
 .wizard-pipe {font-size:30px;margin-top: 10px;}
-.wizard-more-info , .wizard-turn-hover-help-off {padding:0 10px;border:1px solid #F1D031;text-decoration: none;background-color:#eee; }
+.wizard-more-info , .wizard-turn-hover-help-off {padding:0 10px; border:1px solid #E8E894; text-decoration: none;background-color:#fff; }
 .wizard-turn-hover-help-off { margin-left:20px;}
-.wizard-turn-hover-help-off:hover, .wizard-more-info:hover {text-decoration:underline;background-color:white;}  
+.wizard-turn-hover-help-off:hover, .wizard-more-info:hover {text-decoration:underline; border:1px solid #F1D031;/*background-color:white;*/} 
+.wizard-am-i-blue {color:blue;font-size:16px !important;} 

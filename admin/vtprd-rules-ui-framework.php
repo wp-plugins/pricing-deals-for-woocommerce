@@ -31,7 +31,8 @@ class VTPRD_Rules_UI_Framework {
               //dropdown select info
               'label'    => array(
                     'for'    => 'cart-or-catalog-select',
-                    'title'  => __('Discount in Cart or Catalog ', 'vtprd')
+                    'title'  => __('Cart or Catalog ', 'vtprd') .'<br>'.  __('Discount ', 'vtprd')
+                    
                     //'title'  => __('Cart Purchase / Catalog Display', 'vtprd')    .'&nbsp;&nbsp;'.  __('Discount Type', 'vtprd')       
                 ),
                 'select'    => array(
@@ -58,7 +59,7 @@ class VTPRD_Rules_UI_Framework {
                     'id'       => 'cart-or-catalog-Catalog',
                     'class'    => '',
                     'value'    => 'catalog',
-                    'title'    => __('CATALOG Price Reduction', 'vtprd')  //CATALOG Price Display Discount 
+                    'title'    => __('CATALOG Price Reduction', 'vtprd')  .'&nbsp;&nbsp;&nbsp;'.    __('(Wholesale Pricing +)', 'vtprd')   //CATALOG Price Display Discount 
                    ) 
                  )
             ),

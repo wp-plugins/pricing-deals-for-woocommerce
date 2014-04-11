@@ -375,169 +375,152 @@ class VTPRD_Rules_UI{
           </div>
           
           <div class="clear-left" id="first-blue-line">                          
-            <div class="blue-line-left-column  column-width2">                                                                              
-              <span class="blue-dropdown  column-width2" id="cart-or-catalog-select-area">                              
-                 <label class=""  for="<?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['label']['for'];?>"><?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['label']['title'];?></label>  
-                 
-                 <select id="<?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['cart_or_catalog_select']['select']['class']; ?> hasWizardHelpBelow" name="<?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['select']['tabindex']; ?>" >          
+                                                                             
+              <span class="left-column  left-column-nothing-on-top">                              
+                 <label class="hasWizardHelpRight"  for="<?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['label']['for'];?>"><?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['label']['title'];?></label>  
+                 <?php vtprd_show_object_hover_help ('cart_or_catalog_select', 'wizard') ?> 
+              </span>
+              <span class="blue-dropdown  right-column" id="cart-or-catalog-select-area">
+                 <select id="<?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['cart_or_catalog_select']['select']['class']; ?>" name="<?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['select']['tabindex']; ?>" >          
                    <?php
                    for($i=0; $i < sizeof($vtprd_rule_display_framework['cart_or_catalog_select']['option']); $i++) { 
                    ?>                             
                       <option id="<?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['option'][$i]['id']; ?>"  class="<?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['option'][$i]['value']; ?>"   <?php if ($vtprd_rule_display_framework['cart_or_catalog_select']['option'][$i]['value'] == $vtprd_rule->cart_or_catalog_select )  { echo $selected; } ?> >  <?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['option'][$i]['title']; ?> </option>
                    <?php } ?> 
                  </select> 
-                 <?php vtprd_show_object_hover_help ('cart_or_catalog_select', 'wizard') ?>                        
+                  <span class="shortIntro  shortIntro2"  id="buy_group_filter_comment">
+                    <em><?php _e('Where is the discount', 'vtprd');?></em>
+                    <br>
+                    <em><?php _e('taken first?', 'vtprd');?></em>
+                    &nbsp;
+                    <img class="hasHoverHelp2" width="11px" alt=""  src="<?php echo VTPRD_URL;?>/admin/images/help.png" />
+                    <?php vtprd_show_object_hover_help ('cart_or_catalog_select', 'small') ?>
+                  </span>                                        
               </span>
-            </div> <?php //blue-line-left-column ?>
-            
-            <div class="blue-line-right-column">
-              <span class="shortComment  shortComment2"  id="buy_group_filter_comment<?php echo '_' .$k; ?>">
-                <em><?php _e('Cart Discount only, or is the Discount first', 'vtprd');?></em>
-                <br>
-                <em><?php _e('applied when the Product Catalog is Displayed?', 'vtprd');?></em>
-                &nbsp;
-                <img class="hasHoverHelp2" width="11px" alt=""  src="<?php echo VTPRD_URL;?>/admin/images/help.png" />
-                <?php vtprd_show_object_hover_help ('cart_or_catalog_select', 'small') ?>
-              </span>                
-            </div> <?php //blue-line-right-column ?>
-                          
+       
           </div> <?php //end blue-line ?>  
             
-          <div class="blue-line  clear-left">
-            <div class="blue-line-left-column  column-width2">                                   
-              <span class="blue-dropdown  column-width2" id="pricing-type-select-area">                              
-                 <label class=""   for="<?php echo $vtprd_rule_display_framework['pricing_type_select']['label']['for'];?>"><?php echo $vtprd_rule_display_framework['pricing_type_select']['label']['title'];?></label>
-                  
-                 
-                 <select id="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['pricing_type_select']['select']['class']; ?>  hasWizardHelpBelow" name="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['tabindex']; ?>" >          
+          <div class="blue-line  clear-left">                                  
+               <span class="left-column  left-column-less-padding-top3">                              
+                 <label class="hasWizardHelpRight"   for="<?php echo $vtprd_rule_display_framework['pricing_type_select']['label']['for'];?>"><?php echo $vtprd_rule_display_framework['pricing_type_select']['label']['title'];?></label>
+                 <?php vtprd_show_object_hover_help ('pricing_type_select', 'wizard') ?> 
+               </span>
+               <span class="blue-dropdown  right-column" id="pricing-type-select-area">   
+                 <select id="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['pricing_type_select']['select']['class']; ?>  " name="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['tabindex']; ?>" >          
                    <?php
                    for($i=0; $i < sizeof($vtprd_rule_display_framework['pricing_type_select']['option']); $i++) { 
                    ?>                             
                       <option id="<?php echo $vtprd_rule_display_framework['pricing_type_select']['option'][$i]['id']; ?>"  class="<?php echo $vtprd_rule_display_framework['pricing_type_select']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_rule_display_framework['pricing_type_select']['option'][$i]['value']; ?>"   <?php if ($vtprd_rule_display_framework['pricing_type_select']['option'][$i]['value'] == $vtprd_rule->pricing_type_select )  { echo $selected; } ?> >  <?php echo $vtprd_rule_display_framework['pricing_type_select']['option'][$i]['title']; ?> </option>
                    <?php } ?> 
-                 </select>
-                 <?php vtprd_show_object_hover_help ('pricing_type_select', 'wizard') ?>                         
-              </span> 
-            </div> <?php //blue-line-left-column ?>
-            
-            <div class="blue-line-right-column">
-              <span class="shortComment  shortComment2"  id="buy_group_filter_comment<?php echo '_' .$k; ?>">
-                  <span class="">
-                      <em><?php _e("Deal Type controls the rule's entire structure", 'vtprd');?></em>
-                      &nbsp;
-                      <img  class="hasHoverHelp2" width="11px" alt=""  src="<?php echo VTPRD_URL;?>/admin/images/help.png" />  
-                      <?php vtprd_show_object_hover_help ('pricing_type_select', 'small') ?>
-                  </span>                   
-                  <br><em><?php _e("Pricing Deal Rule ", 'vtprd');?></em>
-                  &nbsp;
-                  <a class="commentURL" target="_blank" href="http://www.varktech.com/documentation/pricing-deals/examples"><?php _e('Deal Examples', 'vtprd');?></a>                
-              </span>  
-            </div> <?php //blue-line-right-column ?>
-            
+                 </select>  
+                  <span class="shortIntro  shortIntro2"  id="buy_group_filter_comment">
+                      <span class="">
+                          <em><?php _e("What kind of Deal is it?", 'vtprd');?></em>
+                          &nbsp;
+                          <img  class="hasHoverHelp2" width="11px" alt=""  src="<?php echo VTPRD_URL;?>/admin/images/help.png" />  
+                          <?php vtprd_show_object_hover_help ('pricing_type_select', 'small') ?>
+                      </span>                   
+                      <br>
+                      <a class="commentURL" target="_blank" href="http://www.varktech.com/documentation/pricing-deals/examples"><?php _e('Deal Examples', 'vtprd');?></a>                
+                  </span>                                                          
+               </span> 
           </div> <?php //end blue-line ?>
               
           <div class="blue-line  clear-left">  
-            <div class="blue-line-left-column  column-width2">
-              <span class="blue-dropdown  blue-dropdown-minimum  column-width2" id="minimum-purchase-select-area">                              
-                 <label class="" for="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['label']['for'];?>"><?php echo $vtprd_rule_display_framework['minimum_purchase_select']['label']['title'];?></label>
-                  
-                 <select id="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['minimum_purchase_select']['select']['class']; ?>  hasWizardHelpBelow" name="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['tabindex']; ?>" >          
+               <span class="left-column  left-column-less-padding-top3">                                            
+                 <label class="hasWizardHelpRight" for="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['label']['for'];?>"><?php echo $vtprd_rule_display_framework['minimum_purchase_select']['label']['title'];?></label>
+                 <?php vtprd_show_object_hover_help ('minimum_purchase_select', 'wizard') ?> 
+               </span>
+               <span class="blue-dropdown  blue-dropdown-minimum  right-column" id="minimum-purchase-select-area">  
+                 <select id="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['minimum_purchase_select']['select']['class']; ?>  " name="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['tabindex']; ?>" >          
                    <?php
                    for($i=0; $i < sizeof($vtprd_rule_display_framework['minimum_purchase_select']['option']); $i++) { 
                    ?>                             
                       <option id="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['option'][$i]['id']; ?>"  class="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['option'][$i]['value']; ?>"   <?php if ($vtprd_rule_display_framework['minimum_purchase_select']['option'][$i]['value'] == $vtprd_rule->minimum_purchase_select )  { echo $selected; } ?> >  <?php echo $vtprd_rule_display_framework['minimum_purchase_select']['option'][$i]['title']; ?> </option>
                    <?php } ?> 
                  </select>
-                 <?php vtprd_show_object_hover_help ('minimum_purchase_select', 'wizard') ?>                          
-              </span>
-            </div> <?php //blue-line-left-column ?>
-            
-            <div class="blue-line-right-column">
-              <span class="shortComment  shortComment2"  id="buy_group_filter_comment<?php echo '_' .$k; ?>">
-                <em>
-                <?php _e('Do you have to purchase something first,', 'vtprd');?>
-                <br>
-                <?php _e('before you can purchase the Discounted Item?', 'vtprd');?>
-                </em>
-                &nbsp;
-                <img  class="hasHoverHelp2" width="11px" alt=""  src="<?php echo VTPRD_URL;?>/admin/images/help.png" />                
-                <?php vtprd_show_object_hover_help ('minimum_purchase_select', 'small') ?>
-              </span>   
-            
-            </div> <?php //blue-line-right-column ?>
-                          
+                  <span class="shortIntro  shortIntro2"  id="buy_group_filter_comment">
+                    <em>
+                    <?php _e('Buy this,', 'vtprd');?>
+                    <br>
+                    <?php _e('Discount this?', 'vtprd');?>
+                    </em>
+                    &nbsp;
+                    <img  class="hasHoverHelp2" width="11px" alt=""  src="<?php echo VTPRD_URL;?>/admin/images/help.png" />                
+                    <?php vtprd_show_object_hover_help ('minimum_purchase_select', 'small') ?>
+                  </span>                                          
+              </span>         
           </div> <?php //end blue-line ?>  
               
-          <div class="blue-line  clear-left">
-            <div class="blue-line-left-column  column-width2">                
-              
-              <span class="blue-dropdown  scheduling-group  hasWizardHelpRight" id="scheduling-area">                                        
-                <label class="scheduling-label"><?php _e('Deal Schedule', 'vtprd');?></label>   
-                
-                <span class="date-line clear-left" id='date-line-0'>                               
+          <div class="blue-line  blue-line-less-top  clear-left">
+              <span class="left-column">                                                      
+                <label class="scheduling-label hasWizardHelpRight" id="scheduling-label-item"><?php _e('Deal Schedule', 'vtprd');?></label>   
+                <?php vtprd_show_object_hover_help ('scheduling', 'wizard') ?>
+              </span>
+              <span class="blue-dropdown  scheduling-group  right-column" id="scheduling-area">   
+                <span class="date-line" id='date-line-0'>                               
                 <?php //   <label class="scheduling-label">Scheduling</label> ?>                                              
-                    <span class="date-line-area clear-left">  
+                    <span class="date-line-area">  
                       <?php  $this->vtprd_rule_scheduling(); ?> 
-                    </span>             
+                    </span> 
+                    <span class="on-off-switch">                              
+                    <?php //     <label for="rule-state-select">On/Off Switch</label>  ?> 
+                       <select id="<?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['rule_on_off_sw_select']['select']['class']; ?>" name="<?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['select']['tabindex']; ?>" >          
+                         <?php
+                         for($i=0; $i < sizeof($vtprd_rule_display_framework['rule_on_off_sw_select']['option']); $i++) { 
+                         ?>                             
+                            <option id="<?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['option'][$i]['id']; ?>"  class="<?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['option'][$i]['value']; ?>"   <?php if ($vtprd_rule_display_framework['rule_on_off_sw_select']['option'][$i]['value'] == $vtprd_rule->rule_on_off_sw_select )  { echo $selected; } ?> >  <?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['option'][$i]['title']; ?> </option>
+                         <?php } ?> 
+                       </select>                        
+                    </span>                                
                 </span> 
                    
-                  <span class="on-off-switch">                              
-                  <?php //     <label for="rule-state-select">On/Off Switch</label>  ?> 
-                     <select id="<?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['rule_on_off_sw_select']['select']['class']; ?>" name="<?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['select']['tabindex']; ?>" >          
-                       <?php
-                       for($i=0; $i < sizeof($vtprd_rule_display_framework['rule_on_off_sw_select']['option']); $i++) { 
-                       ?>                             
-                          <option id="<?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['option'][$i]['id']; ?>"  class="<?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['option'][$i]['value']; ?>"   <?php if ($vtprd_rule_display_framework['rule_on_off_sw_select']['option'][$i]['value'] == $vtprd_rule->rule_on_off_sw_select )  { echo $selected; } ?> >  <?php echo $vtprd_rule_display_framework['rule_on_off_sw_select']['option'][$i]['title']; ?> </option>
-                       <?php } ?> 
-                     </select>                        
-                  </span>                                   
-              </span>
-              <?php vtprd_show_object_hover_help ('scheduling', 'wizard') ?>
-            </div> <?php //blue-line-left-column ?>
-            
-            <div class="blue-line-right-column  blue-line-right-column2">
-              <span class="shortComment"  id="buy_group_filter_comment<?php echo '_' .$k; ?>">
-                <em><?php _e('When is the Deal active?', 'vtprd');?></em>
-                &nbsp;
-                <img  class="hasHoverHelp2" width="11px" alt=""  src="<?php echo VTPRD_URL;?>/admin/images/help.png" /> 
-                <?php vtprd_show_object_hover_help ('scheduling', 'small') ?>
-              </span>                
-            </div> <?php //blue-line-right-column ?>
-                           
+
+                  <span class="shortIntro"  id="buy_group_filter_comment">
+                    <em>
+                    <?php _e('Active When?', 'vtprd');?>
+                    <br>
+                    <?php _e('On or Off?', 'vtprd');?>
+                    </em>
+                    &nbsp;
+                    <img  class="hasHoverHelp2" width="11px" alt=""  src="<?php echo VTPRD_URL;?>/admin/images/help.png" /> 
+                    <?php vtprd_show_object_hover_help ('scheduling', 'small') ?>
+                  </span>                                                      
+              </span>      
           </div> <?php //end blue-line ?>
                 
           <div class="blue-line  clear-left">
-            <div class="blue-line-left-column column-width2a">      
-              <span class="blue-dropdown wizard-type" id="wizard-select-area"> 
-                  <label class="wizard-type-label"><?php _e('Hover Help', 'vtprd');?></label> 
-                  
-                     <select id="<?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['wizard_on_off_sw_select']['select']['class']; ?>" name="<?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['select']['tabindex']; ?>" >          
-                       <?php
-                       for($i=0; $i < sizeof($vtprd_rule_display_framework['wizard_on_off_sw_select']['option']); $i++) { 
-                       ?>                             
-                          <option id="<?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['option'][$i]['id']; ?>"  class="<?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['option'][$i]['value']; ?>"   <?php if ($vtprd_rule_display_framework['wizard_on_off_sw_select']['option'][$i]['value'] == $vtprd_rule->wizard_on_off_sw_select )  { echo $selected; } ?> >  <?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['option'][$i]['title']; ?> </option>
-                       <?php } ?> 
-                     </select> 
-               </span>                              
-
-              <span class="blue-dropdown  rule-type" id="rule-type-select-area"> 
-                  <label class="rule-type-label"><?php _e('Show Me', 'vtprd');?></label> 
-                  
-                  <span id="rule-type-info" class="hasWizardHelpRight  clear-left">                    
-                    <?php
-                     for($i=0; $i < sizeof($vtprd_rule_display_framework['rule-type-select']); $i++) { 
-                     ?>                               
-                        <input id="<?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['id']; ?>" class="<?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['class']; ?>" type="<?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['type']; ?>" name="<?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['name']; ?>" value="<?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['value']; ?>" <?php if ( $vtprd_rule_display_framework['rule-type-select'][$i]['value'] == $vtprd_rule->rule_type_select) { echo $checked; } ?>    /><span id="<?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['id'] . '-label'; ?>"> <?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['label']; ?></span> 
-                    <?php } ?>                    
-
-                  </span>
-                  <?php vtprd_show_object_hover_help ('rule-type-select', 'wizard') ?>                  
+              <span class="left-column">                                                      
+                &nbsp;
               </span>
-            </div> <?php //blue-line-left-column ?>
-            
-            <div class="blue-line-right-column">
-            </div> <?php //blue-line-right-column ?>
-                          
+              <span class="right-column">       
+
+                  <span class="blue-dropdown  rule-type" id="rule-type-select-area"> 
+                      <label class="rule-type-label  hasWizardHelpRight"><?php _e('Show Me', 'vtprd');?></label> 
+                      <?php vtprd_show_object_hover_help ('rule-type-select', 'wizard') ?>
+                      <span id="rule-type-info" class="clear-left">                    
+                        <?php
+                         for($i=0; $i < sizeof($vtprd_rule_display_framework['rule-type-select']); $i++) { 
+                         ?>                               
+                            <input id="<?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['id']; ?>" class="<?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['class']; ?>" type="<?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['type']; ?>" name="<?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['name']; ?>" value="<?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['value']; ?>" <?php if ( $vtprd_rule_display_framework['rule-type-select'][$i]['value'] == $vtprd_rule->rule_type_select) { echo $checked; } ?>    /><span id="<?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['id'] . '-label'; ?>"> <?php echo $vtprd_rule_display_framework['rule-type-select'][$i]['label']; ?></span> 
+                        <?php } ?>                    
+                      </span>
+                                        
+                  </span>
+                   <span class="blue-dropdown wizard-type" id="wizard-select-area"> 
+                      <label class="wizard-type-label"><?php _e('Hover Help', 'vtprd');?></label> 
+                      
+                         <select id="<?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['wizard_on_off_sw_select']['select']['class']; ?>  hasHoverHelp2" name="<?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['select']['tabindex']; ?>" >          
+                           <?php
+                           for($i=0; $i < sizeof($vtprd_rule_display_framework['wizard_on_off_sw_select']['option']); $i++) { 
+                           ?>                             
+                              <option id="<?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['option'][$i]['id']; ?>"  class="<?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['option'][$i]['value']; ?>"   <?php if ($vtprd_rule_display_framework['wizard_on_off_sw_select']['option'][$i]['value'] == $vtprd_rule->wizard_on_off_sw_select )  { echo $selected; } ?> >  <?php echo $vtprd_rule_display_framework['wizard_on_off_sw_select']['option'][$i]['title']; ?> </option>
+                           <?php } ?> 
+                         </select> 
+                         <?php vtprd_show_object_hover_help ('hover-help', 'small') ?>
+                   </span>                              
+                     
+              </span>
           </div> <?php //end blue-line ?>
                                                
       </div> <?php //end template-area ?>                       
@@ -553,7 +536,8 @@ class VTPRD_Rules_UI{
  
      <div class="display-virtual_box  clear-left" id="rule_deal_info_group">  
                        
-      <?php  for($k=0; $k < sizeof($vtprd_rule->rule_deal_info[$k]); $k++) {  ?>         
+      <?php // for($k=0; $k < sizeof($vtprd_rule->rule_deal_info[$k]); $k++) {  ?> 
+      <?php  for($k=0; $k < sizeof($vtprd_rule->rule_deal_info); $k++) {  ?>         
       <div class="display-virtual_box rule_deal_info" id="rule_deal_info_line<?php echo '_' .$k; ?>">   
         <div class="display-virtual_box" id="buy_info<?php echo '_' .$k; ?>">  
          
@@ -585,17 +569,16 @@ class VTPRD_Rules_UI{
 
          <div class="screen-box buy_group_box" id="buy_group_box<?php echo '_' .$k; ?>" >
             <span class="left-column">
-                <span class="title" id="buy_group_title">
-                  <a id="buy_group_title_anchor" class="title-anchors second-level-title" href="javascript:void(0);"><span class="showBuyAsBuy"><?php _e('Group Filter', 'vtprd');?></span><span class="showBuyAsDiscount"><?php _e('Group Filter', 'vtprd');?></span> </a>  
-                  <span class="required-asterisk">* </span> 
-                    
+                <span class="title  hasWizardHelpRight" id="buy_group_title">
+                  <a id="buy_group_title_anchor" class="title-anchors second-level-title" href="javascript:void(0);"><span class="showBuyAsBuy"><?php _e('Group Product Filter', 'vtprd');?></span><span class="showBuyAsDiscount"><?php _e('Group Product Filter', 'vtprd');?></span> </a>                    
+                  <span class="required-asterisk">* </span>                    
                 </span>
-               
+                <?php vtprd_show_object_hover_help ('inPop', 'wizard') ?> 
                  
             </span>
             
             <span class="dropdown  buy_group  right-column" id="buy_group_dropdown">              
-               <select id="<?php echo $vtprd_rule_display_framework['inPop']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['inPop']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_rule_display_framework['inPop']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['inPop']['select']['tabindex']; ?>" >          
+               <select id="<?php echo $vtprd_rule_display_framework['inPop']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['inPop']['select']['class']; ?> " name="<?php echo $vtprd_rule_display_framework['inPop']['select']['name'];?>" tabindex="<?php //echo $vtprd_rule_display_framework['inPop']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_rule_display_framework['inPop']['option']); $i++) { 
                       
@@ -609,7 +592,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_rule_display_framework['inPop']['option'][$i]['id']; ?>"  class="<?php echo $vtprd_rule_display_framework['inPop']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_rule_display_framework['inPop']['option'][$i]['value']; ?>"   <?php if ($vtprd_rule_display_framework['inPop']['option'][$i]['value'] == $vtprd_rule->inPop )  { echo $selected; } ?> >  <?php echo $title; ?> </option>
                  <?php } ?> 
                </select> 
-               <?php vtprd_show_object_hover_help ('inPop', 'wizard') ?>
+               
                            
                <span class="buy_group_line_remainder_class" id="buy_group_line_remainder">   
                   <?php $this->vtprd_buy_group_cntl(); ?> 
@@ -635,15 +618,16 @@ class VTPRD_Rules_UI{
          <div class="screen-box buy_amt_box_class<?php echo '_' .$k; ?>" id="buy_amt_box<?php echo '_' .$k; ?>" >
             
             <span class="left-column">
-                <span class="title" id="buy_amt_title<?php echo '_' .$k; ?> ">
+                <span class="title hasWizardHelpRight" id="buy_amt_title<?php echo '_' .$k; ?> ">
                   <a id="buy_amt_title_anchor<?php echo '_' .$k; ?>" class="title-anchors second-level-title" href="javascript:void(0);"><span class="showBuyAsBuy"><?php _e('Group Amount', 'vtprd');?></span><span class="showBuyAsDiscount"><?php _e('Group Amount', 'vtprd');?></span>
                   </a>
                   <span class="required-asterisk">*</span>                      
-                </span>                                              
+                </span> 
+                <?php vtprd_show_object_hover_help ('buy_amt_type', 'wizard') ?>                                             
             </span>                
  
             <span class="dropdown  buy_amt  right-column" id="buy_amt_dropdown<?php echo '_' .$k; ?>">              
-               <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_type']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['tabindex']; ?>" >          
+               <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_type']['select']['class']; ?>  " name="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_amt_type']['option']); $i++) { 
                           $this->vtprd_change_title_currency_symbol('buy_amt_type', $i, $currency_symbol);
@@ -651,7 +635,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['option'][$i]['id'] . '_'  .$k; ?>"  class="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['option'][$i]['value']; ?>"   <?php if ($vtprd_deal_screen_framework['buy_amt_type']['option'][$i]['value'] == $vtprd_rule->rule_deal_info[$k]['buy_amt_type'] )  { echo $selected; } ?> >  <?php echo $vtprd_deal_screen_framework['buy_amt_type']['option'][$i]['title']; ?> </option>
                  <?php } ?>                   
                 </select>  
-                <?php vtprd_show_object_hover_help ('buy_amt_type', 'wizard') ?>
+                
                             
                  <span class="buy_amt_line_remainder  buy_amt_line_remainder_class<?php echo '_' .$k; ?>" id="buy_amt_line_remainder<?php echo '_' .$k; ?>">   
                      <span class="amt-field buy_amt_count" id="buy_amt_count_area<?php echo '_' .$k; ?>">
@@ -681,21 +665,22 @@ class VTPRD_Rules_UI{
          <div class="screen-box  buy_amt_box_appliesto_class<?php echo '_' .$k; ?>  buy_amt_line_remainder  clear-left" id="buy_amt_box_appliesto<?php echo '_' .$k; ?>" > 
             <span class="show-in-adanced-mode-only">
                 <span class="left-column  left-column-less-padding-top3">  
-                    <span class="title" id="buy_amt_type_title<?php echo '_' .$k; ?>" >            
+                    <span class="title  hasWizardHelpRight" id="buy_amt_type_title<?php echo '_' .$k; ?>" >            
                       <a id="buy_amt_title_anchor<?php echo '_' .$k; ?>" class="title-anchors second-level-title" href="javascript:void(0);"><?php _e('Group Amount', 'vtprd'); echo '<br>'; _e('Applies to', 'vtprd');?></a>
-                    </span>            
+                    </span> 
+                    <?php vtprd_show_object_hover_help ('buy_amt_applies_to', 'wizard') ?>           
                 </span> 
                 
 
                 <span class="dropdown  right-column">                           
-                     <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_applies_to']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['tabindex']; ?>" >          
+                     <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_applies_to']['select']['class']; ?>" name="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['tabindex']; ?>" >          
                        <?php
                        for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_amt_applies_to']['option']); $i++) { 
                        ?>                             
                           <option id="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['option'][$i]['id'] . '_'  .$k  ?>"  class="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['option'][$i]['value']; ?>"   <?php if ($vtprd_deal_screen_framework['buy_amt_applies_to']['option'][$i]['value'] == $vtprd_rule->rule_deal_info[$k]['buy_amt_applies_to'] )  { echo $selected; } ?> >  <?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['option'][$i]['title']; ?> </option>
                        <?php } ?> 
                      </select>
-                    <?php vtprd_show_object_hover_help ('buy_amt_applies_to', 'wizard') ?>
+                    
                                
                    <span class="shortIntro" >
                       <em>
@@ -718,12 +703,13 @@ class VTPRD_Rules_UI{
                     
          <div class="screen-box buy_amt_mod_box  buy_amt_mod_box_class<?php echo '_' .$k; ?>" id="buy_amt_mod_box<?php echo '_' .$k; ?>" > 
             <span class="left-column">
-                <span class="title  third-level-title" id="buy_amt_mod_title<?php echo '_' .$k; ?>" >
+                <span class="title  third-level-title  hasWizardHelpRight" id="buy_amt_mod_title<?php echo '_' .$k; ?>" >
                   <a id="buy_amt_mod_title_anchor<?php echo '_' .$k; ?>" class="title-anchors third-level-title" href="javascript:void(0);"><span class="showBuyAsBuy"><?php _e('Min / Max', 'vtprd');?></span><span class="showBuyAsDiscount"><?php _e('Min / Max', 'vtprd');?></span></a> 
                 </span>
+                <?php vtprd_show_object_hover_help ('buy_amt_mod', 'wizard') ?>
             </span>
             <span class="dropdown  buy_amt_mod  right-column" id="buy_amt_mod_dropdown<?php echo '_' .$k; ?>">              
-               <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_mod']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['tabindex']; ?>" >          
+               <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_mod']['select']['class']; ?>" name="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_amt_mod']['option']); $i++) {
                           $this->vtprd_change_title_currency_symbol('buy_amt_mod', $i, $currency_symbol);                  
@@ -731,7 +717,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['option'][$i]['id'] . '_'  .$k  ?>"  class="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['option'][$i]['value']; ?>"   <?php if ($vtprd_deal_screen_framework['buy_amt_mod']['option'][$i]['value'] == $vtprd_rule->rule_deal_info[$k]['buy_amt_mod'] )  { echo $selected; } ?> >  <?php echo $vtprd_deal_screen_framework['buy_amt_mod']['option'][$i]['title']; ?> </option>
                  <?php } ?> 
                </select>
-               <?php vtprd_show_object_hover_help ('buy_amt_mod', 'wizard') ?>
+               
                
                <span class="amt-field  buy_amt_mod_count_area  buy_amt_mod_count_area_class<?php echo '_' .$k; ?>" id="buy_amt_mod_count_area<?php echo '_' .$k; ?>">
                  <input id="<?php echo $vtprd_deal_screen_framework['buy_amt_mod_count']['id'] . '_'  .$k; ?>" class="<?php echo $vtprd_deal_screen_framework['buy_amt_mod_count']['class']; ?>" type="<?php echo $vtprd_deal_screen_framework['buy_amt_mod_count']['type']; ?>" name="<?php echo $vtprd_deal_screen_framework['buy_amt_mod_count']['name'] . '_' .$k ; ?>" value="<?php echo $vtprd_rule->rule_deal_info[$k]['buy_amt_mod_count']; ?>" />
@@ -757,21 +743,22 @@ class VTPRD_Rules_UI{
                     
           <div class="screen-box buy_repeat_box  buy_repeat_box_class<?php echo '_' .$k; ?>" id="buy_repeat_box<?php echo '_' .$k; ?>" >     <?php //Rule repeat shifted to end of action area, although processed first ?> 
             <span class="left-column">
-                <span class="title  third-level-title" id="buy_repeat_title<?php echo '_' .$k; ?> ">
+                <span class="title  third-level-title  hasWizardHelpRight" id="buy_repeat_title<?php echo '_' .$k; ?> ">
                    <a id="buy_repeat_title_anchor<?php echo '_' .$k; ?>" class="title-anchors third-level-title" href="javascript:void(0);"><span class="showBuyAsBuy"><?php echo __('Rule Usage Count', 'vtprd');?></span><span class="showBuyAsDiscount"><?php echo __('Rule Usage Count', 'vtprd');?></span></a>
+                   <span class="required-asterisk">* </span>
                 </span>
-                <span class="required-asterisk">* </span>
+                <?php vtprd_show_object_hover_help ('buy_repeat_condition', 'wizard') ?>
             </span>
             
             <span class="dropdown buy_repeat right-column" id="buy_repeat_dropdown<?php echo '_' .$k; ?>">              
-               <select id="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['buy_repeat_condition']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['tabindex']; ?>" >          
+               <select id="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['buy_repeat_condition']['select']['class']; ?>" name="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_repeat_condition']['option']); $i++) { 
                  ?>                             
                     <option id="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['option'][$i]['id'] . '_'  .$k  ?>"  class="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['option'][$i]['value']; ?>"   <?php if ($vtprd_deal_screen_framework['buy_repeat_condition']['option'][$i]['value'] == $vtprd_rule->rule_deal_info[$k]['buy_repeat_condition'] )  { echo $selected; } ?> >  <?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['option'][$i]['title']; ?> </option>
                  <?php } ?> 
                </select>
-               <?php vtprd_show_object_hover_help ('buy_repeat_condition', 'wizard') ?>
+               
                              
                <span class="amt-field  buy_repeat_count_area  buy_repeat_count_area_class<?php echo '_' .$k; ?>" id="buy_repeat_count_area<?php echo '_' .$k; ?>">              
                  <input id="<?php echo $vtprd_deal_screen_framework['buy_repeat_count']['id'] . '_'  .$k; ?>" class="<?php echo $vtprd_deal_screen_framework['buy_repeat_count']['class']; ?>" type="<?php echo $vtprd_deal_screen_framework['buy_repeat_count']['type']; ?>" name="<?php echo $vtprd_deal_screen_framework['buy_repeat_count']['name'] . '_' .$k ; ?>" value="<?php echo $vtprd_rule->rule_deal_info[$k]['buy_repeat_count']; ?>" />                
@@ -816,14 +803,15 @@ class VTPRD_Rules_UI{
 
          <div class="screen-box action_group_box" id="action_group_box<?php echo '_' .$k; ?>" >
             <span class="left-column">
-                <span class="title" id="action_group_title">
-                  <a id="action_group_title_anchor" class="title-anchors second-level-title" href="javascript:void(0);"><span class="showGetAsGet"><?php _e('Group Filter', 'vtprd');?></span><span class="showGetAsDiscount"><?php _e('Group Filter', 'vtprd');?></span></a>
+                <span class="title  hasWizardHelpRight" id="action_group_title">
+                  <a id="action_group_title_anchor" class="title-anchors second-level-title" href="javascript:void(0);"><span class="showGetAsGet"><?php _e('Group Product Filter', 'vtprd');?></span><span class="showGetAsDiscount"><?php _e('Group Product Filter', 'vtprd');?></span></a>
                   <span class="required-asterisk">*</span>
-                </span>       
+                </span> 
+                <?php vtprd_show_object_hover_help ('actionPop', 'wizard') ?>      
             </span>
              
             <span class="dropdown action_group right-column" id="action_group_dropdown_0">              
-               <select id="<?php echo $vtprd_rule_display_framework['actionPop']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['actionPop']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_rule_display_framework['actionPop']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['actionPop']['select']['tabindex']; ?>" >          
+               <select id="<?php echo $vtprd_rule_display_framework['actionPop']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['actionPop']['select']['class']; ?>" name="<?php echo $vtprd_rule_display_framework['actionPop']['select']['name'];?>" tabindex="<?php //echo $vtprd_rule_display_framework['actionPop']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_rule_display_framework['actionPop']['option']); $i++) { 
                        
@@ -837,7 +825,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_rule_display_framework['actionPop']['option'][$i]['id']; ?>"  class="<?php echo $vtprd_rule_display_framework['actionPop']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_rule_display_framework['actionPop']['option'][$i]['value']; ?>"   <?php if ($vtprd_rule_display_framework['actionPop']['option'][$i]['value'] == $vtprd_rule->actionPop )  { echo $selected; } ?> >  <?php echo $title; ?> </option>
                  <?php } ?> 
                </select> 
-               <?php vtprd_show_object_hover_help ('actionPop', 'wizard') ?>
+               
                            
                <span class="action_group_line_remainder_class" id="action_group_line_remainder">   
                 <?php $this->vtprd_action_group_cntl(); ?> 
@@ -862,13 +850,14 @@ class VTPRD_Rules_UI{
                    
          <div class="screen-box action_amt_box  action_amt_box_class<?php echo '_' .$k; ?>" id="action_amt_box<?php echo '_' .$k; ?>" > 
             <span class="left-column">  
-                <span class="title" id="action_amt_type_title<?php echo '_' .$k; ?>" >            
+                <span class="title  hasWizardHelpRight" id="action_amt_type_title<?php echo '_' .$k; ?>" >            
                   <a id="action_amt_title_anchor<?php echo '_' .$k; ?>" class="title-anchors second-level-title" href="javascript:void(0);"><span class="showGetAsGet"><?php _e('Group Amount', 'vtprd');?></span><span class="showGetAsDiscount"><?php _e('Group Amount', 'vtprd');?></span></a>
                   <span class="required-asterisk">*</span>
-                </span>                                
+                </span>
+                <?php vtprd_show_object_hover_help ('action_amt_type', 'wizard') ?>                                
             </span> 
             <span class="dropdown action_amt right-column" id="action_amt_dropdown<?php echo '_' .$k; ?>">              
-               <select id="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['action_amt_type']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['tabindex']; ?>" >          
+               <select id="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['action_amt_type']['select']['class']; ?>" name="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['action_amt_type']['option']); $i++) {
                           $this->vtprd_change_title_currency_symbol('action_amt_type', $i, $currency_symbol);                  
@@ -876,7 +865,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_deal_screen_framework['action_amt_type']['option'][$i]['id'] . '_'  .$k  ?>"  class="<?php echo $vtprd_deal_screen_framework['action_amt_type']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_deal_screen_framework['action_amt_type']['option'][$i]['value']; ?>"   <?php if ($vtprd_deal_screen_framework['action_amt_type']['option'][$i]['value'] == $vtprd_rule->rule_deal_info[$k]['action_amt_type'] )  { echo $selected; } ?> >  <?php echo $vtprd_deal_screen_framework['action_amt_type']['option'][$i]['title']; ?> </option>
                  <?php } ?> 
                </select>              
-               <?php vtprd_show_object_hover_help ('action_amt_type', 'wizard') ?>
+               
               
                <span class="action_amt_line_remainder  action_amt_line_remainder_class<?php echo '_' .$k; ?>" id="action_amt_line_remainder<?php echo '_' .$k; ?>">
                    <span class="amt-field action_amt_count" id="action_amt_count_pair<?php echo '_' .$k; ?>">
@@ -904,20 +893,21 @@ class VTPRD_Rules_UI{
          <div class="screen-box action_amt_box_appliesto_class<?php echo '_' .$k; ?>  action_amt_line_remainder clear-left  " id="action_amt_box_appliesto<?php echo '_' .$k; ?>" > 
             <span class="show-in-adanced-mode-only">
                 <span class="left-column  left-column-less-padding-top3">  
-                    <span class="title" id="action_amt_type_title<?php echo '_' .$k; ?>" >            
+                    <span class="title  hasWizardHelpRight" id="action_amt_type_title<?php echo '_' .$k; ?>" >            
                       <a id="action_amt_title_anchor<?php echo '_' .$k; ?>" class="title-anchors second-level-title" href="javascript:void(0);"><span class="showGetAsGet"><?php _e('Group Amount', 'vtprd'); echo '<br>'; _e('Applies to', 'vtprd');?></span><span class="showGetAsDiscount"><?php _e('Group Amount', 'vtprd'); echo '<br>'; _e('Applies to', 'vtprd');?></span></a>
-                    </span>            
+                    </span>
+                    <?php vtprd_show_object_hover_help ('action_amt_applies_to', 'wizard') ?>            
                 </span> 
 
                 <span class="dropdown    right-column">                           
-                     <select id="<?php echo $vtprd_deal_screen_framework['action_amt_applies_to']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['action_amt_applies_to']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_deal_screen_framework['action_amt_applies_to']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['action_amt_applies_to']['select']['tabindex']; ?>" >          
+                     <select id="<?php echo $vtprd_deal_screen_framework['action_amt_applies_to']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['action_amt_applies_to']['select']['class']; ?>" name="<?php echo $vtprd_deal_screen_framework['action_amt_applies_to']['select']['name'] . '_' .$k ; ?>" tabindex="<?php //echo $vtprd_deal_screen_framework['action_amt_applies_to']['select']['tabindex']; ?>" >          
                        <?php
                        for($i=0; $i < sizeof($vtprd_deal_screen_framework['action_amt_applies_to']['option']); $i++) { 
                        ?>                             
                           <option id="<?php echo $vtprd_deal_screen_framework['action_amt_applies_to']['option'][$i]['id'] . '_'  .$k  ?>"  class="<?php echo $vtprd_deal_screen_framework['action_amt_applies_to']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_deal_screen_framework['action_amt_applies_to']['option'][$i]['value']; ?>"   <?php if ($vtprd_deal_screen_framework['action_amt_applies_to']['option'][$i]['value'] == $vtprd_rule->rule_deal_info[$k]['action_amt_applies_to'] )  { echo $selected; } ?> >  <?php echo $vtprd_deal_screen_framework['action_amt_applies_to']['option'][$i]['title']; ?> </option>
                        <?php } ?> 
                      </select>
-                     <?php vtprd_show_object_hover_help ('action_amt_applies_to', 'wizard') ?>
+                     
                                
                    <span class="shortIntro" >
                       <em>
@@ -941,13 +931,14 @@ class VTPRD_Rules_UI{
                     
         <div class="screen-box action_amt_mod_box  action_amt_mod_box_class<?php echo '_' .$k; ?>" id="action_amt_mod_box<?php echo '_' .$k; ?>" >
             <span class="left-column">
-                <span class="title  third-level-title" id="action_amt_mod_title<?php echo '_' .$k; ?>" >
+                <span class="title  third-level-title  hasWizardHelpRight" id="action_amt_mod_title<?php echo '_' .$k; ?>" >
                    <a id="action_amt_mod_title_anchor<?php echo '_' .$k; ?>" class="title-anchors third-level-title" href="javascript:void(0);"><span class="showGetAsGet"><?php _e('Min / Max', 'vtprd');?></span><span class="showGetAsDiscount"><?php _e('Min / Max', 'vtprd');?></span></a>
                 </span>
+                <?php vtprd_show_object_hover_help ('action_amt_mod', 'wizard') ?>
             </span>
             
             <span class="dropdown  right-column" id="action_amt_mod_dropdown<?php echo '_' .$k; ?>">
-               <select id="<?php echo $vtprd_deal_screen_framework['action_amt_mod']['select']['id'] . '_' .$k ; ?>" class="<?php echo $vtprd_deal_screen_framework['action_amt_mod']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_deal_screen_framework['action_amt_mod']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['action_amt_mod']['select']['tabindex']; ?>" >          
+               <select id="<?php echo $vtprd_deal_screen_framework['action_amt_mod']['select']['id'] . '_' .$k ; ?>" class="<?php echo $vtprd_deal_screen_framework['action_amt_mod']['select']['class']; ?>" name="<?php echo $vtprd_deal_screen_framework['action_amt_mod']['select']['name'] . '_' .$k ; ?>" tabindex="<?php //echo $vtprd_deal_screen_framework['action_amt_mod']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['action_amt_mod']['option']); $i++) { 
                           $this->vtprd_change_title_currency_symbol('action_amt_mod', $i, $currency_symbol);                  
@@ -955,7 +946,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_deal_screen_framework['action_amt_mod']['option'][$i]['id'] . '_'  .$k  ?>"  class="<?php echo $vtprd_deal_screen_framework['action_amt_mod']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_deal_screen_framework['action_amt_mod']['option'][$i]['value']; ?>"   <?php if ($vtprd_deal_screen_framework['action_amt_mod']['option'][$i]['value'] == $vtprd_rule->rule_deal_info[$k]['action_amt_mod'] )  { echo $selected; } ?> >  <?php echo $vtprd_deal_screen_framework['action_amt_mod']['option'][$i]['title']; ?> </option>
                  <?php } ?> 
                </select>
-               <?php vtprd_show_object_hover_help ('action_amt_mod', 'wizard') ?>
+               
                             
                <span class="amt-field  action_amt_mod_count_area  action_amt_mod_count_area_class<?php echo '_' .$k; ?>" id="action_amt_mod_count_area<?php echo '_' .$k; ?>">
                  <input id="<?php echo $vtprd_deal_screen_framework['action_amt_mod_count']['id'] . '_'  .$k; ?>" class="<?php echo $vtprd_deal_screen_framework['action_amt_mod_count']['class']; ?>" type="<?php echo $vtprd_deal_screen_framework['action_amt_mod_count']['type']; ?>" name="<?php echo $vtprd_deal_screen_framework['action_amt_mod_count']['name'] . '_' .$k ; ?>" value="<?php echo $vtprd_rule->rule_deal_info[$k]['action_amt_mod_count']; ?>" />
@@ -979,20 +970,21 @@ class VTPRD_Rules_UI{
          
          <div class="screen-box action_repeat_condition_box  action_repeat_condition_box_class<?php echo '_' .$k; ?>" id="action_repeat_condition_box<?php echo '_' .$k; ?>" >      <?php //Action repeat shifted to end of action area, although processed first ?> 
             <span class="left-column">
-                <span class="title  third-level-title" id="action_repeat_condition_title<?php echo '_' .$k; ?>" >
+                <span class="title  third-level-title  hasWizardHelpRight" id="action_repeat_condition_title<?php echo '_' .$k; ?>" >
                    <a id="action_repeat_condition_title_anchor<?php echo '_' .$k; ?>" class="title-anchors third-level-title" href="javascript:void(0);"><span class="showGetAsGet"><?php _e('Group Repeat', 'vtprd');?></span><span class="showGetAsDiscount"><?php _e('Group Repeat', 'vtprd');?></span></a>
                 </span>
+                <?php vtprd_show_object_hover_help ('action_repeat_condition', 'wizard') ?>
             </span>
             <span class="dropdown action_repeat_condition right-column"  id="action_repeat_condition_dropdown<?php echo '_' .$k; ?>">              
                
-               <select id="<?php echo $vtprd_deal_screen_framework['action_repeat_condition']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['action_repeat_condition']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_deal_screen_framework['action_repeat_condition']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['action_repeat_condition']['select']['tabindex']; ?>" >          
+               <select id="<?php echo $vtprd_deal_screen_framework['action_repeat_condition']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['action_repeat_condition']['select']['class']; ?>" name="<?php echo $vtprd_deal_screen_framework['action_repeat_condition']['select']['name'] . '_' .$k ; ?>" tabindex="<?php //echo $vtprd_deal_screen_framework['action_repeat_condition']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['action_repeat_condition']['option']); $i++) { 
                  ?>                             
                     <option id="<?php echo $vtprd_deal_screen_framework['action_repeat_condition']['option'][$i]['id'] . '_'  .$k  ?>"  class="<?php echo $vtprd_deal_screen_framework['action_repeat_condition']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_deal_screen_framework['action_repeat_condition']['option'][$i]['value']; ?>"   <?php if ($vtprd_deal_screen_framework['action_repeat_condition']['option'][$i]['value'] == $vtprd_rule->rule_deal_info[$k]['action_repeat_condition'] )  { echo $selected; } ?> >  <?php echo $vtprd_deal_screen_framework['action_repeat_condition']['option'][$i]['title']; ?> </option>
                  <?php } ?> 
                </select> 
-               <?php vtprd_show_object_hover_help ('action_repeat_condition', 'wizard') ?>
+               
                             
                <span class="amt-field action_repeat_count_area  action_repeat_count_area_class<?php echo '_' .$k; ?>" id="action_repeat_count_area<?php echo '_' .$k; ?>">
                  <input id="<?php echo $vtprd_deal_screen_framework['action_repeat_count']['id'] . '_'  .$k; ?>" class="<?php echo $vtprd_deal_screen_framework['action_repeat_count']['class']; ?>" type="<?php echo $vtprd_deal_screen_framework['action_repeat_count']['type']; ?>" name="<?php echo $vtprd_deal_screen_framework['action_repeat_count']['name'] . '_' .$k ; ?>" value="<?php echo $vtprd_rule->rule_deal_info[$k]['action_repeat_count']; ?>" />                 
@@ -1026,15 +1018,16 @@ class VTPRD_Rules_UI{
             </span>
             
             <span class="clear-both left-column">
-                <span class="title  discount_action_type" id="discount_action_type_title<?php echo '_' .$k; ?>" >            
+                <span class="title  discount_action_type  hasWizardHelpRight" id="discount_action_type_title<?php echo '_' .$k; ?>" >            
                   <a id="discount_action_title_anchor<?php echo '_' .$k; ?>" class="title-anchors second-level-title" href="javascript:void(0);"><?php _e('Discount Amount', 'vtprd');?></a>
                   <span class="required-asterisk">*</span>
                 </span>
+                <?php vtprd_show_object_hover_help ('discount_amt_type', 'wizard') ?>
             </span>
 
             <span class="dropdown discount_amt_type right-column" id="discount_amt_type_dropdown<?php echo '_' .$k; ?>">              
               
-               <select id="<?php echo $vtprd_deal_screen_framework['discount_amt_type']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['discount_amt_type']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_deal_screen_framework['discount_amt_type']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['discount_amt_type']['select']['tabindex']; ?>" >          
+               <select id="<?php echo $vtprd_deal_screen_framework['discount_amt_type']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['discount_amt_type']['select']['class']; ?>" name="<?php echo $vtprd_deal_screen_framework['discount_amt_type']['select']['name'] . '_' .$k ; ?>" tabindex="<?php //echo $vtprd_deal_screen_framework['discount_amt_type']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['discount_amt_type']['option']); $i++) { 
                           $this->vtprd_change_title_currency_symbol('discount_amt_type', $i, $currency_symbol);                 
@@ -1042,7 +1035,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_deal_screen_framework['discount_amt_type']['option'][$i]['id'] . '_'  .$k  ?>"  class="<?php echo $vtprd_deal_screen_framework['discount_amt_type']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_deal_screen_framework['discount_amt_type']['option'][$i]['value']; ?>"   <?php if ($vtprd_deal_screen_framework['discount_amt_type']['option'][$i]['value'] == $vtprd_rule->rule_deal_info[$k]['discount_amt_type'] )  { echo $selected; } ?> >  <?php echo $vtprd_deal_screen_framework['discount_amt_type']['option'][$i]['title']; ?> </option>
                  <?php } ?> 
                </select>
-               <?php vtprd_show_object_hover_help ('discount_amt_type', 'wizard') ?>
+               
                 
                <span class="discount_amt_count_area  discount_amt_count_area_class<?php echo '_' .$k; ?>  amt-field" id="discount_amt_count_area<?php echo '_' .$k; ?>">    
                  <span class="discount_amt_count_label" id="discount_amt_count_label<?php echo '_' .$k; ?>"> 
@@ -1087,21 +1080,22 @@ class VTPRD_Rules_UI{
                   
           <div class="screen-box discount_applies_to_box  discount_applies_to_box_class<?php echo '_' .$k; ?>" id="discount_applies_to_box<?php echo '_' .$k; ?>" >
             <span class="left-column">
-                <span class="title" id="discount_applies_to_title<?php echo '_' .$k; ?>" >
+                <span class="title  hasWizardHelpRight" id="discount_applies_to_title<?php echo '_' .$k; ?>" >
                   <a id="discount_applies_to_title_anchor<?php echo '_' .$k; ?>" class="title-anchors second-level-title" href="javascript:void(0);"><?php _e('Discount Applies To', 'vtprd');?></a>
                 </span>
+                <?php vtprd_show_object_hover_help ('discount_applies_to', 'wizard') ?>
             </span>
             
             <span class="dropdown discount_applies_to right-column"  id="discount_applies_to_dropdown<?php echo '_' .$k; ?>">              
                
-               <select id="<?php echo $vtprd_deal_screen_framework['discount_applies_to']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['discount_applies_to']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_deal_screen_framework['discount_applies_to']['select']['name'] . '_' .$k ; ?>" tabindex="<?php echo $vtprd_deal_screen_framework['discount_applies_to']['select']['tabindex']; ?>" >          
+               <select id="<?php echo $vtprd_deal_screen_framework['discount_applies_to']['select']['id'] . '_' .$k ; ?>" class="<?php echo$vtprd_deal_screen_framework['discount_applies_to']['select']['class']; ?>" name="<?php echo $vtprd_deal_screen_framework['discount_applies_to']['select']['name'] . '_' .$k ; ?>" tabindex="<?php //echo $vtprd_deal_screen_framework['discount_applies_to']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['discount_applies_to']['option']); $i++) { 
                  ?>                             
                     <option id="<?php echo $vtprd_deal_screen_framework['discount_applies_to']['option'][$i]['id'] . '_'  .$k  ?>"  class="<?php echo $vtprd_deal_screen_framework['discount_applies_to']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_deal_screen_framework['discount_applies_to']['option'][$i]['value']; ?>"   <?php if ($vtprd_deal_screen_framework['discount_applies_to']['option'][$i]['value'] == $vtprd_rule->rule_deal_info[$k]['discount_applies_to'] )  { echo $selected; } ?> >  <?php echo $vtprd_deal_screen_framework['discount_applies_to']['option'][$i]['title']; ?> </option>
                  <?php } ?> 
                </select>
-               <?php vtprd_show_object_hover_help ('discount_applies_to', 'wizard') ?>
+               
                                
                    <span class="shortIntro" >
                       <em>
@@ -1136,17 +1130,17 @@ class VTPRD_Rules_UI{
              <span class="discount_product_short_msg_area  clear-left">
 
                  <span class="left-column">
-                     <span class="title  hasHoverHelp">                
+                     <span class="title  hasHoverHelp  hasWizardHelpRight">                
                          <span class="title-anchors" id="discount_product_short_msg_label"><?php _e('Checkout Message', 'vtprd'); ?></span> 
                          <span class="required-asterisk">*</span>
                      </span>
-                     <?php vtprd_show_object_hover_help ('discount_product_short_msg', 'small') ?>
+                     <?php vtprd_show_object_hover_help ('discount_product_short_msg', 'wizard') ?>
                  </span>
 
                  <span class="right-column">
                      <span class="column-width50">
-                         <textarea rows="1" cols="50" id="<?php echo $vtprd_rule_display_framework['discount_product_short_msg']['id']; ?>" class="<?php echo $vtprd_rule_display_framework['discount_product_short_msg']['class']; ?>  right-column  hasWizardHelpRight" type="<?php echo $vtprd_rule_display_framework['discount_product_short_msg']['type']; ?>" name="<?php echo $vtprd_rule_display_framework['discount_product_short_msg']['name']; ?>" ><?php echo $vtprd_rule->discount_product_short_msg; ?></textarea>
-                         <?php vtprd_show_object_hover_help ('discount_product_short_msg', 'wizard') ?>
+                         <textarea rows="1" cols="50" id="<?php echo $vtprd_rule_display_framework['discount_product_short_msg']['id']; ?>" class="<?php echo $vtprd_rule_display_framework['discount_product_short_msg']['class']; ?>  right-column" type="<?php echo $vtprd_rule_display_framework['discount_product_short_msg']['type']; ?>" name="<?php echo $vtprd_rule_display_framework['discount_product_short_msg']['name']; ?>" ><?php echo $vtprd_rule->discount_product_short_msg; ?></textarea>
+                         
                      </span>              
                      <span class="shortIntro" >
                         <em>
@@ -1167,15 +1161,16 @@ class VTPRD_Rules_UI{
              <span class="discount_product_full_msg_area clear-both">
 
                  <span class="left-column">
-                     <span class="title">                
+                     <span class="title  hasWizardHelpRight">                
                          <span class="title-anchors" id="discount_product_full_msg_label"> <?php _e('Advertising Message', 'vtprd');?> </span> 
                      </span>
+                     <?php vtprd_show_object_hover_help ('discount_product_full_msg', 'wizard') ?>
                  </span>
                                     
                  <span class="right-column">                
                      <span class="column-width50">
-                         <textarea rows="2" cols="35" id="<?php echo $vtprd_rule_display_framework['discount_product_full_msg']['id']; ?>" class="<?php echo $vtprd_rule_display_framework['discount_product_full_msg']['class']; ?>  right-column  hasWizardHelpRight" type="<?php echo $vtprd_rule_display_framework['discount_product_full_msg']['type']; ?>" name="<?php echo $vtprd_rule_display_framework['discount_product_full_msg']['name']; ?>" ><?php echo $vtprd_rule->discount_product_full_msg; ?></textarea>                                                                                              
-                         <?php vtprd_show_object_hover_help ('discount_product_full_msg', 'wizard') ?>
+                         <textarea rows="2" cols="35" id="<?php echo $vtprd_rule_display_framework['discount_product_full_msg']['id']; ?>" class="<?php echo $vtprd_rule_display_framework['discount_product_full_msg']['class']; ?>  right-column" type="<?php echo $vtprd_rule_display_framework['discount_product_full_msg']['type']; ?>" name="<?php echo $vtprd_rule_display_framework['discount_product_full_msg']['name']; ?>" ><?php echo $vtprd_rule->discount_product_full_msg; ?></textarea>                                                                                              
+                         
                      </span>                               
                      <span class="shortIntro" >
                         <em>
@@ -1226,15 +1221,15 @@ class VTPRD_Rules_UI{
              
                //Both _label fields have trailing '_0', as edits are actually handled in the discount info loop ?>          
             <span class="left-column  left-column-less-padding-top2">
-                <span class="title" id="discount_lifetime_max_title_0" >
+                <span class="title  hasWizardHelpRight" id="discount_lifetime_max_title_0" >
                   <a id="discount_lifetime_max_title_anchor" class="title-anchors second-level-title" href="javascript:void(0);"><?php _e('Customer', 'vtprd'); echo '<br>'; _e('Rule Limit', 'vtprd');?></a>
                 </span>
-                 
+                <?php vtprd_show_object_hover_help ('discount_lifetime_max_amt_type', 'wizard') ?> 
             </span>
             
             <span class="dropdown  right-column" id="discount_lifetime_max_dropdown">
                
-               <select id="<?php echo $vtprd_deal_screen_framework['discount_lifetime_max_amt_type']['select']['id'] .'_0' ;?>" class="<?php echo$vtprd_deal_screen_framework['discount_lifetime_max_amt_type']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_deal_screen_framework['discount_lifetime_max_amt_type']['select']['name'] .'_0' ;?>" tabindex="<?php echo $vtprd_deal_screen_framework['discount_lifetime_max_amt_type']['select']['tabindex'] .'_0' ; ?>" >          
+               <select id="<?php echo $vtprd_deal_screen_framework['discount_lifetime_max_amt_type']['select']['id'] .'_0' ;?>" class="<?php echo$vtprd_deal_screen_framework['discount_lifetime_max_amt_type']['select']['class']; ?>" name="<?php echo $vtprd_deal_screen_framework['discount_lifetime_max_amt_type']['select']['name'] .'_0' ;?>" tabindex="<?php echo $vtprd_deal_screen_framework['discount_lifetime_max_amt_type']['select']['tabindex'] .'_0' ; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['discount_lifetime_max_amt_type']['option']); $i++) { 
                           $this->vtprd_change_title_currency_symbol('discount_lifetime_max_amt_type', $i, $currency_symbol);
@@ -1250,7 +1245,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_deal_screen_framework['discount_lifetime_max_amt_type']['option'][$i]['id'] .'_0' ;?>"  class="<?php echo $vtprd_deal_screen_framework['discount_lifetime_max_amt_type']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_deal_screen_framework['discount_lifetime_max_amt_type']['option'][$i]['value']; ?>"   <?php if ($vtprd_deal_screen_framework['discount_lifetime_max_amt_type']['option'][$i]['value']  == $vtprd_rule->rule_deal_info[0]['discount_lifetime_max_amt_type']  )  { echo $selected; } // use '0' deal_info_line...?> >  <?php echo $title; ?> </option>
                  <?php } ?> 
                </select>
-               <?php vtprd_show_object_hover_help ('discount_lifetime_max_amt_type', 'wizard') ?>
+               
                            
                <span class="amt-field" id="discount_lifetime_max_amt_count_area">
  
@@ -1293,14 +1288,15 @@ class VTPRD_Rules_UI{
              
                //Both _label fields have trailing '_0', as edits are actually handled in the discount info loop ?>          
             <span class="left-column">
-                <span class="title" id="discount_rule_max_title_0" >
+                <span class="title  hasWizardHelpRight" id="discount_rule_max_title_0" >
                   <a id="discount_rule_max_title_anchor" class="title-anchors second-level-title" href="javascript:void(0);"><?php _e('Cart Limit', 'vtprd');?></a>
-                </span>                
+                </span>
+                <?php vtprd_show_object_hover_help ('discount_rule_max_amt_type', 'wizard') ?>                
             </span>   
                     
             <span class="dropdown right-column" id="discount_rule_max_dropdown">
                 
-                <select id="<?php echo $vtprd_deal_screen_framework['discount_rule_max_amt_type']['select']['id'] .'_0' ;?>" class="<?php echo$vtprd_deal_screen_framework['discount_rule_max_amt_type']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_deal_screen_framework['discount_rule_max_amt_type']['select']['name'] .'_0' ;?>" tabindex="<?php echo $vtprd_deal_screen_framework['discount_rule_max_amt_type']['select']['tabindex'] .'_0' ; ?>" >          
+                <select id="<?php echo $vtprd_deal_screen_framework['discount_rule_max_amt_type']['select']['id'] .'_0' ;?>" class="<?php echo$vtprd_deal_screen_framework['discount_rule_max_amt_type']['select']['class']; ?>" name="<?php echo $vtprd_deal_screen_framework['discount_rule_max_amt_type']['select']['name'] .'_0' ;?>" tabindex="<?php //echo $vtprd_deal_screen_framework['discount_rule_max_amt_type']['select']['tabindex'] .'_0' ; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['discount_rule_max_amt_type']['option']); $i++) {
                           $this->vtprd_change_title_currency_symbol('discount_rule_max_amt_type', $i, $currency_symbol); 
@@ -1308,7 +1304,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_deal_screen_framework['discount_rule_max_amt_type']['option'][$i]['id'] .'_0' ;?>"  class="<?php echo $vtprd_deal_screen_framework['discount_rule_max_amt_type']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_deal_screen_framework['discount_rule_max_amt_type']['option'][$i]['value']; ?>"   <?php if ($vtprd_deal_screen_framework['discount_rule_max_amt_type']['option'][$i]['value']  == $vtprd_rule->rule_deal_info[0]['discount_rule_max_amt_type']  )  { echo $selected; } // use '0' deal_info_line...?> >  <?php echo $vtprd_deal_screen_framework['discount_rule_max_amt_type']['option'][$i]['title']; ?> </option>
                  <?php } ?> 
                 </select> 
-                <?php vtprd_show_object_hover_help ('discount_rule_max_amt_type', 'wizard') ?>
+                
                 
                 <span class="amt-field  " id="discount_rule_max_amt_count_area">
                  <input id="<?php echo $vtprd_deal_screen_framework['discount_rule_max_amt_count']['id'] .'_0' ?>" class="<?php echo $vtprd_deal_screen_framework['discount_rule_max_amt_count']['class']; ?>  limit-count" type="<?php echo $vtprd_deal_screen_framework['discount_rule_max_amt_count']['type']; ?>" name="<?php echo $vtprd_deal_screen_framework['discount_rule_max_amt_count']['name'] .'_0' ;?>" value="<?php echo $vtprd_rule->rule_deal_info[0]['discount_rule_max_amt_count']; // use '0' deal_info_line...?>" />
@@ -1348,14 +1344,15 @@ class VTPRD_Rules_UI{
                  
                    //Both _label fields have trailing '_0', as edits are actually handled in the discount info loop ?>          
                 <span class="left-column">
-                    <span class="title" >
+                    <span class="title  hasWizardHelpRight" >
                       <span class="title-anchors" id="discount_rule_cum_max_title_0" ><?php _e('Product Limit', 'vtprd');?></span>
-                    </span>       
+                    </span> 
+                    <?php vtprd_show_object_hover_help ('discount_rule_cum_max_amt_type', 'wizard') ?>      
                 </span>
                 
                 <span class="dropdown right-column" id="discount_rule_cum_max_dropdown">                                                         
                    
-                   <select id="<?php echo $vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['select']['id'] .'_0' ;?>" class="<?php echo$vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['select']['class']; ?>  hasWizardHelpRight" name="<?php echo $vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['select']['name'] .'_0' ;?>" tabindex="<?php echo $vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['select']['tabindex'] .'_0' ; ?>" >          
+                   <select id="<?php echo $vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['select']['id'] .'_0' ;?>" class="<?php echo$vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['select']['class']; ?>" name="<?php echo $vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['select']['name'] .'_0' ;?>" tabindex="<?php //echo $vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['select']['tabindex'] .'_0' ; ?>" >          
                      <?php
                      for($i=0; $i < sizeof($vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['option']); $i++) { 
                               $this->vtprd_change_title_currency_symbol('discount_rule_cum_max_amt_type', $i, $currency_symbol);             
@@ -1363,7 +1360,7 @@ class VTPRD_Rules_UI{
                         <option id="<?php echo $vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['option'][$i]['id'] .'_0' ;?>"  class="<?php echo $vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['option'][$i]['value']; ?>"   <?php if ($vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['option'][$i]['value']  == $vtprd_rule->rule_deal_info[0]['discount_rule_cum_max_amt_type']  )  { echo $selected; } // use '0' deal_info_line...?> >  <?php echo $vtprd_deal_screen_framework['discount_rule_cum_max_amt_type']['option'][$i]['title']; ?> </option>
                      <?php } ?> 
                    </select>
-                   <?php vtprd_show_object_hover_help ('discount_rule_cum_max_amt_type', 'wizard') ?>
+                   
                     
                    <span class="amt-field" id="discount_rule_cum_max_amt_count_area">
               
@@ -1404,21 +1401,22 @@ class VTPRD_Rules_UI{
             <div class="screen-box dropdown cumulativeRulePricing_area clear-left" id="cumulativeRulePricing_areaID"> 
                
                <span class="left-column  left-column-less-padding-top">
-                  <span class="title" >
+                  <span class="title  hasWizardHelpRight" >
                     <span class="cumulativeRulePricing_lit" id="cumulativeRulePricing_label"><?php _e('Other', 'vtprd'); echo '&nbsp;<br>';  _e('Rule Discounts', 'vtprd');?></span>
-                  </span>     
+                  </span> 
+                  <?php vtprd_show_object_hover_help ('cumulativeRulePricing', 'wizard') ?>    
                </span>
                
                <span class="right-column">
                    <span class="column-width50"> 
-                     <select id="<?php echo $vtprd_rule_display_framework['cumulativeRulePricing']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['cumulativeRulePricing']['select']['class']; ?>    hasWizardHelpRight" name="<?php echo $vtprd_rule_display_framework['cumulativeRulePricing']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['cumulativeRulePricing']['select']['tabindex']; ?>" >          
+                     <select id="<?php echo $vtprd_rule_display_framework['cumulativeRulePricing']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['cumulativeRulePricing']['select']['class']; ?>" name="<?php echo $vtprd_rule_display_framework['cumulativeRulePricing']['select']['name'];?>" tabindex="<?php //echo $vtprd_rule_display_framework['cumulativeRulePricing']['select']['tabindex']; ?>" >          
                        <?php
                        for($i=0; $i < sizeof($vtprd_rule_display_framework['cumulativeRulePricing']['option']); $i++) { 
                        ?>                             
                           <option id="<?php echo $vtprd_rule_display_framework['cumulativeRulePricing']['option'][$i]['id']; ?>"  class="<?php echo $vtprd_rule_display_framework['cumulativeRulePricing']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_rule_display_framework['cumulativeRulePricing']['option'][$i]['value']; ?>"   <?php if ($vtprd_rule_display_framework['cumulativeRulePricing']['option'][$i]['value'] == $vtprd_rule->cumulativeRulePricing )  { echo $selected; } ?> >  <?php echo $vtprd_rule_display_framework['cumulativeRulePricing']['option'][$i]['title']; ?> </option>
                        <?php } ?> 
                      </select>
-                     <?php vtprd_show_object_hover_help ('cumulativeRulePricing', 'wizard') ?>
+                     
                      
                      <span class="" id="priority_num">   <?php //only display if multiple rule discounts  ?>
                        <span class="text-field" id="ruleApplicationPriority_num">
@@ -1444,20 +1442,21 @@ class VTPRD_Rules_UI{
     
             <div class="screen-box dropdown cumulativeCouponPricing_area clear-left" id="cumulativeCouponPricing_0">              
                <span class="left-column  left-column-less-padding-top">
-                  <span class="title" >
+                  <span class="title  hasWizardHelpRight" >
                     <span class="cumulativeRulePricing_lit" id="cumulativeCouponPricing_label"><?php _e('Other <br>Coupon Discounts', 'vtprd');//_e('Apply this Rule Discount ', 'vtprd'); echo '&nbsp;&nbsp;';  _e('in Addition to Coupon Discount : &nbsp;', 'vtprd');?></span>
-                  </span>   
+                  </span> 
+                  <?php vtprd_show_object_hover_help ('cumulativeCouponPricing', 'wizard') ?>  
                </span>
                <span class="right-column">
                    <span class="column-width50"> 
-                     <select id="<?php echo $vtprd_rule_display_framework['cumulativeCouponPricing']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['cumulativeCouponPricing']['select']['class']; ?>    hasWizardHelpRight" name="<?php echo $vtprd_rule_display_framework['cumulativeCouponPricing']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['cumulativeCouponPricing']['select']['tabindex']; ?>" >          
+                     <select id="<?php echo $vtprd_rule_display_framework['cumulativeCouponPricing']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['cumulativeCouponPricing']['select']['class']; ?>" name="<?php echo $vtprd_rule_display_framework['cumulativeCouponPricing']['select']['name'];?>" tabindex="<?php //echo $vtprd_rule_display_framework['cumulativeCouponPricing']['select']['tabindex']; ?>" >          
                        <?php
                        for($i=0; $i < sizeof($vtprd_rule_display_framework['cumulativeCouponPricing']['option']); $i++) { 
                        ?>                             
                           <option id="<?php echo $vtprd_rule_display_framework['cumulativeCouponPricing']['option'][$i]['id']; ?>"  class="<?php echo $vtprd_rule_display_framework['cumulativeCouponPricing']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_rule_display_framework['cumulativeCouponPricing']['option'][$i]['value']; ?>"   <?php if ($vtprd_rule_display_framework['cumulativeCouponPricing']['option'][$i]['value'] == $vtprd_rule->cumulativeCouponPricing )  { echo $selected; } ?> >  <?php echo $vtprd_rule_display_framework['cumulativeCouponPricing']['option'][$i]['title']; ?> </option>
                        <?php } ?> 
                      </select>
-                     <?php vtprd_show_object_hover_help ('cumulativeCouponPricing', 'wizard') ?>
+                     
                    </span>           
                    <span class="shortIntro  shortIntro2" >
                       <em>
@@ -1476,20 +1475,21 @@ class VTPRD_Rules_UI{
                  
             <div class="screen-box dropdown cumulativeSalePricing_area clear-left" id="cumulativeSalePricing_areaID">              
                <span class="left-column  left-column-less-padding-top">
-                   <span class="title" >
+                   <span class="title  hasWizardHelpRight" >
                      <span class="cumulativeRulePricing_lit" id="cumulativeSalePricing_label"><?php _e('Product', 'vtprd'); echo '&nbsp;<br>'; _e('Sale Pricing', 'vtprd');?></span>
-                   </span>                 
+                   </span> 
+                   <?php vtprd_show_object_hover_help ('cumulativeSalePricing', 'wizard') ?>                
                </span>
                <span class="right-column">
                    
-                   <select id="<?php echo $vtprd_rule_display_framework['cumulativeSalePricing']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['cumulativeSalePricing']['select']['class']; ?>    hasWizardHelpRight" name="<?php echo $vtprd_rule_display_framework['cumulativeSalePricing']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['cumulativeSalePricing']['select']['tabindex']; ?>" >          
+                   <select id="<?php echo $vtprd_rule_display_framework['cumulativeSalePricing']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['cumulativeSalePricing']['select']['class']; ?>" name="<?php echo $vtprd_rule_display_framework['cumulativeSalePricing']['select']['name'];?>" tabindex="<?php //echo $vtprd_rule_display_framework['cumulativeSalePricing']['select']['tabindex']; ?>" >          
                      <?php
                      for($i=0; $i < sizeof($vtprd_rule_display_framework['cumulativeSalePricing']['option']); $i++) { 
                      ?>                             
                         <option id="<?php echo $vtprd_rule_display_framework['cumulativeSalePricing']['option'][$i]['id']; ?>"  class="<?php echo $vtprd_rule_display_framework['cumulativeSalePricing']['option'][$i]['class']; ?>"  value="<?php echo $vtprd_rule_display_framework['cumulativeSalePricing']['option'][$i]['value']; ?>"   <?php if ($vtprd_rule_display_framework['cumulativeSalePricing']['option'][$i]['value'] == $vtprd_rule->cumulativeSalePricing )  { echo $selected; } ?> >  <?php echo $vtprd_rule_display_framework['cumulativeSalePricing']['option'][$i]['title']; ?> </option>
                      <?php } ?> 
                    </select> 
-                   <?php vtprd_show_object_hover_help ('cumulativeSalePricing', 'wizard') ?>
+                   
                         
                    <span class="shortIntro  shortIntro2 shortIntro3" >
                       <em>
@@ -1604,7 +1604,7 @@ class VTPRD_Rules_UI{
           ?>
             <?php //output hidden count of all variation checkboxes.  Used on update to store info used in 'yousave' messaging?>
             <input type="hidden" id="checkbox_count-var-in" name="checkbox_count-var-in" value="<?php echo $vtprd_info['inpop_variation_checkbox_total']; ?>" />
-           </div>  <?php//end variations-in ?>
+           </div>  <?php //end variations-in ?>
         </div>  <?php //end inPopVarProdID ?> 
 
         <div class="" id="vtprd-pop-in-groups-cntl">             
@@ -1618,7 +1618,7 @@ class VTPRD_Rules_UI{
           // ********************************
           ?>
         
-        </div>  <?php//end prodcat-in ?>
+        </div>  <?php //end prodcat-in ?>
         <h4 class="and-or" id="and-or-in-label"><?php _e('Or', 'vtprd') //('And / Or', 'vtprd');?></h4>
         <div id="rulecat-in">
           <h3 id="rulecat-in-label"><?php _e('Pricing Deals Categories', 'vtprd');?></h3>
@@ -1629,7 +1629,7 @@ class VTPRD_Rules_UI{
           // ********************************
           ?> 
                          
-        </div>  <?php//end rulecat-in ?>
+        </div>  <?php //end rulecat-in ?>
         
         
         <div id="and-or-role-div">
@@ -1737,7 +1737,7 @@ class VTPRD_Rules_UI{
               // ********************************
             }                               
           ?>
-           </div>  <?php//end variations-out ?>
+           </div>  <?php //end variations-out ?>
         </div>  <?php //end actionPopVarProdID ?> 
         
  
@@ -1752,7 +1752,7 @@ class VTPRD_Rules_UI{
           // ********************************
           ?>
         
-        </div>  <?php//end prodcat-out ?>
+        </div>  <?php //end prodcat-out ?>
         <h4 class="and-or"><?php _e('Or', 'vtprd') //('And / Or', 'vtprd');?></h4>
         <div id="rulecat-out">
           <h3 id="rulecat-out-label"><?php _e('Pricing Deals Categories', 'vtprd');?></h3>
@@ -1770,7 +1770,7 @@ class VTPRD_Rules_UI{
           ?>
           
                          
-        </div>  <?php//end rulecat-out ?>
+        </div>  <?php //end rulecat-out ?>
         
 
       </div> <?php //end vtprd-pop-out-cntl ?> 
@@ -1899,21 +1899,22 @@ class VTPRD_Rules_UI{
         $vtprd_rule->periodicByDateRange[0]['rangeEndDate']   = (date('Y')+1) . date('-m-d') ;
      } 
      ?> 
-        <span class="basic-begin-date-area">          
-          <span class="begin-date first-in-line-label" id='begin-date-label-0' ><?php _e('Begin ', 'vtprd');?></span>                    
-          <input type='text' id='date-begin-0' class='pickdate' size='7' value="<?php echo $vtprd_rule->periodicByDateRange[0]['rangeBeginDate']; ?>" name='date-begin-0' readonly="readonly" />				
+        <span class="basic-begin-date-area blue-dropdown"> 
+            <label class="begin-date first-in-line-label"><?php _e('Begin Date', 'vtprd');?></label> 
+            <input type='text' id='date-begin-0' class='pickdate  clear-left' size='7' value="<?php echo $vtprd_rule->periodicByDateRange[0]['rangeBeginDate']; ?>" name='date-begin-0' readonly="readonly" />				
         </span>        
-        <span class="basic-end-date-area">          
-          <span class="end-date first-in-line-label" id='end-date-label-0'><?php _e('End ', 'vtprd');?></span>                     
-          <input type='text' id='date-end-0'   class='pickdate' size='7' value="<?php echo $vtprd_rule->periodicByDateRange[0]['rangeEndDate']; ?>"   name='date-end-0' readonly="readonly"  />          
+        <span class="basic-end-date-area blue-dropdown">          
+          <label class="end-date first-in-line-label"><?php _e('End Date', 'vtprd');?></label>                      
+          <input type='text' id='date-end-0'   class='pickdate   clear-left' size='7' value="<?php echo $vtprd_rule->periodicByDateRange[0]['rangeEndDate']; ?>"   name='date-end-0' readonly="readonly"  />          
         </span>        
         
     <?php      
        global $vtprd_setup_options;
+       /* scaring the punters
        if ( $vtprd_setup_options['use_this_timeZone'] == 'none') {
           echo __('<span id="options-setup-error" style="color:red !important;">Scheduling requires setup: <a  href="/wp-admin/edit.php?post_type=vtprd-rule&page=vtprd_setup_options_page"  title="select">Please - Click Here - to Select the Store GMT Time Zone</a></span>', 'vtprd'); 
         }          
-
+       */
   }   
 
   public  function vtprd_change_title_currency_symbol( $variable_name, $i, $currency_symbol ) {
@@ -1965,7 +1966,8 @@ class VTPRD_Rules_UI{
       ?>  
               </ul>
           </div>
-      <?php if ( current_user_can($tax->cap->edit_terms) && !($taxonomy == 'roles') && !($taxonomy == 'variations') ): ?>
+     <?php //if ( current_user_can($tax->cap->edit_terms) && !($taxonomy == 'roles') && !($taxonomy == 'variations') ): ?>
+      <?php if ( !($taxonomy == 'roles') && !($taxonomy == 'variations') ): ?>
               <div id="<?php echo $taxonomy; ?>-adder" class="wp-hidden-children">
                   <h4>
                       <a id="<?php echo $taxonomy; ?>-add-toggle" href="#<?php echo $taxonomy; ?>-add" class="hide-if-no-js" tabindex="3">
@@ -2173,6 +2175,7 @@ class VTPRD_Rules_UI{
     }
     
     return ($product_variation_IDs);
+    
   } 
   
      
@@ -2248,7 +2251,7 @@ class VTPRD_Rules_UI{
         <h4 id="includeOrExclude-area-title"><?php _e('*Include or Exclude Product*', 'vtprd'); echo '&nbsp;'; _e(' in Pricing Deals Rule processing, based on the Options and Rule List below', 'vtprd');?></h4>                    
         <div class="dropdown includeOrExclude_area clear-left" id="includeOrExclude_areaID">              
            <span class="dropdown-label" id="includeOrExclude_label"><?php _e('Product Options:', 'vtprd');?></span>               
-           <select id="<?php echo $vtprd_rule_display_framework['includeOrExclude']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['includeOrExclude']['select']['class']; ?>" name="<?php echo $vtprd_rule_display_framework['includeOrExclude']['select']['name'];?>" tabindex="<?php echo $vtprd_rule_display_framework['includeOrExclude']['select']['tabindex']; ?>" >          
+           <select id="<?php echo $vtprd_rule_display_framework['includeOrExclude']['select']['id'];?>" class="<?php echo$vtprd_rule_display_framework['includeOrExclude']['select']['class']; ?>" name="<?php echo $vtprd_rule_display_framework['includeOrExclude']['select']['name'];?>" tabindex="<?php //echo $vtprd_rule_display_framework['includeOrExclude']['select']['tabindex']; ?>" >          
              <?php
              for($i=0; $i < sizeof($vtprd_rule_display_framework['includeOrExclude']['option']); $i++) {            
              ?>                             
@@ -2342,7 +2345,7 @@ class VTPRD_Rules_UI{
               +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
            */ ?>  
              <?php //Upper  pricint_type_select?>  
-              <select id="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['id'] .'1';?>" class="<?php echo$vtprd_rule_display_framework['pricing_type_select']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['name'] .'1';?>" tabindex="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['id'] .'1';?>" class="<?php echo$vtprd_rule_display_framework['pricing_type_select']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['name'] .'1';?>" tabindex="<?php //echo $vtprd_rule_display_framework['pricing_type_select']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_rule_display_framework['pricing_type_select']['option']); $i++) { 
                                              
@@ -2352,7 +2355,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_rule_display_framework['pricing_type_select']['option'][$i]['id'] .'1'; ?>"  class="<?php echo $vtprd_rule_display_framework['pricing_type_select']['option'][$i]['class'] .'1'; ?>"  value="<?php echo $vtprd_rule_display_framework['pricing_type_select']['option'][$i]['value']; ?>"    ><?php echo $title; ?></option>
                  <?php } ?> 
                </select>                                        
-              <select id="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['id'] .'-catalog';?>" class="<?php echo$vtprd_rule_display_framework['pricing_type_select']['select']['class'] .'-catalog'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['name'] .'-catalog';?>" tabindex="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['id'] .'-catalog';?>" class="<?php echo$vtprd_rule_display_framework['pricing_type_select']['select']['class'] .'-catalog'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['pricing_type_select']['select']['name'] .'-catalog';?>" tabindex="<?php //echo $vtprd_rule_display_framework['pricing_type_select']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_rule_display_framework['pricing_type_select']['option']); $i++) { 
                                              
@@ -2366,7 +2369,7 @@ class VTPRD_Rules_UI{
                           
              
              <?php //Upper  minimum_purchase_select?>  
-              <select id="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['id'] .'1';?>" class="<?php echo$vtprd_rule_display_framework['minimum_purchase_select']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['name'] .'1';?>" tabindex="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['id'] .'1';?>" class="<?php echo$vtprd_rule_display_framework['minimum_purchase_select']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['name'] .'1';?>" tabindex="<?php //echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_rule_display_framework['minimum_purchase_select']['option']); $i++) { 
                                              
@@ -2376,7 +2379,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['option'][$i]['id'] .'1'; ?>"  class="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['option'][$i]['class'] .'1'; ?>"  value="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['option'][$i]['value']; ?>"    ><?php echo $title; ?></option>
                  <?php } ?> 
                </select>                                        
-              <select id="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['id'] .'-catalog';?>" class="<?php echo$vtprd_rule_display_framework['minimum_purchase_select']['select']['class'] .'-catalog'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['name'] .'-catalog';?>" tabindex="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['id'] .'-catalog';?>" class="<?php echo$vtprd_rule_display_framework['minimum_purchase_select']['select']['class'] .'-catalog'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['name'] .'-catalog';?>" tabindex="<?php //echo $vtprd_rule_display_framework['minimum_purchase_select']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_rule_display_framework['minimum_purchase_select']['option']); $i++) { 
                                              
@@ -2389,7 +2392,7 @@ class VTPRD_Rules_UI{
                </select>   
              
              <?php //Upper  buy_group_filter_select?>  
-              <select id="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['id'] .'1';?>" class="<?php echo$vtprd_rule_display_framework['buy_group_filter_select']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['name'] .'1';?>" tabindex="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['id'] .'1';?>" class="<?php echo$vtprd_rule_display_framework['buy_group_filter_select']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['name'] .'1';?>" tabindex="<?php //echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_rule_display_framework['buy_group_filter_select']['option']); $i++) { 
                                              
@@ -2403,7 +2406,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['option'][$i]['id'] .'1'; ?>"  class="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['option'][$i]['class'] .'1'; ?>"  value="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['option'][$i]['value']; ?>"    ><?php echo $title; ?></option>
                  <?php } ?> 
                </select>                                        
-              <select id="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['id'] .'2';?>" class="<?php echo$vtprd_rule_display_framework['buy_group_filter_select']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['name'] .'2';?>" tabindex="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['id'] .'2';?>" class="<?php echo$vtprd_rule_display_framework['buy_group_filter_select']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['name'] .'2';?>" tabindex="<?php //echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_rule_display_framework['buy_group_filter_select']['option']); $i++) { 
                                              
@@ -2417,7 +2420,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['option'][$i]['id'] .'2'; ?>"  class="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['option'][$i]['class'] .'2'; ?>"  value="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['option'][$i]['value']; ?>"    ><?php echo $title; ?></option>
                  <?php } ?> 
                </select>
-              <select id="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['id'] .'-catalog';?>" class="<?php echo$vtprd_rule_display_framework['buy_group_filter_select']['select']['class'] .'-catalog'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['name'] .'-catalog';?>" tabindex="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['id'] .'-catalog';?>" class="<?php echo$vtprd_rule_display_framework['buy_group_filter_select']['select']['class'] .'-catalog'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['name'] .'-catalog';?>" tabindex="<?php //echo $vtprd_rule_display_framework['buy_group_filter_select']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_rule_display_framework['buy_group_filter_select']['option']); $i++) { 
                                              
@@ -2430,21 +2433,21 @@ class VTPRD_Rules_UI{
                </select>                  
       
              <?php //buy_amt_type ?>  
-              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['id'] .'1';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_type']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['name'] .'1';?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['id'] .'1';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_type']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['name'] .'1';?>" tabindex="<?php //echo $vtprd_deal_screen_framework['buy_amt_type']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_amt_type']['option']); $i++) { 
                  ?>                             
                     <option id="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['option'][$i]['id'] .'1'; ?>"  class="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['option'][$i]['class'] .'1'; ?>"  value="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['option'][$i]['value']; ?>"    ><?php echo $vtprd_deal_screen_framework['buy_amt_type']['option'][$i]['title']; ?></option>
                  <?php } ?> 
                </select>                                        
-              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['id'] .'2';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_type']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['name'] .'2';?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['id'] .'2';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_type']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['name'] .'2';?>" tabindex="<?php //echo $vtprd_deal_screen_framework['buy_amt_type']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_amt_type']['option']); $i++) { 
                  ?>                             
                     <option id="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['option'][$i]['id'] .'2'; ?>"  class="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['option'][$i]['class'] .'2'; ?>"  value="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['option'][$i]['value']; ?>"    ><?php echo $vtprd_deal_screen_framework['buy_amt_type']['option'][$i]['title2']; ?></option>
                  <?php } ?> 
                </select>
-              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['id'] .'-catalog';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_type']['select']['class'] .'-catalog'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['name'] .'-catalog';?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['id'] .'-catalog';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_type']['select']['class'] .'-catalog'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_type']['select']['name'] .'-catalog';?>" tabindex="<?php //echo $vtprd_deal_screen_framework['buy_amt_type']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_amt_type']['option']); $i++) { 
                                              
@@ -2457,14 +2460,14 @@ class VTPRD_Rules_UI{
                </select>                   
                
              <?php //buy_amt_applies_to ?>  
-              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['id'] .'1';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_applies_to']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['name'] .'1';?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['id'] .'1';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_applies_to']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['name'] .'1';?>" tabindex="<?php //echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_amt_applies_to']['option']); $i++) { 
                  ?>                             
                     <option id="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['option'][$i]['id'] .'1'; ?>"  class="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['option'][$i]['class'] .'1'; ?>"  value="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['option'][$i]['value']; ?>"    ><?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['option'][$i]['title']; ?></option>
                  <?php } ?> 
                </select>                                        
-              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['id'] .'2';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_applies_to']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['name'] .'2';?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['id'] .'2';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_applies_to']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['name'] .'2';?>" tabindex="<?php //echo $vtprd_deal_screen_framework['buy_amt_applies_to']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_amt_applies_to']['option']); $i++) { 
                  ?>                             
@@ -2473,14 +2476,14 @@ class VTPRD_Rules_UI{
                </select>  
                
              <?php //buy_amt_mod ?>  
-              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['id'] .'1';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_mod']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['name'] .'1';?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['id'] .'1';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_mod']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['name'] .'1';?>" tabindex="<?php //echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_amt_mod']['option']); $i++) { 
                  ?>                             
                     <option id="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['option'][$i]['id'] .'1'; ?>"  class="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['option'][$i]['class'] .'1'; ?>"  value="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['option'][$i]['value']; ?>"    ><?php echo $vtprd_deal_screen_framework['buy_amt_mod']['option'][$i]['title']; ?></option>
                  <?php } ?> 
                </select>                                        
-              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['id'] .'2';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_mod']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['name'] .'2';?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['id'] .'2';?>" class="<?php echo$vtprd_deal_screen_framework['buy_amt_mod']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['name'] .'2';?>" tabindex="<?php //echo $vtprd_deal_screen_framework['buy_amt_mod']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_amt_mod']['option']); $i++) { 
                  ?>                             
@@ -2489,21 +2492,21 @@ class VTPRD_Rules_UI{
                </select>  
              
             <?php //buy_repeat_condition ?>  
-              <select id="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['id'] .'1';?>" class="<?php echo$vtprd_deal_screen_framework['buy_repeat_condition']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['name'] .'1';?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['id'] .'1';?>" class="<?php echo$vtprd_deal_screen_framework['buy_repeat_condition']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['name'] .'1';?>" tabindex="<?php //echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_repeat_condition']['option']); $i++) { 
                  ?>                             
                     <option id="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['option'][$i]['id'] .'1'; ?>"  class="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['option'][$i]['class'] .'1'; ?>"  value="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['option'][$i]['value']; ?>"    ><?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['option'][$i]['title']; ?></option>
                  <?php } ?> 
                </select>                                        
-              <select id="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['id'] .'2';?>" class="<?php echo$vtprd_deal_screen_framework['buy_repeat_condition']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['name'] .'2';?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['id'] .'2';?>" class="<?php echo$vtprd_deal_screen_framework['buy_repeat_condition']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['name'] .'2';?>" tabindex="<?php //echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_repeat_condition']['option']); $i++) { 
                  ?>                             
                     <option id="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['option'][$i]['id'] .'2'; ?>"  class="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['option'][$i]['class'] .'2'; ?>"  value="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['option'][$i]['value']; ?>"    ><?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['option'][$i]['title2']; ?></option>
                  <?php } ?> 
                </select>  
-              <select id="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['id'] .'-catalog';?>" class="<?php echo$vtprd_deal_screen_framework['buy_repeat_condition']['select']['class'] .'-catalog'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['name'] .'-catalog';?>" tabindex="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['id'] .'-catalog';?>" class="<?php echo$vtprd_deal_screen_framework['buy_repeat_condition']['select']['class'] .'-catalog'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['name'] .'-catalog';?>" tabindex="<?php //echo $vtprd_deal_screen_framework['buy_repeat_condition']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['buy_repeat_condition']['option']); $i++) { 
                                              
@@ -2516,14 +2519,14 @@ class VTPRD_Rules_UI{
                </select>
       
              <?php //action_amt_type ?>  
-              <select id="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['id'] .'1';?>" class="<?php echo$vtprd_deal_screen_framework['action_amt_type']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['name'] .'1';?>" tabindex="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['id'] .'1';?>" class="<?php echo$vtprd_deal_screen_framework['action_amt_type']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['name'] .'1';?>" tabindex="<?php //echo $vtprd_deal_screen_framework['action_amt_type']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['action_amt_type']['option']); $i++) { 
                  ?>                             
                     <option id="<?php echo $vtprd_deal_screen_framework['action_amt_type']['option'][$i]['id'] .'1'; ?>"  class="<?php echo $vtprd_deal_screen_framework['action_amt_type']['option'][$i]['class'] .'1'; ?>"  value="<?php echo $vtprd_deal_screen_framework['action_amt_type']['option'][$i]['value']; ?>"    ><?php echo $vtprd_deal_screen_framework['action_amt_type']['option'][$i]['title']; ?></option>
                  <?php } ?> 
                </select>                                        
-              <select id="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['id'] .'2';?>" class="<?php echo$vtprd_deal_screen_framework['action_amt_type']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['name'] .'2';?>" tabindex="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['id'] .'2';?>" class="<?php echo$vtprd_deal_screen_framework['action_amt_type']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_deal_screen_framework['action_amt_type']['select']['name'] .'2';?>" tabindex="<?php //echo $vtprd_deal_screen_framework['action_amt_type']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_deal_screen_framework['action_amt_type']['option']); $i++) { 
                  ?>                             
@@ -2532,7 +2535,7 @@ class VTPRD_Rules_UI{
                </select> 
                
             <?php //inPop ?>  
-              <select id="<?php echo $vtprd_rule_display_framework['inPop']['select']['id'] .'1';?>" class="<?php echo$vtprd_rule_display_framework['inPop']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['inPop']['select']['name'] .'1';?>" tabindex="<?php echo $vtprd_rule_display_framework['inPop']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_rule_display_framework['inPop']['select']['id'] .'1';?>" class="<?php echo$vtprd_rule_display_framework['inPop']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['inPop']['select']['name'] .'1';?>" tabindex="<?php //echo $vtprd_rule_display_framework['inPop']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_rule_display_framework['inPop']['option']); $i++) { 
                                              
@@ -2546,7 +2549,7 @@ class VTPRD_Rules_UI{
                     <option id="<?php echo $vtprd_rule_display_framework['inPop']['option'][$i]['id'] .'1'; ?>"  class="<?php echo $vtprd_rule_display_framework['inPop']['option'][$i]['class'] .'1'; ?>"  value="<?php echo $vtprd_rule_display_framework['inPop']['option'][$i]['value']; ?>"    ><?php echo $title; ?></option>
                  <?php } ?> 
                </select>                                        
-              <select id="<?php echo $vtprd_rule_display_framework['inPop']['select']['id'] .'2';?>" class="<?php echo$vtprd_rule_display_framework['inPop']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['inPop']['select']['name'] .'2';?>" tabindex="<?php echo $vtprd_rule_display_framework['inPop']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_rule_display_framework['inPop']['select']['id'] .'2';?>" class="<?php echo$vtprd_rule_display_framework['inPop']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['inPop']['select']['name'] .'2';?>" tabindex="<?php //echo $vtprd_rule_display_framework['inPop']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_rule_display_framework['inPop']['option']); $i++) { 
                                              
@@ -2562,14 +2565,14 @@ class VTPRD_Rules_UI{
                </select>  
                  
              <?php //specChoice_in ?>  
-              <select id="<?php echo $vtprd_rule_display_framework['specChoice_in']['select']['id'] .'1';?>" class="<?php echo$vtprd_rule_display_framework['specChoice_in']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['specChoice_in']['select']['name'] .'1';?>" tabindex="<?php echo $vtprd_rule_display_framework['specChoice_in']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_rule_display_framework['specChoice_in']['select']['id'] .'1';?>" class="<?php echo$vtprd_rule_display_framework['specChoice_in']['select']['class'] .'1'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['specChoice_in']['select']['name'] .'1';?>" tabindex="<?php //echo $vtprd_rule_display_framework['specChoice_in']['select']['tabindex']; ?>" >          
                  <?php
                  for($i=0; $i < sizeof($vtprd_rule_display_framework['specChoice_in']['option']); $i++) { 
                  ?>                             
                     <option id="<?php echo $vtprd_rule_display_framework['specChoice_in']['option'][$i]['id'] .'1'; ?>"  class="<?php echo $vtprd_rule_display_framework['specChoice_in']['option'][$i]['class'] .'1'; ?>"  value="<?php echo $vtprd_rule_display_framework['specChoice_in']['option'][$i]['value']; ?>"    ><?php echo $vtprd_rule_display_framework['specChoice_in']['option'][$i]['title']; ?></option>
                  <?php } ?> 
                </select>                                        
-              <select id="<?php echo $vtprd_rule_display_framework['specChoice_in']['select']['id'] .'2';?>" class="<?php echo$vtprd_rule_display_framework['specChoice_in']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['specChoice_in']['select']['name'] .'2';?>" tabindex="<?php echo $vtprd_rule_display_framework['specChoice_in']['select']['tabindex']; ?>" >          
+              <select id="<?php echo $vtprd_rule_display_framework['specChoice_in']['select']['id'] .'2';?>" class="<?php echo$vtprd_rule_display_framework['specChoice_in']['select']['class'] .'2'; ?> hideMe" name="<?php echo $vtprd_rule_display_framework['specChoice_in']['select']['name'] .'2';?>" tabindex="<?php //echo $vtprd_rule_display_framework['specChoice_in']['select']['tabindex']; ?>" >          
                  <?php                                               
                  for($i=0; $i < sizeof($vtprd_rule_display_framework['specChoice_in']['option']); $i++) { 
                  ?>                             
