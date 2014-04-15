@@ -377,7 +377,8 @@ class VTPRD_Rules_UI{
           <div class="clear-left" id="first-blue-line">                          
                                                                              
               <span class="left-column  left-column-nothing-on-top">                              
-                 <label class="hasWizardHelpRight"  for="<?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['label']['for'];?>"><?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['label']['title'];?></label>  
+                 <?php //mwn20140414 added id ?>
+                 <label id="cart-or-catalog-select-label" class="hasWizardHelpRight"  for="<?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['label']['for'];?>"><?php echo $vtprd_rule_display_framework['cart_or_catalog_select']['label']['title'];?></label>  
                  <?php vtprd_show_object_hover_help ('cart_or_catalog_select', 'wizard') ?> 
               </span>
               <span class="blue-dropdown  right-column" id="cart-or-catalog-select-area">
@@ -402,7 +403,8 @@ class VTPRD_Rules_UI{
             
           <div class="blue-line  clear-left">                                  
                <span class="left-column  left-column-less-padding-top3">                              
-                 <label class="hasWizardHelpRight"   for="<?php echo $vtprd_rule_display_framework['pricing_type_select']['label']['for'];?>"><?php echo $vtprd_rule_display_framework['pricing_type_select']['label']['title'];?></label>
+                 <?php //mwn20140414 added id ?>
+                 <label id="pricing-type-select-label" class="hasWizardHelpRight"   for="<?php echo $vtprd_rule_display_framework['pricing_type_select']['label']['for'];?>"><?php echo $vtprd_rule_display_framework['pricing_type_select']['label']['title'];?></label>
                  <?php vtprd_show_object_hover_help ('pricing_type_select', 'wizard') ?> 
                </span>
                <span class="blue-dropdown  right-column" id="pricing-type-select-area">   
@@ -428,7 +430,8 @@ class VTPRD_Rules_UI{
               
           <div class="blue-line  clear-left">  
                <span class="left-column  left-column-less-padding-top3">                                            
-                 <label class="hasWizardHelpRight" for="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['label']['for'];?>"><?php echo $vtprd_rule_display_framework['minimum_purchase_select']['label']['title'];?></label>
+                 <?php //mwn20140414 added id ?>
+                 <label id="minimum-purchase-select-label" class="hasWizardHelpRight" for="<?php echo $vtprd_rule_display_framework['minimum_purchase_select']['label']['for'];?>"><?php echo $vtprd_rule_display_framework['minimum_purchase_select']['label']['title'];?></label>
                  <?php vtprd_show_object_hover_help ('minimum_purchase_select', 'wizard') ?> 
                </span>
                <span class="blue-dropdown  blue-dropdown-minimum  right-column" id="minimum-purchase-select-area">  

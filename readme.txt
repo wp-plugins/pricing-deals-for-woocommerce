@@ -3,8 +3,8 @@ Contributors: vark
 Donate link: http://www.varktech.com/wp-e-commerce/pricing-deals-for-woocommerce/
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
-Tested up to: 3.8.1
-Stable tag: 1.0.1
+Tested up to: 3.8.3
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -24,6 +24,7 @@ Power your store to greater success with pricing deals and sales promotions! Jus
 *   Group pricing
 *   Product and Variation Pricing
 *   Schedulable
+*   Works with WooCommerce 2.1+
 
 = A Complete Discount Marketing Package =
 
@@ -162,6 +163,12 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.2 - 2014-04-14 =
+* Fix - warnings on UI update error
+* Enhancement - improved edit error msgs in UI
+* Fix - Change to collation syntax on install
+* Fix - shortcode role 'notLoggedIn'
+
 = 1.0.1 - 2014-04-10 =
 * Fix - warning on install in front end if no rule
 * Fix - removed red notices to change host timezone on install
@@ -176,6 +183,12 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.0.2 - 2014-04-14 =
+* Fix - warnings on UI update error
+* Enhancement - improved edit error msgs in UI
+* Fix - Change to collation syntax on install
+* Fix - shortcode role 'notLoggedIn'
 
 = 1.0.1 - 2014-04-10 =
 * Fix - warning on install in front end if no rule

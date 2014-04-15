@@ -102,20 +102,47 @@ action amt condition can be an amt or $$
       if ($upperSelectsDoneSw != 'yes') {       
           $vtprd_rule->rule_error_message[] = array( 
                 'insert_error_before_selector' => '.top-box',  
-                'error_msg'  => __('Upper Level Filter choices not yet completed', 'vtprd') );            
+                'error_msg'  => __('Blueprint choices not yet completed', 'vtprd') );   //mwn20140414       
+          $vtprd_rule->rule_error_red_fields[] = '#blue-area-title' ;    //mwn20140414   
       } 
       
+      //mwn20140414    begin   ==> added these IDs to rules_ui.php ...
+      
+      if (($vtprd_rule->cart_or_catalog_select == 'choose') || ($vtprd_rule->cart_or_catalog_select <= ' ')) {
+          $vtprd_rule->rule_error_message[] = array( 
+                'insert_error_before_selector' => '.top-box',  
+                'error_msg'  => __('Cart or Catalog choice not yet made', 'vtprd') );        
+          $vtprd_rule->rule_error_red_fields[] = '#cart-or-catalog-select-label' ; 
+      }
+      
+      if (($vtprd_rule->pricing_type_select == 'choose') || ($vtprd_rule->pricing_type_select <= ' ')) {
+          $vtprd_rule->rule_error_message[] = array( 
+                'insert_error_before_selector' => '.top-box',  
+                'error_msg'  => __('Deal Type choice not yet made', 'vtprd') );        
+          $vtprd_rule->rule_error_red_fields[] = '#pricing-type-select-label' ; 
+      } 
+      
+      if (($vtprd_rule->minimum_purchase_select == 'choose') || ($vtprd_rule->minimum_purchase_select <= ' ')) {
+          $vtprd_rule->rule_error_message[] = array( 
+                'insert_error_before_selector' => '.top-box',  
+                'error_msg'  => __('Deal Action choice not yet made', 'vtprd') );          
+          $vtprd_rule->rule_error_red_fields[] = '#minimum-purchase-select-label' ; 
+      }           
+      //mwn20140414    end 
       
       //#RULEtEMPLATE IS NOW A HIDDEN FIELD which carries the rule template SET WITHIN THE JS
       //   in response to the inital dropdowns being selected. 
      $vtprd_rule->rule_template = $_REQUEST['rule_template_framework']; 
-     if ($vtprd_rule->rule_template == '0') { 
+     
+     if ($vtprd_rule->rule_template <= '0') {   //mwn20140414
+          /*  mwn20140414 
           $vtprd_rule->rule_error_message[] = array( 
                 'insert_error_before_selector' => '.template-area',  
                 'error_msg'  => __('Pricing Deal Template choice is required.', 'vtprd') );
           $vtprd_rule->rule_error_red_fields[] = '#deal-type-title' ; 
+          */
           $this->vtprd_dump_deal_lines_to_rule();
-          $this->vtprd_update_rules_info();              
+        //  $this->vtprd_update_rules_info();   mwn20140414           
           return; //fatal exit....           
       } else {    
         for($i=0; $i < sizeof($vtprd_rule_template_framework['option']); $i++) {
@@ -823,13 +850,24 @@ action amt condition can be an amt or $$
     //**************        
     
     //nuke the browser session variables in this case - allows clean retest ...
-    if(!isset($_SESSION)){
-      session_start();
+/*  mwn20140414 =>code shifted to top of file...
+    if(!isset($_SESSION['session_started'])){
+      session_start();    
       header("Cache-Control: no-cache");
-      header("Pragma: no-cache");
-    }      
-    session_destroy();
-    
+      header("Pragma: no-cache");      
+    }          
+*/
+    // mwn20140414 begin => added inline session_start().  allow potential dup session start, as it's only a Notice, not a warning....
+    //session_start();
+        
+    if (session_id() == "") {
+      session_start();    
+    } 
+    $_SESSION = array();
+    $_SESSION['session_started'] = 'Yes!';  // need to initialize the session prior to destroy 
+    session_destroy();   
+    session_write_close();
+    // mwn20140414 end
     
     return;
   } 
@@ -1747,6 +1785,11 @@ action amt condition can be an amt or $$
   
   public function vtprd_build_deal_edits_framework() {
     global $vtprd_rule, $vtprd_template_structures_framework, $vtprd_deal_edits_framework;
+    
+    //mwn20140414
+    if ($vtprd_rule->rule_template <= '0') {
+        return; 
+    }
     
     // previously determined template key
     $templateKey = $vtprd_rule->rule_template; 
