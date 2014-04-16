@@ -3,7 +3,7 @@ Contributors: vark
 Donate link: http://www.varktech.com/wp-e-commerce/pricing-deals-for-woocommerce/
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
-Tested up to: 3.8.3
+Tested up to: 3.9
 Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
