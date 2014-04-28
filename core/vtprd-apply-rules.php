@@ -76,13 +76,17 @@ class VTPRD_Apply_Rules{
     
 
     if ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ){   
-      echo 'vtprd_info <pre>'.print_r($vtprd_info, true).'</pre>' ;
+      error_log( print_r(  '$vtprd_info', true ) );
+      error_log( var_export($vtprd_info, true ) );
       session_start();    //mwntest
-      echo 'SESSION data <pre>'.print_r($_SESSION, true).'</pre>' ;      
-      echo '<pre>'.print_r($vtprd_rules_set, true).'</pre>' ; 
-      echo '<pre>'.print_r($vtprd_cart, true).'</pre>' ;
-      echo '<pre>'.print_r($vtprd_setup_options, true).'</pre>' ;
-      echo '<pre>'.print_r($vtprd_info, true).'</pre>' ;    
+      error_log( print_r(  '$_SESSION', true ) );
+      error_log( var_export($_SESSION, true ) );
+      error_log( print_r(  '$vtprd_rules_set', true ) );
+      error_log( var_export($vtprd_rules_set, true ) );
+      error_log( print_r(  '$vtprd_cart', true ) );
+      error_log( var_export($vtprd_cart, true ) );
+      error_log( print_r(  '$vtprd_setup_options', true ) );
+      error_log( var_export($vtprd_setup_options, true ) );   
     }
     
     return;      
@@ -559,13 +563,13 @@ class VTPRD_Apply_Rules{
         break;
       case 'inCurrentInPopOnly':
           if ($vtprd_rules_set[$i]->rule_deal_info[$d]['action_amt_type'] == 'zero' ) {  //means we are acting on the already-found 'buy' unit
-            $vtprd_rules_set[$i]->actionPop_exploded_group_begin = $vtprd_rules_set[$i]->inPop_exploded_group_end - 1;   //end - 1 gets the nth, as well as the direct hit...
-            $vtprd_rules_set[$i]->actionPop_exploded_group_end   = $vtprd_rules_set[$i]->inPop_exploded_group_end;        
+            $vtprd_rules_set[$i]->actionPop_exploded_group_begin = $vtprd_rules_set[$i]->inPop_exploded_group_end - 1;   //end - 1 gets the nth, as well as the direct hit...       
           } else {          
             //always the same as inPop pointers
             $vtprd_rules_set[$i]->actionPop_exploded_group_begin = $vtprd_rules_set[$i]->inPop_exploded_group_begin;
-            $vtprd_rules_set[$i]->actionPop_exploded_group_end   = $vtprd_rules_set[$i]->inPop_exploded_group_end;
           }
+        //$vtprd_rules_set[$i]->actionPop_exploded_group_end   = $vtprd_rules_set[$i]->inPop_exploded_group_end;   //v1.0.3 
+          $vtprd_rules_set[$i]->actionPop_exploded_group_end   = sizeof($vtprd_rules_set[$i]->actionPop_exploded_found_list);    //v1.0.3               
         break;  
       case 'nextInInPop':   
           if ($vtprd_rules_set[$i]->rule_deal_info[$d]['action_amt_type'] == 'zero' ) {  //means we are acting on the already-found 'buy' unit
@@ -639,7 +643,9 @@ class VTPRD_Apply_Rules{
         break;
     } 
 
-    if ( ($vtprd_rules_set[$i]->actionPop_exploded_group_end >= sizeof($vtprd_rules_set[$i]->actionPop_exploded_found_list) ) ||   
+    $sizeof_actionpop_list = sizeof($vtprd_rules_set[$i]->actionPop_exploded_found_list); //v 1.0.3
+    if ( ($vtprd_rules_set[$i]->actionPop_exploded_group_end >= $sizeof_actionpop_list ) || 
+         ($ar >= ($sizeof_actionpop_list) ) ||  //v1.0.3 exit if infinite repeat  
          ($vtprd_rules_set[$i]->end_of_actionPop_reached == 'yes') ) {
        $vtprd_rules_set[$i]->discount_processing_status = 'InPopEnd';
 

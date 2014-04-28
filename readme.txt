@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/wp-e-commerce/pricing-deals-for-woocommerce
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -163,6 +163,14 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.3 - 2014-04-26 =
+* Fix - warnings on apply
+* Fix - cartWidget print option corrected
+* Fix - Get group repeat logic
+* Enhancement - e_notices made switchable, based on 'Test Debugging Mode Turned On' settings switch
+* Enhancement - debugging_mode output to error log
+* Change - cumulativeSalePricing switch default now = 'Yes - Apply Discount to Product Price, even if On Sale' - UI + JS chg
+
 = 1.0.2 - 2014-04-14 =
 * Fix - warnings on UI update error
 * Enhancement - improved edit error msgs in UI
@@ -183,6 +191,14 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.0.3 - 2014-04-26 =
+* Fix - warnings on apply
+* Fix - cartWidget print option corrected
+* Fix - Get group repeat logic
+* Enhancement - e_notices made switchable, based on 'Test Debugging Mode Turned On' settings switch
+* Enhancement - debugging_mode output to error log
+* Change - cumulativeSalePricing switch default now = 'Yes - Apply Discount to Product Price, even if On Sale' - UI + JS chg
 
 = 1.0.2 - 2014-04-14 =
 * Fix - warnings on UI update error

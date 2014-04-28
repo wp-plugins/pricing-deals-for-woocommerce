@@ -1340,7 +1340,7 @@ DITTO ie10!!
                               $('#discount_rule_cum_max_amt_type_none_0').attr('selected', true);
                               $('#cumulativeRulePricingNo').attr('selected', true);
                               $('#cumulativeCouponPricingNo').attr('selected', true);
-                              $('#cumulativeSalePricingNo').attr('selected', true);        
+                              $('#cumulativeSalePricingAddTo').attr('selected', true);        
                             //  $('#discount_rule_max_amt_type_0').prop('selectedIndex',1);        
                             //  $('#discount_lifetime_max_amt_type_0').prop('selectedIndex',1);
                             //  $('#cumulativeRulePricing').prop('selectedIndex',1);
@@ -1899,6 +1899,7 @@ DITTO ie10!!
                               setCumulativeSwitchesYes();
                               
                             };                             
+                            /*
                             function setCumulativeSwitchesNo() {                          
                               $("#cumulativeRulePricing").val('no');
                               $("#cumulativeCouponPricing").val('no');
@@ -1908,13 +1909,14 @@ DITTO ie10!!
                               $('#cumulativeSalePricingAddTo').attr('disabled', true);
                               $('#cumulativeSalePricingReplace').attr('disabled', true);
                               cumulativeRulePricing_chg();                           
-                            };  
+                            };
+                            */  
                             function setCumulativeSwitchesYes() {
                               //only do this if NOT 1st time and 1st time data present
                               if ($("#upperSelectsHaveDataFirstTime").val() == 0 ) {
                                 $("#cumulativeRulePricing").val('yes');
                                 $("#cumulativeCouponPricing").val('yes');
-                                $("#cumulativeSalePricing").val('no');
+                                $("#cumulativeSalePricing").val('addToSalePrice');  //v1.0.3
                                 $("#ruleApplicationPriority_num").val('10');
                               }
 

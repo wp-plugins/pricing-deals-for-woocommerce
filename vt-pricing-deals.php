@@ -3,7 +3,7 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.0.2
+Version: 1.0.3
 Author: Vark
 Author URI: http://varktech.com
 */
@@ -43,9 +43,9 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.0.2');
-    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.2');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2014-04-14');
+		define('VTPRD_VERSION',                               '1.0.3');
+    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.3');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2014-04-26');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
@@ -118,7 +118,15 @@ class VTPRD_Controller{
     }
 
     $vtprd_setup_options = get_option( 'vtprd_setup_options' );  //put the setup_options into the global namespace 
- 
+
+    //************
+    // Turn OFF all php Notices, except in debug mode      v1.0.3 
+    //   Settings switch 'Test Debugging Mode Turned On'
+    //************
+    if ( $vtprd_setup_options['debugging_mode_on'] != 'yes' ){
+      //TURN OFF all php notices, in case this default is not set in user's php ini
+      error_reporting(E_ALL ^ E_NOTICE);    //report all errors except notices
+    } 
     //************
             
     /*  **********************************

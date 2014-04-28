@@ -1,5 +1,5 @@
 <?php
-
+                     
 	/*******************************************************  
  	     The session variable for this product will already have been
  	     stored during the catalog display of the product price 
@@ -219,8 +219,8 @@
         
         //parent product vargroup on sale, individual product variation may not be on sale.
         // send an additional sale msg for the varProd parent group...
+        $show_yousave_one_some_msg;
         if ($vtprd_setup_options['show_yousave_one_some_msg'] == 'yes' ) {
-          $show_yousave_one_some_msg;
           if (!$show_yousave_one_some_msg) {
             $rulesetKey = $row['ruleset_occurrence'];
             switch( $vtprd_rules_set[$rulesetKey]->inPop_varProdID_parentLit) {  
@@ -258,6 +258,7 @@
       //needed for wp-e-commerce!!!!!!!!!!!
       //  if = 'yes', display of 'yousave' becomes 'save FROM' and doesn't change!!!!!!!
 //      $product_variations_sw = vtprd_test_for_variations($product_id);
+      $product_variations_sw;
     
       if ($vtprd_cart->cart_items[0]->yousave_total_amt > 0) {
          $list_price                    =   $vtprd_cart->cart_items[0]->db_unit_price_list;
@@ -678,7 +679,7 @@
 	function vtprd_print_widget_discount_total() {
     global $vtprd_cart, $woocommerce, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
 
-    if ($vtprd_setup_options['show_widget_discount_total_line'] == 'no') {
+    if ($vtprd_setup_options['show_cartWidget_discount_total_line'] == 'no') { 
       return;
     }
                                                     

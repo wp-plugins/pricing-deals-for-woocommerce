@@ -476,13 +476,13 @@ class VTPRD_Rules_UI_Framework {
                   'id'       => 'cumulativeRulePricingNo',
                   'class'    => 'cumulativeRulePricingOptions',
                   'value'    => 'no',
-                  'title'    => __('No ', 'vtprd')
+                  'title'    => __("No", 'vtprd')
                  ),                
                 array (
                   'id'       => 'cumulativeRulePricingYes',
                   'class'    => 'cumulativeRulePricingOptions',
                   'value'    => 'yes',
-                  'title'    => __('Yes ', 'vtprd')
+                  'title'    => __('Yes', 'vtprd')
                  )
               )
            ),
@@ -500,19 +500,19 @@ class VTPRD_Rules_UI_Framework {
                   'id'       => 'cumulativeSalePricingNo',
                   'class'    => 'cumulativeSalePricingOptions',
                   'value'    => 'no',
-                  'title'    => __(' No - if product already on Sale, no further discount  ', 'vtprd')
+                  'title'    => __(' No - if product already On Sale, no further discount  ', 'vtprd')
                  ),              
                  array (
                   'id'       => 'cumulativeSalePricingAddTo',
                   'class'    => 'cumulativeSalePricingOptions',
                   'value'    => 'addToSalePrice',
-                  'title'    => __('Apply Discount to Product Sale Price  ', 'vtprd')
+                  'title'    => __(' Yes - Apply Discount to Product Price, even if On Sale', 'vtprd')
                  ),
                  array (
                   'id'       => 'cumulativeSalePricingReplace',
                   'class'    => 'cumulativeSalePricingOptions',
                   'value'    => 'replaceSalePrice',
-                  'title'    => __('Apply Discount to Regular Price, if Less than Sale Price  ', 'vtprd')  . '&nbsp;&nbsp;'
+                  'title'    => __('Apply Discount, if discounted Regular Price Less than Sale Price  ', 'vtprd')  . '&nbsp;&nbsp;'
                  )                 
               )
            ),
@@ -531,13 +531,13 @@ class VTPRD_Rules_UI_Framework {
                   'id'       => 'cumulativeCouponPricingNo',
                   'class'    => 'cumulativeCouponPricingOptions',
                   'value'    => 'no',
-                  'title'    => __('No ', 'vtprd')
+                  'title'    => __('No', 'vtprd')
                  ),
                 array (
                   'id'       => 'cumulativeCouponPricingYes',
                   'class'    => 'cumulativeCouponPricingOptions',
                   'value'    => 'yes',
-                  'title'    => __('Yes ', 'vtprd')
+                  'title'    => __('Yes', 'vtprd')
                  )               
               )
            ),

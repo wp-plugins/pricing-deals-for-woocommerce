@@ -2,7 +2,7 @@
    
 class VTPRD_Rule_update {
 	
-
+           
 	public function __construct(){  
     
     $this->vtprd_edit_rule();

@@ -911,14 +911,10 @@ function vtprd_initialize_options() {
   //****************************
   //  LIFETIME RULE OPTIONS Area
   //****************************    
-  	 if(defined('VTPRD_PRO_DIRNAME')) { 
-       $lifetime_rule_settings_section_msg;
-     } else {
-       $lifetime_rule_settings_section_msg = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . __( '(These options are available in the Pro Version)', 'vtprd' );
-     }
+  //mwn04142014 ==> change to msg "vtprd-lifetime-options-free-msg"
     add_settings_section(
 		'lifetime_rule_settings_section',			// ID used to identify this section and with which to register options
-		__( 'Customer Rule Limit - Options', 'vtprd' ) . '<span id="vtprd-lifetime-options-anchor"></span>' . $lifetime_rule_settings_section_msg,// Title to be displayed on the administration page
+		__( 'Customer Rule Limit - Options', 'vtprd' ) . '<span id="vtprd-lifetime-options-anchor"></span>' . '<span id="vtprd-lifetime-options-free-msg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . __( '(These options are available in the Pro Version)', 'vtprd' ) .'</span>',// Title to be displayed on the administration page
 		array(&$this, 'vtprd_lifetime_rule_options_callback'), // Callback used to render the description of the section
 		'vtprd_setup_options_page'		// Page on which to add this section of options
 	);
@@ -1791,6 +1787,13 @@ function vtprd_debugging_mode_callback () {    //opt8
   $html .= '<p id="help8-text" class = "help-text" >'; 
   $html .= __('"Test Debugging Mode Turned On" => 
   Set this to "yes" if you want to see the full rule structures which produce any error messages. **ONLY** should be used during testing.', 'vtprd'); 
+  $html .= '<br><br>';
+  $html .= __('To see the debugging output, add these lines to your wordpress install"s wp-config.php file: (output will be at wp-content/debug.log)', 'vtprd');  
+ $html .= "<br>    // log php errors     ";
+ $html .= "<br> define('WP_DEBUG', true);    ";
+ $html .= "<br> define( 'WP_DEBUG_LOG', true ); // log to wp-content/debug.log  ";
+ $html .= "<br> define( 'WP_DEBUG_DISPLAY', false ); // don't force display_errors to on ";
+ $html .= "<br> ini_set( 'display_errors', 0 ); // hide errors  "; 
   $html .= '</p>';  
   
 	echo $html;

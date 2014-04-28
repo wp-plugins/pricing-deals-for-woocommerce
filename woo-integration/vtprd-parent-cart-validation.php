@@ -796,9 +796,14 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
       return $price_html;
     }
     
-//    $price =  $cart_item->get_price(); //woo pricing...
-    $price =  $cart_item['line_subtotal'] / $cart_item['quantity'];
-    
+
+//    $price =  $cart_item['line_subtotal'] / $cart_item['quantity'];
+//  v1.0.3
+    if ( isset($cart_item['line_subtotal']) ) {
+      $price =  $cart_item['line_subtotal'] / $cart_item['quantity'];
+    } else {
+      $price =  0;
+    }    
     //mwntest mwncurrtest 
     //vtprd_maybe_get_discount_catalog_session_price($product_id, $price);
     vtprd_maybe_get_price_single_product($product_id, $price);
@@ -1924,10 +1929,11 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
         $vtprd_cart      = $data_chain[1];
       }
 
+
       return $data_chain;
    }
 
-
+/*
    //supply woo with ersatz pricing deals coupon data on demand
    public function vtprd_woo_add_pricing_deal_coupon_data($status, $code) {
       if ($code != 'pricing_deal_discount') {
