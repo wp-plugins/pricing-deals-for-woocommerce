@@ -770,9 +770,14 @@ action amt condition can be an amt or $$
   } //end vtprd_edit_rule
   
   
-  public function vtprd_update_rules_info() {
-    global $post, $vtprd_rule, $vtprd_rules_set; 
+  public function vtprd_update_rules_info() { 
+    global $post, $vtprd_rule, $vtprd_rules_set, $vtprd_setup_options; 
 
+    //v1.0.4
+    if ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ){   
+      error_log( print_r(  '$vtprd_rule', true ) );
+      error_log( var_export($vtprd_rule, true ) );   
+    }
 /*      
     //set the switch used on the screen for JS data check
     switch( true ) {

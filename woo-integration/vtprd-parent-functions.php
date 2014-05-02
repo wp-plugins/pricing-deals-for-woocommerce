@@ -219,7 +219,7 @@
         
         //parent product vargroup on sale, individual product variation may not be on sale.
         // send an additional sale msg for the varProd parent group...
-        $show_yousave_one_some_msg;
+        $show_yousave_one_some_msg = '';
         if ($vtprd_setup_options['show_yousave_one_some_msg'] == 'yes' ) {
           if (!$show_yousave_one_some_msg) {
             $rulesetKey = $row['ruleset_occurrence'];
@@ -258,7 +258,7 @@
       //needed for wp-e-commerce!!!!!!!!!!!
       //  if = 'yes', display of 'yousave' becomes 'save FROM' and doesn't change!!!!!!!
 //      $product_variations_sw = vtprd_test_for_variations($product_id);
-      $product_variations_sw;
+      $product_variations_sw = '';
     
       if ($vtprd_cart->cart_items[0]->yousave_total_amt > 0) {
          $list_price                    =   $vtprd_cart->cart_items[0]->db_unit_price_list;
@@ -2235,6 +2235,24 @@
      return $title;
   }
   add_filter( 'enter_title_here', 'vtprd_change_default_title' ); 
+
+  //***** v1.0.4 begin
+  /* ************************************************
+  **  if BCMATH not installed with PHP by host, this will replace it.
+  *************************************************** */
+  if (!function_exists('bcmul')) {
+    function bcmul($_ro, $_lo, $_scale=0) {
+      return round($_ro*$_lo, $_scale);
+    }
+  }
+  if (!function_exists('bcdiv')) {
+    function bcdiv($_ro, $_lo, $_scale=0) {
+      return round($_ro/$_lo, $_scale);
+    }
+  }
+  //***** v1.0.4 end
+
+
 
   /* ************************************************
   **  Disable draggable metabox in the rule custom post type

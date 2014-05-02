@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/wp-e-commerce/pricing-deals-for-woocommerce
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -163,6 +163,13 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.4 - 2014-5-01 =
+* Fix - if BCMATH not installed with PHP by host, replacement functions
+* Fix - add in missing close comment above function in parent-cart-validation.php
+* Fix - framework, removed (future) upcharge... , fix pricing-type-simple for catalog
+* Fix - framework, pricing-type discount by catalog Option renamed
+* Fix - js for cart simple discount was disallowing discount limiits in error
+
 = 1.0.3 - 2014-04-26 =
 * Fix - warnings on apply
 * Fix - cartWidget print option corrected
@@ -191,6 +198,13 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.0.4 - 2014-05-01 =
+* Fix - if BCMATH not installed with PHP by host, replacement functions
+* Fix - add in missing close comment above function in parent-cart-validation.php
+* Fix - framework, removed (future) upcharge... , fix pricing-type-simple for catalog
+* Fix - framework, pricing-type discount by catalog Option renamed
+* Fix - js for cart simple discount was disallowing discount limiits in error
 
 = 1.0.3 - 2014-04-26 =
 * Fix - warnings on apply

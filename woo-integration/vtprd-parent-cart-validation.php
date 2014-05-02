@@ -1963,7 +1963,7 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
    
      return $coupon_data;
    }
-   
+*/ //v1.0.4 fix (missing close comment...)
    
  //Clean Up Session Variables which would otherwise persist during Discount Processing       
   public function vtprd_maybe_clear_auto_add_session_vars() {

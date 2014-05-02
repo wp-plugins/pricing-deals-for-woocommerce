@@ -66,7 +66,7 @@ DITTO ie10!!
                               switch( $("#pluginVersion").val() ) {
                                case 'freeVersion':
                                   $(".freeVersion-labels").show();
-                                  $(".proVersion-labels").hide();
+                                  $(".proVersion-labels").hide();                                 
                                   disableAllDiscountLimits();
                                  break; 
                                default:
@@ -672,7 +672,7 @@ DITTO ie10!!
                            $('#discount_applies_to_heading_0').attr('disabled', true);  
                            $('#discount_applies_to_heading_0').attr('selected', false);
                            $('#discount_rule_max_amt_type_heading_0').attr('disabled', true);  
-                           $('#discount_rule_max_amt_type_heading_0').attr('selected', false);
+                           $('#discount_rule_max_amt_type_heading_0').attr('selected', false);                          
                            $('#discount_lifetime_max_amt_type_heading_0').attr('disabled', true);  
                            $('#discount_lifetime_max_amt_type_heading_0').attr('selected', false);
                            $('#discount_rule_cum_max_amt_type_heading_0').attr('disabled', true);  
@@ -1050,7 +1050,9 @@ DITTO ie10!!
                               switch( $("#rule_template_framework").val() ) {
                                 case "0":                       noTemplateChoiceYet();              break;
                                 case "D-storeWideSale":         storeWideSale();                    break;
-                                case "D-simpleDiscount":        simpleMembershipDiscount();         break;
+                                case "D-simpleDiscount":        simpleMembershipDiscount();
+                                                                disableAllDiscountLimits();   //v1.0.4  moved here to prevent interference with cart simple discount usage...          
+                                                                                                    break;
                                 case "C-storeWideSale":         process_C_storeWideSale();          break;
                                 case "C-simpleDiscount":        process_C_simpleDiscount();         break;
                                 case "C-discount-inCart":       process_C_discount_inCart();        break;
@@ -1094,15 +1096,15 @@ DITTO ie10!!
                               setWholeStoreOrCartContentsIn();//only on whole store template                           
                               discount_appliesTo_protect1();// set 'each' only 
                               buyAmtType_appliesTo_protect2(); //set each only
-                         //     blockAllButSimpleOptions();                              
+                         //     blockAllButSimpleOptions();                       
                               disableAllDiscountLimits();
                               testForExistingData();
                      //         $("#buy_group_box").show("slow");
                      //         $("#action_group_box").show("slow");  
                             };
                             function simpleMembershipDiscount() {    //Membership Discount   -Display
-                              setDropdownsToInitalDefaults();
-                              disableAllDiscountLimits();
+                              setDropdownsToInitalDefaults();                     
+                            //  disableAllDiscountLimits();   //v1.0.4  moved to a different location, interfered with cart simple discount usage...  
                               actionAmtType_change_text_to_remove_Next();
                               discountAmtType_protect1();
                               setSameAsBuyGroupOnly();                                                            

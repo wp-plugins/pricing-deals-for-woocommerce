@@ -124,6 +124,9 @@ class VTPRD_Rules_UI{
       if (!$found_rule) {
         $this->vtprd_build_new_rule();        
       } 
+
+error_log( print_r(  '$vtprd_rule at UI read time, vtprd-rules-ui.php', true ) );
+error_log( var_export($vtprd_rule, true ) );
          
       add_meta_box('vtprd-deal-selection',  __('Pricing Deals', 'vtprd') , array(&$this, 'vtprd_deal'), 'vtprd-rule', 'normal', 'high');
 

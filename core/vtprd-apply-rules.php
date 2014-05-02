@@ -187,7 +187,7 @@ class VTPRD_Apply_Rules{
 
         //only do this check if the product is on special!!
         if ($vtprd_cart->cart_items[$k]->product_is_on_special == 'yes')  { 
-          $do_continue;
+          $do_continue = '';  //v1.0.4 set = to ''
           switch( $vtprd_rules_set[$i]->cumulativeSalePricing) {
             case 'no':              
                 //product already on sale, can't apply further discount
@@ -387,7 +387,7 @@ class VTPRD_Apply_Rules{
       // ends with sizeof being reached, OR  $vtprd_rules_set[$i]->discount_processing_status == 'yes'
       $sizeof_rule_deal_info = sizeof($vtprd_rules_set[$i]->rule_deal_info);
       for($d=0; $d < $sizeof_rule_deal_info; $d++) {
-        switch( $vtprd_rules_set[$i]->rule_deal_info[$d]['buy_repeat_condition'] ) {
+       switch( $vtprd_rules_set[$i]->rule_deal_info[$d]['buy_repeat_condition'] ) {
             case 'none':     //only applies to 1st rule deal line
                  /* 
                  There can be multiple conditions which are covered by inserting a repeat count = 1.
@@ -412,7 +412,11 @@ class VTPRD_Apply_Rules{
              break; // exit repeat for loop
            }                     
         } // $buy_repeat_count for loop        
-     
+    
+        //v1.0.4 begin => lifetime counted by group (= 'all') up count here, once per rule/cart
+            //EDITED * + * +  * + * +  * + * +  * + * + 
+        //v1.0.4 end 
+               
       }  //rule_deal_info for loop
        
       

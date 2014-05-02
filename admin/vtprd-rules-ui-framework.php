@@ -89,9 +89,9 @@ class VTPRD_Rules_UI_Framework {
                     'class'    => '',
                     'value'    => 'simple',
                     //Part of the store on sale
-                    'title'    => __('Just Discount the Items ', 'vtprd') /*,
+                    'title'    => __('Just Discount the Items ', 'vtprd') ,
                     'title-catalog'
-                               => __('Catalog Discount by Category, Logged-in Role ... ', 'vtprd')*/    
+                               => __('Catalog Discount by Category, Logged-in Role ... ', 'vtprd')    //v1.0.4 enlivened
                    ),                                     
                   array (
                     'id'       => 'pricing-type-Bogo',
@@ -119,19 +119,19 @@ class VTPRD_Rules_UI_Framework {
                     'title'    => __('Whole store on sale', 'vtprd'), //Discount the whole catalog    //vs Discount anything in the cart 
                     'title-catalog'   
                                => __('Whole Catalog on sale', 'vtprd')
-                   ),                                       
-                /*  array (
+                   )/*,                                       
+                  array (
                     'id'       => 'pricing-type-Nth',
                     'class'    => '',
                     'value'    => 'nth',
                     'title'    => __('Discount each Nth', 'vtprd')   
-                   ), */                  
+                   ),                   
                   array (
-                    'id'       => 'pricing-type-Upcharge',
+                    'id'       => 'pricing-type-Upcharge',       //v1.0.4 commented
                     'class'    => '',
                     'value'    => 'upcharge',
                     'title'    => __('Upcharge (Base Price + UpCharge) - Coming Soon...', 'vtprd')   
-                   )                     
+                   ) */                    
                  )
             ), 
           'minimum_purchase_select' =>  array ( 

@@ -10,7 +10,7 @@ class VTPRD_Parent_Definitions {
     
     define('VTPRD_PARENT_PLUGIN_NAME',                      'WooCommerce');
     define('VTPRD_EARLIEST_ALLOWED_PARENT_VERSION',         '2.0.14');  //all due to support for hook 'woocommerce_email_order_items_table' - requires the 2nd order_info variable...
-    define('VTPRD_TESTED_UP_TO_PARENT_VERSION',             '2.1.7');
+    define('VTPRD_TESTED_UP_TO_PARENT_VERSION',             '2.1.8');
     define('VTPRD_DOCUMENTATION_PATH_PRO_BY_PARENT',        'http://www.varktech.com/woocommerce/pricing-deals-pro-for-woocommerce/?active_tab=tutorial');                                                                                                     //***
     define('VTPRD_DOCUMENTATION_PATH_FREE_BY_PARENT',       'http://www.varktech.com/woocommerce/pricing-deals-for-woocommerce/?active_tab=tutorial');      
     define('VTPRD_INSTALLATION_INSTRUCTIONS_BY_PARENT',     'http://www.varktech.com/woocommerce/pricing-deals-for-woocommerce/?active_tab=instructions');
