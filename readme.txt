@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/wp-e-commerce/pricing-deals-for-woocommerce
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -163,6 +163,12 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.5 - 2014-5-08 =
+* Fix -VAT inclusive for Cart pricing
+* Fix -Warnings and move vtprd_debug_options to functions
+* Enhancement - hook added for additional population logic
+* Fix -$product_variations_list
+
 = 1.0.4 - 2014-5-01 =
 * Fix - if BCMATH not installed with PHP by host, replacement functions
 * Fix - add in missing close comment above function in parent-cart-validation.php
@@ -198,6 +204,12 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.0.5 - 2014-5-08 =
+* Fix -VAT inclusive for Cart pricing
+* Fix -Warnings fix
+* Enhancement - hook added for additional population logic
+* Fix -$product_variations_list fix
 
 = 1.0.4 - 2014-05-01 =
 * Fix - if BCMATH not installed with PHP by host, replacement functions

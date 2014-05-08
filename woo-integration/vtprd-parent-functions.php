@@ -70,14 +70,46 @@
               //DON'T USE THIS ANYMORE, BECOMES SELF-REFERENTIAL, AS GET_PRICE() NOW HOOKS THE SINGLE PRODUCT DISCOUNT ...
               //    $vtprd_cart_item->unit_price     =  get_option( 'woocommerce_tax_display_cart' ) == 'excl' || $woocommerce->customer->is_vat_exempt() ? $_product->get_price_excluding_tax() : $_product->get_price();
 
-           
-                  $vtprd_cart_item->unit_price =  $cart_item['line_subtotal'] / $cart_item['quantity'];
-                                   
-                  $vtprd_cart_item->db_unit_price  =  $vtprd_cart_item->unit_price; 
-
-                  //how does this work with tax exemption?????????????????
+                 
+                  //v1.0.5 begin - redo for VAT processing...
+                  
                   $vtprd_cart_item->db_unit_price_list     =  get_post_meta( $product_id, '_regular_price', true );
-                  $vtprd_cart_item->db_unit_price_special  =  get_post_meta( $product_id, '_sale_price', true );               
+                  $vtprd_cart_item->db_unit_price_special  =  get_post_meta( $product_id, '_sale_price', true );                  
+
+                  if (( get_option( 'woocommerce_prices_include_tax' ) == 'no' )  || 
+                      ( $woocommerce->customer->is_vat_exempt()) ) {
+                     //NO VAT included in price
+                     $vtprd_cart_item->unit_price =  $cart_item['line_subtotal'] / $cart_item['quantity'];                                                           
+                  } else {
+                     //VAT included in price, and $cart_item pricing has already subtracted out the VAT, so use DB prices (otherwise if other functions called, recursive processing will ensue...)
+                     switch(true) {
+                        case ($vtprd_cart_item->db_unit_price_special > 0) :  
+                            if ( ($vtprd_cart_item->db_unit_price_list < 0) ||    //sometimes list price is blank, and user only sets a sale price!!!
+                                 ($vtprd_cart_item->db_unit_price_special < $vtprd_cart_item->db_unit_price_list) )  {
+                                //item is on sale, use sale price
+                               $vtprd_cart_item->unit_price = $vtprd_cart_item->db_unit_price_special;
+                            } else {
+                               //use regular price
+                               $vtprd_cart_item->unit_price = $vtprd_cart_item->db_unit_price_list;
+                            }
+                          break;
+                        default:
+                            $vtprd_cart_item->unit_price = $vtprd_cart_item->db_unit_price_list;                            
+                          break;
+                      }
+                     /*
+                     if ( ($vtprd_cart_item->db_unit_price_special > 0) &&
+                          ($vtprd_cart_item->db_unit_price_special < $vtprd_cart_item->db_unit_price_list) ) {
+                       $vtprd_cart_item->unit_price = $vtprd_cart_item->db_unit_price_special;
+                     } else {
+                       $vtprd_cart_item->unit_price = $vtprd_cart_item->db_unit_price_list;
+                     }
+                     */
+                  }
+                  
+                  $vtprd_cart_item->db_unit_price  =  $vtprd_cart_item->unit_price;
+
+                  //v1.0.5 end               
               }               
 
 
@@ -419,14 +451,15 @@
 			'post_status'	  => 'publish',
       'order'         => 'ASC'
 	  ));
+   $product_variations_list = array(); //v1.0.5
    if ($variations)  {    
       $product_variations_list = array();
       foreach ( $variations as $variation) {
         $product_variations_list [] = $variation;             
     	}
-    } else  {
-      $product_variations_list;
-    }
+    }/* else  {           v1.0.5
+      $product_variations_list = array();
+    } */
     
     return ($product_variations_list);
   } 
@@ -2236,6 +2269,7 @@
   }
   add_filter( 'enter_title_here', 'vtprd_change_default_title' ); 
 
+
   //***** v1.0.4 begin
   /* ************************************************
   **  if BCMATH not installed with PHP by host, this will replace it.
@@ -2251,9 +2285,25 @@
     }
   }
   //***** v1.0.4 end
-
-
-
+ 
+ 
+  //***** v1.0.5  begin
+  function vtprd_debug_options(){
+    global $vtprd_setup_options;
+    //************
+    // Turn OFF all php Notices, except in debug mode      v1.0.3 
+    //   Settings switch 'Test Debugging Mode Turned On'
+    //************
+    if ( $vtprd_setup_options['debugging_mode_on'] != 'yes' ){
+      //TURN OFF all php notices, in case this default is not set in user's php ini
+      //error_reporting(E_ALL ^ E_NOTICE);    //report all errors except notices
+      error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING ^ E_DEPRECATED ); //hide notices and warnings  v1.0.5
+    } 
+    //************
+  }
+  //***** v1.0.5  end
+  
+  
   /* ************************************************
   **  Disable draggable metabox in the rule custom post type
   *************************************************** */

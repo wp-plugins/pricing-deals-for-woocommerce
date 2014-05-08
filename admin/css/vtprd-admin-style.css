@@ -887,7 +887,7 @@
             }
             div#submitdiv {
               min-width:120px; /*200px;*/
-              height: 205px;
+              height: 245px;
             }
             div#submitdiv #delete-action {
               float:none;
@@ -1885,7 +1885,7 @@ div#advanced-data-area:hover {
       }
       
      /*(inserted via js*/
-      div#vtprd-redirect {
+      div.vtprd-redirect {
           float: left;
           margin-top: 5px;
           width: 100%;
@@ -1893,11 +1893,14 @@ div#advanced-data-area:hover {
     text-align: left;
     vertical-align: middle;          
       }     
+     div.vtprd-redirect2 {
+        margin-top:15px;
+     }
 
-     a#vtprd-redirect-anchor {    
+     a.vtprd-redirect-anchor {    
             text-decoration: none;
          border-bottom-color: grey;
-        color: black;
+        color: #666666;
         float: left;
         height: 20px;
         line-height: 19px;
@@ -1914,7 +1917,7 @@ div#advanced-data-area:hover {
         position: relative;
         text-align: center;                   
         }
-     a#vtprd-redirect-anchor:hover {
+     a.vtprd-redirect-anchor:hover {
         text-decoration:underline;
         color:blue
      }
@@ -1928,7 +1931,7 @@ div#advanced-data-area:hover {
       }  
  
       /*This gets rid of the blinking white color, when submitdiv height specified...*/
-      #submitdiv .inside {background-color:#F5F5F5;height: 170px;border-bottom: 2px solid #DDDDDD;}
+      #submitdiv .inside {background-color:#F5F5F5;height: 210px; border-bottom: 2px solid #DDDDDD;} 
      
 .more-anchor{display:none;}
 

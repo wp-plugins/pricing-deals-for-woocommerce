@@ -14,13 +14,17 @@ DITTO ie10!!
 
                         jQuery(document).ready(function($) {                                                        
 
-
+                          //v1.0.5 changed to 2 buttons
                           //Include/Exclude Redirect , inserted into the PUBLISH box
                           newHtml  =  '<span class="box-border-line2" id="">&nbsp;</span>'            
-                          newHtml +=  '<div id="vtprd-redirect">';
-                          newHtml +=  '<a href="http://www.varktech.com/documentation/pricing-deals/introrule"  target="_blank" id="vtprd-redirect-anchor">';
-                          newHtml +=  $("#vtprd-docTitle").val();        //pick up the literals passed up in the html...  "Documentation"
-                          newHtml +=  '</a></div>'; 
+                          newHtml +=  '<div class="vtprd-redirect">';
+                          newHtml +=  '<a href="http://www.varktech.com/documentation/pricing-deals/introrule"  target="_blank" class="vtprd-redirect-anchor">';
+                          newHtml +=  $("#vtprd-moreInfo").val();        //pick up the literals passed up in the html...  
+                          newHtml +=  '</a></div>';           
+                          newHtml +=  '<div class="vtprd-redirect vtprd-redirect2">';
+                          newHtml +=  '<a href="http://www.varktech.com/support/"  target="_blank" class="vtprd-redirect-anchor">';
+                          newHtml +=  $("#vtprd-docTitle").val();        //pick up the literals passed up in the html...  
+                          newHtml +=  '</a></div>';                            
                           $(newHtml).insertAfter('div#publishing-action');                                     	                        						
 
                                                                                                                 

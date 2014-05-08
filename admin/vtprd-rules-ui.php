@@ -306,7 +306,8 @@ class VTPRD_Rules_UI{
         <input type="hidden" id="upperSelectsFirstTime" name="upperSelectsFirstTime" value="yes" />
         <input type="hidden" id="upperSelectsDoneSw" name="upperSelectsDoneSw" value="" />
         <input type="hidden" id="catalogCheckoutMsg" name="catalogCheckoutMsg" value="<?php echo __('Message unused for Catalog Discount', 'vtprd');?>" />
-        <input type="hidden" id="vtprd-docTitle" name="vtprd-docTitle" value="<?php _e('- Help! -', 'vtprd');?>" />        
+        <input type="hidden" id="vtprd-moreInfo" name="vtprd-docTitle" value="<?php _e('More Info', 'vtprd');?>" /> <?php //v1.0.5 added 2nd button ?>
+        <input type="hidden" id="vtprd-docTitle" name="vtprd-docTitle" value="<?php _e('- Help! -', 'vtprd');?>" />         
         <?php 
            /*
             Assign a numeric value to the switch
@@ -1566,6 +1567,8 @@ class VTPRD_Rules_UI{
                     if ($vtprd_rule->inPop_varProdID) {
                       $product_ID = $vtprd_rule->inPop_varProdID; 
                       $product_variation_IDs = vtprd_get_variations_list($product_ID);
+                    }  else {
+                      $product_variation_IDs = array();  //v1.0.5
                     }
                     /* ************************************************
                     **   Get Variations Button for Rule screen
@@ -1706,7 +1709,9 @@ class VTPRD_Rules_UI{
                     if ($vtprd_rule->actionPop_varProdID) {
                       $product_ID = $vtprd_rule->actionPop_varProdID; 
                       $product_variation_IDs = vtprd_get_variations_list($product_ID);
-                    }
+                    }   else {                           
+                      $product_variation_IDs = array();  //v1.0.5
+                    }                                    
                     /* ************************************************
                     **   Get Variations Button for Rule screen
                     *     ==>>> get the product id from $_REQUEST['varProdID'];  in the receiving ajax routine. 
@@ -2169,7 +2174,8 @@ class VTPRD_Rules_UI{
     }
     
     $product_variation_IDs = vtprd_get_variations_list($product_ID);
-    if ($product_variation_IDs <= ' ') { 
+    if (sizeof($product_variation_IDs) == 0) {     //v1.0.5
+   // if ($product_variation_IDs <= ' ') {   //v1.0.5
       $vtprd_rule->rule_error_message[] = __('Product has no Variations. Product Name = ', 'vtprd') .$test_post->post_title.   __('<br><br> Please use "Single Product Only" option, above.', 'vtprd') ;
       if ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ){
           $vtprd_rule->rule_error_message[0] =  __('<br><br>Product ID in error = <span id="varProdID-error-ID">', 'vtprd')   .$product_ID .    __('</span>', 'vtprd') ;
