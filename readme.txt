@@ -3,8 +3,8 @@ Contributors: vark
 Donate link: http://www.varktech.com/wp-e-commerce/pricing-deals-for-woocommerce/
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
-Tested up to: 3.9
-Stable tag: 1.0.5
+Tested up to: 3.9.1
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -163,6 +163,9 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.6 - 2014-5-10 =
+* Enhancement - VAT pricing uses regular_price first, but if empty, looks at _price.
+
 = 1.0.5 - 2014-5-08 =
 * Fix -VAT inclusive for Cart pricing
 * Fix -Warnings and move vtprd_debug_options to functions
@@ -174,7 +177,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 * Fix - add in missing close comment above function in parent-cart-validation.php
 * Fix - framework, removed (future) upcharge... , fix pricing-type-simple for catalog
 * Fix - framework, pricing-type discount by catalog Option renamed
-* Fix - js for cart simple discount was disallowing discount limiits in error
+* Fix - js for cart simple discount was disallowing discount limits in error
 
 = 1.0.3 - 2014-04-26 =
 * Fix - warnings on apply
@@ -204,6 +207,9 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.0.6 - 2014-5-10 =
+* Fix -VAT pricing uses regular_price first, but if empty, looks at _price.
 
 = 1.0.5 - 2014-5-08 =
 * Fix -VAT inclusive for Cart pricing

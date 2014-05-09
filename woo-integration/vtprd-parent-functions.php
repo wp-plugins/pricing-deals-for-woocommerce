@@ -73,7 +73,15 @@
                  
                   //v1.0.5 begin - redo for VAT processing...
                   
-                  $vtprd_cart_item->db_unit_price_list     =  get_post_meta( $product_id, '_regular_price', true );
+                  //v1.0.6 begin
+                  $regular_price = get_post_meta( $product_id, '_regular_price', true );
+                  if ($regular_price > 0) {
+                     $vtprd_cart_item->db_unit_price_list  =  $regular_price;
+                  } else {
+                     $vtprd_cart_item->db_unit_price_list  =  get_post_meta( $product_id, '_price', true );
+                  }
+                  //v1.0.6 end
+                  
                   $vtprd_cart_item->db_unit_price_special  =  get_post_meta( $product_id, '_sale_price', true );                  
 
                   if (( get_option( 'woocommerce_prices_include_tax' ) == 'no' )  || 
