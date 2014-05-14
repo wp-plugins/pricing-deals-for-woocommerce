@@ -25,6 +25,7 @@ Power your store to greater success with pricing deals and sales promotions! Jus
 *   Product and Variation Pricing
 *   Schedulable
 *   Works with WooCommerce 2.1+
+*   Pricing Tables (buy 5 get 5% off, buy 10 get 10% off, etc) coming soon!
 
 = A Complete Discount Marketing Package =
 
@@ -44,7 +45,8 @@ Pricing Deals does more than offer discounting functions:
 *   Pricing Deals of any sort, by Role/Membership
 *   Pretty much any deal you can think of, you’ll be able to do!
 
-[Visit the Documentation](http://www.varktech.com/documentation/pricing-deals/introrule/)
+= Full Email and Skype Support =
+Assistance with plugin setup and usage is available 7 days a week. Email us at [Support](http://www.varktech.com/support/) to start the ball rolling.
 
 = Pricing Deals is the Swiss Army Knife of Deals...  to focus on the basic functionality, try these plugins: =
 1. [Wholesale Pricing for WooCommerce](http://wordpress.org/extend/plugins/wholesale-pricing-for-woocommerce) .. (wholesale only - skinnier pricing deals plugin)
