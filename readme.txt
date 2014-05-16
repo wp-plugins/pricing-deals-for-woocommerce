@@ -164,7 +164,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 == Changelog ==
 
 = 1.0.7 - 2014-5-14 =
-* Fix - Include price display suffix in Catalog pricing, as needed
+* Fix - Include 'price display suffix' in Catalog pricing, as needed
 
 = 1.0.6 - 2014-5-10 =
 * Enhancement - VAT pricing uses regular_price first, but if empty, looks at _price.
