@@ -305,6 +305,27 @@
          $db_unit_price_list_html_woo   =   woocommerce_price($list_price);
          $discount_price                =   $vtprd_cart->cart_items[0]->discount_price;
          $discount_price_html_woo       =   woocommerce_price($discount_price);
+         //v1.0.7 begin
+         //from woocommerce/includes/abstracts/abstract-wp-product.php
+         // Check for Price Suffix
+         $price_display_suffix  = get_option( 'woocommerce_price_display_suffix' );
+      	 if ( $price_display_suffix ) {
+            //first get rid of pricing functions which aren't relevant here
+             $find = array(    //these are allowed in suffix, remove
+      				'{price_including_tax}',
+      				'{price_excluding_tax}'
+      			);
+      			$replace = '';
+      			$price_display_suffix = str_replace( $find, $replace, $price_display_suffix );
+            
+            //then see if suffix is needed
+            if (strpos($discount_price_html_woo, $price_display_suffix) !== false) { //if suffix already in price, do nothing
+              $do_nothing;
+            } else {
+              $discount_price_html_woo = $discount_price_html_woo . ' <small class="woocommerce-price-suffix">' . $price_display_suffix . '</small>';
+            }
+         }
+         //v1.0.7 end
    //      $vtprd_cart->cart_items[0]->product_discount_price_html_woo = 
    //         '<del>' . $db_unit_price_list_html_woo . '</del><ins>' . $discount_price_html_woo . '</ins>'; 
       } else {
@@ -323,8 +344,7 @@
                                               $discount_price_html_woo,
             'product_is_on_special'        => $vtprd_cart->cart_items[0]->product_is_on_special,
             'product_yousave_total_amt'    => $vtprd_cart->cart_items[0]->yousave_total_amt,     
-            'product_yousave_total_pct'    => $vtprd_cart->cart_items[0]->yousave_total_pct,
- //           'product_discount_price_html_woo'   => $vtprd_cart->cart_items[0]->product_discount_price_html_woo,     
+            'product_yousave_total_pct'    => $vtprd_cart->cart_items[0]->yousave_total_pct,    
             'product_rule_short_msg_array' => $short_msg_array,        
             'product_rule_full_msg_array'  => $full_msg_array,
             'product_has_variations'       => $product_variations_sw,
@@ -2294,22 +2314,16 @@
   }
   //***** v1.0.4 end
  
- 
-  //***** v1.0.5  begin
-  function vtprd_debug_options(){
+  //v1.07 change
+  function vtprd_debug_options(){ 
     global $vtprd_setup_options;
-    //************
-    // Turn OFF all php Notices, except in debug mode      v1.0.3 
-    //   Settings switch 'Test Debugging Mode Turned On'
-    //************
-    if ( $vtprd_setup_options['debugging_mode_on'] != 'yes' ){
-      //TURN OFF all php notices, in case this default is not set in user's php ini
-      //error_reporting(E_ALL ^ E_NOTICE);    //report all errors except notices
-      error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING ^ E_DEPRECATED ); //hide notices and warnings  v1.0.5
+    if ( ( isset( $vtprd_setup_options['debugging_mode_on'] )) &&
+         ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ) ) {  
+      error_reporting(E_ALL);  
+    }  else {
+      error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING ^ E_DEPRECATED ); 
     } 
-    //************
   }
-  //***** v1.0.5  end
   
   
   /* ************************************************

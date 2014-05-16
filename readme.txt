@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/wp-e-commerce/pricing-deals-for-woocommerce
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 3.9.1
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -25,7 +25,6 @@ Power your store to greater success with pricing deals and sales promotions! Jus
 *   Product and Variation Pricing
 *   Schedulable
 *   Works with WooCommerce 2.1+
-*   Pricing Tables (buy 5 get 5% off, buy 10 get 10% off, etc) coming soon!
 
 = A Complete Discount Marketing Package =
 
@@ -45,8 +44,7 @@ Pricing Deals does more than offer discounting functions:
 *   Pricing Deals of any sort, by Role/Membership
 *   Pretty much any deal you can think of, you’ll be able to do!
 
-= Full Email and Skype Support =
-Assistance with plugin setup and usage is available 7 days a week. Email us at [Support](http://www.varktech.com/support/) to start the ball rolling.
+[Visit the Documentation](http://www.varktech.com/documentation/pricing-deals/introrule/)
 
 = Pricing Deals is the Swiss Army Knife of Deals...  to focus on the basic functionality, try these plugins: =
 1. [Wholesale Pricing for WooCommerce](http://wordpress.org/extend/plugins/wholesale-pricing-for-woocommerce) .. (wholesale only - skinnier pricing deals plugin)
@@ -165,6 +163,9 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.7 - 2014-5-14 =
+* Fix - Include price display suffix in Catalog pricing, as needed
+
 = 1.0.6 - 2014-5-10 =
 * Enhancement - VAT pricing uses regular_price first, but if empty, looks at _price.
 
@@ -209,6 +210,9 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.0.7 - 2014-5-14 =
+* Fix - Include price display suffix in Catalog pricing, as needed
 
 = 1.0.6 - 2014-5-10 =
 * Fix -VAT pricing uses regular_price first, but if empty, looks at _price.
