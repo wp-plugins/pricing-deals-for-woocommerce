@@ -3,3 +3,11 @@ plesae refer to the excellent tutorial at:
 http://www.inkthemes.com/how-to-create-a-po-file-of-your-themes-i-e-translation-of-wordpress-theme-in-multiple-languages/02/
 
 http://betterwp.net/wordpress-tips/create-pot-file-using-poedit/
+
+translation file naming samples:
+
+vtprd-en_EN.po
+vtprd-en_EN.mo
+
+vtprd-fr_FR.po
+vtprd-fr_FR.mo
