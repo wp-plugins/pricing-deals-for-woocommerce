@@ -3,7 +3,7 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.0.7
+Version: 1.0.7.1
 Author: Vark
 Author URI: http://varktech.com
 */
@@ -43,14 +43,15 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.0.7');
+		define('VTPRD_VERSION',                               '1.0.7.1');
     define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2014-05-14');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2014-05-23');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
     define('VTPRD_EARLIEST_ALLOWED_PHP_VERSION',          '5');
     define('VTPRD_PLUGIN_SLUG',                           plugin_basename(__FILE__));
+    define('VTPRD_PRO_PLUGIN_NAME',                      'Varktech Pricing Deals Pro for WooCommerce');    //v1.0.7.1
    
     require_once ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-definitions.php');
             
@@ -149,7 +150,13 @@ class VTPRD_Controller{
             
         //always check if the manually created coupon codes are there - if not create them.
         vtprd_woo_maybe_create_coupon_types();   
- 
+        
+        //v1.0.7.1 begin
+        if ( (defined('VTPRD_PRO_DIRNAME')) &&
+             (version_compare(VTPRD_PRO_VERSION, VTPRD_MINIMUM_PRO_VERSION) < 0) ) {    //'<0' = 1st value is lower  
+          add_action( 'admin_notices',array(&$this, 'vtprd_admin_notice_version_mismatch') );            
+        }
+        //v1.0.7.1 begin 
      
     } else {
 
@@ -157,8 +164,9 @@ class VTPRD_Controller{
 
     }
 
-    if (is_admin()){ 
       /*
+    if (is_admin()){ 
+
       //LIFETIME logid cleanup...
       //  LogID logic from wpsc-admin/init.php
       if(defined('VTPRD_PRO_DIRNAME')) {
@@ -182,10 +190,11 @@ class VTPRD_Controller{
       $coupons_enabled = get_option( 'woocommerce_enable_coupons' ) == 'no' ? false : true;
       if (!$coupons_enabled) {  
         add_action( 'admin_notices',array(&$this, 'vtprd_admin_notice_coupon_enable_required') );            
-      }  
+      } 
+    } 
       */   
          
-    }
+
 
     return; 
   }
@@ -487,16 +496,21 @@ class VTPRD_Controller{
 
      
   }
- 
-  
+
+   //v1.0.7.1 begin                          
    public function vtprd_admin_notice_version_mismatch() {
-      $message  =  '<strong>' . __('Looks like you\'re running an older version of Pricing Deals Pro.' , 'vtprd') .'<br><br>' . __('Your Pro Version = ' , 'vtprd') .VTPRD_PRO_VERSION.  __(' and the minimum required pro version = ' , 'vtprd') .VTPRD_MINIMUM_PRO_VERSION. '</strong>' ;
-      $message .=  '<br><br>' . __('Please delete the old Pricing Deals Pro plugin from your installation via ftp, go to http://www.varktech.com/download-pro-plugins/ , download and install the newest Pricing Deals Pro version.'  , 'vtprd');
+      $message  =  '<strong>' . __('Please also update plugin: ' , 'vtprd') . ' &nbsp;&nbsp;'  .VTPRD_PRO_PLUGIN_NAME . '</strong>' ;
+      $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Your Pro Version = ' , 'vtprd') .VTPRD_PRO_VERSION. ' &nbsp;&nbsp;' . __(' The Minimum Required Pro Version = ' , 'vtprd') .VTPRD_MINIMUM_PRO_VERSION ;      
+      $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Please delete the old Pro plugin from your installation via ftp.'  , 'vtprd');
+      $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Go to ', 'vtprd');
+      $message .=  '<a target="_blank" href="http://www.varktech.com/download-pro-plugins/">Varktech Downloads</a>';
+      $message .=   __(', download and install the newest <strong>'  , 'vtprd') .VTPRD_PRO_PLUGIN_NAME. '</strong>' ;
+      
       $admin_notices = '<div id="message" class="error fade" style="background-color: #FFEBE8 !important;"><p>' . $message . ' </p></div>';
       echo $admin_notices;
       return;    
   }   
-  
+   //v1.0.7.1 end  
 
    public function vtprd_admin_notice_coupon_enable_required() {
       $message  =  '<strong>' . __('In order for the Pricing Deals plugin to function successfully, the Woo Coupons Setting must be on, and it is currently off.' , 'vtprd') . '</strong>' ;

@@ -69,12 +69,6 @@ class VTPRD_Apply_Rules{
                  
     }  
 
-//echo '$woocommerce= <pre>'.print_r($woocommerce, true).'</pre>' ;
-//echo '$vtprd_cart= <pre>'.print_r($vtprd_cart, true).'</pre>' ; 
-//echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ; 
-//wp_die( __('<strong>Looks like</strong>', 'vtmin'), __('VT Minimum Purchase not compatible - WP', 'vtmin'), array('back_link' => true));         
-    
-
     if ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ){   
       error_log( print_r(  '$vtprd_info', true ) );
       error_log( var_export($vtprd_info, true ) );
@@ -698,6 +692,7 @@ class VTPRD_Apply_Rules{
   public function vtprd_apply_discount_as_a_group($i, $d, $ar ) {   
      global $post, $vtprd_setup_options, $vtprd_cart, $vtprd_rules_set, $vtprd_rule, $vtprd_info, $vtprd_template_structures_framework;        
     $prod_discount = 0;    
+   
     switch( true ) {
       case ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'forThePriceOf_Units') :
          // buy 5 ( $vtprd_rules_set[$i]->rule_deal_info[$d]['buy_amt_count'] ) 

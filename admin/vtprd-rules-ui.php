@@ -27,7 +27,11 @@ class VTPRD_Rules_UI{
     add_action( 'wp_ajax_noprov_vtprd_ajax_load_variations_out', array(&$this, 'vtprd_ajax_load_variations_out') );     
       
     //add a metabox to the **parent product custom post type page**
-    add_action( 'add_meta_boxes_' .$vtprd_info['parent_plugin_cpt'] , array(&$this, 'vtprd_parent_product_meta_box_cntl') );
+    //v1.0.7.1 begin  ==>> all in one seo conflicts with this box, don't show when that plugin is active
+    if ( ! defined( 'AIOSEOP_VERSION' ) ) {
+      add_action( 'add_meta_boxes_' .$vtprd_info['parent_plugin_cpt'] , array(&$this, 'vtprd_parent_product_meta_box_cntl') );
+    }
+    // v1.0.7.1 end
 	}
                                
     

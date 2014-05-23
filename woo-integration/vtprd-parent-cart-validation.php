@@ -323,7 +323,7 @@ class VTPRD_Parent_Cart_Validation {
   //the form validation filter executes ONLY at click-to-pay time, just to access the global variables!!!!!!!!! 
 	public function vtprd_woo_validate_order(){
     global $vtprd_rules_set, $vtprd_cart, $vtprd_setup_options, $vtprd_info, $woocommerce;
-        
+    vtprd_debug_options();  //v1.0.5    
     //Open Session Variable, get rules_set and cart if not there...
     $data_chain = $this->vtprd_get_data_chain();
 
@@ -400,10 +400,8 @@ class VTPRD_Parent_Cart_Validation {
         2nd-nth path length is as short as possible.        
   *************************************************** */
 	public function vtprd_get_product_catalog_price_old($price, $product_id = null){     //passed data from wpsc_price
-
- 
     global $post, $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule;
-
+    vtprd_debug_options();  //v1.0.5
    // **********************************
    /*   This is a Catalog-Only call
    // **********************************
@@ -457,7 +455,7 @@ class VTPRD_Parent_Cart_Validation {
   *************************************************** */
 	public function vtprd_get_product_catalog_price_new($price, $product_id = null){     //passed data from wpsc_price
     global $post, $vtprd_info, $vtprd_setup_options;
-
+    vtprd_debug_options();  //v1.0.5
  //echo '001a in catalog_price_new' .'<br>';
 //			 wp_die( __('<strong>DIED in vtprd_get_product_catalog_price_new.</strong>', 'vtprd'), __('VT Pricing Deals not compatible - WP', 'vtprd'), array('back_link' => true));
   /* ************************************************
@@ -521,7 +519,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 
 	public function vtprd_maybe_grouped_price_html($price_html, $product_info){   
     global $post, $vtprd_info, $vtprd_setup_options; 
-    
+    vtprd_debug_options();  //v1.0.5
     //in place of is_admin, which doesn't work in AJAX...
      if ( function_exists( 'get_current_screen' ) ) {  // get_current_screen ONLY exists in ADMIN!!!   
        if ($post->post_type == 'product'  ) {    //in admin, don't run this on the PRODUCT screen!!
@@ -615,7 +613,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 
 	public function vtprd_maybe_variable_sale_price_html($price_html, $product_info){    
     global $post, $vtprd_info, $vtprd_setup_options;
-
+    vtprd_debug_options();  //v1.0.5
     //in place of is_admin, which doesn't work in AJAX...
      if ( function_exists( 'get_current_screen' ) ) {  // get_current_screen ONLY exists in ADMIN!!!   
        if ($post->post_type == 'product'  ) {    //in admin, don't run this on the PRODUCT screen!!
@@ -711,7 +709,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
   */
 	public function vtprd_maybe_catalog_price_html($price_html, $product_info){    
     global $post, $vtprd_info, $vtprd_setup_options;
-
+    vtprd_debug_options();  //v1.0.5
     //in place of is_admin, which doesn't work in AJAX...
      if ( function_exists( 'get_current_screen' ) ) {  // get_current_screen ONLY exists in ADMIN!!!   
        if ($post->post_type == 'product'  ) {    //in admin, don't run this on the PRODUCT screen!!
@@ -775,6 +773,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 	public function vtprd_maybe_cart_item_price_html($price_html, $cart_item, $cart_item_key){    
 //return 444; //mwnprice
     global $post, $vtprd_info, $vtprd_setup_options;
+    vtprd_debug_options();  //v1.0.5
   /* 
      session_start();    //mwntest
     echo 'SESSION data <pre>'.print_r($_SESSION, true).'</pre>' ; 
@@ -825,6 +824,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
   //*************************************************************************
 	public function vtprd_maybe_get_price($price, $product_info){    
     global $post, $vtprd_info;		
+    vtprd_debug_options();  //v1.0.5
  //echo '<br>GET PRICE BEGIN<br>';
 //          session_start();    //mwntest
  //echo 'SESSION data <pre>'.print_r($_SESSION, true).'</pre>' ;
@@ -1145,7 +1145,8 @@ echo '$woocommerce->cart->applied_coupons= <pre>'.print_r($woocommerce->cart->ap
     //IF nothing changed from last time, no need to process the discount => 
     //'woocommerce_cart_updated' RUNS EVERY TIME THE CART OR CHECKOUT PAGE DISPLAYS!!!!!!!!!!!!!
     //-*******************************************************
-    if ( ($woocommerce->cart->cart_contents_total  ==  $woo_cart_contents_total_previous) &&
+    if ( ($woocommerce->cart->cart_contents_total  > 0) &&   //V1.0.7.1  if == 0, lost addressability to woo, rerun
+         ($woocommerce->cart->cart_contents_total  ==  $woo_cart_contents_total_previous) &&
          ($woocommerce->cart->applied_coupons      ==  $woo_applied_coupons_previous) ) {
  //echo '<br>Return 002<br>' ;          
        return;  
@@ -1244,7 +1245,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 	public function vtprd_woo_maybe_add_remove_discount_cart_coupon(){  //and print discount info...    
       
     global $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $wpsc_coupons;  
-                 
+    vtprd_debug_options();  //v1.0.5                 
     //Open Session Variable, get rules_set and cart if not there....
     $data_chain = $this->vtprd_get_data_chain();
       
@@ -1311,7 +1312,7 @@ wp_die( __('<strong>die again.</strong>', 'vtprd'), __('VT Pricing Deals not com
    //****************************************************************
    public function vtprd_woo_maybe_load_discount_amount_to_coupon($status, $code) {
       global $vtprd_rules_set, $wpdb, $vtprd_cart, $vtprd_setup_options, $vtprd_info, $woocommerce;
-      
+      vtprd_debug_options();  //v1.0.5      
   //echo '$code= ' .$code. '<br>';
   //echo 'coupon_code_discount_deal= ' .$vtprd_info['coupon_code_discount_deal_title']. '<br>';
       
@@ -1371,7 +1372,7 @@ wp_die( __('<strong>die again.</strong>', 'vtprd'), __('VT Pricing Deals not com
 	public function vtprd_maybe_print_checkout_discount(){  //and print discount info...
     
      global $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $wpsc_coupons;                 
-    
+     vtprd_debug_options();  //v1.0.5    
     //Open Session Variable, get rules_set and cart if not there....
     $data_chain = $this->vtprd_get_data_chain();
 
@@ -1435,7 +1436,7 @@ echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
   //**************************************************
 	public function vtprd_maybe_print_widget_discount(){  //and print discount info...
     global $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $wpsc_coupons;
-        
+    vtprd_debug_options();  //v1.0.5        
     //Open Session Variable, get rules_set and cart if not there....
     $data_chain = $this->vtprd_get_data_chain();
 
@@ -1483,7 +1484,7 @@ echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
   public function vtprd_post_purchase_maybe_save_log_info($log_id, $posted_info) {   //$log_id comes in as an argument from wpsc call...
       
     global $woocommerce, $vtprd_setup_options, $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule;
-           
+    vtprd_debug_options();  //v1.0.5           
     //while the global data is available here, it does not stay 'current' between iterations, and we loos the 'already_done' switch, so we need the data chain.
          
     //Open Session Variable, get rules_set and cart if not there....
@@ -1540,6 +1541,7 @@ echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
   *************************************************** */ 
  public function vtprd_post_purchase_maybe_email($message, $order_info) {   
     global $wpdb, $vtprd_rules_set, $vtprd_cart, $vtprd_setup_options; 
+     vtprd_debug_options();  //v1.0.5   
 /*
 echo '$message= <pre>'.print_r($message, true).'</pre>' ; 
 echo '$order_info[id]= ' .$order_info->id . '<br>';
@@ -1585,7 +1587,7 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
   *************************************************** */ 
   public function vtprd_post_purchase_maybe_before_thankyou($order_id) {   
     global $wpdb, $vtprd_rules_set, $vtprd_cart, $vtprd_setup_options; 
-
+     vtprd_debug_options();  //v1.0.5
 
     $log_Id = $order_id;
    
@@ -1677,7 +1679,7 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
   *********************************************** */     
  public function vtprd_post_purchase_maybe_purchase_log($message, $notification) {   
     global $woocommerce, $vtprd_rules_set, $vtprd_cart, $vtprd_setup_options, $vtprd_info;    
-             
+    vtprd_debug_options();  //v1.0.5             
     //Open Session Variable, get rules_set and cart if not there....
     $data_chain = $this->vtprd_get_data_chain();
    
