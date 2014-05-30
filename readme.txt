@@ -173,8 +173,6 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 = 1.0.7.1 - 2014-5-23 =
 * Enhancement - Admin improvements
-
-= 1.0.7.1 - 2014-5-23 =
 * Fix - Include/Exclude box on Product wp-admin screen
 * Fix - Cart Updated  woocommerce addressability issue
 
