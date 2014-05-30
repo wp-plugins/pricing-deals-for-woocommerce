@@ -80,7 +80,10 @@ class VTPRD_Apply_Rules{
       error_log( print_r(  '$vtprd_cart', true ) );
       error_log( var_export($vtprd_cart, true ) );
       error_log( print_r(  '$vtprd_setup_options', true ) );
-      error_log( var_export($vtprd_setup_options, true ) );   
+      error_log( var_export($vtprd_setup_options, true ) ); 
+      $woocommerce_cart_contents = $woocommerce->cart->get_cart();
+      error_log( print_r(  '$woocommerce', true ) );
+      error_log( var_export($woocommerce, true ) );    
     }
     
     return;      
@@ -629,6 +632,17 @@ class VTPRD_Apply_Rules{
       case ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'forThePriceOf_Currency') :
       case ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_applies_to'] == 'cheapest') :    //can only be 'each'
       case ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_applies_to'] == 'most_expensive') :   //can only be 'each'
+        
+        //v1.0.7.2 begin
+          //reset the action group pointers to be = to buy group pointers, so actionpop doesn't count whole group at once...  so whatever group count the buy group as set, we do here.
+          if ($vtprd_rules_set[$i]->discountAppliesWhere == 'inCurrentInPopOnly') {  //'inCurrentInPopOnly' = 'discount this one'
+              $vtprd_rules_set[$i]->actionPop_exploded_group_begin = $vtprd_rules_set[$i]->inPop_exploded_group_begin; 
+              $vtprd_rules_set[$i]->actionPop_exploded_group_end   = $vtprd_rules_set[$i]->inPop_exploded_group_end;
+          }
+          $this->vtprd_apply_discount_as_a_group($i, $d, $ar );       
+        break;
+        //v1.0.7.2 end  
+              
       case ( ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_applies_to'] == 'all') && ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'currency') ): 
           $this->vtprd_apply_discount_as_a_group($i, $d, $ar );       
         break;
@@ -729,7 +743,7 @@ class VTPRD_Apply_Rules{
         
         $remainder = $total_savings - $running_total;
 
-        if ($remainder > 0) {
+        if ($remainder <> 0) {      //v1.0.7.2 changed > 0 to <>0 ==>> pick up positive or negative rounding error
           $add_a_penny_to_first = $remainder;
         } else {
           $add_a_penny_to_first = 0;
@@ -782,12 +796,12 @@ class VTPRD_Apply_Rules{
         
         $remainder = $total_savings - $running_total;
 
-        if ($remainder > 0) {
+        if ($remainder <> 0) {      //v1.0.7.2 changed > 0 to <>0 ==>> pick up positive or negative rounding error
           $add_a_penny_to_first = $remainder;
         } else {
           $add_a_penny_to_first = 0;
         }
-       
+        
         //apply the per unit savings to each unit       
         for ( $s=$vtprd_rules_set[$i]->actionPop_exploded_group_begin; $s < $vtprd_rules_set[$i]->actionPop_exploded_group_end; $s++) {
             $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_discount_amt'] = $per_unit_savings_2decimals;
@@ -1415,8 +1429,9 @@ class VTPRD_Apply_Rules{
     * if nth, end is a multiple of ($r + 1) * buy_amt_count        
     */
     $templateKey = $vtprd_rules_set[$i]->rule_template;    
-      
-    $for_loop_current_prod_id;
+    
+    $for_loop_current_prod_id = ''; //v1.0.7.2        
+
     $for_loop_unit_count = 0;
     $for_loop_price_total = 0;
     $for_loop_elapsed_count = 0;
@@ -2303,7 +2318,8 @@ class VTPRD_Apply_Rules{
       for($rule=0; $rule < $sizeof_ruleset; $rule++) {
 
         //skip if we're on the rule initiating the free product array logic
-        if  ($vtprd_rules_set[$rule]->post_id == $vtprd_rules_set[$i]->post_id) {
+        if  ( ($vtprd_rules_set[$rule]->post_id == $vtprd_rules_set[$i]->post_id) ||      //1.0.7.2
+              ($vtprd_rules_set[$rule]->rule_status != 'publish') ) {                     //1.0.7.2 added in != 'publish' test
           continue; 
         }
         

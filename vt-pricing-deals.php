@@ -3,7 +3,7 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.0.7.1
+Version: 1.0.7.2
 Author: Vark
 Author URI: http://varktech.com
 */
@@ -43,9 +43,9 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.0.7.1');
-    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2014-05-23');
+		define('VTPRD_VERSION',                               '1.0.7.2');
+    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5.1');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2014-05-29');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
@@ -67,21 +67,23 @@ class VTPRD_Controller{
     //    picks up ONLY the 1st publish, save_post works thereafter...   
     //      (could possibly conflate all the publish/save actions (4) into the publish_post action...)
     /*  =============+++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
-    add_action( 'draft_to_publish',       array( &$this, 'vtprd_admin_update_rule_cntl' )); 
-    add_action( 'auto-draft_to_publish',  array( &$this, 'vtprd_admin_update_rule_cntl' ));
-    add_action( 'new_to_publish',         array( &$this, 'vtprd_admin_update_rule_cntl' )); 			
-    add_action( 'pending_to_publish',     array( &$this, 'vtprd_admin_update_rule_cntl' ));
+    if (is_admin()) {   //v1.07.2   only add during is_admin
+        add_action( 'draft_to_publish',       array( &$this, 'vtprd_admin_update_rule_cntl' )); 
+        add_action( 'auto-draft_to_publish',  array( &$this, 'vtprd_admin_update_rule_cntl' ));
+        add_action( 'new_to_publish',         array( &$this, 'vtprd_admin_update_rule_cntl' )); 			
+        add_action( 'pending_to_publish',     array( &$this, 'vtprd_admin_update_rule_cntl' ));
+        
+        //standard mod/del/trash/untrash
+        add_action('save_post',     array( &$this, 'vtprd_admin_update_rule_cntl' ));
+        add_action('delete_post',   array( &$this, 'vtprd_admin_delete_rule' ));    
+        add_action('trash_post',    array( &$this, 'vtprd_admin_trash_rule' ));
+        add_action('untrash_post',  array( &$this, 'vtprd_admin_untrash_rule' ));
+        /*  =============+++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+        
+        //get rid of bulk actions on the edit list screen, which aren't compatible with this plugin's actions...
+        add_action('bulk_actions-edit-vtprd-rule', array($this, 'vtprd_custom_bulk_actions') );
+    } //v1.07.2  end
     
-    //standard mod/del/trash/untrash
-    add_action('save_post',     array( &$this, 'vtprd_admin_update_rule_cntl' ));
-    add_action('delete_post',   array( &$this, 'vtprd_admin_delete_rule' ));    
-    add_action('trash_post',    array( &$this, 'vtprd_admin_trash_rule' ));
-    add_action('untrash_post',  array( &$this, 'vtprd_admin_untrash_rule' ));
-    /*  =============+++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-    
-    //get rid of bulk actions on the edit list screen, which aren't compatible with this plugin's actions...
-    add_action('bulk_actions-edit-vtprd-rule', array($this, 'vtprd_custom_bulk_actions') ); 
-
 	}   //end constructor
 
   	                                                             
@@ -219,9 +221,9 @@ class VTPRD_Controller{
   **   Admin - Remove bulk actions on edit list screen, actions don't work the same way as onesies...
   ***************************************************/ 
   function vtprd_custom_bulk_actions($actions){
-    
-    ?> 
-    <style type="text/css"> #delete_all {display:none;} /*kill the 'empty trash' buttons, for the same reason*/ </style>
+              //v1.07.2  add  ".inline.hide-if-no-js, .view" to display:none; list
+    ?>         
+    <style type="text/css"> #delete_all, .inline.hide-if-no-js, .view {display:none;} /*kill the 'empty trash' buttons, for the same reason*/ </style>
     <?php
     
     unset( $actions['edit'] );
@@ -230,7 +232,8 @@ class VTPRD_Controller{
     unset( $actions['delete'] );
     return $actions;
   }
-    
+
+      
   /* ************************************************
   **   Admin - Show Rule UI Screen
   *************************************************** 

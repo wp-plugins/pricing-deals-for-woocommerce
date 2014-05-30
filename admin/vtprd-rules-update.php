@@ -14,7 +14,7 @@ class VTPRD_Rule_update {
     $this->vtprd_maybe_clear_extraneous_data();
        
     //translate rule into text...
-    $this->vtprd_build_ruleInWords();
+    //$this->vtprd_build_ruleInWords();      No longer used
 /*
     global $vtprd_rule;
       echo '$vtprd_rule <pre>'.print_r($vtprd_rule, true).'</pre>' ;  

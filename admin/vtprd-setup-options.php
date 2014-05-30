@@ -2325,7 +2325,7 @@ function vtprd_validate_setup_input( $input ) {
         $output = get_option( 'vtprd_setup_options' );  
       break;
     default:   //standard update button hit...                 
-        $output = array();
+        $output = get_option( 'vtprd_setup_options' ); //v1.0.7.2  changed from array initialize
       	foreach( $input as $key => $value ) {
       		if( isset( $input[$key] ) ) {
       			$output[$key] = strip_tags( stripslashes( $input[ $key ] ) );	

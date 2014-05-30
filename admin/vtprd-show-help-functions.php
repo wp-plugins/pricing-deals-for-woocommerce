@@ -114,7 +114,7 @@
             <li><?php _e('Product-specific info, such as "You Save" or "Old Price" (available ', 'vtprd'); echo '<em>'; _e('only', 'vtprd'); echo '</em>'; _e(' for Realtime Rules)', 'vtprd');?> 
               <ul>
                 <li><em><?php _e('Look in ', 'vtprd'); 
-                        echo 'vt-pricing-deals-for-' . VTPRD_PARENT_PLUGIN_TEXTNAME . '/' . VTPRD_PARENT_PLUGIN_ABBREV . '-integration ';    
+                        echo 'vt-pricing-deals-for- -integration ';    
                         _e('folders for how-to info', 'vtprd');?></em> 
                   <ul>
                     <li><?php _e('"Sample Cart Widget" folder', 'vtprd');?></li>
@@ -336,7 +336,7 @@
         <span class="textarea"> 
           <?php _e('Find the sample version of these same files.  Look in ', 'vtprd');?>
           <em>
-          <?php  echo 'vt-pricing-deals-for-' . VTPRD_PARENT_PLUGIN_TEXTNAME . '/' . VTPRD_PARENT_PLUGIN_ABBREV . '-integration'; ?> 
+          <?php  echo 'vt-pricing-deals-for- -integration'; ?> 
           </em>  
           <?php  _e(' folders for step-by-step instructions.', 'vtprd');?>  
           <br><em>
@@ -589,7 +589,7 @@
                   <?php _e('"Buy 2 of those products, get this product free"', 'vtprd');?> 
               </li>
               <li><?php _e('Look in ', 'vtprd'); 
-                        echo 'vt-pricing-deals-for-' . VTPRD_PARENT_PLUGIN_TEXTNAME . '/' . VTPRD_PARENT_PLUGIN_ABBREV . '-integration ';    
+                        echo 'vt-pricing-deals-for- -integration ';    
                         _e('folders for how-to info, using the do_shortchode or do_action syntax listed.', 'vtprd');?>   
               </li>
             </ul>         

@@ -300,16 +300,20 @@
 //      $product_variations_sw = vtprd_test_for_variations($product_id);
       $product_variations_sw = '';
     
+
+      
       if ($vtprd_cart->cart_items[0]->yousave_total_amt > 0) {
          $list_price                    =   $vtprd_cart->cart_items[0]->db_unit_price_list;
          $db_unit_price_list_html_woo   =   woocommerce_price($list_price);
          $discount_price                =   $vtprd_cart->cart_items[0]->discount_price;
-         $discount_price_html_woo       =   woocommerce_price($discount_price);
+         $discount_price_html_woo    =   woocommerce_price($discount_price);
+
          //v1.0.7 begin
          //from woocommerce/includes/abstracts/abstract-wp-product.php
          // Check for Price Suffix
          $price_display_suffix  = get_option( 'woocommerce_price_display_suffix' );
-      	 if ( $price_display_suffix ) {
+      	 if ( ( $price_display_suffix ) &&                              //v1.0.7.2
+              ( $vtprd_cart->cart_items[0]->discount_price > 0 ) ) {   //v1.0.7.2  don't do suffix for zero amount...
             //first get rid of pricing functions which aren't relevant here
              $find = array(    //these are allowed in suffix, remove
       				'{price_including_tax}',
@@ -322,7 +326,7 @@
             if (strpos($discount_price_html_woo, $price_display_suffix) !== false) { //if suffix already in price, do nothing
               $do_nothing;
             } else {
-              $discount_price_html_woo = $discount_price_html_woo . ' <small class="woocommerce-price-suffix">' . $price_display_suffix . '</small>';
+              $discount_price_html_woo = $discount_price_html_woo . ' <small class="woocommerce-price-suffix ">' . $price_display_suffix . '</small>';
             }
          }
          //v1.0.7 end
@@ -2029,16 +2033,7 @@
       header("Cache-Control: no-cache");
       header("Pragma: no-cache");
     }  
-/*      
-      echo 'vtprd_info <pre>'.print_r($vtprd_info, true).'</pre>' ;
-      session_start();    //mwntest
-      echo 'SESSION data <pre>'.print_r($_SESSION, true).'</pre>' ;      
-      echo '<pre>'.print_r($vtprd_rules_set, true).'</pre>' ; 
-      echo '<pre>'.print_r($vtprd_cart, true).'</pre>' ;
-      echo '<pre>'.print_r($vtprd_setup_options, true).'</pre>' ;
-      echo '<pre>'.print_r($vtprd_info, true).'</pre>' ;  
- wp_die( __('<strong>Looks like you\'re running an older version of WordPress, you need to be running at least WordPress 3.3 to use the Varktech Minimum Purchase plugin.</strong>', 'vtmin'), __('VT Minimum Purchase not compatible - WP', 'vtmin'), array('back_link' => true));
-*/
+
     //if already in the session variable... => this routine can be called multiple times in displaying a single catalog price.  check first if already done.
      
 //      echo 'IN THE ROUTINE, $product_id= ' .$product_id.'<br>' ;
