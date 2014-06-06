@@ -1463,14 +1463,14 @@ echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
     //*****************
     //Save LIfetime data
     //*****************
-    //v1.07.3 begin
+    //v1.0.7.3 begin
     /*
     //moved to thankyou function
     if ( (defined('VTPRD_PRO_DIRNAME')) && ($vtprd_setup_options['use_lifetime_max_limits'] == 'yes') )  { 
       vtprd_save_lifetime_purchase_info($log_id);
     }
     */
-    //v1.07.3 end
+    //v1.0.7.3 end
     
     //Save Discount Purchase Log info
     //************************************************
@@ -1549,12 +1549,12 @@ echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
     //*****************
     //Save LIfetime data
     //*****************
-    //v1.07.3 begin
+    //v1.0.7.3 begin
     //  moved HERE so that abandoned carts are avoided in lifetime info
     if ( (defined('VTPRD_PRO_DIRNAME')) && ($vtprd_setup_options['use_lifetime_max_limits'] == 'yes') )  { 
       vtprd_save_lifetime_purchase_info($log_id);
     }
-    //v1.07.3 end
+    //v1.0.7.3 end
     
     
     //get the Discount detail report...

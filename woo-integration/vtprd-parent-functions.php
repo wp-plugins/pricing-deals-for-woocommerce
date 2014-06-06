@@ -221,14 +221,14 @@
       $vtprd_cart = new VTPRD_Cart;  
       $vtprd_cart_item                = new VTPRD_Cart_Item;    
         
-      // v1.07.3  begin
+      // v1.0.7.3  begin
       //  straight get_post caused WOO to loose the plot with variable products on 1st time through...
       //$post = get_post($product_id);
       if ( ( !isset($post->post_name) ) ||
            ( $post->post_name <= ' ' ) ) {
          $post = get_post($product_id);
       }
-      // v1.07.3  end
+      // v1.0.7.3  end
    
       //change??
       $vtprd_cart_item->product_id            = $product_id;
@@ -2317,7 +2317,7 @@
   }
   //***** v1.0.4 end
  
-  //v1.07 change
+  //v1.0.7 change
   function vtprd_debug_options(){ 
     global $vtprd_setup_options;
     if ( ( isset( $vtprd_setup_options['debugging_mode_on'] )) &&

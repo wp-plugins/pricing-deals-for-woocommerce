@@ -67,7 +67,7 @@ class VTPRD_Controller{
     //    picks up ONLY the 1st publish, save_post works thereafter...   
     //      (could possibly conflate all the publish/save actions (4) into the publish_post action...)
     /*  =============+++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */    
-    if (is_admin()) {   //v1.07.2   only add during is_admin
+    if (is_admin()) {   //v1.0.7.2   only add during is_admin
         add_action( 'draft_to_publish',       array( &$this, 'vtprd_admin_update_rule_cntl' )); 
         add_action( 'auto-draft_to_publish',  array( &$this, 'vtprd_admin_update_rule_cntl' ));
         add_action( 'new_to_publish',         array( &$this, 'vtprd_admin_update_rule_cntl' )); 			
@@ -82,7 +82,7 @@ class VTPRD_Controller{
         
         //get rid of bulk actions on the edit list screen, which aren't compatible with this plugin's actions...
         add_action('bulk_actions-edit-vtprd-rule', array($this, 'vtprd_custom_bulk_actions') );
-    } //v1.07.2  end
+    } //v1.0.7.2  end
     
 	}   //end constructor
 
@@ -221,7 +221,7 @@ class VTPRD_Controller{
   **   Admin - Remove bulk actions on edit list screen, actions don't work the same way as onesies...
   ***************************************************/ 
   function vtprd_custom_bulk_actions($actions){
-              //v1.07.2  add  ".inline.hide-if-no-js, .view" to display:none; list
+              //v1.0.7.2  add  ".inline.hide-if-no-js, .view" to display:none; list
     ?>         
     <style type="text/css"> #delete_all, .inline.hide-if-no-js, .view {display:none;} /*kill the 'empty trash' buttons, for the same reason*/ </style>
     <?php
@@ -254,11 +254,11 @@ class VTPRD_Controller{
       global $post, $vtprd_info;    
       
       
-      // v1.07.3 begin
+      // v1.0.7.3 begin
       if( !isset( $post ) ) {    
         return;
       }  
-      // v1.07.3  end
+      // v1.0.7.3  end
                         
       switch( $post->post_type ) {
         case 'vtprd-rule':
