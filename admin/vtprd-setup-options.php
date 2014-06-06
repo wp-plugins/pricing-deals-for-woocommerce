@@ -1103,14 +1103,17 @@ function vtprd_initialize_options() {
   //  DEFAULT OPTIONS INITIALIZATION
   //****************************
 function vtprd_set_default_options() {
+      /*
+      //v1.07.3 changed to always be YES!!
       if(defined('VTPRD_PRO_DIRNAME')) { 
         $use_lifetime_max_limits_default = 'yes';
       } else {
         $use_lifetime_max_limits_default = 'no';
-      }      
+      } 
+      */     
      $options = array(           
           'register_under_tools_menu'=> 'no',  //opt1         
-          'use_lifetime_max_limits' => $use_lifetime_max_limits_default,    //opt2
+          'use_lifetime_max_limits' => 'yes',    //opt2           //v1.07.3 changed to always be YES, as we always check for PRO anyway when using the switch
           'discount_floor_pct_per_single_item' => '', //opt3  STORE-WIDE Discount max percent
           'discount_floor_pct_msg' => 'System Max xx% Discount reached.',  //opt4
           'show_checkout_discount_total_line' => 'yes', //opt5  yes/no => show total of discounts AFTER products displayed

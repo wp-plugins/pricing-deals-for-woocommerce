@@ -1460,40 +1460,25 @@ echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
     }
     $_SESSION['do_log_function'] = false;
     
-    /*  *************************************************
-     At this point the global variable contents are gone. 
-     session variables are destroyed in parent plugin before post-update processing...
-     load the globals with the session variable contents, so that the data will be 
-     available in the globals during post-update processing!!!
-      
-     DATA CHAIN - global to session back to global
-     global to session - in vtprd_process_discount
-     session to global - in vtprd_woo_validate_order  +
-                            vtprd_post_purchase_maybe_purchase_log
-     access global     - in vtprd_post_purchase_maybe_save_log_info    
-    *************************************************   */
-
-    //if this was initiated during a re-send of the customer email out of WP-Admin, EXIT stage left!!
-    //    (this switch set at cart load time...)
-    //  do_log_function above should take care of this already...
-//    if ($vtprd_cart->wpsc_purchase_in_progress != 'yes') {
-//      return;
-//    }
-  
     //*****************
     //Save LIfetime data
     //*****************
+    //v1.07.3 begin
+    /*
+    //moved to thankyou function
     if ( (defined('VTPRD_PRO_DIRNAME')) && ($vtprd_setup_options['use_lifetime_max_limits'] == 'yes') )  { 
       vtprd_save_lifetime_purchase_info($log_id);
     }
-
+    */
+    //v1.07.3 end
+    
     //Save Discount Purchase Log info
     //************************************************
     //*   Purchase log is essential to customer email reporting
     //*      so it MUST be saved at all times.
     //************************************************
     vtprd_save_discount_purchase_log($log_id);     
-//wp_die( __('<strong>die again.</strong>', 'vtprd'), __('VT Pricing Deals not compatible - WP', 'vtprd'), array('back_link' => true));     
+   
     return;
   } // end  function vtprd_store_max_purchaser_info()     
 
@@ -1505,12 +1490,7 @@ echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
  public function vtprd_post_purchase_maybe_email($message, $order_info) {   
     global $wpdb, $vtprd_rules_set, $vtprd_cart, $vtprd_setup_options; 
      vtprd_debug_options();  //v1.0.5   
-/*
-echo '$message= <pre>'.print_r($message, true).'</pre>' ; 
-echo '$order_info[id]= ' .$order_info->id . '<br>';
-echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ; 
-	 wp_die( __('<strong>DIED in vtprd_get_product_catalog_price_new.</strong>', 'vtprd'), __('VT Pricing Deals not compatible - WP', 'vtprd'), array('back_link' => true)); 
-*/
+
 
     $log_Id = $order_info->id;
    
@@ -1535,12 +1515,8 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
       $discount_reporting = vtprd_email_cart_reporting('html');     
     }
 
-    //overwrite $message old message parts, new info as well...
-//    $message .=  '<br>';
     $message .=  $discount_reporting;
-//    $message .=  '<br>';
 
-    
     return $message;
   }    
 
@@ -1561,13 +1537,26 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
     if ($vtprd_purchase_log) { 
       $vtprd_cart      = unserialize($vtprd_purchase_log['cart_object']);    
       $vtprd_rules_set = unserialize($vtprd_purchase_log['ruleset_object']);
-    }                                                                                                                          
+    }  else {
+      return;
+    }                                                                                                                        
 
     //NO discount found, no msg changes
     if (!($vtprd_cart->yousave_cart_total_amt > 0)) {
       return;    
     } 
-
+    
+    //*****************
+    //Save LIfetime data
+    //*****************
+    //v1.07.3 begin
+    //  moved HERE so that abandoned carts are avoided in lifetime info
+    if ( (defined('VTPRD_PRO_DIRNAME')) && ($vtprd_setup_options['use_lifetime_max_limits'] == 'yes') )  { 
+      vtprd_save_lifetime_purchase_info($log_id);
+    }
+    //v1.07.3 end
+    
+    
     //get the Discount detail report...
     $discount_reporting = vtprd_thankyou_cart_reporting(); 
 

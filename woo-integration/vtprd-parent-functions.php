@@ -219,8 +219,16 @@
       global $post, $wpdb, $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_info; 
 
       $vtprd_cart = new VTPRD_Cart;  
-      $vtprd_cart_item                = new VTPRD_Cart_Item;      
-      $post = get_post($product_id);
+      $vtprd_cart_item                = new VTPRD_Cart_Item;    
+        
+      // v1.07.3  begin
+      //  straight get_post caused WOO to loose the plot with variable products on 1st time through...
+      //$post = get_post($product_id);
+      if ( ( !isset($post->post_name) ) ||
+           ( $post->post_name <= ' ' ) ) {
+         $post = get_post($product_id);
+      }
+      // v1.07.3  end
    
       //change??
       $vtprd_cart_item->product_id            = $product_id;
