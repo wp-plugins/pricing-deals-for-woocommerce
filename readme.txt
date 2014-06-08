@@ -1,6 +1,6 @@
 === Pricing Deals for WooCommerce ===
 Contributors: vark
-Donate link: http://www.varktech.com/wp-e-commerce/pricing-deals-for-woocommerce/
+Donate link: http://www.varktech.com/wp-e-commerce/woocommerce-dynamic-pricing-discounts-pro/
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 3.9.1
@@ -98,7 +98,7 @@ The Pro version  gives you incredible control over rule groups - by category, pr
 
 **The Pro version  *also* gives you: (*group power*!)** 
 
-*   For All deal types, the  [Pro version](http://www.varktech.com/woocommerce/pricing-deals-pro-for-woocommerce/)   gives you group power - the additional flexibility of applying Sales and Promotions to:
+*   For All deal types, the  [Pro version](http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/)   gives you group power - the additional flexibility of applying Sales and Promotions to:
 	*   *Whole Store, Wholesaler or Membership or Role (Display different prices for logged in users), Product Category and Pricing Deal custom Category, Product or Variation*
 *   Deal Types
 	*   BOGO (Buy One, Get One) [for any product, variation, category or role]
@@ -110,11 +110,11 @@ The Pro version  gives you incredible control over rule groups - by category, pr
 *   Pricing Deal Custom Categories (a custom Product taxonomy, allowing custom product groups)
 *   and more!
 
-*[Vist the Pro Version](http://www.varktech.com/woocommerce/pricing-deals-pro-for-woocommerce/)*
+*[Vist the Pro Version](http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/)*
    
 
 [Documentation](http://www.varktech.com/documentation/pricing-deals/introrule/) | 
-[Shameless E-Commerce](http://www.varktech.com/woocommerce/pricing-deals-pro-for-woocommerce/)
+[Shameless E-Commerce](http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/)
 
 
 
