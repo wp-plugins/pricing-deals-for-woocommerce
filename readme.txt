@@ -1,6 +1,6 @@
 === Pricing Deals for WooCommerce ===
 Contributors: vark
-Donate link: http://www.varktech.com/woocommerce/pricing-deals-for-woocommerce/
+Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 3.9.1
