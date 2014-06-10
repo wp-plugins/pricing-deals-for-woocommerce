@@ -26,6 +26,11 @@ Power your store to greater success with pricing deals and sales promotions! Jus
 *   Schedulable
 *   Works with WooCommerce 2.1+
 
+= Unparalleled Customer Service =
+
+*   Customer Service is as important as the plugin functionality itself
+*   [Support](http://www.varktech.com/support/) is open 7 days for questions and 1-on-1 assistance.
+
 = A Complete Discount Marketing Package =
 
 Pricing Deals does more than offer discounting functions:
