@@ -1,10 +1,10 @@
 === Pricing Deals for WooCommerce ===
 Contributors: vark
-Donate link: http://www.varktech.com/wp-e-commerce/pricing-deals-for-woocommerce/
+Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 3.9.1
-Stable tag: 1.0.7.3
+Stable tag: 1.0.7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -19,12 +19,18 @@ Power your store to greater success with pricing deals and sales promotions! Jus
 *   Dynamic Pricing
 *   Wholesale pricing
 *   Category Pricing
+*   Pricing Tiers
 *   Buy one, Get one deals
 *   Quantity bulk discounts
 *   Group pricing
 *   Product and Variation Pricing
 *   Schedulable
 *   Works with WooCommerce 2.1+
+
+= Unparalleled Customer Service =
+
+*   Customer Service is as important as the plugin functionality itself
+*   [Support](http://www.varktech.com/support/) is open 7 days for questions and 1-on-1 assistance.
 
 = A Complete Discount Marketing Package =
 
@@ -50,6 +56,8 @@ Pricing Deals does more than offer discounting functions:
 1. [Wholesale Pricing for WooCommerce](http://wordpress.org/extend/plugins/wholesale-pricing-for-woocommerce) .. (wholesale only - skinnier pricing deals plugin)
 1. [Cart Deals for WooCommerce](http://wordpress.org/extend/plugins/cart-deals-for-woocommerce)  .. (just the basic Cart discounts, please - skinnier pricing deals plugin)
 1. (Pricing Deals itself **already contains** the Wholesale Pricing and Cart Deals functionality)
+
+[Visit the Pro Version](http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/)
 
 = The Details =
  
@@ -98,7 +106,7 @@ The Pro version  gives you incredible control over rule groups - by category, pr
 
 **The Pro version  *also* gives you: (*group power*!)** 
 
-*   For All deal types, the  [Pro version](http://www.varktech.com/woocommerce/pricing-deals-pro-for-woocommerce/)   gives you group power - the additional flexibility of applying Sales and Promotions to:
+*   For All deal types, the  [Pro version](http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/)   gives you group power - the additional flexibility of applying Sales and Promotions to:
 	*   *Whole Store, Wholesaler or Membership or Role (Display different prices for logged in users), Product Category and Pricing Deal custom Category, Product or Variation*
 *   Deal Types
 	*   BOGO (Buy One, Get One) [for any product, variation, category or role]
@@ -110,11 +118,11 @@ The Pro version  gives you incredible control over rule groups - by category, pr
 *   Pricing Deal Custom Categories (a custom Product taxonomy, allowing custom product groups)
 *   and more!
 
-*[Vist the Pro Version](http://www.varktech.com/woocommerce/pricing-deals-pro-for-woocommerce/)*
+*[Vist the Pro Version](http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/)*
    
 
 [Documentation](http://www.varktech.com/documentation/pricing-deals/introrule/) | 
-[Shameless E-Commerce](http://www.varktech.com/woocommerce/pricing-deals-pro-for-woocommerce/)
+[Shameless E-Commerce](http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/)
 
 
 
@@ -162,6 +170,14 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Changelog ==
+
+= 1.07.4 - 2014-06-19 =
+* Enhancement - use WC  coupon routine
+* Enhancement - VAT pricing - include Woo wildcard in suffix text
+* Enhancement - Taxation messaging as needed in checkout
+* Enhancement - Auto add 'Wholesale Buyer' role on install
+* Enhancement - Coupon Individual_use lockout
+* Fix - PHP floating point rounding
 
 = 1.07.3 - 2014-06-05 =
 * Fix - post-purchase processing
@@ -229,6 +245,14 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.07.4 - 2014-06-19 =
+* Enhancement - use WC  coupon routine
+* Enhancement - VAT pricing - include Woo wildcard in suffix text
+* Enhancement - Taxation messaging as needed in checkout
+* Enhancement - Auto add 'Wholesale Buyer' role on install
+* Enhancement - Coupon Individual_use lockout
+* Fix - PHP floating point rounding
 
 = 1.07.3 - 2014-06-05 =
 * Fix - post-purchase processing

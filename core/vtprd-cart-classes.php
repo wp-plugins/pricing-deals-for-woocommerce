@@ -7,6 +7,8 @@ class VTPRD_Cart {
  
     public $cart_original_total_amt;
     public $yousave_cart_total_amt;
+    public $yousave_cart_total_amt_excl_tax;  //v1.0.7.4
+    public $yousave_cart_total_amt_incl_tax;  //v1.0.7.4
     public $yousave_cart_total_qty;
     public $yousave_cart_total_pct;
     public $cart_discount_subtotal;
@@ -53,10 +55,11 @@ class VTPRD_Cart {
     $this->cart_item; 
     $this->cart_original_total_amt = 0;
     $this->yousave_cart_total_amt = 0;
+    $this->yousave_cart_total_amt_excl_tax = 0;  //v1.0.7.4
+    $this->yousave_cart_total_amt_incl_tax = 0;  //v1.0.7.4
     $this->yousave_cart_total_qty = 0;
     $this->yousave_cart_total_pct = 0;
     $this->cart_discount_subtotal = 0;        
-    
     $this->error_messages  = array(
        /* **The following array structure is created on-the-fly during the apply process**
         array(
@@ -85,7 +88,7 @@ class VTPRD_Cart_Item {
     public $db_unit_price;
     public $db_unit_price_list;
     public $db_unit_price_special;
-    public $product_is_on_special;
+    public $product_is_on_special; 
     
     //Running totals and processing switches
     public $original_quantity;
@@ -94,7 +97,7 @@ class VTPRD_Cart_Item {
     public $running_total_price;
     public $running_nth_total_price;
     public $running_index_begin;
-    public $buy_amt_process_status;    
+    public $buy_amt_process_status;        
 
 
     public $ignore_all_rules; //at product level, set to no rules apply to product
@@ -122,6 +125,9 @@ class VTPRD_Cart_Item {
     public $yousave_total_pct;
     public $yousave_total_qty;
     public $yousave_total_unit_price;
+    public $save_orig_unit_price;  //v1.0.7.4
+    public $product_is_taxable;  //v1.0.7.4
+    
     public $product_discount_price_html_woo;
     public $product_in_rule_allowing_display;
     public $product_auto_insert_state;    //used only during auto insert processing ...
@@ -259,7 +265,8 @@ class VTPRD_Cart_Item {
     $this->yousave_total_pct = 0;
     $this->yousave_total_qty = 0;
     $this->yousave_total_unit_price = 0;
-
+    $this->save_orig_unit_price = 0;     //v1.0.7.4
+    $this->product_is_taxable = '';    //v1.0.7.4
 	}
 
 } //end class

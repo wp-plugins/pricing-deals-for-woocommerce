@@ -100,6 +100,15 @@ class VTPRD_Apply_Rules{
       return;
     }
     
+    //v1.0.7.4 begin
+    if ( ($vtprd_info['current_processing_request'] == 'cart') &&
+         ($vtprd_info['skip_cart_processing_due_to_coupon_individual_use']) )  {
+      $vtprd_cart->cart_level_status = 'rejected';
+      $vtprd_cart->cart_level_auditTrail_msg = 'Another Coupon with Individual_use = "yes" has been activated.  Cart processing may not continue.';          
+      return;
+    }
+    //v1.0.7.4 end
+        
     //test all rules for inPop and actionPop participation 
     $vtprd_cart->at_least_one_rule_actionPop_product_found = 'no';
     //
@@ -643,17 +652,19 @@ class VTPRD_Apply_Rules{
         break;
         //v1.0.7.2 end  
               
-      case ( ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_applies_to'] == 'all') && ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'currency') ): 
+      case ( ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_applies_to'] == 'all') && ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'currency') ):
+      case ( ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_applies_to'] == 'all') && ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'percent') ):  //v1.0.7.4   floating point fix...
           $this->vtprd_apply_discount_as_a_group($i, $d, $ar );       
         break;
       
       case ( ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'free')       && ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_applies_to'] == 'each') ):   //can only be 'each'
       case ( ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'fixedPrice') && ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_applies_to'] == 'each') ):   //can only be 'each'  
       case ( ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'currency')   && ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_applies_to'] == 'each') ):
-      case   ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'percent'):  //percent as each/all is mathematically the same, easier to do it as each.
+      case ( ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'percent')    && ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_applies_to'] == 'each') ):    //v1.0.7.4
           $this->vtprd_apply_discount_to_each_product($i, $d, $ar );       
         break;
     } 
+ 
 
     $sizeof_actionpop_list = sizeof($vtprd_rules_set[$i]->actionPop_exploded_found_list); //v 1.0.3
     if ( ($vtprd_rules_set[$i]->actionPop_exploded_group_end >= $sizeof_actionpop_list ) || 
@@ -740,8 +751,10 @@ class VTPRD_Apply_Rules{
         //$per_unit_savings_2decimals = bcdiv($total_savings , $forThePriceOf_Divisor , 2); 
         $per_unit_savings_2decimals = round( ($total_savings / $forThePriceOf_Divisor) , 2);    
         $running_total =  $per_unit_savings_2decimals * $forThePriceOf_Divisor;
+       
         
-        $remainder = $total_savings - $running_total;
+        //$remainder = $total_savings - $running_total;
+        $remainder = round($total_savings - $running_total, 2); //v1.0.7.4   floating point...
 
         if ($remainder <> 0) {      //v1.0.7.2 changed > 0 to <>0 ==>> pick up positive or negative rounding error
           $add_a_penny_to_first = $remainder;
@@ -793,9 +806,10 @@ class VTPRD_Apply_Rules{
         //$per_unit_savings_2decimals = bcdiv($total_savings , $forThePriceOf_Divisor , 2); 
         $per_unit_savings_2decimals = round( ($total_savings / $forThePriceOf_Divisor) , 2);    
         $running_total =  $per_unit_savings_2decimals * $forThePriceOf_Divisor;
+      
+        //$remainder = $total_savings - $running_total;
+        $remainder = round($total_savings - $running_total, 2); //v1.0.7.4   floating point...
         
-        $remainder = $total_savings - $running_total;
-
         if ($remainder <> 0) {      //v1.0.7.2 changed > 0 to <>0 ==>> pick up positive or negative rounding error
           $add_a_penny_to_first = $remainder;
         } else {
@@ -881,11 +895,12 @@ class VTPRD_Apply_Rules{
         //compute remainder
         //$per_unit_savings_2decimals = bcdiv($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] , $unit_count , 2); 
         $per_unit_savings_2decimals = round( ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] / $unit_count ) , 2);    
-     
+   
         $running_total =  $per_unit_savings_2decimals * $unit_count;
         
-        $remainder = $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] - $running_total;
-
+        //$remainder = $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] - $running_total;
+        $remainder = round($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] - $running_total, 2);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
+        
         if ($remainder > 0) {
           $add_a_penny_to_first = $remainder;
         } else {
@@ -907,7 +922,181 @@ class VTPRD_Apply_Rules{
          } 
 
         break;
+      
+         
+      //v1.0.7.4 begin
+      //*******************************************
+      //% value off of a group
+      //  added to handle a price decimal ending in 5, which otherwise will produce a rounding-based error.
+      //  rounding errors are now handled within each product sub-group, so that the fix will be reflected in the appropriate bucket.
+      //*******************************************
+      case ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'percent') :  
+         //Applying a % discount to a group is often different from applying it singly, due to rounding issues.  This routine repairs that
+         //  by comparing the total of the individually discounted items against the discount total of the same group, and adding any remainder to the last item discounted
+
+         //*******************************************
+         //add unit prices together, per product (so any group-level remainder goes with the correct product!)
+         //******************************************* 
+         
+         $cart_group_total = array();
+         /*
+         $cart_group_total [] = array(
+             'product_id'  => $current_product_id,
+             'unit_count'  => $current_unit_count,
+             'total_price' => $current_total_price,
+             'total_discount' => 0 
+              );
+         */         
+             
+         $s=$vtprd_rules_set[$i]->actionPop_exploded_group_begin;
+         $current_product_id = $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_id'];
+         $current_unit_count = 0;
+         $current_total_price = 0;         
+         //pre-process action group for remainder info
+         for( $s=$vtprd_rules_set[$i]->actionPop_exploded_group_begin; $s < $vtprd_rules_set[$i]->actionPop_exploded_group_end; $s++) {
+            if ($current_product_id == $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_id'])  {
+               $current_unit_count++;
+               $current_total_price += $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_unit_price'];
+            } else {
+               $cart_group_total[] = array(
+                   'product_id'  => $current_product_id,
+                   'unit_count'  => $current_unit_count,
+                   'total_price' => $current_total_price,
+                   'total_discount' => 0,
+                   'remainder' => 0 
+                    );
+              $current_product_id = $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_id'];
+              $current_unit_count = 1;
+              $current_total_price = $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_unit_price'];              
+            }
+            
+            //handle last in list
+            if ( ($s + 1) == $vtprd_rules_set[$i]->actionPop_exploded_group_end ) {
+               $cart_group_total[] = array(
+                   'product_id'  => $current_product_id,
+                   'unit_count'  => $current_unit_count,
+                   'total_price' => $current_total_price,
+                   'total_discount' => 0,
+                   'remainder' => 0  
+                    );            
+            }
+            
+         }
+
+         $percent_off = $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] / 100;
+
+         //*******************
+         //compute group discounts, by product
+         //*******************
+         $sizeof_cart_group_total = sizeof ($cart_group_total);
+         for( $c=0; $c < $sizeof_cart_group_total; $c++) {
+            //****************************************************
+            //Get the total discount amount for the whole group, used to calculate final remainder later
+            //****************************************************
+            $discount_2decimals = bcmul($cart_group_total[$c]['total_price'], $percent_off , 2);
+            //compute rounding
+            $temp_discount = $cart_group_total[$c]['total_price'] * $percent_off;
+           
+            //$rounding = $temp_discount - $discount_2decimals;
+            $rounding = round($temp_discount - $discount_2decimals, 4);   // PHP floating point error fix - limit to 4 places right of the decimal!!
+         
+            if ($rounding > 0.005) {
+              $increment = round($rounding, 2); //round the rounding error to 2 decimal points!
+              if ($increment < .01) {
+                $increment = .01;
+              }
+              $cart_group_total[$c]['total_discount']  = $discount_2decimals + $increment; 
+              $cart_group_total[$c]['remainder'] = $increment;
+            } else {
+              $cart_group_total[$c]['total_discount']  = $discount_2decimals;
+              $cart_group_total[$c]['remainder'] = 0;
+            }         
+         
+         }
+
+        $current_product_id = '';
+        $current_unit_count = 0;
+        $current_total_discount = 0;
         
+error_log( print_r(  '$cart_group_total', true ) );
+error_log( var_export($cart_group_total, true ) ); 
+       
+        //*******************  
+        //apply discount to each item - add in **group** remainder to last
+        //*******************
+        for( $s=$vtprd_rules_set[$i]->actionPop_exploded_group_begin; $s < $vtprd_rules_set[$i]->actionPop_exploded_group_end; $s++) { 
+            //*******************
+            // compute per unit discount
+            //*******************
+            $per_unit_savings_2decimals = bcmul($vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_unit_price'] , $percent_off , 2);
+            
+            //compute rounding
+            $temp_discount = $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_unit_price'] * $percent_off;
+            
+error_log( print_r(  'prod_id= ' .$vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_id'], true ) );
+error_log( print_r(  'prod_unit_price= ' .$vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_unit_price'], true ) );
+error_log( print_r(  '$per_unit_savings_2decimals= ' .$per_unit_savings_2decimals, true ) );
+error_log( print_r(  '$temp_discount= ' .$temp_discount, true ) );
+
+            $rounding = round($temp_discount - $per_unit_savings_2decimals, 4);   // PHP floating point error fix - limit to 4 places right of the decimal!!   
+error_log( print_r(  '$rounding top= ' .$rounding, true ) );       
+            if ($rounding > 0.005) {
+              $increment = round($rounding, 2); //round the rounding error to 2 decimal points!
+              if ($increment < .01) {
+                $increment = .01;
+              }
+              $per_unit_savings_2decimals += $increment;
+            } 
+            
+error_log( print_r(  '$rounding bottom= ' .$rounding, true ) );
+
+            //*******************
+            // tabulate discount per product units
+            //*******************  
+            if ($current_product_id == $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_id'])  {
+              $current_total_discount += $per_unit_savings_2decimals;
+              $current_unit_count++; 
+            } else {
+              $current_product_id = $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_id'];
+              $current_total_discount = $per_unit_savings_2decimals;
+              $current_unit_count     = 1;
+            }   
+
+error_log( print_r(  '$current_product_id= ' .$current_product_id, true ) );
+error_log( print_r(  '$current_total_discount= ' .$current_total_discount, true ) );
+error_log( print_r(  '$current_unit_count= ' .$current_unit_count, true ) );
+            
+            //*******************
+            // add in group remainder, as needed
+            //*******************                      
+            for( $c=0; $c < $sizeof_cart_group_total; $c++) {               
+               if ($cart_group_total[$c]['product_id']  ==  $current_product_id ) {
+                  if ($cart_group_total[$c]['unit_count']  ==  $current_unit_count ){  //are we on last unit in product group?                  
+                      $rounding = round($cart_group_total[$c]['total_discount'] - $current_total_discount, 4);   // PHP floating point error fix - limit to 4 places right of the decimal!!              
+                      if ($rounding > 0.005) {
+                        $increment = round($rounding, 2); //round the rounding error to 2 decimal points!
+                        if ($increment < .01) {
+                          $increment = .01;
+                        }
+                        $per_unit_savings_2decimals += $increment;
+                      }
+                  }
+                  $c = $sizeof_cart_group_total; //exit stage left
+               }
+            }
+            
+            //*******************
+            // update discount
+            //*******************                
+            $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_discount_amt'] = $per_unit_savings_2decimals;
+            $curr_prod_array = $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s];
+            $curr_prod_array['exploded_group_occurrence'] = $s;
+            $this->vtprd_upd_cart_discount($i, $d, $curr_prod_array);                 
+        }
+
+      break;
+      //v1.0.7.4 end
+       
     }
     
     return;           
@@ -961,6 +1150,18 @@ class VTPRD_Apply_Rules{
            }
         }
       } 
+
+      //v1.0.7.4 begin
+      //CHECK if catalog discount already applied
+      if ($vtprd_info['current_processing_request'] == 'cart') { 
+         if ( ($vtprd_cart->cart_items[$k]->unit_price < $vtprd_cart->cart_items[$k]->save_orig_unit_price) &&
+              ($vtprd_rules_set[$i]->cumulativeRulePricing == 'no') ) {
+            //A Catalog or other external discount previously applied, no 
+            $vtprd_cart->cart_items[$k]->cartAuditTrail[$vtprd_rules_set[$i]->post_id]['discount_msgs'][] = 'No Discount - CATALOG discount rule already applied discount, no more allowed';
+            return;           
+         }
+      }      
+      //v1.0.7.4 end
       
       switch( $vtprd_rules_set[$i]->rule_deal_info[0]['discount_rule_max_amt_type'] ) {
         case 'none':
@@ -1040,10 +1241,20 @@ class VTPRD_Apply_Rules{
       //compute yousave_pct_at_upd_begin
       $computed_pct =  $curr_prod_array['prod_discount_amt'] /  $curr_prod_array['prod_unit_price'] ;
       //$computed_pct_2decimals = bcdiv($curr_prod_array['prod_discount_amt'] , $curr_prod_array['prod_unit_price'] , 2);
+
       $computed_pct_2decimals = round( ($curr_prod_array['prod_discount_amt'] / $curr_prod_array['prod_unit_price'] ) , 2); 
-      $remainder = $computed_pct - $computed_pct_2decimals;
+                
+      //$remainder = $computed_pct - $computed_pct_2decimals;
+      $remainder = round($computed_pct - $computed_pct_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
+                  
       if ($remainder > 0.005) {
-        $yousave_pct = ($computed_pct_2decimals + .01) * 100;
+        //v1.0.7.4 begin
+        $increment = round($remainder, 2); //round the rounding error to 2 decimal points!  floating point
+        if ($increment < .01) {
+          $increment = .01;
+        }
+        ////v1.0.7.4 end
+        $yousave_pct = ($computed_pct_2decimals + $increment) * 100;  //v1.0.7.4   floating point
       } else {
         $yousave_pct = $computed_pct_2decimals * 100;
       }
@@ -1079,9 +1290,18 @@ class VTPRD_Apply_Rules{
           
             //compute rounding
             $temp_discount = ($yousave_pct / 100) * $curr_prod_array['prod_unit_price'];
-            $rounding = $temp_discount - $discount_2decimals;
+         
+            //$rounding = $temp_discount - $discount_2decimals;
+            $rounding = round($temp_discount - $discount_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
+                     
             if ($rounding > 0.005) {
-              $discount = $discount_2decimals + .01;
+              //v1.0.7.4 begin
+              $increment = round($rounding, 2); //round the rounding error to 2 decimal points!  floating point
+              if ($increment < .01) {
+                $increment = .01;
+              }
+              ////v1.0.7.4 end              
+              $discount = $discount_2decimals + $increment;   //v1.0.7.4  floating point
             }  else {
               $discount = $discount_2decimals;
             } 
@@ -1116,10 +1336,20 @@ class VTPRD_Apply_Rules{
             // $yousave_pct = $yousave_amt / $curr_prod_array['prod_unit_price'] * 100;        
             //compute remainder
             //$yousave_pct_2decimals = bcdiv($curr_prod_array['prod_discount_amt'] , $curr_prod_array['prod_unit_price'] , 2);
+
             $yousave_pct_2decimals = round( ($curr_prod_array['prod_discount_amt'] / $curr_prod_array['prod_unit_price'] ) , 2);      
-            $remainder = $yousave_pct_temp - $yousave_pct_2decimals;
+                              
+          //$remainder = $yousave_pct_temp - $yousave_pct_2decimals;
+            $remainder = round($yousave_pct_temp - $yousave_pct_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
+                        
             if ($remainder > 0.005) {
-              $yousave_pct = ($yousave_pct_2decimals + .01) * 100;
+              //v1.0.7.4 begin
+              $increment = round($remainder, 2); //round the rounding error to 2 decimal points!  floating point
+              if ($increment < .01) {
+                $increment = .01;
+              }
+              ////v1.0.7.4 end              
+              $yousave_pct = ($yousave_pct_2decimals + $increment) * 100;  //v1.0.7.4  PHP floating point 
             } else {
               $yousave_pct = $yousave_pct_2decimals * 100;
             }
@@ -1136,10 +1366,18 @@ class VTPRD_Apply_Rules{
     $yousave_pct_prod_temp = $yousave_product_total_amt / $yousave_total_unit_price;
     //$yousave_pct_prod_2decimals = bcdiv($yousave_product_total_amt , $yousave_total_unit_price , 2);
     $yousave_pct_prod_2decimals = round( ($yousave_product_total_amt / $yousave_total_unit_price ) , 2); 
-        
-    $remainder = $yousave_pct_prod_temp - $yousave_pct_prod_2decimals;
+       
+  //$remainder = $yousave_pct_prod_temp - $yousave_pct_prod_2decimals;
+    $remainder = round($yousave_pct_prod_temp - $yousave_pct_prod_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
+                    
     if ($remainder > 0.005) {
-      $yousave_product_total_pct = ($yousave_pct_prod_2decimals + .01) * 100;
+      //v1.0.7.4 begin
+      $increment = round($remainder, 2); //round the rounding error to 2 decimal points!  floating point
+      if ($increment < .01) {
+        $increment = .01;
+      }
+      ////v1.0.7.4 end
+      $yousave_product_total_pct = ($yousave_pct_prod_2decimals + $increment) * 100;   //v1.0.7.4  PHP floating point 
     } else {
       $yousave_product_total_pct = $yousave_pct_prod_2decimals * 100;
     }
@@ -1154,14 +1392,23 @@ class VTPRD_Apply_Rules{
           //    compute the allowed remainder percentage
           // % = floor minus product % totaled *before now*
           $yousave_pct = $vtprd_setup_options['discount_floor_pct_per_single_item'] - $vtprd_cart->cart_items[$k]->yousave_total_pct;
-          
+         
           $percent_off = $yousave_pct / 100;         
           //compute rounding
           $discount_2decimals = bcmul($curr_prod_array['prod_unit_price'] , $percent_off , 2);
           $temp_discount = $curr_prod_array['prod_unit_price'] * $percent_off;
-          $rounding = $temp_discount - $discount_2decimals;
+          
+          //$rounding = $temp_discount - $discount_2decimals;
+          $rounding = round($temp_discount - $discount_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
+                             
           if ($rounding > 0.005) {
-            $curr_prod_array['prod_discount_amt'] = $discount_2decimals + .01;
+            //v1.0.7.4 begin
+            $increment = round($rounding, 2); //round the rounding error to 2 decimal points!  floating point
+            if ($increment < .01) {
+              $increment = .01;
+            }
+            ////v1.0.7.4 end            
+            $curr_prod_array['prod_discount_amt'] = $discount_2decimals + $increment;   //v1.0.7.4  PHP floating point
           }  else {
             $curr_prod_array['prod_discount_amt'] = $discount_2decimals;
           }          
@@ -1187,12 +1434,21 @@ class VTPRD_Apply_Rules{
             //reduce discount amount to max allowed by rule percentage
             //*********************************************************************
             $discount_2decimals = bcmul(($yousave_pct / 100) , $curr_prod_array['prod_unit_price'] , 2);
-          
+         
             //compute rounding
             $temp_discount = ($yousave_pct / 100) * $curr_prod_array['prod_unit_price'];
-            $rounding = $temp_discount - $discount_2decimals;
+
+          //$rounding = $temp_discount - $discount_2decimals;
+            $rounding = round($temp_discount - $discount_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
+         
             if ($rounding > 0.005) {
-              $discount = $discount_2decimals + .01;
+               //v1.0.7.4 begin
+              $increment = round($rounding, 2); //round the rounding error to 2 decimal points!  floating point
+              if ($increment < .01) {
+                $increment = .01;
+              }
+              ////v1.0.7.4 end             
+              $discount = $discount_2decimals + $increment;    //v1.0.7.4  PHP floating point 
             }  else {
               $discount = $discount_2decimals;
             } 
@@ -1225,9 +1481,18 @@ class VTPRD_Apply_Rules{
             //compute remainder
             //$yousave_pct_2decimals = bcdiv($curr_prod_array['prod_discount_amt'] , $curr_prod_array['prod_unit_price'] , 2);
             $yousave_pct_2decimals = round( ($curr_prod_array['prod_discount_amt'] / $curr_prod_array['prod_unit_price'] ) , 2);     
-            $remainder = $yousave_pct_temp - $yousave_pct_2decimals;
+                            
+          //$remainder = $yousave_pct_temp - $yousave_pct_2decimals;
+            $remainder = round($yousave_pct_temp - $yousave_pct_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
+             
             if ($remainder > 0.005) {
-              $yousave_pct = ($yousave_pct_2decimals + .01) * 100;
+              //v1.0.7.4 begin
+              $increment = round($remainder, 2); //round the rounding error to 2 decimal points!  floating point
+              if ($increment < .01) {
+                $increment = .01;
+              }
+              ////v1.0.7.4 end
+              $yousave_pct = ($yousave_pct_2decimals + $increment) * 100;     //v1.0.7.4  PHP floating point 
             } else {
               $yousave_pct = $yousave_pct_2decimals * 100;
             }
@@ -1259,8 +1524,8 @@ class VTPRD_Apply_Rules{
     //*********************************************************************
     //eND MAX LIMITS CHECKING
     //*********************************************************************
-           
-      
+
+
     //*************************************
     // Add Discount Totals into the Array
     //*************************************       
@@ -1323,10 +1588,20 @@ class VTPRD_Apply_Rules{
       //yousave pct whole number = (total discount amount / (orig unit price * number of units discounted))
       $yousave_pct_prod_temp = $yousave_product_total_amt / $yousave_total_unit_price;
       //$yousave_pct_prod_2decimals = bcdiv($yousave_product_total_amt , $yousave_total_unit_price , 2);
+ 
       $yousave_pct_prod_2decimals = round( ($yousave_product_total_amt / $yousave_total_unit_price ) , 2);     
-      $remainder = $yousave_pct_prod_temp - $yousave_pct_prod_2decimals;
+        
+      //$remainder = $yousave_pct_prod_temp - $yousave_pct_prod_2decimals;
+      $remainder = round($yousave_pct_prod_temp - $yousave_pct_prod_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
+       
       if ($remainder > 0.005) {
-        $yousave_product_total_pct = ($yousave_pct_prod_2decimals + .01) * 100;
+      //v1.0.7.4 begin
+      $increment = round($remainder, 2); //round the rounding error to 2 decimal points!  floating point
+      if ($increment < .01) {
+        $increment = .01;
+      }
+      ////v1.0.7.4 end
+        $yousave_product_total_pct = ($yousave_pct_prod_2decimals + $increment) * 100;    //v1.0.7.4  PHP floating point 
       } else {
         $yousave_product_total_pct = $yousave_pct_prod_2decimals * 100;
       } 
@@ -1360,8 +1635,34 @@ class VTPRD_Apply_Rules{
     
     
     //add in total saved to yousave_total_amt for PRODUCT
-   
-    if ($curr_prod_array['prod_discount_amt'] > 0) {             
+    if ($curr_prod_array['prod_discount_amt'] > 0) {
+ 
+    //v1.0.7.4 begin 
+    //  the vtprd_cart unit price and discounts all reflect the TAX STATE of 'woocommerce_prices_include_tax'      
+		   global $woocommerce;
+       $product_id = $vtprd_cart->cart_items[$k]->product_id;
+       switch( true ) {
+          case ( get_option( 'woocommerce_calc_taxes' ) == 'no' ):
+          case ( !$vtprd_cart->cart_items[$k]->product_is_taxable ):
+          case ( $woocommerce->customer->is_vat_exempt() ):  
+             $prod_discount_amt_excl_tax  =  $curr_prod_array['prod_discount_amt'];
+             $prod_discount_amt_incl_tax  =  $curr_prod_array['prod_discount_amt'];
+            break; 
+          case ( get_option( 'woocommerce_prices_include_tax' ) == 'yes' ): 
+             $prod_discount_amt_excl_tax  =  vtprd_get_price_excluding_tax($product_id, $curr_prod_array['prod_discount_amt']);
+             $prod_discount_amt_incl_tax  =  $curr_prod_array['prod_discount_amt'];
+            break; 
+          case ( get_option( 'woocommerce_prices_include_tax' ) == 'no' ): 
+             $prod_discount_amt_excl_tax  =  $curr_prod_array['prod_discount_amt'];
+             $prod_discount_amt_incl_tax  =  vtprd_get_price_including_tax($product_id, $curr_prod_array['prod_discount_amt']);
+            break;                      
+		   }
+       //THIS is where the cart SAVE TOTALS are stored!!             
+       $vtprd_cart->yousave_cart_total_amt_excl_tax      += $prod_discount_amt_excl_tax;
+       $vtprd_cart->yousave_cart_total_amt_incl_tax      += $prod_discount_amt_incl_tax;
+    //v1.0.7.4 end    
+         
+                 
       $vtprd_rules_set[$i]->discount_total_qty += 1;     
       $vtprd_rules_set[$i]->discount_total_amt += $curr_prod_array['prod_discount_amt'];
       $vtprd_cart->yousave_cart_total_qty      += 1;
@@ -1397,20 +1698,26 @@ class VTPRD_Apply_Rules{
       case 'fixedPrice':
           $discount = $prod_unit_price - $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'];                               
         break;
-      case 'percent':
-          $percent_off = $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] / 100;          
-          
-          $discount_2decimals = bcmul($prod_unit_price , $percent_off , 2);
-        
+      case 'percent': 
+          $percent_off = $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] / 100;   
+          $discount_2decimals = bcmul($prod_unit_price , $percent_off , 2);      
           //compute rounding
           $temp_discount = $prod_unit_price * $percent_off;
-          $rounding = $temp_discount - $discount_2decimals;
+          
+          //$rounding = $temp_discount - $discount_2decimals;
+          $rounding = round($temp_discount - $discount_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
+                  
           if ($rounding > 0.005) {
-            $discount = $discount_2decimals + .01;
+            //v1.0.7.4 begin
+            $increment = round($rounding, 2); //round the rounding error to 2 decimal points!  floating point
+            if ($increment < .01) {
+              $increment = .01;
+            }
+            ////v1.0.7.4 end          
+            $discount = $discount_2decimals + $increment;   //v1.0.7.4  PHP floating
           }  else {
             $discount = $discount_2decimals;
-          }
-           
+          }             
         break;              
       case 'currency': 
           $discount = $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'];     

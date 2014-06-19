@@ -2257,9 +2257,11 @@ DITTO ie10!!
                             });                                     
                              function cumulativeRulePricing_chg() {                                   
                               switch( $("#cumulativeRulePricing").val() ) {                                
+                                /*  v1.0.7.4  allow priority to show at all times
                                 case "no":   $("#priority_num").hide("slow");  
                                              $("#ruleApplicationPriority_num").val('10');  //clear out the priority numbreak;                                                               
                                    break; 
+                                */
                                 case "yes":  $("#priority_num").show("slow");
                                 /*
                                 small bug - if the delete or back key was used by the user to clear out the priority num field,

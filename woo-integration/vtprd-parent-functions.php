@@ -40,7 +40,17 @@
                   $vtprd_cart_item->product_id           = $cart_item['product_id'];
                   $vtprd_cart_item->product_name         = $_product->get_title().$woocommerce->cart->get_item_data( $cart_item );
               }
-  
+              
+              //v1.0.7.4 begin
+              $product = get_product( $vtprd_cart_item->product_id );
+              $tax_status = get_post_meta( $vtprd_cart_item->product_id, '_tax_status', true ); 
+              if ( $tax_status == 'taxable' ) {              
+                $vtprd_cart_item->product_is_taxable = true; 
+              } else {
+                $vtprd_cart_item->product_is_taxable = false;                                              
+              } 
+ 
+              //v1.0.7.4 end  
               
               $vtprd_cart_item->quantity      = $cart_item['quantity'];                                                  
                   
@@ -51,26 +61,15 @@
               vtprd_maybe_get_product_session_info($product_id);
 
               //By this time, there may  be a 'display' session variable for this product, if a discount was displayed in the catalog
-              //  so 2nd - nth iteration picks up the original unit price, not any discount shown currently
-              //  The discount is applied in apply-rules for disambiguation, then rolled out before it gets processed (again)     product_discount_price
+              //  so 2nd - nth iteration picks up the discounted current price AND the original price for comparison
               if ($vtprd_info['product_session_info']['product_discount_price'] > 0) {
-                  $vtprd_cart_item->unit_price             =  $vtprd_info['product_session_info']['product_unit_price'];
+                  $vtprd_cart_item->unit_price             =  vtprd_compute_current_unit_price($product_id, $cart_item, $vtprd_cart_item, $product);     //v1.0.7.4  get current unit price off of the cart, to pick up any CATALOG discounts
+                  $vtprd_cart_item->save_orig_unit_price   =  $vtprd_info['product_session_info']['product_unit_price'];   //v1.0.7.4  save for later comparison
                   $vtprd_cart_item->db_unit_price          =  $vtprd_info['product_session_info']['product_unit_price'];
 
                   $vtprd_cart_item->db_unit_price_special  =  $vtprd_info['product_session_info']['product_special_price']; 
                   $vtprd_cart_item->db_unit_price_list     =  $vtprd_info['product_session_info']['product_list_price'];     
               } else {              
-              //vat_exempt seems to be the same as tax exempt, using the same field???
-              //  how does this work with taxes included in price?
-              //  how about shipping includes taxes, then roll out taxes (vat_exempt) ???
-                  //FROM my original plugins:  $vtprd_cart_item->unit_price     =  get_option( 'woocommerce_display_cart_prices_excluding_tax' ) == 'yes' || $woocommerce->customer->is_vat_exempt() ? $_product->get_price_excluding_tax() : $_product->get_price();
-	                //FROM woo cart		$product_price = get_option( 'woocommerce_tax_display_cart' ) == 'excl' ? $_product->get_price_excluding_tax() : $_product->get_price_including_tax();
-                  //  combining the two:::
-              
-              //DON'T USE THIS ANYMORE, BECOMES SELF-REFERENTIAL, AS GET_PRICE() NOW HOOKS THE SINGLE PRODUCT DISCOUNT ...
-              //    $vtprd_cart_item->unit_price     =  get_option( 'woocommerce_tax_display_cart' ) == 'excl' || $woocommerce->customer->is_vat_exempt() ? $_product->get_price_excluding_tax() : $_product->get_price();
-
-                 
                   //v1.0.5 begin - redo for VAT processing...
                   
                   //v1.0.6 begin
@@ -84,13 +83,28 @@
                   
                   $vtprd_cart_item->db_unit_price_special  =  get_post_meta( $product_id, '_sale_price', true );                  
 
+                   //v1.0.7.4  picks up unit price from product subtotal and quantity
+                  $vtprd_cart_item->unit_price             =  vtprd_compute_current_unit_price($product_id, $cart_item, $vtprd_cart_item, $product); //v1.0.7.4
+                  
+                  $vtprd_cart_item->save_orig_unit_price   =  $vtprd_cart_item->unit_price;   //v1.0.7.4  save for later comparison
+                  
+                  /*  moved to its own function, above  v1.0.7.4
                   if (( get_option( 'woocommerce_prices_include_tax' ) == 'no' )  || 
                       ( $woocommerce->customer->is_vat_exempt()) ) {
                      //NO VAT included in price
-                     $vtprd_cart_item->unit_price =  $cart_item['line_subtotal'] / $cart_item['quantity'];                                                           
+                     $vtprd_cart_item->unit_price  =  $cart_item['line_subtotal'] / $cart_item['quantity'];                                                           
                   } else {
-                     //VAT included in price, and $cart_item pricing has already subtracted out the VAT, so use DB prices (otherwise if other functions called, recursive processing will ensue...)
-                     switch(true) {
+                     
+                     //v1.0.7.4 begin
+                     //TAX included in price in DB, and Woo $cart_item pricing **has already subtracted out the TAX **, so restore the TAX
+                     //  this price reflects the tax situation of the ORIGINAL price - so if the price was originally entered with tax, this will reflect tax
+                     $unit_price_no_tax            =  $cart_item['line_subtotal'] / $cart_item['quantity'];
+                     $vtprd_cart_item->unit_price  =  vtprd_get_price_including_tax($product_id, $unit_price_no_tax);
+                  }
+                  */                     
+                     /*  replaced in v1.0.7.4 with above
+                     //VAT included in price in DB, and Woo $cart_item pricing **has already subtracted out the VAT **, so use DB prices (otherwise if other functions called, recursive processing will ensue...)                     
+                      switch(true) {
                         case ($vtprd_cart_item->db_unit_price_special > 0) :  
                             if ( ($vtprd_cart_item->db_unit_price_list < 0) ||    //sometimes list price is blank, and user only sets a sale price!!!
                                  ($vtprd_cart_item->db_unit_price_special < $vtprd_cart_item->db_unit_price_list) )  {
@@ -105,15 +119,12 @@
                             $vtprd_cart_item->unit_price = $vtprd_cart_item->db_unit_price_list;                            
                           break;
                       }
-                     /*
-                     if ( ($vtprd_cart_item->db_unit_price_special > 0) &&
-                          ($vtprd_cart_item->db_unit_price_special < $vtprd_cart_item->db_unit_price_list) ) {
-                       $vtprd_cart_item->unit_price = $vtprd_cart_item->db_unit_price_special;
-                     } else {
-                       $vtprd_cart_item->unit_price = $vtprd_cart_item->db_unit_price_list;
-                     }
-                     */
-                  }
+                      
+                  }                     
+                   */
+                      //v1.0.7.4 end
+                     
+
                   
                   $vtprd_cart_item->db_unit_price  =  $vtprd_cart_item->unit_price;
 
@@ -132,12 +143,9 @@
               ***  JUST the cat *ids* please...
               ************************************ */
                        
-                $vtprd_cart_item->prod_cat_list = wp_get_object_terms( $cart_item['product_id'], $vtprd_info['parent_plugin_taxonomy'], $args = array('fields' => 'ids') );
-                $vtprd_cart_item->rule_cat_list = wp_get_object_terms( $cart_item['product_id'], $vtprd_info['rulecat_taxonomy'], $args = array('fields' => 'ids') );              
-         
+              $vtprd_cart_item->prod_cat_list = wp_get_object_terms( $cart_item['product_id'], $vtprd_info['parent_plugin_taxonomy'], $args = array('fields' => 'ids') );
+              $vtprd_cart_item->rule_cat_list = wp_get_object_terms( $cart_item['product_id'], $vtprd_info['rulecat_taxonomy'], $args = array('fields' => 'ids') );              
 
-
-        
               //initialize the arrays
               $vtprd_cart_item->prod_rule_include_only_list = array();  
               $vtprd_cart_item->prod_rule_exclusion_list = array();
@@ -161,6 +169,7 @@
                     break;
                 }
               }
+
                
               //add cart_item to cart array
               $vtprd_cart->cart_items[]       = $vtprd_cart_item;
@@ -179,25 +188,77 @@
   }
 
 
+  
+   //************************************* 
+   //v1.0.7.4  New Function
+   //
+   //  the vtprd_cart unit price and discounts all reflect the TAX STATE of 'woocommerce_prices_include_tax'
+   //
+   //************************************* 
+	function vtprd_compute_current_unit_price($product_id, $cart_item, $vtprd_cart_item, $product){
+      global $post, $wpdb, $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_setup_options, $vtprd_info;  
+      $product = get_product( $product_id ); 
+
+		  if ( $vtprd_cart_item->product_is_taxable ) {
+        if ( ( get_option( 'woocommerce_calc_taxes' ) == 'no' ) ||
+             ( get_option( 'woocommerce_prices_include_tax' ) == 'no' )  || 
+             ( $woocommerce->customer->is_vat_exempt()) ) {
+           //NO VAT included in price
+           $unit_price  =  $cart_item['line_subtotal'] / $cart_item['quantity'];                                                  
+        } else {
+           
+           //v1.0.7.4 begin
+           //TAX included in price in DB, and Woo $cart_item pricing **has already subtracted out the TAX **, so restore the TAX
+           //  this price reflects the tax situation of the ORIGINAL price - so if the price was originally entered with tax, this will reflect tax
+           $price           =  $cart_item['line_subtotal'] / $cart_item['quantity'];
+          // $unit_price  =  vtprd_get_price_including_tax($product_id, $price);
+           $qty = 1;           
+           $_tax  = new WC_Tax();                
+          // $product = get_product( $product_id ); 
+           $tax_rates  = $_tax->get_rates( $product->get_tax_class() );
+  			 	 $taxes      = $_tax->calc_tax( $price  * $qty, $tax_rates, false );
+  				 $tax_amount = $_tax->get_tax_total( $taxes );
+  				 $unit_price = round( $price  * $qty + $tax_amount, absint( get_option( 'woocommerce_price_num_decimals' ) ) ); 
+                     
+        } 
+      } else {
+         $unit_price  =  $cart_item['line_subtotal'] / $cart_item['quantity'];
+      } 
+                   
+     return $unit_price;     
+     
+  } 
+
    //************************************* 
 
    //************************************* 
 	function vtprd_count_other_coupons(){
       global $woocommerce, $vtprd_info, $vtprd_rules_set; 
-
+            
+      //v1.0.7.4 begin   routine rewritten!                     
       $coupon_cnt = 0;
-			if ( $woocommerce->applied_coupons ) {
-				foreach ( $woocommerce->applied_coupons as $index => $code ) {
-					if ( $code == $vtprd_info['coupon_code_discount_deal_title'] ) {
-            continue;  //if the coupon is a Pricing Deal discount, skip
-          } else {
-            $coupon_cnt++;
-          }
-				}
-        $vtprd_rules_set[0]->coupons_amount_without_rule_discounts = $coupon_cnt;
-			} else {     
-        $vtprd_rules_set[0]->coupons_amount_without_rule_discounts = 0; 
-      }     
+      $vtprd_info['skip_cart_processing_due_to_coupon_individual_use'] = false;
+      
+      $applied_coupons = WC()->cart->get_coupons();
+      foreach ( $applied_coupons as $code => $coupon ) {	
+        if ( $code == $vtprd_info['coupon_code_discount_deal_title'] ) {
+          continue;  //if the coupon is a Pricing Deal discount, skip
+        } else {
+          $coupon_cnt++;         
+         	 // from woocommerce/includes/class-wc-cart.php
+           // Set a switch to skip Cart processing if a coupon with individual_use = "yes" detected
+    			$the_coupon = new WC_Coupon( $code );           
+    			if ( $the_coupon->id ) {            
+    				// If it's individual use then flag to skip all plugin discount processing!!!!!!!!!!!       				
+            if ( $the_coupon->individual_use == 'yes' ) {
+    					$vtprd_info['skip_cart_processing_due_to_coupon_individual_use'] = true;
+    				}           
+          }            
+        }
+			}
+      $vtprd_rules_set[0]->coupons_amount_without_rule_discounts = $coupon_cnt;
+      //v1.0.7.4 end
+   
      return;     
   } 
 /* 
@@ -247,6 +308,39 @@
       $vtprd_cart_item->rule_cat_list = wp_get_object_terms( $product_id, $vtprd_info['rulecat_taxonomy'], $args = array('fields' => 'ids') );
         //*************************************                    
 
+       //v1.0.7.4 begin 
+      //initialize the arrays
+      $vtprd_cart_item->prod_rule_include_only_list = array();  
+      $vtprd_cart_item->prod_rule_exclusion_list = array();
+      
+      /*  *********************************
+      ***  fill in include/exclude arrays if selected on the PRODUCT Screen (parent plugin)
+      ************************************ */
+      $vtprd_includeOrExclude_meta  = get_post_meta($product_id, $vtprd_info['product_meta_key_includeOrExclude'], true);
+      if ( $vtprd_includeOrExclude_meta ) {
+        switch( $vtprd_includeOrExclude_meta['includeOrExclude_option'] ) {
+          case 'includeAll':  
+            break;
+          case 'includeList':                  
+              $vtprd_cart_item->prod_rule_include_only_list = $vtprd_includeOrExclude_meta['includeOrExclude_checked_list'];                                            
+            break;
+          case 'excludeList':  
+              $vtprd_cart_item->prod_rule_exclusion_list = $vtprd_includeOrExclude_meta['includeOrExclude_checked_list'];                                               
+            break;
+          case 'excludeAll':  
+              $vtprd_cart_item->prod_rule_exclusion_list[0] = 'all';  //set the exclusion list to exclude all
+            break;
+        }
+      }
+      
+      $tax_status = get_post_meta( $product_id, '_tax_status', true ); 
+      if ( $tax_status == 'taxable' ) {              
+        $vtprd_cart_item->product_is_taxable = true; 
+      } else {
+        $vtprd_cart_item->product_is_taxable = false;
+      }      
+      
+       //v1.0.7.4 end
         
       //add cart_item to cart array
       $vtprd_cart->cart_items[]       = $vtprd_cart_item;  
@@ -307,36 +401,74 @@
       //  if = 'yes', display of 'yousave' becomes 'save FROM' and doesn't change!!!!!!!
 //      $product_variations_sw = vtprd_test_for_variations($product_id);
       $product_variations_sw = '';
-    
 
       
       if ($vtprd_cart->cart_items[0]->yousave_total_amt > 0) {
          $list_price                    =   $vtprd_cart->cart_items[0]->db_unit_price_list;
          $db_unit_price_list_html_woo   =   woocommerce_price($list_price);
          $discount_price                =   $vtprd_cart->cart_items[0]->discount_price;
-         $discount_price_html_woo    =   woocommerce_price($discount_price);
+         $discount_price_html_woo       =   woocommerce_price($discount_price);
+
+         //v1.0.7.4 begin
+         $price_including_tax           =   vtprd_get_price_including_tax($product_id, $discount_price); 
+         $price_excluding_tax           =   vtprd_get_price_excluding_tax($product_id, $discount_price);
+         $price_including_tax_html      =   wc_price( $price_including_tax );
+         $price_excluding_tax_html      =   wc_price( $price_excluding_tax );
+         //v1.0.7.4 end
 
          //v1.0.7 begin
-         //from woocommerce/includes/abstracts/abstract-wp-product.php
+         //from woocommerce/includes/abstracts/abstract-wc-product.php
          // Check for Price Suffix
-         $price_display_suffix  = get_option( 'woocommerce_price_display_suffix' );
+         
+         //v1.0.7.4 begin
+         //  no suffix processing if taxes not turned on!!
+         global $woocommerce; 
+         if ( ( get_option( 'woocommerce_calc_taxes' ) == 'no' ) ||
+              ( !$vtprd_cart->cart_items[0]->product_is_taxable) ||
+              ( $woocommerce->customer->is_vat_exempt()) )  {
+            $price_display_suffix  = false;            
+         } else {
+            $price_display_suffix  = get_option( 'woocommerce_price_display_suffix' );
+         }
+         //v1.0.7.4 end
+         
       	 if ( ( $price_display_suffix ) &&                              //v1.0.7.2
               ( $vtprd_cart->cart_items[0]->discount_price > 0 ) ) {   //v1.0.7.2  don't do suffix for zero amount...
-            //first get rid of pricing functions which aren't relevant here
-             $find = array(    //these are allowed in suffix, remove
-      				'{price_including_tax}',
-      				'{price_excluding_tax}'
-      			);
-      			$replace = '';
-      			$price_display_suffix = str_replace( $find, $replace, $price_display_suffix );
-            
-            //then see if suffix is needed
+      			
+            //***************
+            //v1.0.7.4 begin
+            //***************
+
+            if ( (strpos($price_display_suffix,'{price_including_tax}') !== false)  ||
+                 (strpos($price_display_suffix,'{price_excluding_tax}') !== false) ) {   //does the suffix include these wildcards?
+              //  $price_including_tax = vtprd_get_price_including_tax($product_id, $discount_price); 
+              //  $price_excluding_tax = vtprd_get_price_excluding_tax($product_id, $discount_price); 
+   
+              $find = array(    //wildcards allowed in suffix
+      				  '{price_including_tax}',
+      		      '{price_excluding_tax}'
+      			  );              
+              //replace the wildcards in the suffix!            
+              $replace = array(
+        			//	wc_price( $this->get_price_including_tax() ),
+        			//	wc_price( $this->get_price_excluding_tax() )
+                $price_including_tax_html,  
+                $price_excluding_tax_html 
+        			);
+
+        			$price_display_suffix = str_replace( $find, $replace, $price_display_suffix ); 
+            }
+            //v1.0.7.4 end
+                                        
+            //then see if additonal suffix is needed
             if (strpos($discount_price_html_woo, $price_display_suffix) !== false) { //if suffix already in price, do nothing
               $do_nothing;
             } else {
-              $discount_price_html_woo = $discount_price_html_woo . ' <small class="woocommerce-price-suffix ">' . $price_display_suffix . '</small>';
+              //$discount_price_html_woo = $discount_price_html_woo . ' <small class="woocommerce-price-suffix ">' . $price_display_suffix . '</small>';
+              $price_display_suffix  = '<small class="woocommerce-price-suffix ">' . $price_display_suffix . '</small>';
             }
          }
+         
          //v1.0.7 end
    //      $vtprd_cart->cart_items[0]->product_discount_price_html_woo = 
    //         '<del>' . $db_unit_price_list_html_woo . '</del><ins>' . $discount_price_html_woo . '</ins>'; 
@@ -352,8 +484,23 @@
             'product_unit_price'           => $vtprd_cart->cart_items[0]->db_unit_price,
             'product_special_price'        => $vtprd_cart->cart_items[0]->db_unit_price_special,
             'product_discount_price'       => $vtprd_cart->cart_items[0]->discount_price,
+            //v1.0.7.4 - field now contains **just** the discount - suffix is added later.  
+            //  this price reflects the tax situation of the ORIGINAL price - so if the price was originally entered with tax, this will reflect tax
             'product_discount_price_html_woo'  => 
-                                              $discount_price_html_woo,
+                                              $discount_price_html_woo,            
+            //v1.0.7.4 begin
+            'product_discount_price_incl_tax_woo'      =>
+                                              $price_including_tax,
+            'product_discount_price_excl_tax_woo'      =>
+                                              $price_excluding_tax,
+            'product_discount_price_incl_tax_html_woo'      =>
+                                              $price_including_tax_html,
+            'product_discount_price_excl_tax_html_woo'      =>
+                                              $price_excluding_tax_html,                                              
+            'product_discount_price_suffix_html_woo'   =>
+                                              $price_display_suffix, 
+            //v1.0.7.4 end
+                                                        
             'product_is_on_special'        => $vtprd_cart->cart_items[0]->product_is_on_special,
             'product_yousave_total_amt'    => $vtprd_cart->cart_items[0]->yousave_total_amt,     
             'product_yousave_total_pct'    => $vtprd_cart->cart_items[0]->yousave_total_pct,    
@@ -535,8 +682,6 @@
      return ($vartest_response);     
   }  
   
-
-
     
    function vtprd_format_money_element($price) { 
       //from woocommerce/woocommerce-core-function.php   function woocommerce_price
@@ -590,7 +735,8 @@
   function vtprd_print_widget_discount() {
     global $post, $wpdb, $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_setup_options;
       
-      
+    vtprd_load_cart_total_incl_excl(); //v1.0.7.4 
+            
     //  vtprd_enqueue_front_end_css();      
       
     //*****************************
@@ -718,7 +864,12 @@
     //division creates a per-unit discount
     //*************************************
     $amt = $amt / $units;
-    $amt = vtprd_format_money_element($amt);		
+    
+    //v1.0.7.4 begin      
+    $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
+    // $amt = vtprd_format_money_element($amt);
+    //v1.0.7.4 end
+    		
     $output .= '<span class="quantity vtprd-quantity-widget">' . $units  .' &times; ';	
     $output .= '<span class="amount vtprd-amount-widget">' . $vtprd_setup_options['cartWidget_credit_detail_label'] .$amt  .'</span>';
     $output .= '</span>';	    
@@ -760,8 +911,8 @@
     $output .= '<span class="total vtprd-discount-total-label-widget" >';
     $output .= '<strong>'.$vtprd_setup_options['cartWidget_credit_total_title']. '&nbsp;</strong>';     
 
-    $amt = vtprd_format_money_element($vtprd_cart->cart_discount_subtotal); 
-    
+    $amt = vtprd_format_money_element($vtprd_cart->cart_discount_subtotal);
+
     $output .= '<span class="amount  vtprd-discount-total-amount-widget">' . $vtprd_setup_options['cartWidget_credit_total_label'] .$amt . '</span>';
 
     $output .= '</span>';
@@ -795,7 +946,9 @@
     
     $subtotal -= $vtprd_cart->cart_discount_subtotal;
 
-    $amt = vtprd_format_money_element($subtotal); 
+    $amt = vtprd_format_money_element($subtotal);
+
+     
 
 //    $amt = $woocommerce->cart->subtotal .' - ' . $vtprd_cart->cart_discount_subtotal .' = '. $subtotal; //test test
     
@@ -839,7 +992,9 @@
     global $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
    //when executing from here, the table rows created by the print routines need a <table>
     //  when executed from the cart_widget, the TR lines appear in the midst of an existing <table>
-    
+
+    vtprd_load_cart_total_incl_excl(); //v1.0.7.4 
+          
     $execType = 'checkout';
     
     if ($vtprd_setup_options['show_checkout_purchases_subtotal'] == 'beforeDiscounts') {
@@ -997,8 +1152,12 @@
     $output .= '</span>';
     
     $output .= '<span class="vtprd-discount-unitCol-' .$execType. '">' . $units . '</span>';
+
+     //v1.0.7.4 begin      
+    $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
+    // $amt = vtprd_format_money_element($amt);
+    //v1.0.7.4 end   
     
-    $amt = vtprd_format_money_element($amt); 
     $output .= '<span class="vtprd-discount-amtCol-' .$execType. '">' . $vtprd_setup_options['' .$execType. '_credit_detail_label'] . ' ' .$amt . '</span>';
     
     $output .= '</div>'; //end prodline
@@ -1116,8 +1275,9 @@
   
    //no longer used...   $subTotal -= $vtprd_cart->yousave_cart_total_amt;
       $subTotal  -= $vtprd_cart->cart_discount_subtotal;
-   
-      $amt = vtprd_format_money_element($subTotal);
+      
+      $amt = vtprd_format_money_element($subTotal);      
+      
       $labelType = $execType . '_credit_detail_label';  
       $output .= '<span class="vtprd-discount-totAmtCol-' .$execType. ' vtprd-new-subtotal-amt"> &nbsp;&nbsp;' .$amt . '</span>';
       
@@ -1148,9 +1308,7 @@
     $output .= $vtprd_setup_options['' .$execType. '_credit_total_title'];
     $output .= '</span>';
 
-
-    $amt = vtprd_format_money_element($vtprd_cart->cart_discount_subtotal); 
-
+    $amt = vtprd_format_money_element($vtprd_cart->cart_discount_subtotal);
     
     $output .= '<span class="vtprd-discount-totAmtCol-' .$execType. ' vtprd-discount-amt">' . $vtprd_setup_options['' .$execType. '_credit_detail_label'] . ' ' .$amt . '</span>';
      
@@ -1204,9 +1362,12 @@
     //get the discount details    
     $output .= vtprd_email_cart_discount_rows($msgType);
      
+    vtprd_load_cart_total_incl_excl(); //v1.0.7.4 
+    
     if ($vtprd_setup_options['show_checkout_discount_total_line'] == 'yes') {
       if ($msgType == 'html') {
-        $amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt); 
+        $amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);
+        $amt .= vtprd_maybe_load_incl_excl_vat_lit();  //v1.0.7.4        
         $output .= '<tr>';
         $output .= '<td style="text-align:left;vertical-align:middle;border:1px solid #eee;word-wrap:break-word;font-weight:bold"  colspan="2">'. $vtprd_setup_options['checkout_credit_total_title'] .'</td>';						
         $output .= '<td style="text-align:left;vertical-align:middle;border:1px solid #eee">'  . $vtprd_setup_options['checkout_credit_total_label'] .$amt .'</td>';		
@@ -1232,6 +1393,8 @@
     $output;
     $amt = vtprd_format_money_element($vtprd_cart->wpsc_orig_coupon_amount);  //show original coupon amt as credit
     
+    vtprd_format_money_element($vtprd_cart->wpsc_orig_coupon_amount);  //show original coupon amt as credit
+       
     if ($msgType == 'html')  {
       $output .= '<tr>';
         $output .= '<td colspan="2">' . __('Coupon Discount', 'vtprd') .'</td>';
@@ -1298,7 +1461,12 @@
 	function vtprd_email_discount_detail_line($amt, $units, $msgType, $k) {  
     global $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
       $output;
-    $amt = vtprd_format_money_element($amt); //mwn
+          
+      //v1.0.7.4 begin      
+      $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
+      // $amt = vtprd_format_money_element($amt); //mwn
+      //v1.0.7.4 end 
+         
     if ($msgType == 'html')  {
       $output .= '<tr>';
 
@@ -1362,9 +1530,8 @@
 
       $output;
   
-      
-      $amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);      
-          
+      $amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);
+ 
     if ($msgType == 'html')  {
       $output .= '<tr>';
         $output .= '<td colspan="2">' . $vtprd_setup_options['checkout_credit_total_title'] .'</td>';
@@ -1394,24 +1561,27 @@
       
       $subTotal  = $woocommerce->cart->subtotal;
       
+      vtprd_load_cart_total_incl_excl(); //v1.0.7.4 
+      
       //*****************************
       //No longer used - $subTotal -= $vtprd_cart->yousave_cart_total_amt;
       //*****************************
       $subTotal -= $vtprd_cart->cart_discount_subtotal;   //may or may not contain the coupon amount, depending on passed value calling function
-      
+            
       $amt = vtprd_format_money_element($subTotal);
-
-    if ($msgType == 'html')  {
-      $output .= '<tr>';
-        $output .= '<td colspan="2">' . $vtprd_setup_options['checkout_new_subtotal_label'] .'</td>';
-        $output .= '<td>' . $amt .'</td>';
-      $output .= '</tr>';
-    } else {
-      $output .= $vtprd_setup_options['checkout_new_subtotal_label'];
-      $output .= '  '; 
-      $output .= $amt;
-      $output .= "\r\n";        
-    }
+      $amt .= vtprd_maybe_load_incl_excl_vat_lit();  //v1.0.7.4
+      
+      if ($msgType == 'html')  {
+        $output .= '<tr>';
+          $output .= '<td colspan="2">' . $vtprd_setup_options['checkout_new_subtotal_label'] .'</td>';
+          $output .= '<td>' . $amt .'</td>';
+        $output .= '</tr>';
+      } else {
+        $output .= $vtprd_setup_options['checkout_new_subtotal_label'];
+        $output .= '  '; 
+        $output .= $amt;
+        $output .= "\r\n";        
+      }
     
     return $output; 
   }  
@@ -1436,11 +1606,14 @@
     $output .= '</tr>';    
     $output .= '</thead>';
     
+    vtprd_load_cart_total_incl_excl(); //v1.0.7.4 
+    
     if (($vtprd_setup_options['show_checkout_discount_total_line'] == 'yes') || 
         ($vtprd_setup_options['checkout_new_subtotal_line']        == 'yes')) {
         $output .= '<tfoot>';
         if ($vtprd_setup_options['show_checkout_discount_total_line'] == 'yes') {
-            $amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt); 
+            $amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);
+            $amt .= vtprd_maybe_load_incl_excl_vat_lit();  //v1.0.7.4  
             $output .= '<tr class="checkout_credit_total">';
             $output .= '<th scope="row">'. $vtprd_setup_options['checkout_credit_total_title'] .'</th>';						
             $output .= '<td><span class="amount">'  . $vtprd_setup_options['checkout_credit_total_label'] .$amt .'</span></td>';		
@@ -1524,8 +1697,12 @@
 	function vtprd_thankyou_discount_detail_line($amt, $units, $msgType, $k) {  
     global $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
       $output;
-    $amt = vtprd_format_money_element($amt); //mwn
-
+    
+    //v1.0.7.4 begin      
+    $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
+    // $amt = vtprd_format_money_element($amt); //mwn
+    //v1.0.7.4 end
+    
     $output .= '<tr class = "order_table_item">';
     /*
     $output .= '<td  class="product-name">' . $vtprd_cart->cart_items[$k]->product_name ;
@@ -1607,13 +1784,16 @@
             $output .= '<th  class="product-subtotal" >' . __('Discount Amount', 'vtprd') .'</th>';					
             $output .= '</tr>';    
             $output .= '</thead>';
-    }
+    } 
+   
+    vtprd_load_cart_total_incl_excl(); //v1.0.7.4 
     
     if (($vtprd_setup_options['show_checkout_discount_total_line'] == 'yes') || 
         ($vtprd_setup_options['checkout_new_subtotal_line']        == 'yes')) { 
         $output .= '<tfoot>';
          if ($vtprd_setup_options['show_checkout_discount_total_line'] == 'yes') {
-            $amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt); 
+            $amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);
+            $amt .= vtprd_maybe_load_incl_excl_vat_lit();  //v1.0.7.4  
             $output .= '<tr class="checkout_discount_total_line">';
             $output .= '<th scope="row" colspan="2">'. $vtprd_setup_options['checkout_credit_total_title'] .'</th>';						
             $output .= '<td ><span class="amount">'  . $vtprd_setup_options['checkout_credit_total_label'] .$amt .'</span></td>';		
@@ -1628,7 +1808,10 @@
         			$subtotal = $woocommerce->cart->subtotal;
             }   
             $subtotal -= $vtprd_cart->yousave_cart_total_amt;
-            $amt = vtprd_format_money_element($subtotal);                     
+
+            $amt = vtprd_format_money_element($subtotal);
+            $amt .= vtprd_maybe_load_incl_excl_vat_lit();  //v1.0.7.4
+                               
             $output .= '<tr class="checkout_new_subtotal">';
             $output .= '<th scope="row" colspan="2">'. $vtprd_setup_options['checkout_new_subtotal_label'] .'</th>';						
             $output .= '<td ><span class="amount">'  . $amt .'</span></td>';		
@@ -1716,8 +1899,12 @@
 	function vtprd_checkout_discount_detail_line($amt, $units, $msgType, $k) {  
     global $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
       $output;
-    $amt = vtprd_format_money_element($amt); //mwn
 
+      //v1.0.7.4 begin      
+      $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
+      // $amt = vtprd_format_money_element($amt);
+      //v1.0.7.4 end
+    
     $output .= '<tr class = "order_table_item">';
 
     if (sizeof($vtprd_cart->cart_items[$k]->variation_array) > 0   ) {
@@ -2173,7 +2360,10 @@
     
       //compute rounding
       $temp_discount = $price * $percent_off;
-      $rounding = $temp_discount - $discount_2decimals;
+          
+    //$rounding = $temp_discount - $discount_2decimals;
+      $rounding = round($temp_discount - $discount_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
+           
       if ($rounding > 0.005) {
         $discount = $discount_2decimals + .01;
       }  else {
@@ -2328,6 +2518,282 @@
     } 
   }
   
+  //****************************************
+  //v1.0.7.4 new function
+  // Format $amt with VAT suffix, as needed 
+  //****************************************
+  function vtprd_format_amt_and_adjust_for_taxes($amt, $k=null){ 
+    global $post, $wpdb, $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_setup_options, $vtprd_info; 
+
+    if ($k) {   //routine can be called without '$k' value
+       if  ( !$vtprd_cart->cart_items[$k]->product_is_taxable )  {  
+         return vtprd_format_money_element($amt);
+       }
+    }
+    
+    //at a minimum, format $amt
+    if ( ( get_option( 'woocommerce_calc_taxes' ) == 'no' ) ||
+         ( $woocommerce->customer->is_vat_exempt() ) ) {  
+       return vtprd_format_money_element($amt);
+    }
+    
+    $woocommerce_prices_include_tax   =   get_option('woocommerce_prices_include_tax');
+    $woocommerce_tax_display_cart     =   get_option('woocommerce_tax_display_cart');
+
+    if ($woocommerce_prices_include_tax == 'yes') {
+        switch(true) {
+          case ($woocommerce_tax_display_cart   == 'incl') :
+              $amt = vtprd_format_money_element($amt); 
+            break; 
+          case ($woocommerce_tax_display_cart   == 'excl') :
+              $product_id = $vtprd_cart->cart_items[$k]->product_id;
+              $amt = vtprd_get_price_excluding_tax($product_id, $amt);
+              $amt = vtprd_format_money_element($amt);
+            break;
+        }           
+    } else {  // price does NOT include tax
+        switch(true) {
+          case ($woocommerce_tax_display_cart   == 'excl') :         
+              $amt = vtprd_format_money_element($amt); 
+            break; 
+          case ($woocommerce_tax_display_cart   == 'incl') :
+             $qty = 1;           
+             $_tax  = new WC_Tax();
+             $product = get_product( $vtprd_cart->cart_items[$k]->product_id );
+             $tax_rates  = $_tax->get_rates( $product->get_tax_class() );
+    			 	 $taxes      = $_tax->calc_tax( $amt  * $qty, $tax_rates, false );
+    				 $tax_amount = $_tax->get_tax_total( $taxes );
+    				 $amt        = round( $amt  * $qty + $tax_amount, absint( get_option( 'woocommerce_price_num_decimals' ) ) ); 
+             $amt        = vtprd_format_money_element($amt); 
+            break;
+        }    
+    }
+
+    $amt .= vtprd_maybe_load_incl_excl_vat_lit(); 
+     
+    return $amt;
+  }
+  
+  
+  //****************************************
+  //v1.0.7.4 new function
+  //from woocommerce/includes/abstracts/abstract-wc-product.php
+  //****************************************
+  function vtprd_get_price_including_tax($product_id, $discount_price){ 
+    global $post, $wpdb, $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_setup_options, $vtprd_info; 
+
+    //changed $this->  to  $product->
+    //use $discount_price as basi
+
+    $qty = 1; 
+    $product = get_product( $product_id ); 
+    $price = $discount_price;
+    
+		$_tax  = new WC_Tax();
+
+		if ( $product->is_taxable() ) {
+
+			if ( get_option('woocommerce_prices_include_tax') === 'no' ) {
+
+				$tax_rates  = $_tax->get_rates( $product->get_tax_class() );
+				$taxes      = $_tax->calc_tax( $price * $qty, $tax_rates, false );
+				$tax_amount = $_tax->get_tax_total( $taxes );
+				$price      = round( $price * $qty + $tax_amount, absint( get_option( 'woocommerce_price_num_decimals' ) ) );
+			} else {
+
+				$tax_rates      = $_tax->get_rates( $product->get_tax_class() );
+				$base_tax_rates = $_tax->get_shop_base_rate( $product->tax_class );
+
+				if ( ! empty( WC()->customer ) && WC()->customer->is_vat_exempt() ) {
+
+					$base_taxes 		= $_tax->calc_tax( $price * $qty, $base_tax_rates, true );
+					$base_tax_amount	= array_sum( $base_taxes );
+					$price      		= round( $price * $qty - $base_tax_amount, absint( get_option( 'woocommerce_price_num_decimals' ) ) );
+
+				} elseif ( $tax_rates !== $base_tax_rates ) {
+
+					$base_taxes			= $_tax->calc_tax( $price * $qty, $base_tax_rates, true );
+					$modded_taxes		= $_tax->calc_tax( ( $price * $qty ) - array_sum( $base_taxes ), $tax_rates, false );
+					$price      		= round( ( $price * $qty ) - array_sum( $base_taxes ) + array_sum( $modded_taxes ), absint( get_option( 'woocommerce_price_num_decimals' ) ) );
+
+				} else {
+
+					$price = $price * $qty;
+
+				}
+
+			}
+
+		} else {
+			$price = $price * $qty;     
+		}
+    
+    return $price;
+  }
+ 
+  //****************************************
+  //v1.0.7.4 new function
+  //from woocommerce/includes/abstracts/abstract-wc-product.php
+  //****************************************
+  function vtprd_get_price_excluding_tax($product_id, $discount_price){ 
+    global $post, $wpdb, $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_setup_options, $vtprd_info; 
+
+    //changed $this->  to  $product->
+    //use $discount_price as basis
+    
+    $qty = 1;
+    $product = get_product( $product_id );
+    $price = $discount_price;
+    
+		if ( $product->is_taxable() && get_option('woocommerce_prices_include_tax') === 'yes' ) {
+
+			$_tax       = new WC_Tax();
+			$tax_rates  = $_tax->get_shop_base_rate( $product->tax_class );
+			$taxes      = $_tax->calc_tax( $price * $qty, $tax_rates, true );
+			$price      = $_tax->round( $price * $qty - array_sum( $taxes ) );
+		} else {
+			$price = $price * $qty;     
+		}
+        
+    return $price;
+  }
+ 
+  //****************************************
+  //v1.0.7.4 new function
+  //  adds in default 'Wholesale Buyer' role at install time
+  //****************************************
+  function vtprd_maybe_add_wholesale_role(){ 
+		global $wp_roles;
+	
+		if ( class_exists( 'WP_Roles' ) ) {
+      if ( !isset( $wp_roles ) ) { 
+			   $wp_roles = new WP_Roles();
+      }
+    }
+  
+    $wholesale_role_name =  __('Wholesale Buyer' , 'vtprd');
+  
+    //Check if it's already there!
+    If ( get_role( $wholesale_role_name ) ) {
+       return;
+    }
+  
+		if ( is_object( $wp_roles ) ) { 
+			$capabilities = array( 
+				'read' => true,
+				'edit_posts' => false,
+				'delete_posts' => false,
+			);
+
+			add_role ('wholesale_buyer', $wholesale_role_name, $capabilities );
+
+			$role = get_role( 'wholesale_buyer' ); 
+			$role->add_cap( 'buy_wholesale' );
+
+		}
+        
+    return;
+  }  
+  
+  
+  //****************************************
+  //v1.0.7.4 new function
+  //****************************************
+  function vtprd_load_cart_total_incl_excl(){ 
+	  global $vtprd_cart;
+/*
+    if ( get_option( 'woocommerce_calc_taxes' )      == 'yes' ) {
+      if ( get_option( 'woocommerce_tax_display_cart' ) == 'incl' )  {
+          $vtprd_cart->yousave_cart_total_amt =  $vtprd_cart->yousave_cart_total_amt_incl_tax;  
+      } else {
+          $vtprd_cart->yousave_cart_total_amt =  $vtprd_cart->yousave_cart_total_amt_excl_tax;
+      }
+    } 
+ */   
+    if ( get_option( 'woocommerce_calc_taxes' )  == 'yes' ) {
+       switch (get_option('woocommerce_prices_include_tax')) {
+          case 'yes':
+              if (get_option('woocommerce_tax_display_cart')   == 'excl') {
+                 $excl_vat_lit .= ' <small>' . WC()->countries->ex_tax_or_vat() . '</small>'; 
+              }   
+             break;         
+          case 'no':
+              if (get_option('woocommerce_tax_display_cart')   == 'incl') {
+                 $vtprd_cart->yousave_cart_total_amt =  $vtprd_cart->yousave_cart_total_amt_incl_tax;   
+              }           
+             break;
+       }          
+    }    
+
+ 
+    return;
+  }
+
+ 
+  
+  //****************************************
+  //v1.0.7.4 new function
+  //****************************************
+  function vtprd_maybe_load_incl_excl_vat_lit(){ 
+		global $vtprd_cart, $woocommerce;
+    //inc_tax_or_vat()
+
+    $excl_vat_lit = '';
+/*    
+    if ( get_option( 'woocommerce_calc_taxes' )  == 'yes' ) {
+       if (get_option('woocommerce_prices_include_tax') == 'yes') {
+          if (get_option('woocommerce_tax_display_cart')   == 'excl') {
+             $excl_vat_lit .= ' <small>' . WC()->countries->ex_tax_or_vat() . '</small>'; 
+          } 
+       } else {
+          if (get_option('woocommerce_tax_display_cart')   == 'incl') {
+             $excl_vat_lit .= ' <small>' . WC()->countries->inc_tax_or_vat() . '</small>'; 
+          }               
+       }
+    }
+*/
+     if ( get_option( 'woocommerce_calc_taxes' )  == 'yes' ) {
+       switch (get_option('woocommerce_prices_include_tax')) {
+          case 'yes':
+              if (get_option('woocommerce_tax_display_cart')   == 'excl') {
+                 $excl_vat_lit .= ' <small>' . WC()->countries->ex_tax_or_vat() . '</small>'; 
+              } 
+             break;         
+          case 'no':
+              if (get_option('woocommerce_tax_display_cart')   == 'incl') {
+                 $excl_vat_lit .= ' <small>' . WC()->countries->inc_tax_or_vat() . '</small>'; 
+              }           
+             break;
+       }          
+    } 
+
+
+    return $excl_vat_lit;
+  } 
+   
+  //****************************************
+  //v1.0.7.4 new function
+  //  Testing Note:  Compare how Deal discount is applied vs Regular coupon discount of same amount
+  //    example: 10% cart discount vs 10% coupon, with a variety of tax switch settings...
+  //****************************************
+  function vtprd_coupon_apply_before_tax(){ 
+
+    $apply_before_tax = 'yes';  //supply DEFAULT
+    if ( get_option( 'woocommerce_calc_taxes' )  == 'yes' ) {
+       if (get_option('woocommerce_prices_include_tax') == 'yes') {
+         $do_nothing;
+          if (get_option('woocommerce_tax_display_cart')   == 'excl') {
+             $apply_before_tax = 'no'; 
+          } 
+       } else {
+          if (get_option('woocommerce_tax_display_cart')   == 'incl') {
+            $apply_before_tax = 'no'; 
+          }               
+       }
+    } 
+ 
+    return $apply_before_tax;
+  }
   
   /* ************************************************
   **  Disable draggable metabox in the rule custom post type
@@ -2360,10 +2826,11 @@
  add_action( 'wp_footer', 'vtprd_performance', 20 );
 */ 
  
-  /* ************************************************
-  **  W# Total Cache Special Flush for Custom Post type
-  *************************************************** */ 
+
 /*
+  // ****************************************************
+  //**  W3 Total Cache Special Flush for Custom Post type
+  // ***************************************************  
 function vtprd_w3_flush_page_custom( $post_id ) {
 
    if ( !is_plugin_active('W3 Total Cache') ) {

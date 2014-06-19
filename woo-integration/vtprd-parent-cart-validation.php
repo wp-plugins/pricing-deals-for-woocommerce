@@ -59,6 +59,7 @@ class VTPRD_Parent_Cart_Validation {
  
     add_filter('woocommerce_empty_price_html',            array(&$this, 'vtprd_maybe_catalog_price_html'), 10, 2);
 
+    //This is run out of the Cart and Mini-Cart uniquely
     $current_version =  WOOCOMMERCE_VERSION;
     if( (version_compare(strval('2.1.0'), strval($current_version), '>') == 1) ) {   //'==1' = 2nd value is lower     
       add_filter('woocommerce_cart_item_price_html',        array(&$this, 'vtprd_maybe_cart_item_price_html'), 10, 3);
@@ -228,6 +229,7 @@ class VTPRD_Parent_Cart_Validation {
     //v1.0.7.2  needed if all prices are zero from Catalog rules, otherwise subtotal reflects list price!
     add_action( 'woocommerce_before_mini_cart', array(&$this, 'vtprd_maybe_recalc_woo_totals'), 10, 1 );  
 
+    
     //*************************************************
     // Post-Purchase
     //*************************************************       
@@ -414,9 +416,9 @@ class VTPRD_Parent_Cart_Validation {
 
     //price is ALWAYS returned with NO formatting, as it is called during processing, not at display time
     if ($vtprd_info['product_session_info']['product_yousave_total_amt'] > 0)  {     //v1.0.7.2  replaced 'product_discount_price' with 'product_yousave_total_amt' to pick up a FREE discount
-      $price = $vtprd_info['product_session_info']['product_discount_price'];
-    } 
-   
+      //$price = $vtprd_info['product_session_info']['product_discount_price'];
+      $price = $this->vtprd_show_shop_price(); //v1.0.7.4 
+    }  
     return $price;     
   } 
    
@@ -483,9 +485,10 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 */ 
 
     if ($vtprd_info['product_session_info']['product_yousave_total_amt'] > 0)  {     //v1.0.7.2  replaced 'product_discount_price' with 'product_yousave_total_amt' to pick up a FREE discount
-      $price = $vtprd_info['product_session_info']['product_discount_price'];
+      //$price = $vtprd_info['product_session_info']['product_discount_price'];
+      $price = $this->vtprd_show_shop_price(); //v1.0.7.4 
     }
-   
+  
     return $price;
 
        
@@ -511,6 +514,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
     */
     //***************************************************
     $from = strstr($price_html, 'From') !== false ? ' From ' : ' ';
+    $min_price_id = ''; //v1.0.7.4 moved here
     if ($from) {
     		$child_prices = array();
     		$all_children = $product_info->get_children();
@@ -523,9 +527,8 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
         if (count($child_prices) == 0) {
           return $price_html;
         }
-        
+
         $min_price = '';
-        $min_price_id;
         //find min
         foreach ($child_prices as $key => $child_price) {
           if ( ($child_price < $min_price) || ($min_price = '') ) {
@@ -573,13 +576,16 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
  */
 
     if ($vtprd_info['product_session_info']['product_yousave_total_amt'] > 0)  {     //v1.0.7.2  replaced 'product_discount_price' with 'product_yousave_total_amt' to pick up a FREE discount
+      /*  //v1.0.7.4 replaced with below
       if ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes')  {
         $price_html = '<del>' . $vtprd_info['product_session_info']['product_list_price_html_woo']  . '</del><ins>' .$from. ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'] . '</ins>'; 
       } else {
         $price_html = $from. ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'];  
       }
+      */
+      $price_html = $this->vtprd_show_shop_price_html(); //v1.0.7.4 
     } 
-        
+       
     return $price_html;
 
       
@@ -668,11 +674,14 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
  */
 
     if ($vtprd_info['product_session_info']['product_yousave_total_amt'] > 0)  {     //v1.0.7.2  replaced 'product_discount_price' with 'product_yousave_total_amt' to pick up a FREE discount
+      /*  //v1.0.7.4 replaced with below
       if ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes')  {
-        $price_html = '<del>' . $vtprd_info['product_session_info']['product_list_price_html_woo']  . '</del><ins>' .$from.  ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'] . '</ins>'; 
+        $price_html = '<del>' . $vtprd_info['product_session_info']['product_list_price_html_woo']  . '</del><ins>' .$from. ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'] . '</ins>'; 
       } else {
-        $price_html = $from. ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'];
+        $price_html = $from. ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'];  
       }
+      */
+      $price_html = $this->vtprd_show_shop_price_html(); //v1.0.7.4 
     } 
 
     return $price_html;
@@ -733,13 +742,16 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
     $from = strstr($price_html, 'From') !== false ? ' From ' : ' ';
      
     if ($vtprd_info['product_session_info']['product_yousave_total_amt'] > 0)  {     //v1.0.7.2  replaced 'product_discount_price' with 'product_yousave_total_amt' to pick up a FREE discount
-      if ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes')  {     
-        $price_html = '<del>' . $vtprd_info['product_session_info']['product_list_price_html_woo']  . '</del><ins>' .$from.  ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'] . '</ins>'; 
+      /*  //v1.0.7.4 replaced with below
+      if ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes')  {
+        $price_html = '<del>' . $vtprd_info['product_session_info']['product_list_price_html_woo']  . '</del><ins>' .$from. ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'] . '</ins>'; 
       } else {
-        $price_html = $from.  ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'];
+        $price_html = $from. ' ' . $vtprd_info['product_session_info']['product_discount_price_html_woo'];  
       }
+      */
+      $price_html = $this->vtprd_show_shop_price_html(); //v1.0.7.4 
     } 
-       
+
     return $price_html;
  
 
@@ -748,17 +760,8 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 
 	public function vtprd_maybe_cart_item_price_html($price_html, $cart_item, $cart_item_key){    
 //return 444; //mwnprice
-    global $post, $vtprd_info, $vtprd_setup_options;
+    global $post, $vtprd_info, $vtprd_setup_options, $woocommerce;
     vtprd_debug_options();  //v1.0.5
-  /* 
-     session_start();    //mwntest
-    echo 'SESSION data <pre>'.print_r($_SESSION, true).'</pre>' ; 
-     echo '$price_html= ' .$price_html. '<br>';
-     echo '$cart_item_key= ' .$cart_item_key. '<br>';
-     echo '$cart_item->product_id= ' .$cart_item['product_id']. '<br>';
-     echo '$cart_item <pre>'.print_r($cart_item, true).'</pre>' ;
-     wp_die( __('<strong>Looks like you\'re running an older version of WordPress, you need to be running at least WordPress 3.3 to use the Varktech Maximum Purchase plugin.</strong>', 'vtmax'), __('VT Maximum Purchase not compatible - WP', 'vtmax'), array('back_link' => true));
-	*/		
 
    
     if ($cart_item['variation_id'] > ' ') {      
@@ -775,25 +778,162 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 //    $price =  $cart_item['line_subtotal'] / $cart_item['quantity'];
 //  v1.0.3
     if ( isset($cart_item['line_subtotal']) ) {
-      $price =  $cart_item['line_subtotal'] / $cart_item['quantity'];
+      $price =  $cart_item['line_subtotal'] / $cart_item['quantity']; //already priced this once, item price is correct...
     } else {
       $price =  0;
     }    
-    //mwntest mwncurrtest 
-    //vtprd_maybe_get_discount_catalog_session_price($product_id, $price);
+
     vtprd_maybe_get_price_single_product($product_id, $price);
 
     if ($vtprd_info['product_session_info']['product_yousave_total_amt'] > 0)  {     //v1.0.7.2  replaced 'product_discount_price' with 'product_yousave_total_amt' to pick up a FREE discount
-      if ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes')  {
-        $price_html = '<del>' . $vtprd_info['product_session_info']['product_list_price_html_woo']  . '</del><ins>' . $vtprd_info['product_session_info']['product_discount_price_html_woo'] . '</ins>'; 
-    } else {
-        $price_html = $vtprd_info['product_session_info']['product_discount_price_html_woo'];
-      }
+       
+       //v1.0.7.4 begin      
+      if ( get_option( 'woocommerce_calc_taxes' ) == 'yes' ) {              
+        $woocommerce_tax_display_cart = get_option( 'woocommerce_tax_display_cart' );         
+        if ( get_option( 'woocommerce_prices_include_tax' ) == 'yes' ) {
+            switch( true ) {
+              case ( $woocommerce->customer->is_vat_exempt()):
+                  $price_contents = $vtprd_info['product_session_info']['product_discount_price_excl_tax_html_woo'];
+                  $price_html = $this->vtprd_maybe_show_crossouts($price_contents);
+                break; 
+              case ( $woocommerce_tax_display_cart == 'incl'):
+                  $price_contents = $vtprd_info['product_session_info']['product_discount_price_html_woo'];
+                  $price_html = $this->vtprd_maybe_show_crossouts($price_contents);  
+                break;           
+              case ( $woocommerce_tax_display_cart == 'excl'):
+                  $price_contents = $vtprd_info['product_session_info']['product_discount_price_excl_tax_html_woo'];
+                  $price_html = $this->vtprd_maybe_show_crossouts($price_contents);    
+                break;
+            }       
+        } else {
+            switch( true ) {
+              case ( $woocommerce->customer->is_vat_exempt()):
+                  $price_contents = $vtprd_info['product_session_info']['product_discount_price_html_woo'];
+                  $price_html = $this->vtprd_maybe_show_crossouts($price_contents); 
+                break; 
+              case ( $woocommerce_tax_display_cart == 'incl'):
+                  $price_contents = $vtprd_info['product_session_info']['product_discount_price_incl_tax_html_woo'];
+                  $price_html = $this->vtprd_maybe_show_crossouts($price_contents);  
+                break;           
+              case ( $woocommerce_tax_display_cart == 'excl'):
+                  $price_contents = $vtprd_info['product_session_info']['product_discount_price_html_woo'];
+                  $price_html = $this->vtprd_maybe_show_crossouts($price_contents);     
+                break;
+            }                     
+        }
+      } else {
+        $price_contents = $vtprd_info['product_session_info']['product_discount_price_html_woo'];
+        $price_html = $this->vtprd_maybe_show_crossouts($price_contents);       
+      }               
+      //v1.0.7.4 end
     } 
  
    return $price_html;
 
  }
+ 
+  //v1.0.7.4 new function
+  public function vtprd_show_shop_price() {
+    global $vtprd_info, $vtprd_setup_options, $woocommerce;
+    
+    if ( get_option( 'woocommerce_calc_taxes' ) == 'yes' ) {         
+      $woocommerce_tax_display_shop = get_option( 'woocommerce_tax_display_shop' );
+        
+      //suffix gets added automatically, blank if no suffix provided ...
+      if ( get_option( 'woocommerce_prices_include_tax' ) == 'yes' ) {      
+          switch( true ) {
+            case ( $woocommerce->customer->is_vat_exempt()):
+                $price = $vtprd_info['product_session_info']['product_discount_price_excl_tax_woo'];
+              break; 
+            case ( $woocommerce_tax_display_shop == 'incl'):
+                $price = $vtprd_info['product_session_info']['product_discount_price']; 
+              break;           
+            case ( $woocommerce_tax_display_shop == 'excl'):
+                $price = $vtprd_info['product_session_info']['product_discount_price_excl_tax_woo'];    
+              break;
+          } 
+      } else {      
+          switch( true ) {
+            case ( $woocommerce->customer->is_vat_exempt()):
+                $price = $vtprd_info['product_session_info']['product_discount_price'];
+              break; 
+            case ( $woocommerce_tax_display_shop == 'incl'):
+                $price = $vtprd_info['product_session_info']['product_discount_price_incl_tax_woo'];; 
+              break;           
+            case ( $woocommerce_tax_display_shop == 'excl'):
+                $price = $vtprd_info['product_session_info']['product_discount_price'];    
+              break;
+          }                 
+      }    
+    } else {
+      $price = $vtprd_info['product_session_info']['product_discount_price']; 
+    }
+    
+    return $price;
+  }
+  
+  //****************************
+  //v1.0.7.4 new function
+  //****************************
+  public function vtprd_show_shop_price_html() {
+    global $vtprd_info, $vtprd_setup_options, $woocommerce;
+    
+    if ( get_option( 'woocommerce_calc_taxes' ) == 'yes' ) {
+      //suffix gets added automatically, blank if no suffix provided ...
+      $woocommerce_tax_display_shop = get_option( 'woocommerce_tax_display_shop' );
+      
+      if ( get_option( 'woocommerce_prices_include_tax' ) == 'yes' ) {      
+          switch( true ) {
+            case ( $woocommerce->customer->is_vat_exempt()):
+                $price_contents = $vtprd_info['product_session_info']['product_discount_price_excl_tax_html_woo'] .$vtprd_info['product_session_info']['product_discount_price_suffix_html_woo'];
+                $price_html = $this->vtprd_maybe_show_crossouts($price_contents);
+              break; 
+            case ( $woocommerce_tax_display_shop == 'incl'):
+                $price_contents = $vtprd_info['product_session_info']['product_discount_price_html_woo']          .$vtprd_info['product_session_info']['product_discount_price_suffix_html_woo'];
+                $price_html = $this->vtprd_maybe_show_crossouts($price_contents);  
+              break;           
+            case ( $woocommerce_tax_display_shop == 'excl'):
+                $price_contents = $vtprd_info['product_session_info']['product_discount_price_excl_tax_html_woo'] .$vtprd_info['product_session_info']['product_discount_price_suffix_html_woo'];
+                $price_html = $this->vtprd_maybe_show_crossouts($price_contents);    
+              break;
+          }       
+      } else {      
+          switch( true ) {
+            case ( $woocommerce->customer->is_vat_exempt()):
+                $price_contents = $vtprd_info['product_session_info']['product_discount_price_html_woo']          .$vtprd_info['product_session_info']['product_discount_price_suffix_html_woo'];
+                $price_html = $this->vtprd_maybe_show_crossouts($price_contents);
+              break; 
+            case ( $woocommerce_tax_display_shop == 'incl'):
+                $price_contents = $vtprd_info['product_session_info']['product_discount_price_incl_tax_html_woo'] .$vtprd_info['product_session_info']['product_discount_price_suffix_html_woo'];
+                $price_html = $this->vtprd_maybe_show_crossouts($price_contents);  
+              break;           
+            case ( $woocommerce_tax_display_shop == 'excl'):
+                $price_contents = $vtprd_info['product_session_info']['product_discount_price_html_woo']          .$vtprd_info['product_session_info']['product_discount_price_suffix_html_woo'];
+                $price_html = $this->vtprd_maybe_show_crossouts($price_contents);    
+              break;
+          }                    
+      }    
+    } else {
+      $price_contents = $vtprd_info['product_session_info']['product_discount_price_html_woo']          .$vtprd_info['product_session_info']['product_discount_price_suffix_html_woo'];
+      $price_html = $this->vtprd_maybe_show_crossouts($price_contents); 
+    }
+    
+    return $price_html;
+  }
+
+
+  //v1.0.7.4 new function
+  public function vtprd_maybe_show_crossouts($price_contents) {
+    global $vtprd_setup_options, $vtprd_info;
+     
+    if ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes')  {
+      $price_html = '<del>' . $vtprd_info['product_session_info']['product_list_price_html_woo']  . '</del><ins>' . $price_contents . '</ins>'; 
+    } else {
+      $price_html = $price_contents;
+    }
+    
+    return $price_html;
+  }
  
   //*************************************************************************
   //FROM 'woocommerce_get_price' => Central behind the scenes pricing
@@ -813,8 +953,10 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
     }
 */  
     //in place of is_admin, which doesn't work in AJAX...
-     if ( function_exists( 'get_current_screen' ) ) {  // get_current_screen ONLY exists in ADMIN!!!   
-       if ($post->post_type == 'product'  ) {    //in admin, don't run this on the PRODUCT screen!!
+     if ( (function_exists( 'get_current_screen' ) ) ||    // get_current_screen ONLY exists in ADMIN!!!  
+          ( is_admin() ) ) {                //v1.0.7.4
+       if ( (isset($post->post_type)) &&    //v1.0.7.4
+            ($post->post_type == 'product'  ) ) {    //in admin, don't run this on the PRODUCT screen!!
          return $price;
        }
      }
@@ -836,10 +978,12 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
     //vtprd_maybe_get_discount_catalog_session_price($product_id);
     vtprd_maybe_get_price_single_product($product_id, $price);
 
-    if ($vtprd_info['product_session_info']['product_yousave_total_amt'] > 0)  {     //v1.0.7.2  replaced 'product_discount_price' with 'product_yousave_total_amt' to pick up a FREE discount
-      $price = $vtprd_info['product_session_info']['product_discount_price'];
+    if ($vtprd_info['product_session_info']['product_yousave_total_amt'] > 0)  {     //v1.0.7.2  replaced 'product_discount_price' with 'product_yousave_total_amt' to pick up a FREE discount      
+      $price = $vtprd_info['product_session_info']['product_discount_price'];  //v1.0.7.4 ==>> this remains unchanged!! 
+     // $price = $this->vtprd_show_shop_price(); //v1.0.7.4 
+   
     } 
-    
+  
    return $price;
 
  }
@@ -873,9 +1017,10 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
   
  
     if ($vtprd_info['product_session_info']['product_yousave_total_amt'] > 0)  {     //v1.0.7.2  replaced 'product_discount_price' with 'product_yousave_total_amt' to pick up a FREE discount
-      $price = $vtprd_info['product_session_info']['product_discount_price'];
+      //$price = $vtprd_info['product_session_info']['product_discount_price'];
+      $price = $this->vtprd_show_shop_price(); //v1.0.7.4
     } 
-     
+    
     return $price;   
 
   }
@@ -1195,11 +1340,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
     $data_chain[] =  $contents_total;
     $data_chain[] =  $applied_coupons;
     $_SESSION['data_chain'] = serialize($data_chain);             
-    
- //echo '<br>End PROCESS_DISCOUNT!!<br>' ; //mwnecho
- //echo 'process_discount $contents_total= ' .$contents_total. '<br>';
- //echo 'process_discount $applied_coupons= ' .$applied_coupons. '<br>';   
-    
+     
     return;        
 } 
      
@@ -1256,14 +1397,20 @@ wp_die( __('<strong>die again.</strong>', 'vtprd'), __('VT Pricing Deals not com
   //clears coupon from cart
    public function vtprd_woo_maybe_remove_coupon_from_cart($coupon_title) {
       global $woocommerce;
-			if ( $woocommerce->applied_coupons ) {
+			
+      WC()->cart->remove_coupon( $coupon_title );   //v1.0.7.4 
+      
+      /* //v1.0.7.4  'if' replaced with the above
+      if ( $woocommerce->applied_coupons ) {
 				foreach ( $woocommerce->applied_coupons as $index => $code ) {
 					if ( $code == $coupon_title ) {
             unset( $woocommerce->applied_coupons[ $index ] );
             break;
           } 
 				}
-			}              
+			}    
+      */      
+                   
     return;        
 } 
 
@@ -1295,6 +1442,16 @@ wp_die( __('<strong>die again.</strong>', 'vtprd'), __('VT Pricing Deals not com
       if ($vtprd_cart->yousave_cart_total_amt <= 0) {
          return false;
       }
+
+      //v1.0.7.4 begin
+      vtprd_load_cart_total_incl_excl(); 
+      
+      //$apply_before_tax  used to MIMIC the way regular coupons taxation!!
+      //  Testing Note:  Compare how Deal discount is applied vs Regular coupon discount of same amount
+      //    example: 10% cart discount vs 10% coupon, with a variety of tax switch settings...
+      $apply_before_tax = vtprd_coupon_apply_before_tax();    
+      
+      //v1.0.7.4 end
       
       //GET coupon_id of the previously inserted placeholder coupon where title = $vtprd_info['coupon_code_discount_deal_title']
       $deal_discount_title = $vtprd_info['coupon_code_discount_deal_title'];
@@ -1311,7 +1468,7 @@ wp_die( __('<strong>die again.</strong>', 'vtprd'), __('VT Pricing Deals not com
             'usage_limit'                => '',
             'usage_count'                => '',
             'expiry_date'                => '',
-            'apply_before_tax'           => 'yes',
+            'apply_before_tax'           => $apply_before_tax,
             'free_shipping'              => 'no',
             'product_categories'         => array(),
             'exclude_product_categories' => array(),
@@ -1954,6 +2111,7 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
      return;
    }
    //v1.0.7.2 end
+  
    
  /*
     also:  in wpsc-includes/purchase-log-class.php  (from 3.9)

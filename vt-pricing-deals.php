@@ -3,7 +3,7 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.0.7.3
+Version: 1.0.7.4
 Author: Vark
 Author URI: http://varktech.com
 */
@@ -43,9 +43,9 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.0.7.3');
-    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5.2');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2014-06-05');
+		define('VTPRD_VERSION',                               '1.0.7.4');
+    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5.3');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2014-06-19');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
@@ -122,7 +122,9 @@ class VTPRD_Controller{
 
     $vtprd_setup_options = get_option( 'vtprd_setup_options' );  //put the setup_options into the global namespace 
     
-    vtprd_debug_options();  //v1.0.5
+    if (function_exists('vtprd_debug_options')) { 
+      vtprd_debug_options();  //v1.0.5
+    }
             
     /*  **********************************
         Set GMT time zone for Store 
@@ -158,8 +160,21 @@ class VTPRD_Controller{
              (version_compare(VTPRD_PRO_VERSION, VTPRD_MINIMUM_PRO_VERSION) < 0) ) {    //'<0' = 1st value is lower  
           add_action( 'admin_notices',array(&$this, 'vtprd_admin_notice_version_mismatch') );            
         }
-        //v1.0.7.1 begin 
-     
+        //v1.0.7.1 end 
+      
+      //v1.0.7.4 begin  
+      //****************************************
+      //INSIST that coupons be enabled in woo, in order for this plugin to work!!
+      //****************************************
+      $coupons_enabled = get_option( 'woocommerce_enable_coupons' ) == 'no' ? false : true;
+      if (!$coupons_enabled) {  
+        add_action( 'admin_notices',array(&$this, 'vtprd_admin_notice_coupon_enable_required') );            
+      } 
+
+      vtprd_maybe_add_wholesale_role();
+ 
+      //v1.0.7.4 end 
+      
     } else {
 
         add_action( "wp_enqueue_scripts", array(&$this, 'vtprd_enqueue_frontend_scripts'), 1 );    //priority 1 to run 1st, so front-end-css can be overridden by another file with a dependancy
@@ -464,7 +479,6 @@ class VTPRD_Controller{
     //the options are added at admin_init time by the setup_options.php as soon as plugin is activated!!!
         
     $this->vtprd_create_discount_log_tables();
-   
 
 		$earliest_allowed_wp_version = 3.3;
     if( (version_compare(strval($earliest_allowed_wp_version), strval($wp_version), '>') == 1) ) {   //'==1' = 2nd value is lower  
@@ -505,7 +519,7 @@ class VTPRD_Controller{
         return;         
     }
 
-     
+    return; 
   }
 
    //v1.0.7.1 begin                          
@@ -524,8 +538,8 @@ class VTPRD_Controller{
    //v1.0.7.1 end  
 
    public function vtprd_admin_notice_coupon_enable_required() {
-      $message  =  '<strong>' . __('In order for the Pricing Deals plugin to function successfully, the Woo Coupons Setting must be on, and it is currently off.' , 'vtprd') . '</strong>' ;
-      $message .=  '<br><br>' . __('Please go to the Woocommerce/Settings page.  Under the "General" tab, check the box next to "Enable the use of coupons" and click on the "Save Changes" button.'  , 'vtprd');
+      $message  =  '<strong>' . __('In order for the "Pricing Deals" plugin to function successfully, the Woo Coupons Setting must be on, and it is currently off.' , 'vtprd') . '</strong>' ;
+      $message .=  '<br><br>' . __('Please go to the Woocommerce/Settings page.  Under the "Checkout" tab, check the box next to "Enable the use of coupons" and click on the "Save Changes" button.'  , 'vtprd');
       $admin_notices = '<div id="message" class="error fade" style="background-color: #FFEBE8 !important;"><p>' . $message . ' </p></div>';
       echo $admin_notices;
       return;    

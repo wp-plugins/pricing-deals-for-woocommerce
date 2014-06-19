@@ -258,7 +258,14 @@ action amt condition can be an amt or $$
             $vtprd_rule->ruleApplicationPriority_num = '10'; //init variable     
        }
     } else {
-      $vtprd_rule->ruleApplicationPriority_num = '10'; //init variable  
+    //v1.0.7.4 begin
+    //  $vtprd_rule->ruleApplicationPriority_num = '10'; //init variable  
+         $vtprd_rule->ruleApplicationPriority_num = $_REQUEST['ruleApplicationPriority_num'];
+         $vtprd_rule->ruleApplicationPriority_num = preg_replace('/[^0-9.]+/', '', $vtprd_rule->ruleApplicationPriority_num); //remove leading/trailing spaces, percent sign, dollar sign
+         if ( is_numeric($vtprd_rule->ruleApplicationPriority_num) === false ) { 
+            $vtprd_rule->ruleApplicationPriority_num = '10'; //init variable 
+         }
+     //v1.0.7.4 end  
     }
                  
     $vtprd_rule->cumulativeSalePricing   = $_REQUEST['cumulativeSalePricing'];
