@@ -239,7 +239,7 @@
       $coupon_cnt = 0;
       $vtprd_info['skip_cart_processing_due_to_coupon_individual_use'] = false;
       
-      $applied_coupons = WC()->cart->get_coupons();
+      $applied_coupons = $woocommerce->cart->get_coupons();  //v1.0.7.5
       foreach ( $applied_coupons as $code => $coupon ) {	
         if ( $code == $vtprd_info['coupon_code_discount_deal_title'] ) {
           continue;  //if the coupon is a Pricing Deal discount, skip
@@ -935,9 +935,8 @@
     $output .= '<strong>'.$vtprd_setup_options['cartWidget_new_subtotal_label'] .'&nbsp;</strong>';     
 
     
-    //can't use the regular routine, as it returns a formatted result
-    //$subtotal = vtprd_get_Woo_cartSubtotal(); 
-   if ( $woocommerce->tax_display_cart == 'excl' ) {
+   //v1.0.7.5 - changed to "get_option('woocommerce_tax_display_cart')" - $woocommerce didn't have the info yet...
+   if ( get_option('woocommerce_tax_display_cart') == 'excl' ) {  //v1.0.7.5
 			$subtotal = $woocommerce->cart->subtotal_ex_tax ;
 		} else {
 			$subtotal = $woocommerce->cart->subtotal;
@@ -947,8 +946,6 @@
     $subtotal -= $vtprd_cart->cart_discount_subtotal;
 
     $amt = vtprd_format_money_element($subtotal);
-
-     
 
 //    $amt = $woocommerce->cart->subtotal .' - ' . $vtprd_cart->cart_discount_subtotal .' = '. $subtotal; //test test
     
@@ -2505,8 +2502,8 @@
       return round($_ro/$_lo, $_scale);
     }
   }
-  //***** v1.0.4 end
- 
+  //***** v1.0.4 end 
+  
   //v1.0.7 change
   function vtprd_debug_options(){ 
     global $vtprd_setup_options;
@@ -2604,7 +2601,7 @@
 				$tax_rates      = $_tax->get_rates( $product->get_tax_class() );
 				$base_tax_rates = $_tax->get_shop_base_rate( $product->tax_class );
 
-				if ( ! empty( WC()->customer ) && WC()->customer->is_vat_exempt() ) {
+				if ( ! empty( $woocommerce->customer ) && $woocommerce->customer->is_vat_exempt() ) {   //v1.0.7.5
 
 					$base_taxes 		= $_tax->calc_tax( $price * $qty, $base_tax_rates, true );
 					$base_tax_amount	= array_sum( $base_taxes );
@@ -2700,7 +2697,7 @@
   //v1.0.7.4 new function
   //****************************************
   function vtprd_load_cart_total_incl_excl(){ 
-	  global $vtprd_cart;
+	  global $vtprd_cart, $woocommerce;
 /*
     if ( get_option( 'woocommerce_calc_taxes' )      == 'yes' ) {
       if ( get_option( 'woocommerce_tax_display_cart' ) == 'incl' )  {
@@ -2714,7 +2711,7 @@
        switch (get_option('woocommerce_prices_include_tax')) {
           case 'yes':
               if (get_option('woocommerce_tax_display_cart')   == 'excl') {
-                 $excl_vat_lit .= ' <small>' . WC()->countries->ex_tax_or_vat() . '</small>'; 
+                 $excl_vat_lit .= ' <small>' . $woocommerce->countries->ex_tax_or_vat() . '</small>';  //v1.0.7.5
               }   
              break;         
           case 'no':
@@ -2743,11 +2740,11 @@
     if ( get_option( 'woocommerce_calc_taxes' )  == 'yes' ) {
        if (get_option('woocommerce_prices_include_tax') == 'yes') {
           if (get_option('woocommerce_tax_display_cart')   == 'excl') {
-             $excl_vat_lit .= ' <small>' . WC()->countries->ex_tax_or_vat() . '</small>'; 
+             $excl_vat_lit .= ' <small>' . $woocommerce->countries->ex_tax_or_vat() . '</small>';   //v1.0.7.5
           } 
        } else {
           if (get_option('woocommerce_tax_display_cart')   == 'incl') {
-             $excl_vat_lit .= ' <small>' . WC()->countries->inc_tax_or_vat() . '</small>'; 
+             $excl_vat_lit .= ' <small>' . $woocommerce->countries->inc_tax_or_vat() . '</small>';   //v1.0.7.5
           }               
        }
     }
@@ -2756,12 +2753,12 @@
        switch (get_option('woocommerce_prices_include_tax')) {
           case 'yes':
               if (get_option('woocommerce_tax_display_cart')   == 'excl') {
-                 $excl_vat_lit .= ' <small>' . WC()->countries->ex_tax_or_vat() . '</small>'; 
+                 $excl_vat_lit .= ' <small>' . $woocommerce->countries->ex_tax_or_vat() . '</small>';     //v1.0.7.5
               } 
              break;         
           case 'no':
               if (get_option('woocommerce_tax_display_cart')   == 'incl') {
-                 $excl_vat_lit .= ' <small>' . WC()->countries->inc_tax_or_vat() . '</small>'; 
+                 $excl_vat_lit .= ' <small>' . $woocommerce->countries->inc_tax_or_vat() . '</small>';     //v1.0.7.5
               }           
              break;
        }          
@@ -2794,6 +2791,21 @@
  
     return $apply_before_tax;
   }
+
+
+
+  //**v1.0.7.5 begin
+  /* ************************************************
+  **  if wc_price not there (pre woo 2.1 )
+  *************************************************** */
+  if (!function_exists('wc_price')) {
+    function wc_price($amount) {
+      return woocommerce_price($amount);
+    }
+  }
+
+  //***** 1.0.7.5  end 
+
   
   /* ************************************************
   **  Disable draggable metabox in the rule custom post type

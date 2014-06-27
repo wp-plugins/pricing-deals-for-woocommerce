@@ -1397,19 +1397,22 @@ wp_die( __('<strong>die again.</strong>', 'vtprd'), __('VT Pricing Deals not com
   //clears coupon from cart
    public function vtprd_woo_maybe_remove_coupon_from_cart($coupon_title) {
       global $woocommerce;
-			
-      WC()->cart->remove_coupon( $coupon_title );   //v1.0.7.4 
-      
-      /* //v1.0.7.4  'if' replaced with the above
-      if ( $woocommerce->applied_coupons ) {
-				foreach ( $woocommerce->applied_coupons as $index => $code ) {
-					if ( $code == $coupon_title ) {
-            unset( $woocommerce->applied_coupons[ $index ] );
-            break;
-          } 
-				}
-			}    
-      */      
+			//v1.0.7.5 reworked for backwards compatability
+       
+      $current_version =  WOOCOMMERCE_VERSION;
+      //if before woo version 2.1
+      if( (version_compare(strval('2.1.0'), strval($current_version), '>') == 1) ) {   //'==1' = 2nd value is lower  
+        if ( $woocommerce->applied_coupons ) {
+  				foreach ( $woocommerce->applied_coupons as $index => $code ) {
+  					if ( $code == $coupon_title ) {
+              unset( $woocommerce->applied_coupons[ $index ] );
+              break;
+            } 
+  				}
+  			}    
+      } else {
+        WC()->cart->remove_coupon( $coupon_title );   //v1.0.7.4 
+      }      
                    
     return;        
 } 

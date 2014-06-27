@@ -1017,10 +1017,7 @@ class VTPRD_Apply_Rules{
         $current_product_id = '';
         $current_unit_count = 0;
         $current_total_discount = 0;
-        
-error_log( print_r(  '$cart_group_total', true ) );
-error_log( var_export($cart_group_total, true ) ); 
-       
+           
         //*******************  
         //apply discount to each item - add in **group** remainder to last
         //*******************
@@ -1032,14 +1029,9 @@ error_log( var_export($cart_group_total, true ) );
             
             //compute rounding
             $temp_discount = $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_unit_price'] * $percent_off;
-            
-error_log( print_r(  'prod_id= ' .$vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_id'], true ) );
-error_log( print_r(  'prod_unit_price= ' .$vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_unit_price'], true ) );
-error_log( print_r(  '$per_unit_savings_2decimals= ' .$per_unit_savings_2decimals, true ) );
-error_log( print_r(  '$temp_discount= ' .$temp_discount, true ) );
 
             $rounding = round($temp_discount - $per_unit_savings_2decimals, 4);   // PHP floating point error fix - limit to 4 places right of the decimal!!   
-error_log( print_r(  '$rounding top= ' .$rounding, true ) );       
+       
             if ($rounding > 0.005) {
               $increment = round($rounding, 2); //round the rounding error to 2 decimal points!
               if ($increment < .01) {
@@ -1047,8 +1039,6 @@ error_log( print_r(  '$rounding top= ' .$rounding, true ) );
               }
               $per_unit_savings_2decimals += $increment;
             } 
-            
-error_log( print_r(  '$rounding bottom= ' .$rounding, true ) );
 
             //*******************
             // tabulate discount per product units
@@ -1062,10 +1052,6 @@ error_log( print_r(  '$rounding bottom= ' .$rounding, true ) );
               $current_unit_count     = 1;
             }   
 
-error_log( print_r(  '$current_product_id= ' .$current_product_id, true ) );
-error_log( print_r(  '$current_total_discount= ' .$current_total_discount, true ) );
-error_log( print_r(  '$current_unit_count= ' .$current_unit_count, true ) );
-            
             //*******************
             // add in group remainder, as needed
             //*******************                      

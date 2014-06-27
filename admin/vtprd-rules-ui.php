@@ -2334,7 +2334,7 @@ class VTPRD_Rules_UI{
         $vtprd_rule->minimum_purchase_select = 'none';
         $vtprd_rule->buy_group_filter_select = 'choose';
         $vtprd_rule->get_group_filter_select = 'choose';
-        $vtprd_rule->rule_on_off_sw_select = 'on';
+        $vtprd_rule->rule_on_off_sw_select = 'onForever'; //v1.0.7.5 changed from 'on' 
         $vtprd_rule->wizard_on_off_sw_select = 'on';
         $vtprd_rule->rule_type_select = 'basic';          
          

@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 3.9.1
-Stable tag: 1.0.7.4
+Stable tag: 1.0.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -171,7 +171,12 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
-= 1.07.4 - 2014-06-19 =
+= 1.0.7.5 - 2014-06-27 =
+* Enhancement - backwards compatability
+* Fix - mini-cart discount subtotal excluding tax
+* Enhancement - rule schedule default - "on always"
+
+= 1.0.7.4 - 2014-06-19 =
 * Enhancement - use WC  coupon routine
 * Enhancement - VAT pricing - include Woo wildcard in suffix text
 * Enhancement - Taxation messaging as needed in checkout
@@ -179,7 +184,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 * Enhancement - Coupon Individual_use lockout
 * Fix - PHP floating point rounding
 
-= 1.07.3 - 2014-06-05 =
+= 1.0.7.3 - 2014-06-05 =
 * Fix - post-purchase processing
 * Fix - intermittent issue with variable product name 
 * Fix - use_lifetime_max_limits defaults to 'yes'
@@ -246,7 +251,12 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Upgrade Notice ==
 
-= 1.07.4 - 2014-06-19 =
+= 1.0.7.5 - 2014-06-27 =
+* Enhancement - backwards compatability
+* Fix - mini-cart discount subtotal excluding tax
+* Enhancement - rule schedule default - "on always"
+
+= 1.0.7.4 - 2014-06-19 =
 * Enhancement - use WC  coupon routine
 * Enhancement - VAT pricing - include Woo wildcard in suffix text
 * Enhancement - Taxation messaging as needed in checkout
@@ -254,7 +264,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 * Enhancement - Coupon Individual_use lockout
 * Fix - PHP floating point rounding
 
-= 1.07.3 - 2014-06-05 =
+= 1.0.7.3 - 2014-06-05 =
 * Fix - post-purchase processing
 * Fix - intermittent issue with variable product name 
 * Fix - use_lifetime_max_limits defaults to 'yes'

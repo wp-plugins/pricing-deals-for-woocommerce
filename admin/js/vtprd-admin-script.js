@@ -367,7 +367,8 @@ DITTO ie10!!
                              //   let the pre-loaded switch setting carry on.  
                              //     "== 0" means neither of these conditions is true.
                              if ( $("#upperSelectsHaveDataFirstTime").val() == 0) {
-                                $('#rule-on-off-sw-on').attr('selected', true);
+                                $("#rule-on-off-sw-select").val('onForever')               //v1.0.7.5 
+                                rule_on_off_sw_select_test();                              //v1.0.7.5 
                              }                             
                              
                              jQuery('#date-begin-0').css('text-decoration', 'none');
@@ -407,11 +408,9 @@ DITTO ie10!!
                              //IF we're in the 1st time thru and there upper selects had data coming in,
                              //   let the pre-loaded switch setting carry on.  
                              //     "== 0" means neither of these conditions is true.
-                             if ( $("#upperSelectsHaveDataFirstTime").val() == 0) {
-                                $('#rule-on-off-sw-on').attr('selected', true);
-                                jQuery('#date-begin-0').css('color', '#0077BB !important').css('text-decoration', 'none');
-                                jQuery('#date-end-0').css('color', '#0077BB !important').css('text-decoration', 'none');
-                                jQuery('#rule-on-off-sw-select').css('color', '#0077BB !important'); 
+                             if ( $("#upperSelectsHaveDataFirstTime").val() == 0) {                            
+                                $("#rule-on-off-sw-select").val('onForever')               //v1.0.7.5 
+                                rule_on_off_sw_select_test();                              //v1.0.7.5 
                              } 
                        
                              //activate lower screen
@@ -469,9 +468,8 @@ DITTO ie10!!
                              //   let the pre-loaded switch setting carry on.  
                              //     "== 0" means neither of these conditions is true.
                              if ( $("#upperSelectsHaveDataFirstTime").val() == 0) {
-                                 $('#rule-on-off-sw-on').attr('selected', true);
-                                 jQuery('#date-begin-0').css('text-decoration', 'none');
-                                 jQuery('#date-end-0').css('text-decoration', 'none');
+                                 $("#rule-on-off-sw-select").val('onForever')               //v1.0.7.5 
+                                 rule_on_off_sw_select_test();                              //v1.0.7.5 
                              }                                 
                              
                              //Disable and darken basic/advanced ...
