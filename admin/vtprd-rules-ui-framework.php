@@ -4177,7 +4177,7 @@ class VTPRD_Rules_UI_Framework {
                     'id'       => 'discount_amt_type_forThePriceOf_Currency',
                     'class'    => 'discount_amt_type_forThePriceOf_Currency',
                     'value'    => 'forThePriceOf_Currency',
-                    'title'    => __('Package Price')
+                    'title'    => __('Package Price $$')
                     //'title'    => __('Group Price $$') .'&nbsp;&nbsp;&nbsp;'. __('[X products for $$]', 'vtprd') 
                     //'title'    => __('For the Price of - Total $$ Pricing', 'vtprd') .'&nbsp;&nbsp;&nbsp;'. __('["Buy 5, Get them for a Total Price of $400"]', 'vtprd')     
                    ),                                                                                                                                  

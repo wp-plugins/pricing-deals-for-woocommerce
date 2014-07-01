@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 3.9.1
-Stable tag: 1.0.7.5
+Stable tag: 1.0.7.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -171,6 +171,11 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.7.6 - 2014-06-30 =
+* Enhancement - Group Pricing math
+* Enhancement - Percentage discount now defaults to 'all in group'
+* Enhancement - Package perentage pricing now defaults to 'all in group'
+
 = 1.0.7.5 - 2014-06-27 =
 * Enhancement - backwards compatability
 * Fix - mini-cart discount subtotal excluding tax
@@ -250,6 +255,11 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.0.7.6 - 2014-06-30 =
+* Enhancement - Group Pricing math
+* Enhancement - Percentage discount now defaults to 'all in group'
+* Enhancement - Package perentage pricing now defaults to 'all in group'
 
 = 1.0.7.5 - 2014-06-27 =
 * Enhancement - backwards compatability

@@ -1678,12 +1678,21 @@ DITTO ie10!!
                               $('.discount_amt_type_free').attr('disabled', true);    
                               $('.discount_amt_type_forThePriceOf_Units').attr('disabled', false);
                               $('.discount_amt_type_forThePriceOf_Currency').attr('disabled', false);
+                              /*  default reversed, //v1.0.7.6 begin
                               switch( $("#discount_amt_type_0").val() ) {                                    
                                   case "forThePriceOf_Currency":
                                      $('.discount_amt_type_forThePriceOf_Currency').attr('selected', true); break;                                                                                   
                                   default:  //case "forThePriceOf_Units":  set as default in case no choice as yet for discount_amt_type 
                                      $('.discount_amt_type_forThePriceOf_Units').attr('selected', true); break;
                               };
+                              */
+                              switch( $("#discount_amt_type_0").val() ) {     //v1.0.7.6 switched defaults                                
+                                  case "forThePriceOf_Units":
+                                     $('.discount_amt_type_forThePriceOf_Units').attr('selected', true); break;                                                                                   
+                                  default:  //case "forThePriceOf_Units":  set as default in case no choice as yet for discount_amt_type        
+                                     $('.discount_amt_type_forThePriceOf_Currency').attr('selected', true);  break;
+                              };
+                              // //v1.0.7.6 end                              
                             }; 
                             function discountAmtType_reset() { 
                               $('.discount_amt_type_heading').attr('disabled', false);
@@ -1741,6 +1750,15 @@ DITTO ie10!!
                               $('.discount_applies_to_cheapest').attr('disabled', true);
                               $('.discount_applies_to_most_expensive').attr('disabled', true);
                             };
+                            //v1.0.7.6 function added
+                            function discount_appliesTo_protect5() { 
+                              $('.discount_applies_to_title').attr('disabled', true);
+                              $('.discount_applies_to_each').attr('disabled', false);  
+                              $('.discount_applies_to_all').attr('selected', true);
+                              $('.discount_applies_to_all').attr('disabled', false);
+                              $('.discount_applies_to_cheapest').attr('disabled', true);
+                              $('.discount_applies_to_most_expensive').attr('disabled', true);
+                            };
                              function discount_appliesTo_reset() { 
                               $('.discount_applies_to_title').attr('disabled',false);
                               if ($("#templateChanged").val() == 'yes') {
@@ -1754,6 +1772,7 @@ DITTO ie10!!
                             
                             //  setAttribsFor_ForThePriceOf
                              function setAttribsFor_ForThePriceOf() {
+                                /*  //v1.0.7.6  begin  -  values reversed
                                 switch( $("#discount_amt_type_0").val() ) {                                    
                                   case "forThePriceOf_Currency":
                                      setAttribsFor_ForThePriceOf_Currency();     
@@ -1762,6 +1781,16 @@ DITTO ie10!!
                                      setAttribsFor_ForThePriceOf_Units();
                                      break;
                                 };
+                                */
+                                switch( $("#discount_amt_type_0").val() ) {                                    
+                                  case "forThePriceOf_Units":
+                                     setAttribsFor_ForThePriceOf_Units();     
+                                     break;                                                                                   
+                                  default:  //set currency as default in case no choice as yet for discount_amt_type                                      
+                                     setAttribsFor_ForThePriceOf_Currency();
+                                     break;
+                                };
+                                //v1.0.7.6 end                                
                              };
                               
                              function setAttribsFor_ForThePriceOf_Currency() {  
@@ -2088,8 +2117,10 @@ DITTO ie10!!
                                                         
                             //Discount Amount Condition Type
                             $('#discount_amt_type_0').change(function(){
-                                discount_amt_line_remainder_chg();                                                                                                                   
+                                $("#chg_detected_sw").val('yes');  //v1.0.7.6
+                                discount_amt_line_remainder_chg();                                                                                                                                                   
                             });                                     
+                             
                              function discount_amt_line_remainder_chg() {     
                                                           
                               switch( $("#discount_amt_type_0").val() ) {                                
@@ -2118,7 +2149,15 @@ DITTO ie10!!
                                                      $(".hide-discount-help").show("slow");
                                                      $('.discount_auto_add_free_product').removeAttr('checked');
                                                      //turn back on in case previous selection was fixedPrice 
-                                                     $('.discount_applies_to_all').attr('disabled', false);
+                                                     
+                                                     //v1.0.7.6  begin
+                                                     //$('.discount_applies_to_all').attr('disabled', false);
+                                                     if ($("#chg_detected_sw").val() == 'yes') {
+                                                        discount_appliesTo_protect5(); //  set 'all' as default
+                                                        $("#chg_detected_sw").val('no');
+                                                     }
+                                                     //v1.0.7.6  end
+                                                      
                                                      break;
                                                                                      
                                 case "currency":     $("#discount_amt_count_area_0").show("slow"); 

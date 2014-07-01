@@ -359,6 +359,7 @@ class VTPRD_Rules_UI{
         
         <?php //Statuses used for switching of the upper dropdowns ?>
         <input type="hidden" id="select_status_sw"  name="select_status_sw"  value="no" />
+        <input type="hidden" id="chg_detected_sw"  name="chg_detected_sw"    value="no" />   <?php //v1.0.7.6 ?>
         
         <?php //pass these two messages up to JS, translated here if necessary ?>
         <input type="hidden" id="fullMsg" name="fullMsg" value="<?php echo $vtprd_info['default_full_msg'];?>" />    

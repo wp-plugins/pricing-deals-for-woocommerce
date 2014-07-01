@@ -153,6 +153,8 @@
               /*  *********************************
               ***  fill in include/exclude arrays if selected on the PRODUCT Screen (parent plugin)
               ************************************ */
+              //v1.0.7.6 TEMPORARY removal
+              
               $vtprd_includeOrExclude_meta  = get_post_meta($product_id, $vtprd_info['product_meta_key_includeOrExclude'], true);
               if ( $vtprd_includeOrExclude_meta ) {
                 switch( $vtprd_includeOrExclude_meta['includeOrExclude_option'] ) {
@@ -169,7 +171,7 @@
                     break;
                 }
               }
-
+              
                
               //add cart_item to cart array
               $vtprd_cart->cart_items[]       = $vtprd_cart_item;
@@ -316,6 +318,8 @@
       /*  *********************************
       ***  fill in include/exclude arrays if selected on the PRODUCT Screen (parent plugin)
       ************************************ */
+      //v1.0.7.6 TEMPORARY removal
+      
       $vtprd_includeOrExclude_meta  = get_post_meta($product_id, $vtprd_info['product_meta_key_includeOrExclude'], true);
       if ( $vtprd_includeOrExclude_meta ) {
         switch( $vtprd_includeOrExclude_meta['includeOrExclude_option'] ) {
@@ -332,6 +336,7 @@
             break;
         }
       }
+      
       
       $tax_status = get_post_meta( $product_id, '_tax_status', true ); 
       if ( $tax_status == 'taxable' ) {              
@@ -402,6 +407,13 @@
 //      $product_variations_sw = vtprd_test_for_variations($product_id);
       $product_variations_sw = '';
 
+        //v1.0.7.4 begin  -  initialize variables
+       $price_including_tax           =   0; 
+       $price_excluding_tax           =   0;
+       $price_including_tax_html      =   '';
+       $price_excluding_tax_html      =   '';
+       $price_display_suffix          =   '';
+       //v1.0.7.4 end
       
       if ($vtprd_cart->cart_items[0]->yousave_total_amt > 0) {
          $list_price                    =   $vtprd_cart->cart_items[0]->db_unit_price_list;
@@ -2353,8 +2365,9 @@
     //from apply-rules.php   function vtprd_compute_each_discount
       $percent_off = $PercentValue / 100;          
       
-      $discount_2decimals = bcmul($price , $percent_off , 2);
-    
+   // $discount_2decimals = bcmul($price , $percent_off , 2);
+      $discount_2decimals = round($price * $percent_off , 2); //v1.0.7.6
+      
       //compute rounding
       $temp_discount = $price * $percent_off;
           

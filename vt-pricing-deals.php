@@ -3,7 +3,7 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.0.7.5
+Version: 1.0.7.6
 Author: Vark
 Author URI: http://varktech.com
 */
@@ -43,9 +43,9 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.0.7.5');
-    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5.3');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2014-06-27');
+		define('VTPRD_VERSION',                               '1.0.7.6');
+    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5.4');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2014-06-30');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
@@ -442,6 +442,8 @@ class VTPRD_Controller{
       if ( !( $post->ID > ' ' ) ) { //a blank post id means no data to proces....
         return;
       } 
+      
+
 
       $includeOrExclude_option = $_REQUEST['includeOrExclude'];
       switch( $includeOrExclude_option ) {
@@ -450,11 +452,10 @@ class VTPRD_Controller{
             $includeOrExclude_checked_list = null; //initialize to null, as it's used later...
           break;
         case 'includeList':                  
-        case 'excludeList':  
-            $includeOrExclude_checked_list = $_REQUEST['includeOrExclude-checked_list']; //contains list of checked rule post-id"s                           
+        case 'excludeList':                                       
           break;
       }
-      
+
       $vtprd_includeOrExclude = array (
             'includeOrExclude_option'         => $includeOrExclude_option,
             'includeOrExclude_checked_list'   => $includeOrExclude_checked_list
@@ -468,6 +469,7 @@ class VTPRD_Controller{
         add_post_meta($post->ID, $vtprd_info['product_meta_key_includeOrExclude'], $vtprd_includeOrExclude, true);
       }
 
+      
   }
  
 
