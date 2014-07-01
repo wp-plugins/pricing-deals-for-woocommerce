@@ -174,7 +174,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 = 1.0.7.6 - 2014-06-30 =
 * Enhancement - Group Pricing math
 * Enhancement - Percentage discount now defaults to 'all in group'
-* Enhancement - Package perentage pricing now defaults to 'all in group'
+* Enhancement - Package Pricing now defaults to currency
 
 = 1.0.7.5 - 2014-06-27 =
 * Enhancement - backwards compatability
@@ -259,7 +259,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 = 1.0.7.6 - 2014-06-30 =
 * Enhancement - Group Pricing math
 * Enhancement - Percentage discount now defaults to 'all in group'
-* Enhancement - Package perentage pricing now defaults to 'all in group'
+* Enhancement - Package Pricing now defaults to currency
 
 = 1.0.7.5 - 2014-06-27 =
 * Enhancement - backwards compatability
