@@ -424,8 +424,8 @@
          //v1.0.7.4 begin
          $price_including_tax           =   vtprd_get_price_including_tax($product_id, $discount_price); 
          $price_excluding_tax           =   vtprd_get_price_excluding_tax($product_id, $discount_price);
-         $price_including_tax_html      =   wc_price( $price_including_tax );
-         $price_excluding_tax_html      =   wc_price( $price_excluding_tax );
+         $price_including_tax_html      =   woocommerce_price( $price_including_tax );  //v1.0.7.6  using older woocommerce_price
+         $price_excluding_tax_html      =   woocommerce_price( $price_excluding_tax );  //v1.0.7.6  using older woocommerce_price
          //v1.0.7.4 end
 
          //v1.0.7 begin
@@ -2505,6 +2505,7 @@
   /* ************************************************
   **  if BCMATH not installed with PHP by host, this will replace it.
   *************************************************** */
+ /*  v1.0.7.6 removed!
   if (!function_exists('bcmul')) {
     function bcmul($_ro, $_lo, $_scale=0) {
       return round($_ro*$_lo, $_scale);
@@ -2515,6 +2516,7 @@
       return round($_ro/$_lo, $_scale);
     }
   }
+  */
   //***** v1.0.4 end 
   
   //v1.0.7 change
@@ -2811,12 +2813,13 @@
   /* ************************************************
   **  if wc_price not there (pre woo 2.1 )
   *************************************************** */
+  /*v1.0.7.6 removed!
   if (!function_exists('wc_price')) {
     function wc_price($amount) {
       return woocommerce_price($amount);
     }
   }
-
+   */
   //***** 1.0.7.5  end 
 
   
