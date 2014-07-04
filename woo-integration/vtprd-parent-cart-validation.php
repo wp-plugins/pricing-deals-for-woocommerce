@@ -497,7 +497,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 
 	public function vtprd_maybe_grouped_price_html($price_html, $product_info){   
     global $post, $vtprd_info, $vtprd_setup_options; 
-    vtprd_debug_options();  //v1.0.5
+    vtprd_debug_options();  //v1.0.5 
     //in place of is_admin, which doesn't work in AJAX...
      if ( function_exists( 'get_current_screen' ) ) {  // get_current_screen ONLY exists in ADMIN!!!   
        if ($post->post_type == 'product'  ) {    //in admin, don't run this on the PRODUCT screen!!
@@ -528,7 +528,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
           return $price_html;
         }
 
-        $min_price = '';
+        $min_price = ''; 
         //find min
         foreach ($child_prices as $key => $child_price) {
           if ( ($child_price < $min_price) || ($min_price = '') ) {
@@ -594,7 +594,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 
 	public function vtprd_maybe_variable_sale_price_html($price_html, $product_info){    
     global $post, $vtprd_info, $vtprd_setup_options;
-    vtprd_debug_options();  //v1.0.5
+    vtprd_debug_options();  //v1.0.5 
     //in place of is_admin, which doesn't work in AJAX...
      if ( function_exists( 'get_current_screen' ) ) {  // get_current_screen ONLY exists in ADMIN!!!   
        if ($post->post_type == 'product'  ) {    //in admin, don't run this on the PRODUCT screen!!
@@ -620,12 +620,12 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
                                                              //**************       
         }        
     		
-        if (count($child_prices) == 0) {
+        if (count($child_prices) == 0) { 
           return $price_html;
         }
         
         $min_price = '';
-        $min_price_id;
+        $min_price_id = ''; //v1.0.7.7
         //find min
         foreach ($child_prices as $key => $child_price) {
           if ( ($child_price < $min_price) || ($min_price = '') ) {
@@ -693,7 +693,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
   */
 	public function vtprd_maybe_catalog_price_html($price_html, $product_info){    
     global $post, $vtprd_info, $vtprd_setup_options;
-    vtprd_debug_options();  //v1.0.5
+    vtprd_debug_options();  //v1.0.5  
     //in place of is_admin, which doesn't work in AJAX...
      if ( function_exists( 'get_current_screen' ) ) {  // get_current_screen ONLY exists in ADMIN!!!   
        if ($post->post_type == 'product'  ) {    //in admin, don't run this on the PRODUCT screen!!
@@ -834,7 +834,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
  
   //v1.0.7.4 new function
   public function vtprd_show_shop_price() {
-    global $vtprd_info, $vtprd_setup_options, $woocommerce;
+    global $vtprd_info, $vtprd_setup_options, $woocommerce; 
     
     if ( get_option( 'woocommerce_calc_taxes' ) == 'yes' ) {         
       $woocommerce_tax_display_shop = get_option( 'woocommerce_tax_display_shop' );
@@ -876,7 +876,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
   //v1.0.7.4 new function
   //****************************
   public function vtprd_show_shop_price_html() {
-    global $vtprd_info, $vtprd_setup_options, $woocommerce;
+    global $vtprd_info, $vtprd_setup_options, $woocommerce; 
     
     if ( get_option( 'woocommerce_calc_taxes' ) == 'yes' ) {
       //suffix gets added automatically, blank if no suffix provided ...
@@ -913,7 +913,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
               break;
           }                    
       }    
-    } else {
+    } else { 
       $price_contents = $vtprd_info['product_session_info']['product_discount_price_html_woo']          .$vtprd_info['product_session_info']['product_discount_price_suffix_html_woo'];
       $price_html = $this->vtprd_maybe_show_crossouts($price_contents); 
     }
@@ -924,12 +924,12 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 
   //v1.0.7.4 new function
   public function vtprd_maybe_show_crossouts($price_contents) {
-    global $vtprd_setup_options, $vtprd_info;
+    global $vtprd_setup_options, $vtprd_info;  
      
     if ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes')  {
       $price_html = '<del>' . $vtprd_info['product_session_info']['product_list_price_html_woo']  . '</del><ins>' . $price_contents . '</ins>'; 
-    } else {
-      $price_html = $price_contents;
+     } else {
+      $price_html = $price_contents;  
     }
     
     return $price_html;

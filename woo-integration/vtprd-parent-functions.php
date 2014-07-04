@@ -240,8 +240,16 @@
       //v1.0.7.4 begin   routine rewritten!                     
       $coupon_cnt = 0;
       $vtprd_info['skip_cart_processing_due_to_coupon_individual_use'] = false;
-      
-      $applied_coupons = $woocommerce->cart->get_coupons();  //v1.0.7.5
+
+      //v1.0.7.7 begin - backwards compatability
+      $current_version =  WOOCOMMERCE_VERSION;
+      if( (version_compare(strval('2.1.0'), strval($current_version), '>') == 1) ) {   //'==1' = 2nd value is lower
+        $applied_coupons = $woocommerce->cart->get_applied_coupons();
+      } else {
+        $applied_coupons = WC()->cart->get_coupons();
+      }          
+      //v1.0.7.7 end
+            
       foreach ( $applied_coupons as $code => $coupon ) {	
         if ( $code == $vtprd_info['coupon_code_discount_deal_title'] ) {
           continue;  //if the coupon is a Pricing Deal discount, skip
@@ -424,8 +432,8 @@
          //v1.0.7.4 begin
          $price_including_tax           =   vtprd_get_price_including_tax($product_id, $discount_price); 
          $price_excluding_tax           =   vtprd_get_price_excluding_tax($product_id, $discount_price);
-         $price_including_tax_html      =   woocommerce_price( $price_including_tax );  //v1.0.7.6  using older woocommerce_price
-         $price_excluding_tax_html      =   woocommerce_price( $price_excluding_tax );  //v1.0.7.6  using older woocommerce_price
+         $price_including_tax_html      =   woocommerce_price( $price_including_tax );  //v1.0.7.7  using older woocommerce_price, was wc_price
+         $price_excluding_tax_html      =   woocommerce_price( $price_excluding_tax );  //v1.0.7.7  using older woocommerce_price, was wc_price
          //v1.0.7.4 end
 
          //v1.0.7 begin
