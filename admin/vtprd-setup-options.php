@@ -2340,14 +2340,27 @@ function vtprd_validate_setup_input( $input ) {
 
 
      //one of these switches must be on
-     if ( ($input['use_lifetime_max_limits'] == 'no' ) &&
-         (($input['max_purch_rule_lifetime_limit_by_ip'] == 'yes' ) ||
+     if (
+          (($input['use_lifetime_max_limits'] == 'no' ) ||
+          ($output['use_lifetime_max_limits'] == 'no' ) )
+                                &&
+        ((($input['max_purch_rule_lifetime_limit_by_ip'] == 'yes' ) ||
           ($input['max_purch_rule_lifetime_limit_by_email'] == 'yes' ) ||
           ($input['max_purch_rule_lifetime_limit_by_billto_name'] == 'yes' ) ||
           ($input['max_purch_rule_lifetime_limit_by_billto_addr'] == 'yes' ) ||
           ($input['max_purch_rule_lifetime_limit_by_shipto_name'] == 'yes' ) ||
-          ($input['max_purch_rule_lifetime_limit_by_shipto_addr'] == 'yes' )) ) {
-        $admin_errorMsg = __(' As one of the following switches has been set to "yes": ', 'vtprd')
+          ($input['max_purch_rule_lifetime_limit_by_shipto_addr'] == 'yes' ))
+                                 ||
+         (($output['max_purch_rule_lifetime_limit_by_ip'] == 'yes' ) ||
+          ($output['max_purch_rule_lifetime_limit_by_email'] == 'yes' ) ||
+          ($output['max_purch_rule_lifetime_limit_by_billto_name'] == 'yes' ) ||
+          ($output['max_purch_rule_lifetime_limit_by_billto_addr'] == 'yes' ) ||
+          ($output['max_purch_rule_lifetime_limit_by_shipto_name'] == 'yes' ) ||
+          ($output['max_purch_rule_lifetime_limit_by_shipto_addr'] == 'yes' )))
+                                                                               ) {
+                 $input['use_lifetime_max_limits'] = 'yes'; //manually set the switch //v1.0.7.9
+                 $output['use_lifetime_max_limits'] = 'yes';                          //v1.0.7.9
+      /*  $admin_errorMsg = __(' As one of the following switches has been set to "yes": ', 'vtprd')
            .'<br>'.  __('"Check Customer against Rule Purchase History, by IP" ', 'vtprd')
            .'<br>'.  __('"Check Customer against Rule Purchase History, by Email" ', 'vtprd')
            .'<br>'.  __('"Check Customer against Rule Purchase History, by BillTo Name" ', 'vtprd')
@@ -2356,19 +2369,22 @@ function vtprd_validate_setup_input( $input ) {
            .'<br>'.  __('"Check Customer against Rule Purchase History, by ShipTo Address" ', 'vtprd')
            .'<br>'.  __('The "Use Customer Rule Limits" must also be set to "yes" ', 'vtprd');
         $admin_errorMsgTitle = __('Use Max Customer Rule Limit', 'vtprd');
-        add_settings_error( 'vtprd Options', $admin_errorMsgTitle , $admin_errorMsg , 'error' );  
+        add_settings_error( 'vtprd Options', $admin_errorMsgTitle , $admin_errorMsg , 'error' ); */ 
      }
    
 
      //one of these switches must be on
-     if ( ($input['use_lifetime_max_limits'] == 'yes' ) &&
+     if ( ( (isset ($input['use_lifetime_max_limits']) ) &&      //v1.0.7.9
+            ($input['use_lifetime_max_limits'] == 'yes' ) ) &&     
          (($input['max_purch_rule_lifetime_limit_by_ip'] == 'no' ) &&
           ($input['max_purch_rule_lifetime_limit_by_email'] == 'no' ) &&
           ($input['max_purch_rule_lifetime_limit_by_billto_name'] == 'no' ) &&
           ($input['max_purch_rule_lifetime_limit_by_billto_addr'] == 'no' ) &&
           ($input['max_purch_rule_lifetime_limit_by_shipto_name'] == 'no' ) &&
           ($input['max_purch_rule_lifetime_limit_by_shipto_addr'] == 'no' )) ) {
-        $admin_errorMsg = __(' The "Use Customer Rule Limits" has been set to "yes", but all of the following switches has been set to "no": ', 'vtprd')
+              $input['use_lifetime_max_limits'] = 'no'; //manually set the switch //v1.0.7.9
+              $output['use_lifetime_max_limits'] = 'no'; //manually set the switch //v1.0.7.9
+      /*  $admin_errorMsg = __(' The "Use Customer Rule Limits" has been set to "no" ', 'vtprd')
            .'<br>'.  __('"Check Customer against Rule Purchase History, by IP" ', 'vtprd')
            .'<br>'.  __('"Check Customer against Rule Purchase History, by Email" ', 'vtprd')
            .'<br>'.  __('"Check Customer against Rule Purchase History, by BillTo Name" ', 'vtprd')
@@ -2376,14 +2392,13 @@ function vtprd_validate_setup_input( $input ) {
            .'<br>'.  __('"Check Customer against Rule Purchase History, by ShipTo Name" ', 'vtprd')
            .'<br>'.  __('"Check Customer against Rule Purchase History, by ShipTo Address" ', 'vtprd');
         $admin_errorMsgTitle = __('Use Max Customer Rule Limit', 'vtprd');
-        add_settings_error( 'vtprd Options', $admin_errorMsgTitle , $admin_errorMsg , 'error' );  
+        add_settings_error( 'vtprd Options', $admin_errorMsgTitle , $admin_errorMsg , 'error' );  */
      }
   
   $input['discount_floor_pct_per_single_item'] = preg_replace('/[^0-9.]+/', '', $input['discount_floor_pct_per_single_item']); //remove leading/trailing spaces, percent sign, dollar sign
    
   $tempMsg =    str_replace(array("\r\n", "\r", "\n", "\t"), ' ', $input['lifetime_purchase_button_error_msg']);
   $input['lifetime_purchase_button_error_msg'] = $tempMsg;
-
 /* 
     //In this situation, this 'id or class Selector' may not be blank, supply wpsc checkout default - must include '.' or '#'
   if ( $input['show_error_before_checkout_products_selector']  <= ' ' ) {
