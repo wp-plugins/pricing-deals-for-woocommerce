@@ -31,7 +31,10 @@ ASK YOUR HOST TO TURN OFF magic_quotes_gpc !!!!!
    $vtprd_deal_screen_framework;
    $vtprd_deal_edits_framework;
    $vtprd_template_structures_framework;
-
+   
+   //initial setup only, overriden later in function vtprd_debug_options
+   error_reporting(E_ERROR | E_CORE_ERROR | E_COMPILE_ERROR); //1.0.7.7
+    
      
 class VTPRD_Controller{
 	
