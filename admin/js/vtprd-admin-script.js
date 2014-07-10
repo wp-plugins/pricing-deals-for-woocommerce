@@ -2156,7 +2156,7 @@ DITTO ie10!!
                                                         if ($("#cart-or-catalog-select").val() == 'cart') {
                                                           discount_appliesTo_protect5(); //  set 'all' as default
                                                         } else {   //catalog requires each!!
-                                                          discount_appliesTo_protect2(); //  set 'each' as default
+                                                          discount_appliesTo_protect1(); //  set 'each' as default
                                                         }
                                                         
                                                         $("#chg_detected_sw").val('no');
