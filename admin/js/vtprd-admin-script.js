@@ -2150,13 +2150,18 @@ DITTO ie10!!
                                                      $('.discount_auto_add_free_product').removeAttr('checked');
                                                      //turn back on in case previous selection was fixedPrice 
                                                      
-                                                     //v1.0.7.6  begin
+                                                     //v1.0.7.7  begin
                                                      //$('.discount_applies_to_all').attr('disabled', false);
                                                      if ($("#chg_detected_sw").val() == 'yes') {
-                                                        discount_appliesTo_protect5(); //  set 'all' as default
+                                                        if ($("#cart-or-catalog-select").val() == 'cart') {
+                                                          discount_appliesTo_protect5(); //  set 'all' as default
+                                                        } else {   //catalog requires each!!
+                                                          discount_appliesTo_protect2(); //  set 'each' as default
+                                                        }
+                                                        
                                                         $("#chg_detected_sw").val('no');
                                                      }
-                                                     //v1.0.7.6  end
+                                                     //v1.0.7.7  end
                                                       
                                                      break;
                                                                                      
