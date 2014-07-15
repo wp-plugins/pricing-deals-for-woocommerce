@@ -155,7 +155,7 @@
               ************************************ */
               //v1.0.7.6 TEMPORARY removal
               
-              $vtprd_includeOrExclude_meta  = get_post_meta($product_id, $vtprd_info['product_meta_key_includeOrExclude'], true);
+              $vtprd_includeOrExclude_meta  = get_post_meta($cart_item['product_id'], $vtprd_info['product_meta_key_includeOrExclude'], true); //v1.0.7.8  use the parent ID at all times!
               if ( $vtprd_includeOrExclude_meta ) {
                 switch( $vtprd_includeOrExclude_meta['includeOrExclude_option'] ) {
                   case 'includeAll':  
@@ -298,8 +298,24 @@
       if ( ( !isset($post->post_name) ) ||
            ( $post->post_name <= ' ' ) ) {
          $post = get_post($product_id);
-      }
+      }   
       // v1.0.7.3  end
+      
+       //v1.0.7.8  begin
+       //If this is a variation, get the Parent, needed below
+      $post_parent_ID = '';
+      if ( $post->ID != $product_id )   { 
+         //save ID from the Post, which is the variation Parent
+         $post_parent_ID = $post->ID;
+         //get post for current Variation
+         $post = get_post($product_id);
+      } else {
+        if ( $post->post_parent > 0 ) {
+           $post_parent_ID = $post->post_parent;
+        }
+      
+      }
+       //v1.0.7.8  end
    
       //change??
       $vtprd_cart_item->product_id            = $product_id;
@@ -314,9 +330,19 @@
       /*  *********************************
       ***  JUST the cat *ids* please...
       ************************************ */
-      $vtprd_cart_item->prod_cat_list = wp_get_object_terms( $product_id, $vtprd_info['parent_plugin_taxonomy'], $args = array('fields' => 'ids') );
-      $vtprd_cart_item->rule_cat_list = wp_get_object_terms( $product_id, $vtprd_info['rulecat_taxonomy'], $args = array('fields' => 'ids') );
+      //v1.0.7.8  begin
+      
+      //if we're on a variation, gotta use the Parent to get the taxonomies!!
+      if ($post_parent_ID) {
+        $use_this_id = $post_parent_ID;
+      } else {
+        $use_this_id = $product_id;
+      }
+      
+      $vtprd_cart_item->prod_cat_list = wp_get_object_terms( $use_this_id, $vtprd_info['parent_plugin_taxonomy'], $args = array('fields' => 'ids') );
+      $vtprd_cart_item->rule_cat_list = wp_get_object_terms( $use_this_id, $vtprd_info['rulecat_taxonomy'], $args = array('fields' => 'ids') );
         //*************************************                    
+      //v1.0.7.8  end                   
 
        //v1.0.7.4 begin 
       //initialize the arrays
@@ -328,7 +354,7 @@
       ************************************ */
       //v1.0.7.6 TEMPORARY removal
       
-      $vtprd_includeOrExclude_meta  = get_post_meta($product_id, $vtprd_info['product_meta_key_includeOrExclude'], true);
+      $vtprd_includeOrExclude_meta  = get_post_meta($use_this_id, $vtprd_info['product_meta_key_includeOrExclude'], true);   //v1.0.7.8  exclusions are on the Parent!
       if ( $vtprd_includeOrExclude_meta ) {
         switch( $vtprd_includeOrExclude_meta['includeOrExclude_option'] ) {
           case 'includeAll':  
@@ -358,6 +384,13 @@
       //add cart_item to cart array
       $vtprd_cart->cart_items[]       = $vtprd_cart_item;  
       
+       //v1.0.7.8  begin
+       //restore parent $post as needed, for WOO's sanity
+      if ($post_parent_ID)   { 
+         $post = get_post($post_parent_ID);
+      }
+       //v1.0.7.8  end           
+            
                 
   }
 
@@ -543,6 +576,8 @@
       //store session id 'vtprd_product_session_info_[$product_id]'
       $_SESSION['vtprd_product_session_info_'.$product_id] = $vtprd_info['product_session_info'];
       
+      //initialize vtprd_cart to clear all discount values...  //v1.0.7.8
+      $vtprd_cart = new vtprd_Cart;                            //v1.0.7.8
   }
 
     function vtprd_fill_variations_checklist($tax_class, $checked_list = NULL, $pop_in_out_sw, $product_ID, $product_variation_IDs) { 

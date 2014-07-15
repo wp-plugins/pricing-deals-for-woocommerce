@@ -3,7 +3,7 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.0.7.7
+Version: 1.0.7.8
 Author: Vark
 Author URI: http://varktech.com
 */
@@ -46,9 +46,9 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.0.7.7');
+		define('VTPRD_VERSION',                               '1.0.7.8');
     define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5.4');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2014-07-04');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2014-07-15');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
