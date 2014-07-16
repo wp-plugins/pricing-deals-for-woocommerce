@@ -8,7 +8,7 @@ Stable tag: 1.0.7.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Dynamic Pricing, Wholesale Pricing,  BOGO Deals and more - Pricing Deals do any kind of deal you can think of!   
+Dynamic Pricing, Wholesale Pricing,  BOGO Deals and more - Pricing Deals can do any kind of deal you can think of!   
 
 == Description ==
 
