@@ -902,7 +902,12 @@
       $output .= '<span class="vtprd-product-name-widget">' . $vtprd_cart->cart_items[$k]->parent_product_name .'</span>';	
       $output .= '<dl class="variation">';
       foreach($vtprd_cart->cart_items[$k]->variation_array as $key => $value) {          
-        $name = sanitize_title( str_replace( 'attribute_pa_', '', $key  ) );  //post v 2.1
+        //v1.0.7.8  begin
+        // add in on-the-fly attribute name handling; remove sanitize_title
+        $name  = str_replace( 'attribute_pa_', '', $key  );  //post v 2.1
+        $name  = str_replace( 'attribute_', '', $key  );     //post v 2.1   for on-the-fly variations
+        $value = str_replace( 'attribute_', '', $value  );   //post v 2.1   for on-the-fly variations
+        //v1.0.7.8  end
         $name = sanitize_title( str_replace( 'pa_', '', $name  ) );   //pre v 2.1
         $name = ucwords($name);  
         $output .= '<dt>'. $name . ': </dt>';
@@ -1527,7 +1532,12 @@
         $output .= '<small>';
        // $output .= '<dl class="variation">';
         foreach($vtprd_cart->cart_items[$k]->variation_array as $key => $value) {          
-          $name = sanitize_title( str_replace( 'attribute_pa_', '', $key  ) );  //post v 2.1
+          //v1.0.7.8  begin
+          // add in on-the-fly attribute name handling; remove sanitize_title
+          $name  = str_replace( 'attribute_pa_', '', $key  );  //post v 2.1
+          $name  = str_replace( 'attribute_', '', $key  );     //post v 2.1   for on-the-fly avariations
+          $value = str_replace( 'attribute_', '', $value  );   //post v 2.1   for on-the-fly variations
+          //v1.0.7.8  end
           $name = sanitize_title( str_replace( 'pa_', '', $name  ) );   //pre v 2.1
           $name = ucwords($name);  
           $output .= '<br>'. $name . ': ' .$value ;           
@@ -1767,7 +1777,12 @@
       $output .= '<strong class="product-quantity"> &times; ' . $units  .'</strong>';	
       $output .= '<dl class="variation">';
       foreach($vtprd_cart->cart_items[$k]->variation_array as $key => $value) {          
-        $name = sanitize_title( str_replace( 'attribute_pa_', '', $key  ) );  //post v 2.1
+        //v1.0.7.8  begin
+        // add in on-the-fly attribute name handling; remove sanitize_title
+        $name  = str_replace( 'attribute_pa_', '', $key  );  //post v 2.1
+        $name  = str_replace( 'attribute_', '', $key  );     //post v 2.1   for on-the-fly variations
+        $value = str_replace( 'attribute_', '', $value  );   //post v 2.1   for on-the-fly variations
+        //v1.0.7.8  end
         $name = sanitize_title( str_replace( 'pa_', '', $name  ) );   //pre v 2.1
         $name = ucwords($name);  
         $output .= '<dt>'. $name . ': </dt>';
@@ -1965,7 +1980,12 @@
       $output .= '<dl class="variation">';
 
       foreach($vtprd_cart->cart_items[$k]->variation_array as $key => $value) {          
-        $name = sanitize_title( str_replace( 'attribute_pa_', '', $key  ) );  //post v 2.1
+        //v1.0.7.8  begin
+        // add in on-the-fly attribute name handling; remove sanitize_title
+        $name  = str_replace( 'attribute_pa_', '', $key  );  //post v 2.1
+        $name  = str_replace( 'attribute_', '', $key  );     //post v 2.1   for on-the-fly variations
+        $value = str_replace( 'attribute_', '', $value  );   //post v 2.1   for on-the-fly variations
+        //v1.0.7.8  end
         $name = sanitize_title( str_replace( 'pa_', '', $name  ) );   //pre v 2.1
         $name = ucwords($name);  
         $output .= '<dt>'. $name . ': </dt>';
@@ -2571,6 +2591,18 @@
     }  else {
       error_reporting(E_ERROR | E_CORE_ERROR | E_COMPILE_ERROR);    //only allow FATAL error types  //v1.0.7.7       
     } 
+    
+    //v1.0.7.8 begin
+    //refresh $woocommerce addressablility
+    $current_version =  WOOCOMMERCE_VERSION;
+    if( (version_compare(strval('2.1.0'), strval($current_version), '>') == 1) ) {   //'==1' = 2nd value is lower     
+      $do_nothing_for_older_version = '';
+    } else {
+      //from woocommerce.php
+      global $woocommerce;
+      $woocommerce = WC();
+    }
+    //v1.0.7.8 end   
   }
   
   //****************************************
