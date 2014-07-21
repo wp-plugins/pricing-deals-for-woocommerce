@@ -3042,6 +3042,8 @@
   //****************************************
   function vtprd_maybe_customer_tax_exempt(){ 
 		global $vtprd_cart, $woocommerce;
+    
+    return false;
     //save is_tax_exempt status
     //handles addressability for emails!
     //defaults to false.
