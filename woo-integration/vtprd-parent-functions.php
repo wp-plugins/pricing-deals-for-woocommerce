@@ -1043,7 +1043,7 @@
      
 	function vtprd_print_discount_detail_line_widget($amt, $units, $k) {  
     global $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
-    $output;
+    $output = ''; //v1.0.7.9
 
     if (sizeof($vtprd_cart->cart_items[$k]->variation_array) > 0   ) {
       $output .= '<span class="vtprd-product-name-widget">' . $vtprd_cart->cart_items[$k]->parent_product_name .'</span>';	
@@ -1131,7 +1131,7 @@
       return;
     }
                                                     
-    $output;
+    $output = ''; //v1.0.7.9
     $output .= '<span class="total vtprd-discount-total-label-widget" >';
     $output .= '<strong>'.$vtprd_setup_options['cartWidget_credit_total_title']. '&nbsp;</strong>';     
 
@@ -1154,7 +1154,7 @@
        return;
     }
 
-    $output;
+    $output = ''; //v1.0.7.9
     $output .= '<p class="total vtprd-combined-total-label-widget" >';
     $output .= '<strong>'.$vtprd_setup_options['cartWidget_new_subtotal_label'] .'&nbsp;</strong>';     
 
@@ -1190,7 +1190,7 @@
 	function vtprd_print_widget_purchases_subtotal() {
     global $vtprd_cart, $woocommerce, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
                                                
-    $output;
+    $output = ''; //v1.0.7.9
     $output .= '<span class="total vtprd-product-total-label-widget" >';
     $output .= '<strong>'.$vtprd_setup_options['cartWidget_credit_subtotal_title']. '&nbsp;</strong>';     
 
@@ -1222,7 +1222,7 @@
       vtprd_print_cart_purchases_subtotal($execType);
     }
     
-    $output;
+    $output = ''; //v1.0.7.9
 
     $output .=  '<table class="vtprd-discount-table"> ';
     
@@ -1340,7 +1340,7 @@
   function vtprd_print_cart_widget_title() {     
     global $vtprd_setup_options;
     if ($vtprd_setup_options['show_cartWidget_discount_titles_above_details'] == 'yes') {    
-      $output;  
+      $output = ''; //v1.0.7.9  
       $output .= '<tr id="vtprd-discount-title-cartWidget" >';
       $output .= '<td colspan="' .$vtprd_setup_options['cartWidget_html_colspan_value']. '" id="vtprd-discount-title-cartWidget-line">';
       $output .= '<div class="vtprd-discount-prodLine-cartWidget" >';
@@ -1363,7 +1363,7 @@
      
 	function vtprd_print_discount_detail_line($amt, $units, $execType, $k) {  
     global $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
-    $output;
+    $output = ''; //v1.0.7.9
     $output .= '<tr class="vtprd-discount-total-for-product-rule-row-' .$execType. '  bottomLine-' .$execType. '" >';
     $output .= '<td colspan="' .$vtprd_setup_options['' .$execType. '_html_colspan_value']. '">';
     $output .= '<div class="vtprd-discount-prodLine-' .$execType. '" >';
@@ -1429,7 +1429,7 @@
       }
 
 
-      $output;
+      $output = ''; //v1.0.7.9
       if ($vtprd_setup_options[$subTotalCheck] == 'beforeDiscounts') {
           $output .= '<tr class="vtprd-discount-total-' .$execType. '" >';
           $output .= '<td colspan="' .$vtprd_setup_options['' .$execType. '_html_colspan_value'].'" class="vtprd-discount-total-' .$execType. '-line">';
@@ -1481,7 +1481,7 @@
 	function vtprd_print_new_cart_checkout_subtotal_line($execType) {
     global $vtprd_cart, $woocommerce, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;   
 
-      $output;
+      $output = ''; //v1.0.7.9
  
       $output .= '<tr class="vtprd-discount-total-' .$execType. ' vtprd-new-subtotal-line" >';
       $output .= '<td colspan="' .$vtprd_setup_options['' .$execType. '_html_colspan_value'].'" class="vtprd-discount-total-' .$execType. '-line">';
@@ -1520,7 +1520,7 @@
     if ($vtprd_setup_options[$printRowsCheck] == 'no') {
       return;
     }
-    $output;
+    $output = ''; //v1.0.7.9
     $output .= '<tr class="vtprd-discount-total-' .$execType. ' vtprd-discount-line" >';    
     $output .= '<td colspan="' .$vtprd_setup_options['' .$execType. '_html_colspan_value']. '" class="vtprd-discount-total-' .$execType. '-line ">';
     $output .= '<div class="vtprd-discount-prodLine-' .$execType. '" >';
@@ -1556,7 +1556,7 @@
   *************************************************** */
 	function vtprd_email_cart_reporting($msgType) {
     global $vtprd_cart, $vtprd_cart_item, $vtprd_rules_set, $vtprd_info, $vtprd_setup_options;
-    $output;
+    $output = ''; //v1.0.7.9
     
     if ($vtprd_setup_options['show_checkout_discount_titles_above_details'] == 'yes') {
       if ($msgType == 'html') {
@@ -1611,7 +1611,7 @@
 	function vtprd_email_cart_coupon_discount_row($msgType) {
     global $vtprd_cart, $vtprd_rules_set, $vtprd_setup_options;
 
-    $output;
+    $output = ''; //v1.0.7.9
     $amt = vtprd_format_money_element($vtprd_cart->wpsc_orig_coupon_amount);  //show original coupon amt as credit
     
     vtprd_format_money_element($vtprd_cart->wpsc_orig_coupon_amount);  //show original coupon amt as credit
@@ -1638,7 +1638,7 @@
 	function vtprd_email_cart_discount_rows($msgType) {
     global $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
        
-      $output;
+      $output = ''; //v1.0.7.9
 
       $sizeof_cart_items = sizeof($vtprd_cart->cart_items);
       for($k=0; $k < $sizeof_cart_items; $k++) {  
@@ -1681,7 +1681,7 @@
     
 	function vtprd_email_discount_detail_line($amt, $units, $msgType, $k) {  
     global $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
-      $output;
+      $output = ''; //v1.0.7.9
           
       //v1.0.7.4 begin      
       $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
@@ -1751,7 +1751,7 @@
 	function vtprd_email_cart_purchases_subtotal($msgType) {
     global $vtprd_cart, $woocommerce, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;   
 
-    $output;
+    $output = ''; //v1.0.7.9
     //$subTotal = $vtprd_cart->cart_original_total_amt;    //show as a credit
     $amt = vtprd_get_Woo_cartSubtotal(); 
     
@@ -1773,7 +1773,7 @@
 	function vtprd_email_cart_discount_total($msgType) {
     global $vtprd_cart, $vtprd_rules_set, $vtprd_setup_options;
 
-      $output;
+      $output = ''; //v1.0.7.9
   
       $amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);
  
@@ -1799,7 +1799,7 @@
   function vtprd_email_new_cart_checkout_subtotal_line($msgType) {
     global $vtprd_cart, $woocommerce, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;   
 
-      $output;
+      $output = ''; //v1.0.7.9
    
       // for wpec $vtprd_cart->cart_original_total_amt is not accurate - use wpec's own routine
       //$subTotal = $vtprd_cart->cart_original_total_amt - $vtprd_cart->yousave_cart_total_amt;    //show as a credit
@@ -1839,7 +1839,7 @@
   *************************************************** */
 	function vtprd_thankyou_cart_reporting() {
     global $vtprd_cart, $vtprd_cart_item, $vtprd_rules_set, $vtprd_info, $vtprd_setup_options, $woocommerce;
-    $output;
+    $output = ''; //v1.0.7.9
    	
     $output .=  '<h2 id="vtprd-thankyou-title">' . __('Cart Discount Details', 'vtprd') .'<h2>';
      	
@@ -1901,7 +1901,7 @@
 	function vtprd_thankyou_cart_discount_rows($msgType) {
     global $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
        
-      $output;
+      $output = ''; //v1.0.7.9
 
       $sizeof_cart_items = sizeof($vtprd_cart->cart_items);
       for($k=0; $k < $sizeof_cart_items; $k++) {  
@@ -1941,7 +1941,7 @@
      
 	function vtprd_thankyou_discount_detail_line($amt, $units, $msgType, $k) {  
     global $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
-      $output;
+      $output = ''; //v1.0.7.9
     
     //v1.0.7.4 begin      
     $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
@@ -2014,7 +2014,7 @@
 	function vtprd_thankyou_cart_purchases_subtotal($msgType) {
     global $vtprd_cart, $woocommerce, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;   
 
-    $output;
+    $output = ''; //v1.0.7.9
     //$subTotal = $vtprd_cart->cart_original_total_amt;    //show as a credit
     $amt = vtprd_get_Woo_cartSubtotal(); 
     
@@ -2041,7 +2041,7 @@
   *************************************************** */
 	function vtprd_checkout_cart_reporting() {
     global $vtprd_cart, $vtprd_cart_item, $vtprd_rules_set, $vtprd_info, $vtprd_setup_options, $woocommerce;
-    $output;        
+    $output = ''; //v1.0.7.9        
    	if (($vtprd_setup_options['show_checkout_discount_detail_lines'] == 'yes') ||  
         ($vtprd_setup_options['show_checkout_discount_total_line']   == 'yes') ||  
         ($vtprd_setup_options['checkout_new_subtotal_line']          == 'yes') ) {	
@@ -2129,7 +2129,7 @@
 	function vtprd_checkout_cart_discount_rows($msgType) {
     global $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
        
-      $output;
+      $output = ''; //v1.0.7.9
 
       $sizeof_cart_items = sizeof($vtprd_cart->cart_items);
       for($k=0; $k < $sizeof_cart_items; $k++) {  
@@ -2167,7 +2167,7 @@
      
 	function vtprd_checkout_discount_detail_line($amt, $units, $msgType, $k) {  
     global $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
-      $output;
+      $output = ''; //v1.0.7.9
 
       //v1.0.7.4 begin      
       $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
@@ -2234,7 +2234,7 @@
 	function vtprd_checkout_cart_purchases_subtotal($msgType) {
     global $vtprd_cart, $woocommerce, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;   
 
-    $output;
+    $output = ''; //v1.0.7.9
     //$subTotal = $vtprd_cart->cart_original_total_amt;    //show as a credit
     $amt = vtprd_get_Woo_cartSubtotal(); 
     
@@ -3042,21 +3042,20 @@
   //****************************************
   function vtprd_maybe_customer_tax_exempt(){ 
 		global $vtprd_cart, $woocommerce;
-    
-    return false;
+
     //save is_tax_exempt status
     //handles addressability for emails!
     //defaults to false.
-    if ($vtprd_cart->customer_is_tax_exempt) {
+    if ($vtprd_cart->customer_is_tax_exempt) {           
       return true;
     }
-    if (!is_object($woocommerce->customer)) {
+    if (!is_object($woocommerce->customer)) {   
       return false; 
     }
     if ( ! empty( $woocommerce->customer ) && $woocommerce->customer->is_vat_exempt() ) {
-      $vtprd_cart->customer_is_tax_exempt = true;
+      $vtprd_cart->customer_is_tax_exempt = true;      
       return true;
-    }
+    }    
     return false;
   }  
   
