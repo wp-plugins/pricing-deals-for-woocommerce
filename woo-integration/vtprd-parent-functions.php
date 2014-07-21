@@ -10,10 +10,13 @@
       global $post, $wpdb, $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_setup_options, $vtprd_info; 
 
      // from Woocommerce/templates/cart/mini-cart.php  and  Woocommerce/templates/checkout/review-order.php
-      $woocommerce_cart_contents = $woocommerce->cart->get_cart();  
+      $woocommerce_cart_contents = $woocommerce->cart->get_cart(); 
+
       if (sizeof($woocommerce_cart_contents) > 0) {
-					$vtprd_cart = new vtprd_Cart;  
+					$vtprd_cart = new vtprd_Cart;
+
           foreach ( $woocommerce_cart_contents as $cart_item_key => $cart_item ) {
+
 						$_product = $cart_item['data'];
 						if ($_product->exists() && $cart_item['quantity']>0) {
 							$vtprd_cart_item                = new vtprd_Cart_Item;
@@ -35,7 +38,7 @@
                   $vtprd_cart_item->variation_array      = $cart_item['variation'];                  
                   $vtprd_cart_item->product_name         = $parent_post->post_title . '&nbsp;' . $varLabels ;
                   $vtprd_cart_item->parent_product_name  = $parent_post->post_title;
-
+                  $vtprd_cart_item->variation_name_html  = $woocommerce->cart->get_item_data( $cart_item );   //v1.0.7.9
               } else { 
                   $vtprd_cart_item->product_id           = $cart_item['product_id'];
                   $vtprd_cart_item->product_name         = $_product->get_title().$woocommerce->cart->get_item_data( $cart_item );
@@ -43,6 +46,7 @@
               
               //v1.0.7.4 begin
               $product = get_product( $vtprd_cart_item->product_id );
+
               $tax_status = get_post_meta( $vtprd_cart_item->product_id, '_tax_status', true ); 
               if ( $tax_status == 'taxable' ) {              
                 $vtprd_cart_item->product_is_taxable = true; 
@@ -204,7 +208,7 @@
 		  if ( $vtprd_cart_item->product_is_taxable ) {
         if ( ( get_option( 'woocommerce_calc_taxes' ) == 'no' ) ||
              ( get_option( 'woocommerce_prices_include_tax' ) == 'no' )  || 
-             ( $woocommerce->customer->is_vat_exempt()) ) {
+             ( vtprd_maybe_customer_tax_exempt() ) ) {      //v1.0.7.9
            //NO VAT included in price
            $unit_price  =  $cart_item['line_subtotal'] / $cart_item['quantity'];                                                  
         } else {
@@ -289,7 +293,8 @@
 	function vtprd_load_vtprd_cart_for_single_product_price($product_id, $price){
       global $post, $wpdb, $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_info; 
 
-      $vtprd_cart = new VTPRD_Cart;  
+      $vtprd_cart = new VTPRD_Cart; 
+
       $vtprd_cart_item                = new VTPRD_Cart_Item;    
         
       // v1.0.7.3  begin
@@ -476,9 +481,10 @@
          //v1.0.7.4 begin
          //  no suffix processing if taxes not turned on!!
          global $woocommerce; 
+
          if ( ( get_option( 'woocommerce_calc_taxes' ) == 'no' ) ||
               ( !$vtprd_cart->cart_items[0]->product_is_taxable) ||
-              ( $woocommerce->customer->is_vat_exempt()) )  {
+              ( vtprd_maybe_customer_tax_exempt() ) ) {      //v1.0.7.9
             $price_display_suffix  = false;            
          } else {
             $price_display_suffix  = get_option( 'woocommerce_price_display_suffix' );
@@ -590,8 +596,123 @@
         $parent_post = get_post($product_ID);
         
         $attributes = (array) maybe_unserialize( get_post_meta($product_ID, '_product_attributes', true) );
-    
-        $parent_post_terms = wp_get_post_terms( $post->ID, $attribute['name'] );
+
+       
+        //**********************************
+        //v1.0.7.9 begin
+        //**********************************
+        /*   DATA STRUCTURES
+        
+        ==>Custom variation
+        $product = get_product( '1847' );
+        $attributes = vtprd_get_attributes( $product ); 
+        
+        [18-Jul-2014 21:31:27 UTC] $attributes
+        [18-Jul-2014 21:31:27 UTC] array (
+          0 => 
+          array (
+            'name' => 'Volume',
+            'option' => '10-ml',
+          ),
+        )
+        
+        ==>Variation PARENT
+        $attributes2 = maybe_unserialize( get_post_meta( '1846', '_product_attributes', true ) );
+        
+        [18-Jul-2014 21:31:27 UTC] $attributes2 parent 1846 custom
+        [18-Jul-2014 21:31:27 UTC] array (
+          'volume' => 
+          array (
+            'name' => 'Volume',
+            'value' => '10 ml. | 20ml. | 30ml',
+            'position' => '2',
+            'is_visible' => 1,
+            'is_variation' => 1,
+            'is_taxonomy' => 0,
+          ),
+        )
+        
+        $attributes2 = maybe_unserialize( get_post_meta( '738', '_product_attributes', true ) );
+        [18-Jul-2014 21:31:27 UTC] $attributes2 parent 738 Normal
+        [18-Jul-2014 21:31:27 UTC] array (
+          'pa_colors2' => 
+          array (
+            'name' => 'pa_colors2',
+            'value' => '',
+            'position' => '0',
+            'is_visible' => 1,
+            'is_variation' => 1,
+            'is_taxonomy' => 1,
+          ),
+          'pa_size2' => 
+          array (
+            'name' => 'pa_size2',
+            'value' => '',
+            'position' => '1',
+            'is_visible' => 1,
+            'is_variation' => 1,
+            'is_taxonomy' => 1,
+          ),
+        )  
+        
+        [19-Jul-2014 12:01:13 UTC] $custom_options= 1846
+        [19-Jul-2014 12:01:13 UTC] array (
+          0 => 
+          array (
+            'taxonomy_name' => 'Volume',
+            'options_list' => 
+            array (
+              0 => 
+              array (
+                'option' => '10-ml',
+                'option_name' => '10 ml.',
+              ),
+              1 => 
+              array (
+                'option' => '20ml',
+                'option_name' => '20ml.',
+              ),
+              2 => 
+              array (
+                'option' => '30ml',
+                'option_name' => '30ml',
+              ),
+            ),
+          ),
+        )              
+        */ 
+               
+        //Build Custom Options Name array for all attributes found for $product_ID.  Used later as name lookup...
+        
+        $custom_options = array();
+        $current_version =  WOOCOMMERCE_VERSION;
+        if( (version_compare(strval('2.1.0'), strval($current_version), '<=') == true) ) {   //only v2.1+
+          foreach ($attributes as $attribute) {        
+              //is this a CUSTOM variation??  if so, split up the custom variation names into the option array
+              if ( ($attribute['is_variation']) &&
+                   (!$attribute['is_taxonomy'])) {
+                //custom variation attribute!!!!!!!!
+                $option_names = array_map( 'trim', explode( WC_DELIMITER, $attribute['value'] ) );
+                $options_list = array();
+                foreach ($option_names as $option_name) {
+                   $options_list[] = array (
+                     'option' =>      sanitize_title( $option_name ),   //ex: 10-ml
+                     'option_name' => $option_name                      //ex: 10 ML.
+                   );
+                }
+                $custom_options[] = array (                             
+                  'taxonomy_name' => $attribute['name'],                 //'Volume'
+                  'options_list'  => $options_list                       //list from above
+                );                                                       
+              }
+  				}
+        } 
+        $sizeof_custom_options = sizeof($custom_options);                
+       //v1.0.7.9  end 
+       //**********************************
+
+        
+        //$parent_post_terms = wp_get_post_terms( $post->ID, $attribute['name'] );  //v1.0.7.9  not used
        
         // woo parent product title only carried on parent post
         echo '<h3>' .$parent_post->post_title.    ' - Variations</h3>'; 
@@ -612,18 +733,31 @@
             $output  .= '>'; //end input statement
  
             $variation_label = ''; //initialize label
-            $variation_product_name_attributes;
+            $variation_product_name_attributes = '';  //v1.0.7.9
             $variation_product_name_attributes_cnt = 0;
+            
+            
             
             //get the variation names
             foreach ($attributes as $attribute) :
 
+
+									// Get current value for variation (if set)                                                                                 
+									$variation_selected_value = get_post_meta( $product_variation_ID, 'attribute_' . sanitize_title($attribute['name']), true );       
+
 									// Only deal with attributes that are variations
-									if ( !$attribute['is_variation'] ) continue;
+									//**********************************
+                  //v1.0.7.9 begin
+                  if ( ( (isset($attribute['is_variation'])) &&    
+                         (!$attribute['is_variation']) ) || 
+                       (!isset($attribute['is_variation'])) ) {                              
+                    continue; //skip to next in $attributes foreach
+                  }
+                  //v1.0.7.9 end
+                  //**********************************
 
-									// Get current value for variation (if set)
-									$variation_selected_value = get_post_meta( $product_variation_ID, 'attribute_' . sanitize_title($attribute['name']), true );
 
+ 
 									// Get terms for attribute taxonomy or value if its a custom attribute
 									if ($attribute['is_taxonomy']) :
 										$post_terms = wp_get_post_terms( $product_ID, $attribute['name'] );
@@ -641,27 +775,42 @@
                       }
 										endforeach;
 									else :
-										$options = explode('|', $attribute['value']);
-										foreach ($options as $option) :
-											if ($variation_selected_value == $option) {
-                        $variation_label .= ucfirst($option) . '&nbsp;&nbsp;' ;
+										
+                     //v1.0.7.9 begin
+                     //check if this is a custom attrib...  
+                      $taxonomy_name = $attribute['name'];
+                      for($s=0; $s < $sizeof_custom_options; $s++) {
+                        
+                        if ($custom_options[$s]['taxonomy_name'] == $taxonomy_name) {
+                            
+                            $sizeof_options_list = sizeof($custom_options[$s]['options_list']);
+                            for($z=0; $z < $sizeof_options_list; $z++) {
+                           
+                               if ($custom_options[$s]['options_list'][$z]['option'] == $variation_selected_value ) {
+                                 
+                                  $variation_label .= ucfirst($custom_options[$s]['options_list'][$z]['option_name']) . '&nbsp;&nbsp;' ;
+                                  if ($variation_product_name_attributes_cnt > 0) {
+                                    $variation_product_name_attributes .= '{,}';  //custom list separator
+                                  }
+                                  $variation_product_name_attributes .= $custom_options[$s]['options_list'][$z]['option_name'];
+                                  $variation_product_name_attributes_cnt++;
+                                  $z = $sizeof_options_list;
+                                 
+                               }
+                            
+                            }
                           
-                          //for auto-insert support
-                          if ($variation_product_name_attributes_cnt > 0) {
-                            $variation_product_name_attributes .= '{,}';  //custom list separator
-                          }
-                          $variation_product_name_attributes .= ucfirst($option);
-                          $variation_product_name_attributes_cnt++;
-                                                 
-                      }
-										endforeach;
-									endif;
+                            $s = $sizeof_custom_options;
+                        }
+                      }                    
+                      //v1.0.7.9 end
+									endif; 
 
 						endforeach;
     
             $output  .= '&nbsp;&nbsp; #' .$product_variation_ID. '&nbsp;&nbsp; - &nbsp;&nbsp;' .$variation_label;
             $output  .= '</label>';
-            
+
             
             //hide name attribute list, used in auto add function ONLY AUTOADD
             // custom list of attributes with   '{,}' as a separator...
@@ -670,11 +819,10 @@
 
 
             $output  .= '</li>'; 
-            echo $output ;           
+            echo $output ; 
+                     
          }   
-
          
-               
         return;     
     }
     
@@ -702,7 +850,7 @@
     }/* else  {           v1.0.5
       $product_variations_list = array();
     } */
-    
+
     return ($product_variations_list);
   } 
 
@@ -849,7 +997,7 @@
        	if ( $vtprd_cart->cart_items[$k]->yousave_total_amt > 0) {            
             echo '<li>';
             $msg_cnt = 0;  
-//echo 'yousave_by_rule_info= <pre>'.print_r($vtprd_cart->cart_items[$k]->yousave_by_rule_info, true).'</pre>' ; 
+ 
             if ($vtprd_setup_options['show_cartWidget_discount_details_grouped_by_what'] == 'rule') {
               //these rows are indexed by ruleID, so a foreach is needed...
               foreach($vtprd_cart->cart_items[$k]->yousave_by_rule_info as $key => $yousave_by_rule) {
@@ -857,15 +1005,14 @@
                 if ($msg_cnt > 1) {
                   echo '</li><li>';
                 }
-//echo '<br>$key= '.$key.'<br>' ;
+
                 $i = $yousave_by_rule['ruleset_occurrence'];
                 //display info is tabulated for cumulative rule processing, but the Price Reduction has already taken place!!
                 $output  = '<span class="vtprd-discount-msg-widget" >';                  
                 $output .= stripslashes($yousave_by_rule['rule_short_msg']);
                 $output .= '</span><br>';
                 echo  $output;
-//echo '$k= '.$k. ' $key= '.$key.'<br>' ;
-//echo '$yousave_by_rule= <pre>'.print_r($yousave_by_rule, true).'</pre>' ;                 
+                 
                 //if a max was reached and msg supplied, print here 
                 if ($yousave_by_rule['rule_max_amt_msg'] > ' ') {    
                   $output  = '<span class="vtprd-discount-max-msg-widget" >';                  
@@ -900,21 +1047,38 @@
 
     if (sizeof($vtprd_cart->cart_items[$k]->variation_array) > 0   ) {
       $output .= '<span class="vtprd-product-name-widget">' . $vtprd_cart->cart_items[$k]->parent_product_name .'</span>';	
-      $output .= '<dl class="variation">';
-      foreach($vtprd_cart->cart_items[$k]->variation_array as $key => $value) {          
-        //v1.0.7.8  begin
-        // add in on-the-fly attribute name handling; remove sanitize_title
-        $name  = str_replace( 'attribute_pa_', '', $key  );  //post v 2.1
-        $name  = str_replace( 'attribute_', '', $key  );     //post v 2.1   for on-the-fly variations
-        $value = str_replace( 'attribute_', '', $value  );   //post v 2.1   for on-the-fly variations
-        //v1.0.7.8  end
-        $name = sanitize_title( str_replace( 'pa_', '', $name  ) );   //pre v 2.1
-        $name = ucwords($name);  
-        $output .= '<dt>'. $name . ': </dt>';
-        $output .= '<dd>'. $value .'</dd>';           
+      //v1.0.7.9 begin
+      if ($vtprd_cart->cart_items[$k]->variation_name_html > '')  {
+        $output .= $vtprd_cart->cart_items[$k]->variation_name_html;
+      } else {
+        $output .= '<dl class="variation">';
+        foreach($vtprd_cart->cart_items[$k]->variation_array as $key => $value) {          
+          //v1.0.7.8  begin               
+          $name  = str_replace( 'attribute_pa_', '', $key  );  //post v 2.1
+          $name  = str_replace( 'attribute_', '', $key  );     //post v 2.1   for on-the-fly variations
+          $value = str_replace( 'attribute_', '', $value  );   //post v 2.1   for on-the-fly variations
+          $name  = str_replace( 'pa_', '', $name  );   //pre v 2.1
+          $name  = ucwords($name);
+          $current_version =  WOOCOMMERCE_VERSION;
+          if( (version_compare(strval('2.1.0'), strval($current_version), '>') == 1) ) {   //'==1' = 2nd value is lower     
+            //pre 2.1
+            $name  = sanitize_title($name);
+            $value = sanitize_title($value);            
+            $output .= '<dt class="variation-'.$name.'">'. $name . ': </dt>';  //added class
+            $output .= '<dd class="variation-'.$name.'">'. $value .'</dd>';    //added class
+          } else {
+            //post 2.1
+            //$name2 = sanitize_text_field( $name );
+            $name2 = sanitize_title( $name );
+            $name2_san = sanitize_html_class( $name2 );
+            $output .= '<dt class="variation-'. $name2_san.'">'. wp_kses_post( $name ) . ': </dt>';  //added class
+            $output .= '<dd class="variation-'. $name2_san.'">'. wp_kses_post( wpautop( $value )) .'</dd>';    //added class
+          }
+          //v1.0.7.8  end              
+        }
+        $output .= '</dl>';
       }
-      $output .= '</dl>';
-    
+      //v1.0.7.9 end    
     } else {
       $output .= '<span class="vtprd-product-name-widget">' . $vtprd_cart->cart_items[$k]->product_name  .'</span>';
       $output .= '<br>';
@@ -1530,19 +1694,38 @@
       if (sizeof($vtprd_cart->cart_items[$k]->variation_array) > 0   ) {
         $output .= '<td  class="vtprd-product-name-email" style="text-align:left;vertical-align:middle;border:1px solid #eee;word-wrap:break-word"><span class="vtprd-product-name-span">' . $vtprd_cart->cart_items[$k]->parent_product_name .'</span>';
         $output .= '<small>';
-       // $output .= '<dl class="variation">';
-        foreach($vtprd_cart->cart_items[$k]->variation_array as $key => $value) {          
-          //v1.0.7.8  begin
-          // add in on-the-fly attribute name handling; remove sanitize_title
-          $name  = str_replace( 'attribute_pa_', '', $key  );  //post v 2.1
-          $name  = str_replace( 'attribute_', '', $key  );     //post v 2.1   for on-the-fly avariations
-          $value = str_replace( 'attribute_', '', $value  );   //post v 2.1   for on-the-fly variations
-          //v1.0.7.8  end
-          $name = sanitize_title( str_replace( 'pa_', '', $name  ) );   //pre v 2.1
-          $name = ucwords($name);  
-          $output .= '<br>'. $name . ': ' .$value ;           
-        }
-        //$output .= '</dl></small>';
+        //v1.0.7.9 begin
+        if ($vtprd_cart->cart_items[$k]->variation_name_html > '')  {
+          $variation_name_html = $vtprd_cart->cart_items[$k]->variation_name_html;
+          //remove wrapping paragraph on variation name...
+          $variation_name_html = str_replace( '<p>',  '', $variation_name_html  );
+          $variation_name_html = str_replace( '</p>', '', $variation_name_html  );                                                                               
+           $output .= $variation_name_html;
+        } else {
+        //v1.0.7.9 end        
+           // $output .= '<dl class="variation">';
+          foreach($vtprd_cart->cart_items[$k]->variation_array as $key => $value) {          
+            //v1.0.7.8  begin                
+            $name  = str_replace( 'attribute_pa_', '', $key  );  //post v 2.1
+            $name  = str_replace( 'attribute_', '', $key  );     //post v 2.1   for on-the-fly variations
+            $value = str_replace( 'attribute_', '', $value  );   //post v 2.1   for on-the-fly variations
+            $name  = str_replace( 'pa_', '', $name  );   //pre v 2.1
+            $current_version =  WOOCOMMERCE_VERSION;
+            if( (version_compare(strval('2.1.0'), strval($current_version), '>') == 1) ) {   //'==1' = 2nd value is lower     
+              //pre 2.1
+              $name  = sanitize_title($name);
+              $value = sanitize_title($value);
+              $name  = ucwords($name);  
+              $output .= '<br class="variation-'.$name.'">'. $name . ': ' .$value ;  //added class
+            } else {
+              //post 2.1
+              $name2 = sanitize_text_field( $name );
+              $output .= '<br class="variation-'.sanitize_html_class( $name2 ).'">'. wp_kses_post( $name ) . ': ' .wp_kses_post( wpautop( $value ));  //added class
+            }
+            //v1.0.7.8  end                       
+          }
+          //$output .= '</dl></small>'; 
+        }  //v1.0.7.9           
         $output .= '</small>';      			
         $output .= '</td>';     
       } else {
@@ -1775,20 +1958,39 @@
     if (sizeof($vtprd_cart->cart_items[$k]->variation_array) > 0   ) {
       $output .= '<td  class="product-name vtprd-product-name" ><span class="vtprd-product-name-span">' . $vtprd_cart->cart_items[$k]->parent_product_name .'</span>';
       $output .= '<strong class="product-quantity"> &times; ' . $units  .'</strong>';	
-      $output .= '<dl class="variation">';
-      foreach($vtprd_cart->cart_items[$k]->variation_array as $key => $value) {          
-        //v1.0.7.8  begin
-        // add in on-the-fly attribute name handling; remove sanitize_title
-        $name  = str_replace( 'attribute_pa_', '', $key  );  //post v 2.1
-        $name  = str_replace( 'attribute_', '', $key  );     //post v 2.1   for on-the-fly variations
-        $value = str_replace( 'attribute_', '', $value  );   //post v 2.1   for on-the-fly variations
-        //v1.0.7.8  end
-        $name = sanitize_title( str_replace( 'pa_', '', $name  ) );   //pre v 2.1
-        $name = ucwords($name);  
-        $output .= '<dt>'. $name . ': </dt>';
-        $output .= '<dd>'. $value .'</dd>';           
+      
+      //v1.0.7.9 begin
+      if ($vtprd_cart->cart_items[$k]->variation_name_html > '')  {
+        $output .= $vtprd_cart->cart_items[$k]->variation_name_html;
+      } else {
+        $output .= '<dl class="variation">';
+        foreach($vtprd_cart->cart_items[$k]->variation_array as $key => $value) {          
+          //v1.0.7.8  begin              
+          $name  = str_replace( 'attribute_pa_', '', $key  );  //post v 2.1
+          $name  = str_replace( 'attribute_', '', $key  );     //post v 2.1   for on-the-fly variations
+          $value = str_replace( 'attribute_', '', $value  );   //post v 2.1   for on-the-fly variations
+          $name  = str_replace( 'pa_', '', $name  );   //pre v 2.1
+          $name  = ucwords($name);
+          $current_version =  WOOCOMMERCE_VERSION;
+          if( (version_compare(strval('2.1.0'), strval($current_version), '>') == 1) ) {   //'==1' = 2nd value is lower     
+            //pre 2.1
+            $name  = sanitize_title($name);
+            $value = sanitize_title($value);            
+            $output .= '<dt class="variation-'.$name.'">'. $name . ': </dt>';  //added class
+            $output .= '<dd class="variation-'.$name.'">'. $value .'</dd>';    //added class
+          } else {
+            //post 2.1
+            //$name2 = sanitize_text_field( $name );
+            $name2 = sanitize_title( $name );
+            $name2_san = sanitize_html_class( $name2 );
+            $output .= '<dt class="variation-'. $name2_san.'">'. wp_kses_post( $name ) . ': </dt>';  //added class
+            $output .= '<dd class="variation-'. $name2_san.'">'. wp_kses_post( wpautop( $value )) .'</dd>';    //added class
+          }
+          //v1.0.7.8  end              
+        }
+        $output .= '</dl>';
       }
-      $output .= '</dl>';
+      //v1.0.7.9 end
             			
       $output .= '</td>';     
     } else {
@@ -1977,21 +2179,38 @@
     if (sizeof($vtprd_cart->cart_items[$k]->variation_array) > 0   ) {
       $output .= '<td  class="product-name vtprd-product-name" ><span class="vtprd-product-name-span">' . $vtprd_cart->cart_items[$k]->parent_product_name .'</span>';
       
-      $output .= '<dl class="variation">';
-
-      foreach($vtprd_cart->cart_items[$k]->variation_array as $key => $value) {          
-        //v1.0.7.8  begin
-        // add in on-the-fly attribute name handling; remove sanitize_title
-        $name  = str_replace( 'attribute_pa_', '', $key  );  //post v 2.1
-        $name  = str_replace( 'attribute_', '', $key  );     //post v 2.1   for on-the-fly variations
-        $value = str_replace( 'attribute_', '', $value  );   //post v 2.1   for on-the-fly variations
-        //v1.0.7.8  end
-        $name = sanitize_title( str_replace( 'pa_', '', $name  ) );   //pre v 2.1
-        $name = ucwords($name);  
-        $output .= '<dt>'. $name . ': </dt>';
-        $output .= '<dd>'. $value .'</dd>';           
+      //v1.0.7.9 begin
+      if ($vtprd_cart->cart_items[$k]->variation_name_html > '')  {
+        $output .= $vtprd_cart->cart_items[$k]->variation_name_html;
+      } else {
+        $output .= '<dl class="variation">';
+        foreach($vtprd_cart->cart_items[$k]->variation_array as $key => $value) {          
+          //v1.0.7.8  begin               
+          $name  = str_replace( 'attribute_pa_', '', $key  );  //post v 2.1
+          $name  = str_replace( 'attribute_', '', $key  );     //post v 2.1   for on-the-fly variations
+          $value = str_replace( 'attribute_', '', $value  );   //post v 2.1   for on-the-fly variations
+          $name  = str_replace( 'pa_', '', $name  );   //pre v 2.1
+          $name  = ucwords($name);
+          $current_version =  WOOCOMMERCE_VERSION;
+          if( (version_compare(strval('2.1.0'), strval($current_version), '>') == 1) ) {   //'==1' = 2nd value is lower     
+            //pre 2.1
+            $name  = sanitize_title($name);
+            $value = sanitize_title($value);            
+            $output .= '<dt class="variation-'.$name.'">'. $name . ': </dt>';  //added class
+            $output .= '<dd class="variation-'.$name.'">'. $value .'</dd>';    //added class
+          } else {
+            //post 2.1
+            //$name2 = sanitize_text_field( $name );
+            $name2 = sanitize_title( $name );
+            $name2_san = sanitize_html_class( $name2 );
+            $output .= '<dt class="variation-'. $name2_san.'">'. wp_kses_post( $name ) . ': </dt>';  //added class
+            $output .= '<dd class="variation-'. $name2_san.'">'. wp_kses_post( wpautop( $value )) .'</dd>';    //added class
+          }
+          //v1.0.7.8  end              
+        }
+        $output .= '</dl>';
       }
-      $output .= '</dl>';
+      //v1.0.7.9 end
             			
       $output .= '</td>';
       //$output .= '<strong class="product-quantity"> &times; ' . $units  .'</strong>';	     
@@ -2617,10 +2836,10 @@
          return vtprd_format_money_element($amt);
        }
     }
-    
+           
     //at a minimum, format $amt
     if ( ( get_option( 'woocommerce_calc_taxes' ) == 'no' ) ||
-         ( $woocommerce->customer->is_vat_exempt() ) ) {  
+         ( vtprd_maybe_customer_tax_exempt() ) ) {      //v1.0.7.9  
        return vtprd_format_money_element($amt);
     }
     
@@ -2691,7 +2910,8 @@
 				$tax_rates      = $_tax->get_rates( $product->get_tax_class() );
 				$base_tax_rates = $_tax->get_shop_base_rate( $product->tax_class );
 
-				if ( ! empty( $woocommerce->customer ) && $woocommerce->customer->is_vat_exempt() ) {   //v1.0.7.5
+			//	if ( ! empty( $woocommerce->customer ) && $woocommerce->customer->is_vat_exempt() ) {   //v1.0.7.5
+        if ( vtprd_maybe_customer_tax_exempt() )  {      //v1.0.7.9
 
 					$base_taxes 		= $_tax->calc_tax( $price * $qty, $base_tax_rates, true );
 					$base_tax_amount	= array_sum( $base_taxes );
@@ -2816,7 +3036,27 @@
     return;
   }
 
- 
+  
+  //****************************************
+  //v1.0.7.9 new function
+  //****************************************
+  function vtprd_maybe_customer_tax_exempt(){ 
+		global $vtprd_cart, $woocommerce;
+    //save is_tax_exempt status
+    //handles addressability for emails!
+    //defaults to false.
+    if ($vtprd_cart->customer_is_tax_exempt) {
+      return true;
+    }
+    if (!is_object($woocommerce->customer)) {
+      return false; 
+    }
+    if ( ! empty( $woocommerce->customer ) && $woocommerce->customer->is_vat_exempt() ) {
+      $vtprd_cart->customer_is_tax_exempt = true;
+      return true;
+    }
+    return false;
+  }  
   
   //****************************************
   //v1.0.7.4 new function
@@ -2881,7 +3121,49 @@
  
     return $apply_before_tax;
   }
+    
+    
+    //v1.0.7.9 new function
+    //from::includes/api/class-wc-api-products.php
+  	function vtprd_get_attributes( $product ) {
 
+		$attributes = array();
+
+		if ( $product->is_type( 'variation' ) ) {
+
+			// variation attributes
+			foreach ( $product->get_variation_attributes() as $attribute_name => $attribute ) {
+
+				// taxonomy-based attributes are prefixed with `pa_`, otherwise simply `attribute_`
+				$attributes[] = array(
+					'name'   => ucwords( str_replace( 'attribute_', '', str_replace( 'pa_', '', $attribute_name ) ) ),
+					'option' => $attribute,
+				);
+			}
+
+		} else {
+
+			foreach ( $product->get_attributes() as $attribute ) {
+
+				// taxonomy-based attributes are comma-separated, others are pipe (|) separated
+				if ( $attribute['is_taxonomy'] )
+					$options = explode( ',', $product->get_attribute( $attribute['name'] ) );
+				else
+					$options = explode( '|', $product->get_attribute( $attribute['name'] ) );
+
+				$attributes[] = array(
+					'name'      => ucwords( str_replace( 'pa_', '', $attribute['name'] ) ),
+					'position'  => $attribute['position'],
+					'visible'   => (bool) $attribute['is_visible'],
+					'variation' => (bool) $attribute['is_variation'],
+					'options'   => array_map( 'trim', $options ),
+				);
+			}
+		}
+
+		return $attributes;
+	}
+  //v1.0.7.9  end
 
 
   //**v1.0.7.5 begin
@@ -2952,4 +3234,4 @@ function vtprd_w3_flush_page_custom( $post_id ) {
   add_action( 'delete_post',  'vtprd_w3_flush_page_custom', 10, 1 );
   add_action( 'trash_post',   'vtprd_w3_flush_page_custom', 10, 1 );
   add_action( 'untrash_post', 'vtprd_w3_flush_page_custom', 10, 1 );
- */
+ */ 

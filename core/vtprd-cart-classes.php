@@ -46,6 +46,7 @@ class VTPRD_Cart {
     public $wpsc_purchase_in_progress;
   //  public $wpsc_orig_coupons_amount;
     public $cumulativeCouponPricing_maybe_rollout_needed; //in support of auto add free products timing - 'NO' now needs a rollout...
+    public $customer_is_tax_exempt;        //v1.0.7.9
            
  //   CART-LEVEL UNITS AND AMOUNTS AS RELATES TO RULES ITERATIONS, INPUT AND OUTPUT..  mAYBE PUT THE NEW CART-ITEM STUFF HERE....
     
@@ -69,7 +70,8 @@ class VTPRD_Cart {
         )
         */
     ); 
-    $this->error_messages_processed;         
+    $this->error_messages_processed;
+    $this->customer_is_tax_exempt = false;        //v1.0.7.9         
   }
   
 
@@ -131,7 +133,7 @@ class VTPRD_Cart_Item {
     public $product_discount_price_html_woo;
     public $product_in_rule_allowing_display;
     public $product_auto_insert_state;    //used only during auto insert processing ...
-                                 
+    public $variation_name_html;    //v1.0.7.9  pre-load variation name...                            
   
 	public function __construct(){
     $this->product_id;
@@ -267,6 +269,7 @@ class VTPRD_Cart_Item {
     $this->yousave_total_unit_price = 0;
     $this->save_orig_unit_price = 0;     //v1.0.7.4
     $this->product_is_taxable = '';    //v1.0.7.4
+    $this->variation_name_html = '';    //v1.0.7.9 
 	}
 
 } //end class

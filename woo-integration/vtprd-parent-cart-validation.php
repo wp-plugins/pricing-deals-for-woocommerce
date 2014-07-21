@@ -760,7 +760,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
 
 	public function vtprd_maybe_cart_item_price_html($price_html, $cart_item, $cart_item_key){    
 //return 444; //mwnprice
-    global $post, $vtprd_info, $vtprd_setup_options, $woocommerce;
+    global $post, $vtprd_info, $vtprd_setup_options, $woocommerce, $vtprd_cart;
     vtprd_debug_options();  //v1.0.5
 
    
@@ -792,7 +792,8 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
         $woocommerce_tax_display_cart = get_option( 'woocommerce_tax_display_cart' );         
         if ( get_option( 'woocommerce_prices_include_tax' ) == 'yes' ) {
             switch( true ) {
-              case ( $woocommerce->customer->is_vat_exempt()):
+           // case ( $woocommerce->customer->is_vat_exempt()):
+              case ( vtprd_maybe_customer_tax_exempt() ):      //v1.0.7.9
                   $price_contents = $vtprd_info['product_session_info']['product_discount_price_excl_tax_html_woo'];
                   $price_html = $this->vtprd_maybe_show_crossouts($price_contents);
                 break; 
@@ -807,7 +808,8 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
             }       
         } else {
             switch( true ) {
-              case ( $woocommerce->customer->is_vat_exempt()):
+            //case ( $woocommerce->customer->is_vat_exempt()):
+              case ( vtprd_maybe_customer_tax_exempt() ):      //v1.0.7.9
                   $price_contents = $vtprd_info['product_session_info']['product_discount_price_html_woo'];
                   $price_html = $this->vtprd_maybe_show_crossouts($price_contents); 
                 break; 
@@ -834,15 +836,16 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
  
   //v1.0.7.4 new function
   public function vtprd_show_shop_price() {
-    global $vtprd_info, $vtprd_setup_options, $woocommerce; 
+    global $vtprd_info, $vtprd_setup_options, $woocommerce, $vtprd_cart; 
     
     if ( get_option( 'woocommerce_calc_taxes' ) == 'yes' ) {         
       $woocommerce_tax_display_shop = get_option( 'woocommerce_tax_display_shop' );
-        
+
       //suffix gets added automatically, blank if no suffix provided ...
       if ( get_option( 'woocommerce_prices_include_tax' ) == 'yes' ) {      
           switch( true ) {
-            case ( $woocommerce->customer->is_vat_exempt()):
+         // case ( $woocommerce->customer->is_vat_exempt()):
+            case ( vtprd_maybe_customer_tax_exempt() ):      //v1.0.7.9
                 $price = $vtprd_info['product_session_info']['product_discount_price_excl_tax_woo'];
               break; 
             case ( $woocommerce_tax_display_shop == 'incl'):
@@ -854,7 +857,8 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
           } 
       } else {      
           switch( true ) {
-            case ( $woocommerce->customer->is_vat_exempt()):
+         // case ( $woocommerce->customer->is_vat_exempt()):
+            case ( vtprd_maybe_customer_tax_exempt() ):      //v1.0.7.9
                 $price = $vtprd_info['product_session_info']['product_discount_price'];
               break; 
             case ( $woocommerce_tax_display_shop == 'incl'):
@@ -876,15 +880,16 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
   //v1.0.7.4 new function
   //****************************
   public function vtprd_show_shop_price_html() {
-    global $vtprd_info, $vtprd_setup_options, $woocommerce; 
+    global $vtprd_info, $vtprd_setup_options, $woocommerce, $vtprd_cart; 
     
     if ( get_option( 'woocommerce_calc_taxes' ) == 'yes' ) {
       //suffix gets added automatically, blank if no suffix provided ...
       $woocommerce_tax_display_shop = get_option( 'woocommerce_tax_display_shop' );
-      
+
       if ( get_option( 'woocommerce_prices_include_tax' ) == 'yes' ) {      
           switch( true ) {
-            case ( $woocommerce->customer->is_vat_exempt()):
+         // case ( $woocommerce->customer->is_vat_exempt()):
+            case ( vtprd_maybe_customer_tax_exempt() ):      //v1.0.7.9
                 $price_contents = $vtprd_info['product_session_info']['product_discount_price_excl_tax_html_woo'] .$vtprd_info['product_session_info']['product_discount_price_suffix_html_woo'];
                 $price_html = $this->vtprd_maybe_show_crossouts($price_contents);
               break; 
@@ -899,7 +904,8 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
           }       
       } else {      
           switch( true ) {
-            case ( $woocommerce->customer->is_vat_exempt()):
+        //  case ( $woocommerce->customer->is_vat_exempt()):
+            case ( vtprd_maybe_customer_tax_exempt() ):      //v1.0.7.9
                 $price_contents = $vtprd_info['product_session_info']['product_discount_price_html_woo']          .$vtprd_info['product_session_info']['product_discount_price_suffix_html_woo'];
                 $price_html = $this->vtprd_maybe_show_crossouts($price_contents);
               break; 

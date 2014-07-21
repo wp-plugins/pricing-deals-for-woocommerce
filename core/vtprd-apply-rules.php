@@ -1650,7 +1650,8 @@ class VTPRD_Apply_Rules{
        switch( true ) {
           case ( get_option( 'woocommerce_calc_taxes' ) == 'no' ):
           case ( !$vtprd_cart->cart_items[$k]->product_is_taxable ):
-          case ( $woocommerce->customer->is_vat_exempt() ):  
+      //  case ( $woocommerce->customer->is_vat_exempt() ):
+          case ( vtprd_maybe_customer_tax_exempt() ) :      //v1.0.7.9  
              $prod_discount_amt_excl_tax  =  $curr_prod_array['prod_discount_amt'];
              $prod_discount_amt_incl_tax  =  $curr_prod_array['prod_discount_amt'];
             break; 

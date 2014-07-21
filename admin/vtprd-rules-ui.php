@@ -1663,7 +1663,7 @@ class VTPRD_Rules_UI{
           
           <?php
           // ********************************
-          $this->vtprd_post_category_meta_box($post, array( 'args' => array( 'taxonomy' => 'roles', 'tax_class' => 'role-in', 'checked_list' => $vtprd_rule->role_in_checked  )));
+          $this->vtprd_post_category_meta_box($post, array( 'args' => array( 'taxonomy' => 'roles', 'tax_class' => 'role-in', 'checked_list' => $vtprd_rule->role_in_checked,  'pop_in_out_sw' => ' '  )));     //v1.0.7.9 'pop_in_out_sw' => ' '
           // ********************************
           ?>
         </div>
@@ -1949,11 +1949,8 @@ class VTPRD_Rules_UI{
       ?>
       <div id="taxonomy-<?php echo $taxonomy; ?>" class="categorydiv">
    
-          <div id="<?php echo $taxonomy; ?>-pop" class="tabs-panel" style="display: none;">
-              <ul id="<?php echo $taxonomy; ?>checklist-pop" class="categorychecklist form-no-clear" >
-                  <?php $popular_ids = wp_popular_terms_checklist($taxonomy); ?>
-              </ul>
-          </div>
+          <?php //v1.0.7.9  removed popular terms box, unused!! ?>
+
    
           <div id="<?php echo $taxonomy; ?>-all" class="tabs-panel">
               <?php
@@ -2091,46 +2088,48 @@ class VTPRD_Rules_UI{
      */
 
     public function vtprd_ajax_load_variations_in() {
-    global $wpdb, $post, $vtprd_rule;
-       /*  *********************************************
-         USE exit rather than return
-         as the return statement engerders a 0 return code in the ajax
-         which displays as an errant '0' with the ajax display. 
-        ********************************************* */
-    $vtprd_rule->inPop_varProdID  = $_POST['inVarProdID'];  //from var *passed in from ajax js     
-    $product_ID = $vtprd_rule->inPop_varProdID;
-    $product_variation_IDs = $this->vtprd_ajax_edit_product($product_ID, 'in');
-    
-    if ($vtprd_rule->rule_error_message[0] > ' ') {
-       echo '<div id="inVariationsError">';
-       echo $vtprd_rule->rule_error_message[0];
-       echo '</div>';
-    } else {
-       $this->vtprd_ajax_show_variations_in ($product_variation_IDs); 
-    }
+      global $wpdb, $post, $vtprd_rule;
+         /*  *********************************************
+           USE exit rather than return
+           as the return statement engerders a 0 return code in the ajax
+           which displays as an errant '0' with the ajax display. 
+          ********************************************* */
+      $vtprd_rule->inPop_varProdID  = $_POST['inVarProdID'];  //from var *passed in from ajax js     
+      $product_ID = $vtprd_rule->inPop_varProdID;
+      $product_variation_IDs = $this->vtprd_ajax_edit_product($product_ID, 'in');
+      
+      if ( (isset($vtprd_rule->rule_error_message[0])) &&    //v1.0.7.9
+           ($vtprd_rule->rule_error_message[0] > ' ') ) {    //v1.0.7.9
+         echo '<div id="inVariationsError">';
+         echo $vtprd_rule->rule_error_message[0];
+         echo '</div>';
+      } else {
+         $this->vtprd_ajax_show_variations_in ($product_variation_IDs); 
+      }
           
     exit;
   }   //end ajax_load_variations_in(
 
     public function vtprd_ajax_load_variations_out() {
-    global $wpdb, $post, $vtprd_rule;
-       /*  *********************************************
-         USE exit rather than return
-         as the return statement engerders a 0 return code in the ajax
-         which displays as an errant '0' with the ajax display. 
-        ********************************************* */
-    $vtprd_rule->actionPop_varProdID  = $_POST['outVarProdID'];  //from var *passed in from ajax js     
-    $product_ID = $vtprd_rule->actionPop_varProdID;
-    $product_variation_IDs = $this->vtprd_ajax_edit_product($product_ID, 'out');
-    
-    if ($vtprd_rule->rule_error_message[0] > ' ') {
-       echo '<div id="outVariationsError">';
-       echo $vtprd_rule->rule_error_message[0];
-       echo '</div>';
-    } else {
-       $this->vtprd_ajax_show_variations_out ($product_variation_IDs);
-    }
-          
+      global $wpdb, $post, $vtprd_rule;
+         /*  *********************************************
+           USE exit rather than return
+           as the return statement engerders a 0 return code in the ajax
+           which displays as an errant '0' with the ajax display. 
+          ********************************************* */
+      $vtprd_rule->actionPop_varProdID  = $_POST['outVarProdID'];  //from var *passed in from ajax js     
+      $product_ID = $vtprd_rule->actionPop_varProdID;
+      $product_variation_IDs = $this->vtprd_ajax_edit_product($product_ID, 'out');
+  
+      if ( (isset($vtprd_rule->rule_error_message[0])) &&    //v1.0.7.9
+           ($vtprd_rule->rule_error_message[0] > ' ') ) {    //v1.0.7.9      
+         echo '<div id="outVariationsError">';
+         echo $vtprd_rule->rule_error_message[0];
+         echo '</div>';
+      } else {
+         $this->vtprd_ajax_show_variations_out ($product_variation_IDs);
+      }
+            
     exit;
   }   //end ajax_load_variations_out(
      
@@ -2195,11 +2194,16 @@ class VTPRD_Rules_UI{
      
   public function vtprd_ajax_show_variations_in ($product_variation_IDs) {
      global $post, $vtprd_info, $vtprd_rule; $vtprd_rules_set;
+          //v1.0.7.9 begin    - initialize array as necessary
+          if (!isset( $vtprd_rule->var_in_checked[0])) {
+             $vtprd_rule->var_in_checked = array();
+          }
+          //v1.0.7.9 end
      ?>             
           <h3><?php _e('Product Variations', 'vtprd');?></h3>                  
      <?php
             //********************************
-            $this->vtprd_post_category_meta_box($post, array( 'args' => array( 'taxonomy' => 'variations', 'tax_class' => 'var-in', 'checked_list' => $vtprd_rule->var_in_checked, 'product_ID' => $vtprd_rule->inPop_varProdID, 'product_variation_IDs' => $product_variation_IDs )));
+            $this->vtprd_post_category_meta_box($post, array( 'args' => array( 'taxonomy' => 'variations', 'tax_class' => 'var-in', 'checked_list' => $vtprd_rule->var_in_checked, 'pop_in_out_sw' => 'in', 'product_ID' => $vtprd_rule->inPop_varProdID, 'product_variation_IDs' => $product_variation_IDs )));                  //v1.0.7.9  'pop_in_out_sw' => 'in'
             // ******************************** 
             //output hidden count of all variation checkboxes.  Used on update to store info used in 'yousave' messaging
             ?>
@@ -2213,7 +2217,7 @@ class VTPRD_Rules_UI{
           <h3><?php _e('Product Variations', 'vtprd');?></h3>                  
      <?php
             //********************************
-            $this->vtprd_post_category_meta_box($post, array( 'args' => array( 'taxonomy' => 'variations', 'tax_class' => 'var-out', 'checked_list' => $vtprd_rule->var_out_checked, 'product_ID' => $vtprd_rule->actionPop_varProdID, 'product_variation_IDs' => $product_variation_IDs )));
+            $this->vtprd_post_category_meta_box($post, array( 'args' => array( 'taxonomy' => 'variations', 'tax_class' => 'var-out', 'checked_list' => $vtprd_rule->var_out_checked,  'pop_in_out_sw' => 'out', 'product_ID' => $vtprd_rule->actionPop_varProdID, 'product_variation_IDs' => $product_variation_IDs )));         //v1.0.7.9  'pop_in_out_sw' => 'out'
             // ********************************                 
   } 
 
