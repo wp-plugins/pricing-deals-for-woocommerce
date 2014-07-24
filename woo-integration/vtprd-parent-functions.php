@@ -3046,7 +3046,8 @@
     //save is_tax_exempt status
     //handles addressability for emails!
     //defaults to false.
-    if ($vtprd_cart->customer_is_tax_exempt) {           
+    if ( (isset($vtprd_cart->customer_is_tax_exempt)) &&  //v1.0.7.9a
+         ($vtprd_cart->customer_is_tax_exempt) ) {           
       return true;
     }
     if (!is_object($woocommerce->customer)) {   
