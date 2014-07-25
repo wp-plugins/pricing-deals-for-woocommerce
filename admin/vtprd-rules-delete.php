@@ -126,15 +126,37 @@ class VTPRD_Rule_delete {
      
   public  function vtprd_nuke_lifetime_purchase_history() {
     global $wpdb;      
-    $wpdb->query("DROP TABLE IF EXISTS `".VTPRD_LIFETIME_LIMITS_PURCHASER."` ");  
-    $wpdb->query("DROP TABLE IF EXISTS `".VTPRD_LIFETIME_LIMITS_PURCHASER_RULE."` " );
-    $wpdb->query("DROP TABLE IF EXISTS `".VTPRD_LIFETIME_LIMITS_PURCHASER_LOGID_RULE."` " );
+    //v1.0.8.0 begin
+    //$wpdb->query("DROP TABLE IF EXISTS `".VTPRD_LIFETIME_LIMITS_PURCHASER."` ");  
+    //$wpdb->query("DROP TABLE IF EXISTS `".VTPRD_LIFETIME_LIMITS_PURCHASER_RULE."` " );
+    //$wpdb->query("DROP TABLE IF EXISTS `".VTPRD_LIFETIME_LIMITS_PURCHASER_LOGID_RULE."` " );
+
+    //only empty if tables exist
+    $table_name =  VTPRD_LIFETIME_LIMITS_PURCHASER;
+    $is_this_table = $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" );
+    if ( $is_this_table  == VTPRD_LIFETIME_LIMITS_PURCHASER) {
+      $wpdb->query("TRUNCATE `".VTPRD_LIFETIME_LIMITS_PURCHASER."` ");  
+      $wpdb->query("TRUNCATE `".VTPRD_LIFETIME_LIMITS_PURCHASER_RULE."` " );
+      $wpdb->query("TRUNCATE `".VTPRD_LIFETIME_LIMITS_PURCHASER_LOGID_RULE."` " );
+    }    
+    //v1.0.8.0 end
   }
        
   public  function vtprd_nuke_audit_trail_logs() {
     global $wpdb;    
-    $wpdb->query("DROP TABLE IF EXISTS `".VTPRD_PURCHASE_LOG."` ");
-    $wpdb->query("DROP TABLE IF EXISTS `".VTPRD_PURCHASE_LOG_PRODUCT."` ");
-    $wpdb->query("DROP TABLE IF EXISTS `".VTPRD_PURCHASE_LOG_PRODUCT_RULE."` " );
+    //v1.0.8.0 begin
+    //$wpdb->query("DROP TABLE IF EXISTS `".VTPRD_PURCHASE_LOG."` ");
+    //$wpdb->query("DROP TABLE IF EXISTS `".VTPRD_PURCHASE_LOG_PRODUCT."` ");
+    //$wpdb->query("DROP TABLE IF EXISTS `".VTPRD_PURCHASE_LOG_PRODUCT_RULE."` " );
+    
+    //only empty if tables exist
+    $table_name =  VTPRD_PURCHASE_LOG;
+    $is_this_table = $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" );
+    if ( $is_this_table  == VTPRD_PURCHASE_LOG) {
+        $wpdb->query("TRUNCATE `".VTPRD_PURCHASE_LOG."` ");
+        $wpdb->query("TRUNCATE `".VTPRD_PURCHASE_LOG_PRODUCT."` ");
+        $wpdb->query("TRUNCATE `".VTPRD_PURCHASE_LOG_PRODUCT_RULE."` " );
+    }     
+    //v1.0.8.0 end
   }
 } //end class

@@ -9,11 +9,14 @@
  
       global $post, $wpdb, $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_setup_options, $vtprd_info; 
 
-     // from Woocommerce/templates/cart/mini-cart.php  and  Woocommerce/templates/checkout/review-order.php
-      $woocommerce_cart_contents = $woocommerce->cart->get_cart(); 
+      $woocommerce_cart_contents = $woocommerce->cart->get_cart();
 
-      if (sizeof($woocommerce_cart_contents) > 0) {
-					$vtprd_cart = new vtprd_Cart;
+      if (sizeof($woocommerce_cart_contents) > 0) { 
+					
+          //v1.0.8.0  save previous cart before creating new cart image, for lifetime confirmation processing only
+          $vtprd_previous_cart = $vtprd_cart;     //v1.0.8.0 
+          
+          $vtprd_cart = new vtprd_Cart;
 
           foreach ( $woocommerce_cart_contents as $cart_item_key => $cart_item ) {
 
@@ -47,7 +50,7 @@
               //v1.0.7.4 begin
               $product = get_product( $vtprd_cart_item->product_id );
 
-              $tax_status = get_post_meta( $vtprd_cart_item->product_id, '_tax_status', true ); 
+              $tax_status = get_post_meta( $vtprd_cart_item->product_id, '_tax_status', true );
               if ( $tax_status == 'taxable' ) {              
                 $vtprd_cart_item->product_is_taxable = true; 
               } else {
@@ -67,7 +70,7 @@
               //By this time, there may  be a 'display' session variable for this product, if a discount was displayed in the catalog
               //  so 2nd - nth iteration picks up the discounted current price AND the original price for comparison
               if ($vtprd_info['product_session_info']['product_discount_price'] > 0) {
-                  $vtprd_cart_item->unit_price             =  vtprd_compute_current_unit_price($product_id, $cart_item, $vtprd_cart_item, $product);     //v1.0.7.4  get current unit price off of the cart, to pick up any CATALOG discounts
+                  $vtprd_cart_item->unit_price             =  vtprd_compute_current_unit_price($product_id, $cart_item, $vtprd_cart_item, $product, $vtprd_previous_cart);     //v1.0.8.0
                   $vtprd_cart_item->save_orig_unit_price   =  $vtprd_info['product_session_info']['product_unit_price'];   //v1.0.7.4  save for later comparison
                   $vtprd_cart_item->db_unit_price          =  $vtprd_info['product_session_info']['product_unit_price'];
 
@@ -88,7 +91,7 @@
                   $vtprd_cart_item->db_unit_price_special  =  get_post_meta( $product_id, '_sale_price', true );                  
 
                    //v1.0.7.4  picks up unit price from product subtotal and quantity
-                  $vtprd_cart_item->unit_price             =  vtprd_compute_current_unit_price($product_id, $cart_item, $vtprd_cart_item, $product); //v1.0.7.4
+                  $vtprd_cart_item->unit_price             =  vtprd_compute_current_unit_price($product_id, $cart_item, $vtprd_cart_item, $product, $vtprd_previous_cart); //v1.0.8.0
                   
                   $vtprd_cart_item->save_orig_unit_price   =  $vtprd_cart_item->unit_price;   //v1.0.7.4  save for later comparison
                   
@@ -176,7 +179,8 @@
                 }
               }
               
-               
+              $vtprd_cart_item->lifetime_line_subtotal = $cart_item['line_subtotal'];     //v1.0.8.0  for future lifetime processing only...  
+              
               //add cart_item to cart array
               $vtprd_cart->cart_items[]       = $vtprd_cart_item;
 				    }
@@ -201,22 +205,30 @@
    //  the vtprd_cart unit price and discounts all reflect the TAX STATE of 'woocommerce_prices_include_tax'
    //
    //************************************* 
-	function vtprd_compute_current_unit_price($product_id, $cart_item, $vtprd_cart_item, $product){
+	function vtprd_compute_current_unit_price($product_id, $cart_item, $vtprd_cart_item, $product, $vtprd_previous_cart){          //v1.0.8.0
       global $post, $wpdb, $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_setup_options, $vtprd_info;  
-      $product = get_product( $product_id ); 
+      $product = get_product( $product_id );
 
-		  if ( $vtprd_cart_item->product_is_taxable ) {
+      //v1.0.8.0  begin
+		  if (isset($cart_item['line_subtotal'])) {
+        $cart_item_line_subtotal = $cart_item['line_subtotal'];
+      } else {
+        $cart_item_line_subtotal = vtprd_get_line_subtotal_for_lifetime_only($product_id, $vtprd_previous_cart);
+      }
+      //v1.0.8.0  end
+      
+      if ( $vtprd_cart_item->product_is_taxable ) {
         if ( ( get_option( 'woocommerce_calc_taxes' ) == 'no' ) ||
              ( get_option( 'woocommerce_prices_include_tax' ) == 'no' )  || 
              ( vtprd_maybe_customer_tax_exempt() ) ) {      //v1.0.7.9
            //NO VAT included in price
-           $unit_price  =  $cart_item['line_subtotal'] / $cart_item['quantity'];                                                  
+           $unit_price  =  $cart_item_line_subtotal / $cart_item['quantity'];  //v1.0.8.0                                                
         } else {
            
            //v1.0.7.4 begin
            //TAX included in price in DB, and Woo $cart_item pricing **has already subtracted out the TAX **, so restore the TAX
            //  this price reflects the tax situation of the ORIGINAL price - so if the price was originally entered with tax, this will reflect tax
-           $price           =  $cart_item['line_subtotal'] / $cart_item['quantity'];
+           $price           =  $cart_item_line_subtotal / $cart_item['quantity'];     //v1.0.8.0  
           // $unit_price  =  vtprd_get_price_including_tax($product_id, $price);
            $qty = 1;           
            $_tax  = new WC_Tax();                
@@ -228,12 +240,31 @@
                      
         } 
       } else {
-         $unit_price  =  $cart_item['line_subtotal'] / $cart_item['quantity'];
+         $unit_price  =  $cart_item_line_subtotal / $cart_item['quantity'];     //v1.0.8.0 
       } 
                    
      return $unit_price;     
      
   } 
+  
+   
+   //************************************* 
+   //new function v1.0.8.0 
+   // Lifetime only, at checkout confirmation time the line_subtotal in the cart has gone away...
+   //   get the line_subtotal from previous cart image at last add-to-cart or cart screen
+   //************************************* 
+	function vtprd_get_line_subtotal_for_lifetime_only($product_id, $vtprd_previous_cart) {
+      $lifetime_line_subtotal = 0;
+      $sizeof_cart_items = sizeof($vtprd_previous_cart->cart_items);
+      for($k=0; $k < $sizeof_cart_items; $k++) {
+        if ($vtprd_previous_cart->cart_items[$k]->product_id == $product_id) {
+           $lifetime_line_subtotal = $vtprd_previous_cart->cart_items[$k]->lifetime_line_subtotal;
+           $k = $sizeof_cart_items;
+        }
+      } 
+   
+      return $lifetime_line_subtotal;     
+  }
 
    //************************************* 
 
@@ -406,13 +437,14 @@
       $short_msg_array = array();
       $full_msg_array = array();
       $msg_already_done = 'no';
-    
+      $show_yousave_one_some_msg = ''; //v1.0.8.0
+      
       //auditTrail keyed to rule_id, so foreach is necessary
       foreach ($vtprd_cart->cart_items[0]->cartAuditTrail as $key => $row) {       
         
         //parent product vargroup on sale, individual product variation may not be on sale.
         // send an additional sale msg for the varProd parent group...
-        $show_yousave_one_some_msg = '';
+        
         if ($vtprd_setup_options['show_yousave_one_some_msg'] == 'yes' ) {
           if (!$show_yousave_one_some_msg) {
             $rulesetKey = $row['ruleset_occurrence'];
@@ -2039,7 +2071,7 @@
   **   Assemble all of the cart discount row info FOR email/transaction results messaging  
   *        $msgType = 'html' or 'plainText'            
   *************************************************** */
-	function vtprd_checkout_cart_reporting() {
+	function vtprd_checkout_cart_reporting($msgType) {      //v1.0.8.0
     global $vtprd_cart, $vtprd_cart_item, $vtprd_rules_set, $vtprd_info, $vtprd_setup_options, $woocommerce;
     $output = ''; //v1.0.7.9        
    	if (($vtprd_setup_options['show_checkout_discount_detail_lines'] == 'yes') ||  
@@ -2562,7 +2594,8 @@
       }
       //Create PURCHASE LOG row - 1 per cart
       $purchaser_ip_address = $vtprd_info['purchaser_ip_address']; 
-      $next_id; //supply null value for use with autoincrement table key
+      $next_id = '';             //v1.0.8.0 //supply null value for use with autoincrement table key
+      $date = date("Y-m-d");     //v1.0.8.0 
  
       $ruleset_object = serialize($vtprd_rules_set); 
       $cart_object    = serialize($vtprd_cart);
@@ -2804,6 +2837,7 @@
   //v1.0.7 change
   function vtprd_debug_options(){ 
     global $vtprd_setup_options;
+
     if ( ( isset( $vtprd_setup_options['debugging_mode_on'] )) &&
          ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ) ) {  
       error_reporting(E_ALL);  
@@ -3046,7 +3080,7 @@
     //save is_tax_exempt status
     //handles addressability for emails!
     //defaults to false.
-    if ( (isset($vtprd_cart->customer_is_tax_exempt)) &&  //v1.0.7.9a
+    if ( (isset($vtprd_cart->customer_is_tax_exempt)) &&  //v1.0.8.0
          ($vtprd_cart->customer_is_tax_exempt) ) {           
       return true;
     }

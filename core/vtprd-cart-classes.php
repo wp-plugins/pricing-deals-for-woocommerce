@@ -133,7 +133,8 @@ class VTPRD_Cart_Item {
     public $product_discount_price_html_woo;
     public $product_in_rule_allowing_display;
     public $product_auto_insert_state;    //used only during auto insert processing ...
-    public $variation_name_html;    //v1.0.7.9  pre-load variation name...                            
+    public $variation_name_html;    //v1.0.7.9  pre-load variation name... 
+    public $lifetime_line_subtotal;     //v1.0.8.0  for lifetime processing only...                            
   
 	public function __construct(){
     $this->product_id;
@@ -270,6 +271,7 @@ class VTPRD_Cart_Item {
     $this->save_orig_unit_price = 0;     //v1.0.7.4
     $this->product_is_taxable = '';    //v1.0.7.4
     $this->variation_name_html = '';    //v1.0.7.9 
+    $this->lifetime_line_subtotal = 0;     //v1.0.8.0  for lifetime processing only... 
 	}
 
 } //end class

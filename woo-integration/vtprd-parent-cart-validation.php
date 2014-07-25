@@ -224,12 +224,14 @@ class VTPRD_Parent_Cart_Validation {
 
     //Reapply rules only if an error occurred during processing regarding lifetime rule limits...         
     //the form validation filter executes ONLY at click-to-pay time                                                                      
-    add_filter( 'woocommerce_before_checkout_process', array(&$this, 'vtprd_woo_validate_order'), 1);   
-  
+    if (defined('VTPRD_PRO_DIRNAME')) {  //v1.0.8.0
+      add_filter( 'woocommerce_before_checkout_process', array(&$this, 'vtprd_woo_validate_order'), 1);   
+    }
+    
     //v1.0.7.2  needed if all prices are zero from Catalog rules, otherwise subtotal reflects list price!
     add_action( 'woocommerce_before_mini_cart', array(&$this, 'vtprd_maybe_recalc_woo_totals'), 10, 1 );  
 
-    
+
     //*************************************************
     // Post-Purchase
     //*************************************************       
@@ -299,25 +301,24 @@ class VTPRD_Parent_Cart_Validation {
 	public function vtprd_woo_validate_order(){
     global $vtprd_rules_set, $vtprd_cart, $vtprd_setup_options, $vtprd_info, $woocommerce;
     vtprd_debug_options();  //v1.0.5    
+
+    
     //Open Session Variable, get rules_set and cart if not there...
     $data_chain = $this->vtprd_get_data_chain();
 
     // switch from run-through at checkout time 
     if ( (defined('VTPRD_PRO_DIRNAME')) && ($vtprd_setup_options['use_lifetime_max_limits'] == 'yes') ) {    
-   /* 
-    if ( $vtmam_cart->error_messages_processed == 'yes' ) {  
-      $woocommerce->add_error(  __('Purchase error found.', 'vtmam') );  //supplies an error msg and prevents payment from completing 
-      return;
-    }
-    */
-      
+
       if ( ($vtprd_cart->lifetime_limit_applies_to_cart == 'yes') && ( sizeof($vtprd_cart->error_messages) == 0 ) ) {   //error msg > 0 = 2nd time through HERE, customer has blessed the reduction
         //reapply rules to catch lifetime rule logic using email and address info...
         
         $total_discount_1st_runthrough = $vtprd_cart->yousave_cart_total_amt;
+        
         $vtprd_info['checkout_validation_in_process'] = 'yes';
         
-        $vtprd_apply_rules = new VTPRD_Apply_Rules;   
+        $vtprd_apply_rules = new VTPRD_Apply_Rules;
+        
+        $vtprd_info['checkout_validation_in_process'] = 'no'; //v1.0.8.0  
    
         //ERROR Message Path
         if ( ( sizeof($vtprd_cart->error_messages) > 0 ) && 
@@ -750,7 +751,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
       }
       */
       $price_html = $this->vtprd_show_shop_price_html(); //v1.0.7.4 
-    } 
+    }
 
     return $price_html;
  
@@ -881,6 +882,8 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
   //****************************
   public function vtprd_show_shop_price_html() {
     global $vtprd_info, $vtprd_setup_options, $woocommerce, $vtprd_cart; 
+    
+    $price_html = '';  //v1.0.8.0
     
     if ( get_option( 'woocommerce_calc_taxes' ) == 'yes' ) {
       //suffix gets added automatically, blank if no suffix provided ...
@@ -1223,9 +1226,23 @@ public function vtprd_get_product_catalog_price_add_to_cart( $product_id, $param
     //Open Session Variable, get rules_set and cart if not there....
     $data_chain = $this->vtprd_get_data_chain();
     
-    $previous_user_role                = $data_chain[2]; //v1.0.7.2  added
-    $woo_cart_contents_total_previous  = $data_chain[3]; //v1.0.7.2  changed occurrence numbers
-    $woo_applied_coupons_previous      = $data_chain[4]; //v1.0.7.2  changed occurrence numbers 
+    //v1.0.8.0  begin
+    if ( isset ($data_chain[2]) ) {   
+      $previous_user_role                = $data_chain[2]; //v1.0.7.2  added
+    } else {
+      $previous_user_role                = ''; 
+    }
+    if ( isset ($data_chain[3]) ) {   
+      $woo_cart_contents_total_previous  = $data_chain[3]; //v1.0.7.2  changed occurrence numbers
+    } else {
+      $woo_cart_contents_total_previous  = ''; 
+    }
+    if ( isset ($data_chain[4]) ) {   
+      $woo_applied_coupons_previous      = $data_chain[4]; //v1.0.7.2  changed occurrence numbers 
+    } else {
+      $woo_applied_coupons_previous      = ''; 
+    }
+    //v1.0.8.0  end
     
     //**********
     //prevents recursive processing during auto add execution of add_to_cart! 
@@ -1384,6 +1401,7 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
       
     } else {
        //remove coupon and recalculate totals
+error_log( print_r(  'REMOVE COUPON', true ) );
        if ($woocommerce->cart->has_discount($coupon_title) ) {
   				$this->vtprd_woo_maybe_remove_coupon_from_cart($coupon_title);
           $woocommerce->cart->calculate_totals();
@@ -1532,7 +1550,8 @@ echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
     
     if ($vtprd_cart->yousave_cart_total_amt > 0) {  
     //    vtprd_print_checkout_discount();
-        vtprd_checkout_cart_reporting();
+        $msgType = 'plainText';                         //v1.0.8.0
+        vtprd_checkout_cart_reporting($msgType);        //v1.0.8.0
     } 
 
     /*  *************************************************
@@ -1692,8 +1711,9 @@ echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
   *************************************************** */ 
   public function vtprd_post_purchase_maybe_before_thankyou($order_id) {   
     global $wpdb, $vtprd_rules_set, $vtprd_cart, $vtprd_setup_options; 
-     vtprd_debug_options();  //v1.0.5
-
+    vtprd_debug_options();  //v1.0.5
+    
+    $message = '';  //v1.0.8.0
     $log_Id = $order_id;
    
     //if there's a discount history, let's find it...
@@ -2045,8 +2065,12 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
       
           
       if ($vtprd_rules_set == '') {        
-        $vtprd_rules_set = $data_chain[0];
-        $vtprd_cart      = $data_chain[1];
+        if (isset($data_chain[0])) {    //v1.0.8.0
+          $vtprd_rules_set = $data_chain[0];
+        }
+        if (isset($data_chain[1])) {    //v1.0.8.0
+          $vtprd_cart      = $data_chain[1];
+        }
       }
 
 
@@ -2144,7 +2168,6 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
     return;   
   }
    
-    
    
 } //end class
 $vtprd_parent_cart_validation = new VTPRD_Parent_Cart_Validation;
