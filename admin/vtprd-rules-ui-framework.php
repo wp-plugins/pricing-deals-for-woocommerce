@@ -2007,7 +2007,7 @@ class VTPRD_Rules_UI_Framework {
                   ),
                   array ( 
                     'cross_field_name'            => 'cumulativeCouponPricing',
-                    'cross_field_insertBefore'    => '#cumulativeCouponPricing_0',
+                    'cross_field_insertBefore'    => '#cumulativeCouponPricing',
                     'cross_required_or_optional'  => 'required', 
                     'applies_to_this_field_values'  => array ('yes'),
                     'cross_allowed_values'        => array ('yes'),
@@ -2222,7 +2222,7 @@ class VTPRD_Rules_UI_Framework {
                   ),
                   array ( 
                     'cross_field_name'            => 'cumulativeCouponPricing',
-                    'cross_field_insertBefore'    => '#cumulativeCouponPricing_0',
+                    'cross_field_insertBefore'    => '#cumulativeCouponPricing',
                     'cross_required_or_optional'  => 'required', 
                     'applies_to_this_field_values'  => array ('yes'),
                     'cross_allowed_values'        => array ('yes'),
@@ -2437,7 +2437,7 @@ class VTPRD_Rules_UI_Framework {
                   ),
                   array ( 
                     'cross_field_name'            => 'cumulativeCouponPricing',
-                    'cross_field_insertBefore'    => '#cumulativeCouponPricing_0',
+                    'cross_field_insertBefore'    => '#cumulativeCouponPricing',
                     'cross_required_or_optional'  => 'required', 
                     'applies_to_this_field_values'  => array ('yes'),
                     'cross_allowed_values'        => array ('yes'),
@@ -2652,7 +2652,7 @@ class VTPRD_Rules_UI_Framework {
                   ),
                   array ( 
                     'cross_field_name'            => 'cumulativeCouponPricing',
-                    'cross_field_insertBefore'    => '#cumulativeCouponPricing_0',
+                    'cross_field_insertBefore'    => '#cumulativeCouponPricing',
                     'cross_required_or_optional'  => 'required', 
                     'applies_to_this_field_values'  => array ('yes'),
                     'cross_allowed_values'        => array ('yes'),
@@ -2867,7 +2867,7 @@ class VTPRD_Rules_UI_Framework {
                   ),
                   array ( 
                     'cross_field_name'            => 'cumulativeCouponPricing',
-                    'cross_field_insertBefore'    => '#cumulativeCouponPricing_0',
+                    'cross_field_insertBefore'    => '#cumulativeCouponPricing',
                     'cross_required_or_optional'  => 'required', 
                     'applies_to_this_field_values'  => array ('yes'),
                     'cross_allowed_values'        => array ('yes'),
