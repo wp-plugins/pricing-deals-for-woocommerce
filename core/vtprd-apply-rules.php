@@ -572,6 +572,8 @@ class VTPRD_Apply_Rules{
           $vtprd_rules_set[$i]->actionPop_exploded_group_end   = sizeof($vtprd_rules_set[$i]->actionPop_exploded_found_list);
         break;
       case 'inCurrentInPopOnly':
+         //v1.0.8.1 begin  -  refactored
+          /*
           if ($vtprd_rules_set[$i]->rule_deal_info[$d]['action_amt_type'] == 'zero' ) {  //means we are acting on the already-found 'buy' unit
             $vtprd_rules_set[$i]->actionPop_exploded_group_begin = $vtprd_rules_set[$i]->inPop_exploded_group_end - 1;   //end - 1 gets the nth, as well as the direct hit...       
           } else {          
@@ -579,7 +581,24 @@ class VTPRD_Apply_Rules{
             $vtprd_rules_set[$i]->actionPop_exploded_group_begin = $vtprd_rules_set[$i]->inPop_exploded_group_begin;
           }
         //$vtprd_rules_set[$i]->actionPop_exploded_group_end   = $vtprd_rules_set[$i]->inPop_exploded_group_end;   //v1.0.3 
-          $vtprd_rules_set[$i]->actionPop_exploded_group_end   = sizeof($vtprd_rules_set[$i]->actionPop_exploded_found_list);    //v1.0.3               
+         $vtprd_rules_set[$i]->actionPop_exploded_group_end   = sizeof($vtprd_rules_set[$i]->actionPop_exploded_found_list);    //v1.0.3
+          */
+
+          if ($vtprd_rules_set[$i]->rule_deal_info[$d]['action_amt_type'] == 'zero' ) {  //means we are acting on the already-found 'buy' unit
+            $vtprd_rules_set[$i]->actionPop_exploded_group_begin = $vtprd_rules_set[$i]->inPop_exploded_group_end - 1;   //end - 1 gets the nth, as well as the direct hit...
+            $vtprd_rules_set[$i]->actionPop_exploded_group_end   = $vtprd_rules_set[$i]->inPop_exploded_group_end;         
+          } else {
+            if ($ar > 0) { //if 2nd - nth actionPop repeat, use the previous actionPop group end to begin the next group
+              $vtprd_rules_set[$i]->actionPop_exploded_group_begin = $vtprd_rules_set[$i]->actionPop_exploded_group_end;
+            } else {
+              //always the same as inPop pointers at beginning
+              $vtprd_rules_set[$i]->actionPop_exploded_group_begin = $vtprd_rules_set[$i]->inPop_exploded_group_begin;                   
+            } 
+   
+            //SETS action amt "window" for the actionPop_exploded_group
+            $this->vtprd_set_action_group_end($i, $d, $ar );  //vtprd_action_amt_process 
+          }
+          //v1.0.8.1 end                               
         break;  
       case 'nextInInPop':   
           if ($vtprd_rules_set[$i]->rule_deal_info[$d]['action_amt_type'] == 'zero' ) {  //means we are acting on the already-found 'buy' unit
@@ -901,7 +920,7 @@ class VTPRD_Apply_Rules{
         //$remainder = $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] - $running_total;
         $remainder = round($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] - $running_total, 2);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
         
-        if ($remainder > 0) {
+        if ($remainder != 0) {      //v1.0.8.1  allow for negative remainder!
           $add_a_penny_to_first = $remainder;
         } else {
           $add_a_penny_to_first = 0;
