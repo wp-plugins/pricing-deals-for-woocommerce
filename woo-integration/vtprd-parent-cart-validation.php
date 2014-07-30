@@ -1401,7 +1401,6 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
       
     } else {
        //remove coupon and recalculate totals
-error_log( print_r(  'REMOVE COUPON', true ) );
        if ($woocommerce->cart->has_discount($coupon_title) ) {
   				$this->vtprd_woo_maybe_remove_coupon_from_cart($coupon_title);
           $woocommerce->cart->calculate_totals();
@@ -1588,7 +1587,6 @@ echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
     //Open Session Variable, get rules_set and cart if not there....
     $data_chain = $this->vtprd_get_data_chain();
 
-    
     //set one-time switch for use in function vtprd_post_purchase_maybe_save_log_info
     $_SESSION['do_log_function'] = true;
           
@@ -2068,11 +2066,11 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
         if (isset($data_chain[0])) {    //v1.0.8.0
           $vtprd_rules_set = $data_chain[0];
         }
-        if (isset($data_chain[1])) {    //v1.0.8.0
-          $vtprd_cart      = $data_chain[1];
-        }
       }
-
+      
+      if (isset($data_chain[1])) {    //v1.0.8.2  moved here
+        $vtprd_cart      = $data_chain[1];
+      }
 
       return $data_chain;
    }
