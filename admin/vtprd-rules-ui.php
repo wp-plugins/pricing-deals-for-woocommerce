@@ -35,10 +35,11 @@ class VTPRD_Rules_UI{
 	}
                                
     
-  public function vtprd_enqueue_admin_scripts() {
+  public function vtprd_enqueue_admin_scripts() {  
     global $post_type, $vtprd_info;
-    if( $post_type == 'vtprd-rule' ){     //Put all JS into the FOOTER
-        
+
+      if( get_post_type() == 'vtprd-rule' ){         //v1.0.8.2
+    
         //QTip Resources
         wp_register_style ('vtprd-qtip-style', VTPRD_URL.'/admin/css/vtprd.qtip.min.css' );  
         wp_enqueue_style  ('vtprd-qtip-style'); 
@@ -70,6 +71,8 @@ class VTPRD_Rules_UI{
         }
        
       }
+      
+      
     //These are for the include/exclude meta box on the parent plugin PRODUCT page
     if( $post_type == $vtprd_info['parent_plugin_cpt']){
       wp_register_style('vtprd-admin-product-metabox-style', VTPRD_URL.'/admin/css/vtprd-admin-product-metabox-style.css' );  
