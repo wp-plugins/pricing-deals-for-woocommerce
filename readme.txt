@@ -173,6 +173,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 = 1.0.8.2 - 2014-07-30 =
 * Fix - Auto Insert free product name in discount reporting
+* Fix - Fine-tune Admin resources
 
 = 1.0.8.1 - 2014-07-27 =
 * Fix - Refactored "Discount This" limits
@@ -282,6 +283,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 = 1.0.8.2 - 2014-07-30 =
 * Fix - Auto Insert free product name in discount reporting
+* Fix - Fine-tune Admin resources
 
 = 1.0.8.1 - 2014-07-27 =
 * Fix - Refactored "Discount This" limits
