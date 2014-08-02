@@ -2066,11 +2066,12 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
         if (isset($data_chain[0])) {    //v1.0.8.0
           $vtprd_rules_set = $data_chain[0];
         }
+        if (isset($data_chain[1])) {    //v1.0.8.3
+          $vtprd_cart      = $data_chain[1];
+        }        
       }
       
-      if (isset($data_chain[1])) {    //v1.0.8.2  moved here
-        $vtprd_cart      = $data_chain[1];
-      }
+
 
       return $data_chain;
    }
