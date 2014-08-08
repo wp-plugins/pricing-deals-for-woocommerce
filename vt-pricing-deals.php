@@ -3,7 +3,7 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.0.8.3
+Version: 1.0.8.4
 Author: Vark
 Author URI: http://varktech.com
 */
@@ -34,7 +34,7 @@ ASK YOUR HOST TO TURN OFF magic_quotes_gpc !!!!!
    
    //initial setup only, overriden later in function vtprd_debug_options
    error_reporting(E_ERROR | E_CORE_ERROR | E_COMPILE_ERROR); //1.0.7.7
-    
+   
      
 class VTPRD_Controller{
 	
@@ -46,16 +46,17 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.0.8.3');
-    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5.6');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2014-08-2');
+		define('VTPRD_VERSION',                               '1.0.8.4');
+    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5.7');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2014-08-6');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
     define('VTPRD_EARLIEST_ALLOWED_PHP_VERSION',          '5');
     define('VTPRD_PLUGIN_SLUG',                           plugin_basename(__FILE__));
     define('VTPRD_PRO_PLUGIN_NAME',                      'Varktech Pricing Deals Pro for WooCommerce');    //v1.0.7.1
-   
+    
+
     require_once ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-definitions.php');
             
     // overhead stuff
@@ -99,11 +100,12 @@ class VTPRD_Controller{
     //$product->get_rating_count() odd error at checkout... woocommerce/templates/single-product-reviews.php on line 20  
     //  (Fatal error: Call to a member function get_rating_count() on a non-object)
     global $product;
+       
+    load_plugin_textdomain( 'vtprd', null, dirname( plugin_basename( __FILE__ ) ) . '/languages' );  //v1.0.8.4  moved here above defs
+   
 
     //Split off for AJAX add-to-cart, etc for Class resources.  Loads for is_Admin and true INIT loads are kept here.
     //require_once ( VTPRD_DIRNAME . '/core/vtprd-load-execution-resources.php' );
-    
-    load_plugin_textdomain( 'vtprd', null, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); 
 
     require_once  ( VTPRD_DIRNAME . '/core/vtprd-backbone.php' );    
     require_once  ( VTPRD_DIRNAME . '/core/vtprd-rules-classes.php');
@@ -111,7 +113,7 @@ class VTPRD_Controller{
     require_once  ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-functions.php');
     require_once  ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-theme-functions.php');
     require_once  ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-cart-validation.php');   
-    require_once  ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-definitions.php');
+//  require_once  ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-definitions.php');    //v1.0.8.4  moved above
     require_once  ( VTPRD_DIRNAME . '/core/vtprd-cart-classes.php');
     
     //************

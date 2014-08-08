@@ -1909,7 +1909,9 @@ DITTO ie10!!
                               $('#cartChoiceIn').attr('disabled', false);
                               $('#groupChoiceIn').attr('disabled', false);
                               $('#varChoiceIn').attr('disabled', false);
-                              $('#singleChoiceIn').attr('disabled', false);                            
+                              $('#singleChoiceIn').attr('disabled', false); 
+                              $("#andChoiceIn").prop("checked", false);   //v1.0.8.4 
+                              $("#orChoiceIn").prop("checked", true);     //v1.0.8.4                       
                             };
                             function popChoiceOut_reset() {
                               //inPopRadio
@@ -1917,7 +1919,9 @@ DITTO ie10!!
                               $('#cartChoiceOut').attr('disabled', false);
                               $('#groupChoiceOut').attr('disabled', false);
                               $('#varChoiceOut').attr('disabled', false);
-                              $('#singleChoiceOut').attr('disabled', false);                            
+                              $('#singleChoiceOut').attr('disabled', false);
+                              $("#andChoiceOut").prop("checked", false);   //v1.0.8.4 
+                              $("#orChoiceOut").prop("checked", true);     //v1.0.8.4                              
                             };
                             //KEEP this
                             function changeCumulativeSwitches() {
@@ -2204,6 +2208,8 @@ DITTO ie10!!
                                                      };
                                                      //disallow here!!  only allow 'applies to each' 
                                                      $('.discount_applies_to_all').attr('disabled', true); 
+                                                     $('.discount_applies_to_each').attr('disabled', false);
+                                                     $('#discount_applies_to_each_0').attr('selected', true);
                                                      break;
                                                                                                           
                                 case "forThePriceOf_Units":   
@@ -2974,7 +2980,7 @@ DITTO ie10!!
                              
                         $('#popChoiceIn').change(function(){
                             popChoiceInTest();
-                            mirrorPopChoiceInChange();
+                          //  mirrorPopChoiceInChange();       //v1.0.8.4
                         });
 
                         function popChoiceInTest() {
@@ -3054,7 +3060,7 @@ DITTO ie10!!
                            
                         $('#popChoiceOut').change(function(){
                             popChoiceOutTest();
-                            mirrorPopChoiceOutChange();
+                          //  mirrorPopChoiceOutChange();   //v1.0.8.4
                         });                                
 
                         function popChoiceOutTest() {     

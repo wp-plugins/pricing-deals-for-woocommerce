@@ -2031,7 +2031,6 @@
       $output .= '</td>';
     }
 
-    
     $output .= '<td  class="product-total">';
     $output .= '<span class="amount">' . $vtprd_setup_options['checkout_credit_detail_label'] .$amt .'</span>';				
     $output .= '</td>';
@@ -2453,9 +2452,20 @@
        $vtprd_info['product_session_info'] = $_SESSION['vtprd_product_session_info_'.$product_id];   
       //will be a problem in Ajax...
       $current_time_in_seconds = time();          
-      $user_role = vtprd_get_current_user_role();      
+      $user_role = vtprd_get_current_user_role();  
+      
+      //*****************************
+      //v1.0.8.4 timestamp  begin
+      $vtprd_ruleset_timestamp = get_option( 'vtprd_ruleset_timestamp' );  
+      if (!$vtprd_ruleset_timestamp) {
+        $vtprd_ruleset_timestamp = 0; 
+      }     
+      //v1.0.8.4 timestamp  end
+      //*****************************
+          
       if ( ( ($current_time_in_seconds - $vtprd_info['product_session_info']['session_timestamp_in_seconds']) > '3600' ) ||     //session data older than 60 minutes
-           (  $user_role != $vtprd_info['product_session_info']['user_role']) ) {    //current user role not the same as prev
+           (  $user_role != $vtprd_info['product_session_info']['user_role']) ||                                      //user role CHANGED via user login
+           (  $vtprd_ruleset_timestamp > $vtprd_info['product_session_info']['session_timestamp_in_seconds'] ) ) {   //v1.0.8.4 timestamp - GET *more recent* ADMIN updates to ruleset NOW    
         vtprd_apply_rules_to_single_product($product_id, $price);
         //reset user role info, in case it changed
         $vtprd_info['product_session_info']['user_role'] = $user_role;
@@ -2502,9 +2512,21 @@
        $vtprd_info['product_session_info'] = $_SESSION['vtprd_product_session_info_'.$product_id];   
       //will be a problem in Ajax...
       $current_time_in_seconds = time();          
-      $user_role = vtprd_get_current_user_role();      
+      $user_role = vtprd_get_current_user_role();   
+      
+      
+      //*****************************
+      //v1.0.8.4 timestamp  begin
+      $vtprd_ruleset_timestamp = get_option( 'vtprd_ruleset_timestamp' );  
+      if (!$vtprd_ruleset_timestamp) {
+        $vtprd_ruleset_timestamp = 0;
+      }     
+      //v1.0.8.4 timestamp  end
+      //*****************************
+         
       if ( ( ($current_time_in_seconds - $vtprd_info['product_session_info']['session_timestamp_in_seconds']) > '3600' ) ||     //session data older than 60 minutes
-           (  $user_role != $vtprd_info['product_session_info']['user_role']) ) {    //current user role not the same as prev
+           (  $user_role != $vtprd_info['product_session_info']['user_role']) ||                                      //user role CHANGED via user login
+           (  $vtprd_ruleset_timestamp > $vtprd_info['product_session_info']['session_timestamp_in_seconds'] ) ) {   //v1.0.8.4 timestamp - GET *more recent* ADMIN updates to ruleset NOW           
         vtprd_apply_rules_to_single_product($product_id, $price);
         //reset stored role to current
         $vtprd_info['product_session_info']['user_role'] = $user_role;        
@@ -2561,9 +2583,21 @@
        $vtprd_info['product_session_info'] = $_SESSION['vtprd_product_session_info_'.$product_id];   
       //will be a problem in Ajax...
       $current_time_in_seconds = time();          
-      $user_role = vtprd_get_current_user_role();      
+      $user_role = vtprd_get_current_user_role();  
+      
+      
+      //*****************************
+      //v1.0.8.4 timestamp  begin
+      $vtprd_ruleset_timestamp = get_option( 'vtprd_ruleset_timestamp' );  
+      if (!$vtprd_ruleset_timestamp) {
+        $vtprd_ruleset_timestamp = 0;
+      }     
+      //v1.0.8.4 timestamp  end
+      //*****************************
+
       if ( ( ($current_time_in_seconds - $vtprd_info['product_session_info']['session_timestamp_in_seconds']) > '3600' ) ||     //session data older than 60 minutes
-           (  $user_role != $vtprd_info['product_session_info']['user_role']) ) {    //current user role not the same as prev
+           (  $user_role != $vtprd_info['product_session_info']['user_role']) ||                                      //user role CHANGED via user login
+           (  $vtprd_ruleset_timestamp > $vtprd_info['product_session_info']['session_timestamp_in_seconds'] ) ) {   //v1.0.8.4 timestamp - GET *more recent* ADMIN updates to ruleset NOW            
         vtprd_apply_rules_to_single_product($product_id, $price);
         //reset stored role to current
         $vtprd_info['product_session_info']['user_role'] = $user_role;        

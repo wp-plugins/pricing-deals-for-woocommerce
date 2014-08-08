@@ -38,7 +38,7 @@ class VTPRD_Rules_UI{
   public function vtprd_enqueue_admin_scripts() {  
     global $post_type, $vtprd_info;
 
-      if( get_post_type() == 'vtprd-rule' ){         //v1.0.8.2
+      if( get_post_type() == 'vtprd-rule' ){         //v1.0.8.2   can't just test $post_type here, not always accurate!
     
         //QTip Resources
         wp_register_style ('vtprd-qtip-style', VTPRD_URL.'/admin/css/vtprd.qtip.min.css' );  

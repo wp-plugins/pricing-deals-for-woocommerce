@@ -151,7 +151,8 @@ class VTPRD_Parent_Definitions {
         'purch_hist_done' => '',
         'purchaser_ip_address'  => $this->vtprd_get_ip_address(), //v1.0.7.4    >>> must be here!!
         'default_short_msg' => $default_short_msg,
-        'default_full_msg'  => $default_full_msg
+        'default_full_msg'  => $default_full_msg,
+        'applied_value_of_discount_applies_to' =>  ''   //v1.0.8.4   
 
       ); //end vtprd_info
       

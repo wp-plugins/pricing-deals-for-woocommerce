@@ -450,7 +450,15 @@ class VTPRD_Apply_Rules{
       if (sizeof($vtprd_rules_set[$i]->free_product_array) > 0) {
         $this->vtprd_roll_free_products_out_of_other_rules($i); 
       }
-      
+                            
+      //v1.0.8.4 begin
+      //  for next rule iterations, if cumulativeRulePricing == 'no'
+      if ( ($vtprd_info['applied_value_of_discount_applies_to']  == 'cheapest') ||
+           ($vtprd_info['applied_value_of_discount_applies_to']  == 'most_expensive') ||
+           ($vtprd_info['applied_value_of_discount_applies_to']  == 'all') ) {
+         $this->vtprd_mark_products_in_an_all_rule($i);
+      }      
+      //v1.0.8.4 begin  
       
     }  //ruleset for loop
     return;    
@@ -684,6 +692,7 @@ class VTPRD_Apply_Rules{
         break;
     } 
  
+    $vtprd_info['applied_value_of_discount_applies_to']  =  $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_applies_to'];   //v1.0.8.4  store value for processing
 
     $sizeof_actionpop_list = sizeof($vtprd_rules_set[$i]->actionPop_exploded_found_list); //v 1.0.3
     if ( ($vtprd_rules_set[$i]->actionPop_exploded_group_end >= $sizeof_actionpop_list ) || 
@@ -1153,7 +1162,15 @@ class VTPRD_Apply_Rules{
     //*********************************************************************
     //CHECK THE MANY DIFFERENT MAX LIMITS BEFORE UPDATING THE DISCOUNT TO THE ARRAY
     //********************************************************************* 
-   
+
+    //v1.0.8.4 begin
+    if ( ($vtprd_rules_set[$i]->cumulativeRulePricing == 'no') &&
+         ($vtprd_cart->cart_items[$k]->product_already_in_an_all_rule == 'yes') ) {
+        $vtprd_cart->cart_items[$k]->cartAuditTrail[$vtprd_rules_set[$i]->post_id]['discount_msgs'][] = 'No Discount - part of an "all" rule group from previous discount, no more allowed';
+        return;     
+    }
+    //v1.0.8.4 begin
+    
     if ( isset( $vtprd_cart->cart_items[$k]->yousave_by_rule_info[$rule_id] ) ) {
       if ( (sizeof ($vtprd_cart->cart_items[$k]->yousave_by_rule_info) > 1 ) &&   //only 1 allowed in this case...
            ($vtprd_rules_set[$i]->cumulativeRulePricing == 'no') ) {
@@ -2690,7 +2707,25 @@ class VTPRD_Apply_Rules{
     return;
   }  
  
-
+   //*******************************************************
+   //v1.0.8.4 new function
+   //  for next rule iterations, if cumulativeRulePricing == 'no'
+   //*******************************************************
+   public  function vtprd_mark_products_in_an_all_rule($i) {
+		  global $vtprd_cart, $vtprd_rules_set, $vtprd_info, $vtprd_setup_options, $vtprd_rule; 
+      
+      $sizeof_cart_items = sizeof($vtprd_cart->cart_items);
+      $sizeof_actionPop_found_list = sizeof($vtprd_rules_set[$i]->actionPop_found_list);
+      
+      for($a=0; $a < $sizeof_actionPop_found_list; $a++) {            
+          for($k=0; $k < $sizeof_cart_items; $k++) { 
+             if ($vtprd_cart->cart_items[$k]->product_id == $vtprd_rules_set[$i]->actionPop_found_list[$a]['prod_id']) {
+                $vtprd_cart->cart_items[$k]->product_already_in_an_all_rule = 'yes'; 
+             }
+          }
+      }
+   }      
+      //v1.0.8.4 begin 
 
    
 } //end class

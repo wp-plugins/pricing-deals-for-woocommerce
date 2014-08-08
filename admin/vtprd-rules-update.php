@@ -861,17 +861,15 @@ action amt condition can be an amt or $$
     }
     //**************        
     
-    //nuke the browser session variables in this case - allows clean retest ...
-/*  mwn20140414 =>code shifted to top of file...
-    if(!isset($_SESSION['session_started'])){
-      session_start();    
-      header("Cache-Control: no-cache");
-      header("Pragma: no-cache");      
-    }          
-*/
-    // mwn20140414 begin => added inline session_start().  allow potential dup session start, as it's only a Notice, not a warning....
-    //session_start();
-        
+    //v1.0.8.4 timestamp begin
+    $current_time = time();
+    if (get_option('vtprd_ruleset_has_a_display_rule') == true) {
+      update_option( 'vtprd_ruleset_timestamp',$current_time );
+    } else {
+      add_option( 'vtprd_ruleset_timestamp',$current_time );
+    }
+    //v1.0.8.4 timestamp  end
+
     if (session_id() == "") {
       session_start();    
     } 
@@ -881,6 +879,8 @@ action amt condition can be an amt or $$
     session_write_close();
     // mwn20140414 end
     
+    
+     
     return;
   } 
   

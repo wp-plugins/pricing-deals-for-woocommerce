@@ -171,7 +171,8 @@ class VTPRD_Parent_Cart_Validation {
    //MAYBE++ add_action( 'woocommerce_ajax_added_to_cart' ,              array(&$this, 'vtprd_ajax_add_to_cart_hook2'), 10, 1 );
         
     //'woocommerce_cart_updated' RUNS EVERY TIME THE CART OR CHECKOUT PAGE DISPLAYS!!!!!!!!!!!!!
-    add_action( 'woocommerce_cart_updated',                   array(&$this, 'vtprd_cart_updated') );   //AFTER cart update completed, all totals computed
+    add_action( 'woocommerce_cart_updated',                   array(&$this, 'vtprd_cart_updated') );   //AFTER cart update completed, all totals computed 
+    add_action( 'wp_login',                                   array(&$this, 'vtprd_maybe_update_cart_on_login'), 10, 2 );   //v1.0.8.4   re-applies rules on login immediately!
     
     //this runs BEFORE the qty is zeroed, not much use...
     //add_action( 'woocommerce_before_cart_item_quantity_zero', array(&$this, 'vtprd_test_quantity_zero'), 10,1 );     //cart_item_removed
@@ -1218,7 +1219,22 @@ public function vtprd_get_product_catalog_price_add_to_cart( $product_id, $param
       return;
 
    }       
-
+ 
+   //*************************************
+   // v1.0.8.4  new function
+   //recalc the cart if user changes, to pick up user/role-based rules
+   //*************************************
+   public function vtprd_maybe_update_cart_on_login($user_login, $user) {
+      global $woocommerce;
+      
+      if ( ( isset($woocommerce) ) &&
+           ( isset($woocommerce->cart) ) && 
+           ($woocommerce->cart->cart_contents_total  > 0) ) {
+         $this->vtprd_cart_updated();    
+      }
+      return; 
+   }
+ 
    // do_action( 'woocommerce_add_to_cart', $cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data );
    public function vtprd_cart_updated() {
       global $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $wpsc_coupons;  
