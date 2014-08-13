@@ -172,7 +172,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 == Changelog ==
 
 = 1.0.8.5 - 2014-08-13 =
-* Enhancement - Coupon Title 'deals' tranlated via filter - see languages/translation directions.txt 
+* Enhancement - Coupon Title 'deals' translated via filter - see languages/translation directions.txt 
 * Fix - Variation taxable status
 
 = 1.0.8.4 - 2014-08-6 =
@@ -295,7 +295,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 == Upgrade Notice ==
 
 = 1.0.8.5 - 2014-08-13 =
-* Enhancement - Coupon Title 'deals' tranlated via filter - see languages/translation directions.txt 
+* Enhancement - Coupon Title 'deals' translated via filter - see languages/translation directions.txt 
 * Fix - Variation taxable status
 
 = 1.0.8.4 - 2014-08-6 =
