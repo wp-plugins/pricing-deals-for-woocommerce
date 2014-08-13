@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 3.9.2
-Stable tag: 1.0.8.4
+Stable tag: 1.0.8.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -171,6 +171,10 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.8.5 - 2014-08-13 =
+* Enhancement - Coupon Title 'deals' tranlated via filter - see languages/translation directions.txt 
+* Fix - Variation taxable status
+
 = 1.0.8.4 - 2014-08-6 =
 * Enhancement - Pick up User Login and apply to Cart realtime 
 * Enhancement - Upgraded discount exclusion for pricing tiers, when "Discount Applies to ALL" 
@@ -289,6 +293,10 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.0.8.5 - 2014-08-13 =
+* Enhancement - Coupon Title 'deals' tranlated via filter - see languages/translation directions.txt 
+* Fix - Variation taxable status
 
 = 1.0.8.4 - 2014-08-6 =
 * Enhancement - Pick up User Login and apply to Cart realtime 

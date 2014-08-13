@@ -11,3 +11,13 @@ vtprd-en_EN.mo
 
 vtprd-fr_FR.po
 vtprd-fr_FR.mo
+
+
+//v1.0.8.5
+ If you want translate the 'Deals' title of "Coupon: Deals", you would use the following wordpress filter:
+// Sample filter execution ==>>  put into your theme's functions.php file, so it's not affected by plugin updates
+          function coupon_code_discount_title() {
+            return 'different coupon title';  //new coupon title
+          }
+
+          add_filter('vtprd_coupon_code_discount_title', 'coupon_code_discount_title', 10);   

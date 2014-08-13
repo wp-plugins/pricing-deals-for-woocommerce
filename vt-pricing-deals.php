@@ -3,7 +3,7 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.0.8.4
+Version: 1.0.8.5
 Author: Vark
 Author URI: http://varktech.com
 */
@@ -46,9 +46,9 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.0.8.4');
+		define('VTPRD_VERSION',                               '1.0.8.5');
     define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5.7');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2014-08-6');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2014-08-13');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
@@ -86,6 +86,7 @@ class VTPRD_Controller{
         
         //get rid of bulk actions on the edit list screen, which aren't compatible with this plugin's actions...
         add_action('bulk_actions-edit-vtprd-rule', array($this, 'vtprd_custom_bulk_actions') );
+     
     } //v1.0.7.2  end
     
 	}   //end constructor
@@ -102,6 +103,25 @@ class VTPRD_Controller{
     global $product;
        
     load_plugin_textdomain( 'vtprd', null, dirname( plugin_basename( __FILE__ ) ) . '/languages' );  //v1.0.8.4  moved here above defs
+
+
+    
+    //v1.0.8.5 begin
+    // instead of translation, using filter to allow title change!!!!!!!!
+    //  this propagates throughout all plugin code execution through global...
+    $coupon_title  = apply_filters('vtprd_coupon_code_discount_title','' );
+    if ($coupon_title) {
+       global $vtprd_info; 
+       $vtprd_info['coupon_code_discount_deal_title'] = $coupon_title;
+    }
+    /*
+    // Sample filter execution ==>>  put into your theme's functions.php file, so it's not affected by plugin updates
+          function coupon_code_discount_title() {
+            return 'different coupon title';  //<<==  Change this text to be the title you want!!!
+          }
+          add_filter('vtprd_coupon_code_discount_title', 'coupon_code_discount_title', 10);         
+    */
+    //v1.0.8.5 end
    
 
     //Split off for AJAX add-to-cart, etc for Class resources.  Loads for is_Admin and true INIT loads are kept here.
@@ -159,6 +179,7 @@ class VTPRD_Controller{
             
         //always check if the manually created coupon codes are there - if not create them.
         vtprd_woo_maybe_create_coupon_types();   
+
         
         //v1.0.7.1 begin
         if ( (defined('VTPRD_PRO_DIRNAME')) &&

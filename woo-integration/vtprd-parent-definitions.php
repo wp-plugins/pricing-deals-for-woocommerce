@@ -42,6 +42,7 @@ class VTPRD_Parent_Definitions {
     }
     
     $coupon_code_discount_deal_title  = __('deals', 'vtprd');
+        
     $default_short_msg  =  __('Short checkout message required', 'vtprd');
     $default_full_msg   =  __('Get 10% off Laptops Today! (sample)', 'vtprd');
     

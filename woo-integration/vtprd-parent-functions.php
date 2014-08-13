@@ -41,23 +41,28 @@
                   $vtprd_cart_item->variation_array      = $cart_item['variation'];                  
                   $vtprd_cart_item->product_name         = $parent_post->post_title . '&nbsp;' . $varLabels ;
                   $vtprd_cart_item->parent_product_name  = $parent_post->post_title;
-                  $vtprd_cart_item->variation_name_html  = $woocommerce->cart->get_item_data( $cart_item );   //v1.0.7.9
+                  $vtprd_cart_item->variation_name_html  = $woocommerce->cart->get_item_data( $cart_item );   //v1.0.7.9                  
               } else { 
                   $vtprd_cart_item->product_id           = $cart_item['product_id'];
                   $vtprd_cart_item->product_name         = $_product->get_title().$woocommerce->cart->get_item_data( $cart_item );
               }
               
-              //v1.0.7.4 begin
-              $product = get_product( $vtprd_cart_item->product_id );
+              $product = get_product( $vtprd_cart_item->product_id ); //v1.0.7.4
 
+              //v1.0.8.5 begin
+              $varID  = $cart_item['variation_id'];
+              $prodID = $cart_item['product_id'];
+              $vtprd_cart_item->product_is_taxable = vtprd_product_taxable_check($prodID, $varID) ; 
+              /*
               $tax_status = get_post_meta( $vtprd_cart_item->product_id, '_tax_status', true );
               if ( $tax_status == 'taxable' ) {              
                 $vtprd_cart_item->product_is_taxable = true; 
               } else {
                 $vtprd_cart_item->product_is_taxable = false;                                              
               } 
- 
-              //v1.0.7.4 end  
+              */
+              //v1.0.8.5 end
+
               
               $vtprd_cart_item->quantity      = $cart_item['quantity'];                                                  
                   
@@ -407,13 +412,24 @@
         }
       }
       
-      
+      //v1.0.8.5 begin
+      if ($post_parent_ID) {  //if a parent id is present, this is a variation...
+        $prodID = $post_parent_ID;
+        $varID  = $product_id;
+      } else {
+        $prodID = $product_id;
+        $varID  = ' ';      
+      }
+      $vtprd_cart_item->product_is_taxable = vtprd_product_taxable_check($prodID, $varID) ; 
+      /*
       $tax_status = get_post_meta( $product_id, '_tax_status', true ); 
       if ( $tax_status == 'taxable' ) {              
         $vtprd_cart_item->product_is_taxable = true; 
       } else {
         $vtprd_cart_item->product_is_taxable = false;
       }      
+      */
+      //v1.0.8.5 end
       
        //v1.0.7.4 end
         
@@ -2460,8 +2476,8 @@
       if (!$vtprd_ruleset_timestamp) {
         $vtprd_ruleset_timestamp = 0; 
       }     
-      //v1.0.8.4 timestamp  end
-      //*****************************
+      //v1.0.8.4 timestamp  end 
+      //*****************************      
           
       if ( ( ($current_time_in_seconds - $vtprd_info['product_session_info']['session_timestamp_in_seconds']) > '3600' ) ||     //session data older than 60 minutes
            (  $user_role != $vtprd_info['product_session_info']['user_role']) ||                                      //user role CHANGED via user login
@@ -2871,7 +2887,7 @@
   //v1.0.7 change
   function vtprd_debug_options(){ 
     global $vtprd_setup_options;
-
+  
     if ( ( isset( $vtprd_setup_options['debugging_mode_on'] )) &&
          ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ) ) {  
       error_reporting(E_ALL);  
@@ -2891,7 +2907,7 @@
     }
     //v1.0.7.8 end   
   }
-  
+ 
   //****************************************
   //v1.0.7.4 new function
   // Format $amt with VAT suffix, as needed 
@@ -3235,6 +3251,32 @@
 	}
   //v1.0.7.9  end
 
+  /* ************************************************ v1.0.8.5 new function
+  **   Process both reg product and var product taxation
+  *************************************************** */
+  function vtprd_product_taxable_check($prodID, $varID) {
+     if ($varID > ' ') {
+        $var_tax_status = get_post_meta( $varID, '_tax_class', true );
+        switch($var_tax_status) {
+          case 'zero-rate' :  
+              return false;   //variation not taxed
+            break;
+          case 'reduced-rate' :  
+              return true;    //variation taxed
+            break;
+          default :  
+              continue;      //variation taxation based on parent  (blank or == 'parent')
+            break;            
+        } 
+     }
+    
+    $tax_status = get_post_meta( $prodID, '_tax_status', true );
+    if ( $tax_status == 'taxable' ) {              
+      return true; 
+    } else {
+      return false;                                              
+    }   
+  }
 
   //**v1.0.7.5 begin
   /* ************************************************
