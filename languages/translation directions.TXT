@@ -1,4 +1,6 @@
-plesae refer to the excellent tutorial at:
+(PLEASE place your translated PO file BACK into the LANGUAGES folder on your server...)
+
+please refer to the excellent tutorial at::
 
 http://www.inkthemes.com/how-to-create-a-po-file-of-your-themes-i-e-translation-of-wordpress-theme-in-multiple-languages/02/
 
