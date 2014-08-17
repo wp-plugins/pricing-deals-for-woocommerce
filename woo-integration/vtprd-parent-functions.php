@@ -46,6 +46,17 @@
                   $vtprd_cart_item->product_id           = $cart_item['product_id'];
                   $vtprd_cart_item->product_name         = $_product->get_title().$woocommerce->cart->get_item_data( $cart_item );
               }
+
+              //v1.0.8.6  begin
+              //for Variation Products with Attributes only, **there is NO product_ID difference** - the only difference is in the variation array.
+              //   this info is used later to uniquely identify the product to which a discount should be added.
+              $vtprd_cart_item->product_variation_key  = array (
+                 'product_id'    => $cart_item['product_id'], 
+                 'variation_id'  => $cart_item['variation_id'],
+                 'variation'     => $cart_item['variation']
+              );   
+              //v1.0.8.6  end
+              
               
               $product = get_product( $vtprd_cart_item->product_id ); //v1.0.7.4
 
@@ -373,15 +384,20 @@
       ************************************ */
       //v1.0.7.8  begin
       
-      //if we're on a variation, gotta use the Parent to get the taxonomies!!
-      if ($post_parent_ID) {
-        $use_this_id = $post_parent_ID;
+      
+      //v1.0.8.6 begin
+      //if we're on a variation, gotta use the Parent to get the taxonomies!!     
+      if ($post->post_parent > 0) {
+        $use_this_id = $post->post_parent;
       } else {
         $use_this_id = $product_id;
       }
+      //v1.0.8.6 begin
+      
       
       $vtprd_cart_item->prod_cat_list = wp_get_object_terms( $use_this_id, $vtprd_info['parent_plugin_taxonomy'], $args = array('fields' => 'ids') );
       $vtprd_cart_item->rule_cat_list = wp_get_object_terms( $use_this_id, $vtprd_info['rulecat_taxonomy'], $args = array('fields' => 'ids') );
+
         //*************************************                    
       //v1.0.7.8  end                   
 
@@ -629,7 +645,7 @@
       } 
       //store session id 'vtprd_product_session_info_[$product_id]'
       $_SESSION['vtprd_product_session_info_'.$product_id] = $vtprd_info['product_session_info'];
-      
+ 
       //initialize vtprd_cart to clear all discount values...  //v1.0.7.8
       $vtprd_cart = new vtprd_Cart;                            //v1.0.7.8
   }
@@ -645,7 +661,6 @@
         
         $attributes = (array) maybe_unserialize( get_post_meta($product_ID, '_product_attributes', true) );
 
-       
         //**********************************
         //v1.0.7.9 begin
         //**********************************
@@ -757,14 +772,14 @@
         } 
         $sizeof_custom_options = sizeof($custom_options);                
        //v1.0.7.9  end 
-       //**********************************
+       //*********************************
 
         
         //$parent_post_terms = wp_get_post_terms( $post->ID, $attribute['name'] );  //v1.0.7.9  not used
        
         // woo parent product title only carried on parent post
         echo '<h3>' .$parent_post->post_title.    ' - Variations</h3>'; 
-        
+                
         foreach ($product_variation_IDs as $product_variation_ID) {     //($product_variation_IDs as $product_variation_ID => $info)
             // $variation_post = get_post($product_variation_ID);
          
@@ -797,8 +812,8 @@
 									//**********************************
                   //v1.0.7.9 begin
                   if ( ( (isset($attribute['is_variation'])) &&    
-                         (!$attribute['is_variation']) ) || 
-                       (!isset($attribute['is_variation'])) ) {                              
+                              (!$attribute['is_variation']) ) || 
+                        (!isset($attribute['is_variation'])) ) {                              
                     continue; //skip to next in $attributes foreach
                   }
                   //v1.0.7.9 end
@@ -864,7 +879,7 @@
             // custom list of attributes with   '{,}' as a separator...
             $woo_attributes_id =  'woo_attributes_' .$product_variation_ID. '_' .$tax_class ;
             $output  .= '<input type="hidden" id="'.$woo_attributes_id.'" name="'.$woo_attributes_id.'" value="'.$variation_product_name_attributes.'">';          
-
+            
 
             $output  .= '</li>'; 
             echo $output ; 
@@ -903,7 +918,7 @@
   } 
 
   
-  
+ 
   function vtprd_test_for_variations($prod_ID) { 
       
      $vartest_response = 'no';
@@ -924,7 +939,7 @@
      // code from:  woocommerce/admin/post-types/writepanels/writepanel-product-type-variable.php
      $attributes = (array) maybe_unserialize( get_post_meta($prod_ID, '_product_attributes', true) );
      foreach ($attributes as $attribute) {
-       if ($attribute['is_variation'])  {
+       if ( isset( $attribute['is_variation'] ) )  {  //v1.0.8.6
           $vartest_response = 'yes';
           break;
        }
@@ -966,15 +981,16 @@
   function vtprd_get_current_user_role() {
     global $current_user; 
     
-    if ( !$current_user )  {
-      $current_user = wp_get_current_user();
-    }
+    if ( !$current_user )  {   
+      get_currentuserinfo();
+    }               
     
     $user_roles = $current_user->roles;
     $user_role = array_shift($user_roles);
     if  ($user_role <= ' ') {
       $user_role = 'notLoggedIn';
-    }      
+    }  
+   
     return $user_role;
   } 
 
@@ -2887,7 +2903,7 @@
   //v1.0.7 change
   function vtprd_debug_options(){ 
     global $vtprd_setup_options;
-  
+
     if ( ( isset( $vtprd_setup_options['debugging_mode_on'] )) &&
          ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ) ) {  
       error_reporting(E_ALL);  

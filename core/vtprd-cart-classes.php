@@ -81,7 +81,8 @@ class VTPRD_Cart_Item {
 
     public $product_id; 
     public $variation_id; //woo and jigo only 
-    public $variation_array; //woo and jigo only 
+    public $variation_array; //woo and jigo only
+    public $product_variation_key; //woo, combo of other fields... //v1.0.8.6
     public $product_name;
     public $parent_product_name;  //woo and jigo only 
     public $quantity;
@@ -144,11 +145,21 @@ class VTPRD_Cart_Item {
       /*
          Array
             (
-                [pa_colors2] => purple
+                [pa_colors2] => purple,
                 [pa_size2] => lg
             )
      
       */ 
+    $this->product_variation_key = array(); //woo, combo of other fields... //v1.0.8.6   
+      /*
+         Array
+            (
+               [product_id]    => $cart_item['product_id'], 
+               [variation_id]  => $cart_item['variation_id'],
+               [variation]     => $cart_item['variation']
+            )
+     
+      */                 
     $this->product_name;
     $this->parent_product_name;
     $this->quantity = 0.00;

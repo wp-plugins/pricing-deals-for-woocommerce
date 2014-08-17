@@ -1227,10 +1227,10 @@ public function vtprd_get_product_catalog_price_add_to_cart( $product_id, $param
    public function vtprd_maybe_update_cart_on_login($user_login, $user) {
       global $woocommerce;
       
-      if ( ( isset($woocommerce) ) &&
-           ( isset($woocommerce->cart) ) && 
-           ($woocommerce->cart->cart_contents_total  > 0) ) {
-         $this->vtprd_cart_updated();    
+      $woocommerce_cart_contents = $woocommerce->cart->get_cart();
+      if ( sizeof($woocommerce_cart_contents) > 0 ) {       
+         //this re-does the CART rules
+         $this->vtprd_cart_updated();                     
       }
       return; 
    }
@@ -1278,6 +1278,7 @@ public function vtprd_get_product_catalog_price_add_to_cart( $product_id, $param
         return;
       }          
     }
+
      
 /*
 echo '$woocommerce->cart->cart_contents_total= ' .$woocommerce->cart->cart_contents_total . '<br>';

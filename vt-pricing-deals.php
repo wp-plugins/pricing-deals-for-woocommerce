@@ -3,7 +3,7 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.0.8.5
+Version: 1.0.8.6
 Author: Vark
 Author URI: http://varktech.com
 */
@@ -46,9 +46,9 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.0.8.5');
-    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5.7');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2014-08-13');
+		define('VTPRD_VERSION',                               '1.0.8.6');
+    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5.8');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2014-08-16');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
@@ -554,7 +554,7 @@ class VTPRD_Controller{
    public function vtprd_admin_notice_version_mismatch() {
       $message  =  '<strong>' . __('Please also update plugin: ' , 'vtprd') . ' &nbsp;&nbsp;'  .VTPRD_PRO_PLUGIN_NAME . '</strong>' ;
       $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Your Pro Version = ' , 'vtprd') .VTPRD_PRO_VERSION. ' &nbsp;&nbsp;' . __(' The Minimum Required Pro Version = ' , 'vtprd') .VTPRD_MINIMUM_PRO_VERSION ;      
-      $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Please delete the old Pro plugin from your installation via ftp.'  , 'vtprd');
+      $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Please delete the old Pro plugin from your installation (no rules will be affected).'  , 'vtprd');
       $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Go to ', 'vtprd');
       $message .=  '<a target="_blank" href="http://www.varktech.com/download-pro-plugins/">Varktech Downloads</a>';
       $message .=   __(', download and install the newest <strong>'  , 'vtprd') .VTPRD_PRO_PLUGIN_NAME. '</strong>' ;
