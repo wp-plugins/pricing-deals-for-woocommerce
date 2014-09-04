@@ -622,6 +622,22 @@ class VTPRD_Apply_Rules{
             //SETS action amt "window" for the actionPop_exploded_group
             $this->vtprd_set_action_group_end($i, $d, $ar );  //vtprd_action_amt_process 
           }
+          
+          //v1.0.8.7 begin
+          // capture overflow...  >= since we're comparing occurrence with size
+          $sizeOf_actionPop_exploded_found_list = sizeof($vtprd_rules_set[$i]->actionPop_exploded_found_list);
+          if ($vtprd_rules_set[$i]->actionPop_exploded_group_begin >= $sizeOf_actionPop_exploded_found_list ) {
+             $vtprd_rules_set[$i]->rule_processing_status = 'cartGroupFailedTest';
+             break;
+          }
+          //don't let end go beyond the end of the actionpop list
+          if ($vtprd_rules_set[$i]->actionPop_exploded_group_end >= $sizeOf_actionPop_exploded_found_list ) {
+             //sizeof = count, group_end is occurrence, have to subtract 1
+             $vtprd_rules_set[$i]->actionPop_exploded_group_end = $sizeOf_actionPop_exploded_found_list - 1;
+          }         
+          //v1.0.8.7 end
+          
+          
         break;  
       case 'nextInActionPop':         
           //first time actionPop_exploded_group_end arrives here = 0...
