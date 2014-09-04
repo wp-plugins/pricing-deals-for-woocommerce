@@ -629,12 +629,7 @@ class VTPRD_Apply_Rules{
           if ($vtprd_rules_set[$i]->actionPop_exploded_group_begin >= $sizeOf_actionPop_exploded_found_list ) {
              $vtprd_rules_set[$i]->rule_processing_status = 'cartGroupFailedTest';
              break;
-          }
-          //don't let end go beyond the end of the actionpop list
-          if ($vtprd_rules_set[$i]->actionPop_exploded_group_end >= $sizeOf_actionPop_exploded_found_list ) {
-             //sizeof = count, group_end is occurrence, have to subtract 1
-             $vtprd_rules_set[$i]->actionPop_exploded_group_end = $sizeOf_actionPop_exploded_found_list - 1;
-          }         
+          }        
           //v1.0.8.7 end
           
           
