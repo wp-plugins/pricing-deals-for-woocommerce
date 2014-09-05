@@ -25,7 +25,7 @@ Power your store to greater success with pricing deals and sales promotions! Jus
 *   Group pricing
 *   Product and Variation Pricing
 *   Schedulable
-*   Works with WooCommerce 2.1+
+*   Works with WooCommerce 2.2+
 
 = Unparalleled Customer Service =
 
