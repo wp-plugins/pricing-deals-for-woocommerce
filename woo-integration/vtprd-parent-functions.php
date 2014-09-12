@@ -1905,7 +1905,7 @@
     global $vtprd_cart, $vtprd_cart_item, $vtprd_rules_set, $vtprd_info, $vtprd_setup_options, $woocommerce;
     $output = ''; //v1.0.7.9
    	
-    $output .=  '<h2 id="vtprd-thankyou-title">' . __('Cart Discount Details', 'vtprd') .'<h2>';
+    $output .=  '<h2 id="vtprd-thankyou-title">' . __('Cart Discount Details', 'vtprd') .'</h2>';  //v1.0.8.7  change 2nd <h2>  to </h2>
      	
     $output .= '<table class="shop_table order_details vtprd-thankyou-table">';
     $output .= '<thead>';
