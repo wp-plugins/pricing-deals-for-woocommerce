@@ -173,6 +173,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 = 1.0.8.7 - 2014-09-04 =
 * Fix - Rare Discount by each counting issue
+* Fix - Onsale Switch for Catalog Rules
 
 = 1.0.8.6 - 2014-08-16 =
 * Fix - Rare variation categories list issue
@@ -303,6 +304,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 = 1.0.8.7 - 2014-09-04 =
 * Fix - Rare Discount by each counting issue
+* Fix - Onsale Switch for Catalog Rules
 
 = 1.0.8.6 - 2014-08-16 =
 * Fix - Rare variation categories list issue

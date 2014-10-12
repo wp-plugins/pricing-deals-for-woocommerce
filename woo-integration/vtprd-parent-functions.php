@@ -378,7 +378,19 @@
       $vtprd_cart_item->db_unit_price_list    = $price;
       $vtprd_cart_item->db_unit_price_special = $price;    
       $vtprd_cart_item->total_price           = $price;
-            
+      
+      
+      //*****************
+      //v1.0.8.7  begin
+      //*****************
+      // db_unit_price_special CAN be zero if item is FREE!!
+      if (get_post_meta( $product_id, '_sale_price', true ) ==  $price)  {
+          $vtprd_cart_item->product_is_on_special = 'yes';             
+      } 
+      //v1.0.8.7  end
+       //*****************
+       
+                  
       /*  *********************************
       ***  JUST the cat *ids* please...
       ************************************ */
