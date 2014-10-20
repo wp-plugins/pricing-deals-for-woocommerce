@@ -539,6 +539,16 @@
       
       if ($vtprd_cart->cart_items[0]->yousave_total_amt > 0) {
          $list_price                    =   $vtprd_cart->cart_items[0]->db_unit_price_list;
+         
+         //v1.0.8.8 begin
+         //if taxation should be applied to list price, do so here
+         if ( ( get_option('woocommerce_calc_taxes')  == 'yes' ) &&
+              ( get_option('woocommerce_prices_include_tax') == 'no') &&
+              ( get_option('woocommerce_tax_display_cart')   == 'incl') ) {
+            $list_price                 =   vtprd_get_price_including_tax($product_id, $list_price);      
+         }
+         //v1.0.8.8 end
+         
          $db_unit_price_list_html_woo   =   woocommerce_price($list_price);
          $discount_price                =   $vtprd_cart->cart_items[0]->discount_price;
          $discount_price_html_woo       =   woocommerce_price($discount_price);
@@ -561,15 +571,14 @@
          if ( ( get_option( 'woocommerce_calc_taxes' ) == 'no' ) ||
               ( !$vtprd_cart->cart_items[0]->product_is_taxable) ||
               ( vtprd_maybe_customer_tax_exempt() ) ) {      //v1.0.7.9
-            $price_display_suffix  = false;            
+            $price_display_suffix  = false;                       
          } else {
-            $price_display_suffix  = get_option( 'woocommerce_price_display_suffix' );
+            $price_display_suffix  = get_option( 'woocommerce_price_display_suffix' );           
          }
          //v1.0.7.4 end
          
       	 if ( ( $price_display_suffix ) &&                              //v1.0.7.2
-              ( $vtprd_cart->cart_items[0]->discount_price > 0 ) ) {   //v1.0.7.2  don't do suffix for zero amount...
-      			
+              ( $vtprd_cart->cart_items[0]->discount_price > 0 ) ) {   //v1.0.7.2  don't do suffix for zero amount...     			
             //***************
             //v1.0.7.4 begin
             //***************
@@ -577,8 +586,7 @@
             if ( (strpos($price_display_suffix,'{price_including_tax}') !== false)  ||
                  (strpos($price_display_suffix,'{price_excluding_tax}') !== false) ) {   //does the suffix include these wildcards?
               //  $price_including_tax = vtprd_get_price_including_tax($product_id, $discount_price); 
-              //  $price_excluding_tax = vtprd_get_price_excluding_tax($product_id, $discount_price); 
-   
+              //  $price_excluding_tax = vtprd_get_price_excluding_tax($product_id, $discount_price);     
               $find = array(    //wildcards allowed in suffix
       				  '{price_including_tax}',
       		      '{price_excluding_tax}'
@@ -590,7 +598,6 @@
                 $price_including_tax_html,  
                 $price_excluding_tax_html 
         			);
-
         			$price_display_suffix = str_replace( $find, $replace, $price_display_suffix ); 
             }
             //v1.0.7.4 end
@@ -649,7 +656,9 @@
             //for later ajaxVariations pricing
             'this_is_a_parent_product_with_variations' => $vtprd_cart->cart_items[0]->this_is_a_parent_product_with_variations,            
             'pricing_by_rule_array'        => $vtprd_cart->cart_items[0]->pricing_by_rule_array                   
-          ) ;      
+          ) ;  
+
+
       if(!isset($_SESSION)){
         session_start();
         header("Cache-Control: no-cache");
@@ -3079,7 +3088,8 @@
  
   //****************************************
   //v1.0.7.4 new function
-  //  adds in default 'Wholesale Buyer' role at install time
+  //v1.0.8.8 refactored for new 'Wholesale Tax Free' role
+  //  adds in default 'Wholesale Buyer' + new 'Wholesale Tax Free'  role at iadmin time
   //****************************************
   function vtprd_maybe_add_wholesale_role(){ 
 		global $wp_roles;
@@ -3089,31 +3099,71 @@
 			   $wp_roles = new WP_Roles();
       }
     }
+
+		$capabilities = array( 
+			'read' => true,
+			'edit_posts' => false,
+			'delete_posts' => false,
+		); 
+     
+    $wholesale_buyer_role_name    =  __('Wholesale Buyer' , 'vtprd');
+    $wholesale_tax_free_role_name =  __('Wholesale Tax Free' , 'vtprd');
   
-    $wholesale_role_name =  __('Wholesale Buyer' , 'vtprd');
-  
-    //Check if it's already there!
-    If ( get_role( $wholesale_role_name ) ) {
-       return;
-    }
-  
+
 		if ( is_object( $wp_roles ) ) { 
-			$capabilities = array( 
-				'read' => true,
-				'edit_posts' => false,
-				'delete_posts' => false,
-			);
 
-			add_role ('wholesale_buyer', $wholesale_role_name, $capabilities );
+      If ( !get_role( $wholesale_buyer_role_name ) ) {
+    			add_role ('wholesale_buyer', $wholesale_buyer_role_name, $capabilities );    
+    			$role = get_role( 'wholesale_buyer' ); 
+    			$role->add_cap( 'buy_wholesale' );
+      }
 
-			$role = get_role( 'wholesale_buyer' ); 
-			$role->add_cap( 'buy_wholesale' );
+      If ( !get_role(  $wholesale_tax_free_role_name ) ) {
+    			add_role ('wholesale_tax_free',  $wholesale_tax_free_role_name, $capabilities );    
+    			$role = get_role( 'wholesale_tax_free' ); 
+    			$role->add_cap( 'buy_tax_free' );
+      }
 
 		}
-        
+       
     return;
   }  
-  
+
+  //****************************************
+  //v1.0.8.8 new function
+  //**************************************** 
+   //Make all logged-in roles with "buy_tax_free" capability tax-free
+   /*
+    * Enhancement - Added "Wholesale Tax Free" Role.  Added "buy_tax_free" Role Capability.
+		Now **Any** User logged in with a role with the "buy_tax_free" Role Capability 
+		will have 0 tax applied
+		And the tax-free status will apply to the **Role**, regardless of whether a deal is currently active!!
+
+    		**************************************** 
+    		**Setup needed - Requires the addition of a  "Zero Rate Rates" tax class in the wp-admin back end 
+    		*****************************************     
+    		*(1) go to Woocommerce/Settings
+    		*(2) Select (click on) the 'Tax' tab at the top of the page
+    		*(3) You will then see, just below the tabs, the line     
+    		    "Tax Options | Standard Rates | Reduced Rate Rates | Zero Rate Rates " 
+    		*(4) Select (click on) "Zero Rate Rates " 
+    		*(5) Then at the bottom left, click on 'insert row' .  
+    		* Done.
+    		* 
+    * 
+    **Now  any role with the capability 'buy_tax_free' will have 0 taxes applied!                               
+   */
+
+    add_filter( 'woocommerce_product_tax_class', 'vtprd_maybe_tax_free_tax_class', 1, 2 );
+ 
+    function vtprd_maybe_tax_free_tax_class( $tax_class, $product ) {
+
+    if  ( current_user_can('buy_tax_free') ) {
+        $tax_class = 'Zero Rate';
+    }
+    return $tax_class;
+  }
+
   
   //****************************************
   //v1.0.7.4 new function
@@ -3162,6 +3212,8 @@
          ($vtprd_cart->customer_is_tax_exempt) ) {           
       return true;
     }
+  
+    
     if (!is_object($woocommerce->customer)) {   
       return false; 
     }
@@ -3283,6 +3335,7 @@
   **   Process both reg product and var product taxation
   *************************************************** */
   function vtprd_product_taxable_check($prodID, $varID) {
+     
      if ($varID > ' ') {
         $var_tax_status = get_post_meta( $varID, '_tax_class', true );
         switch($var_tax_status) {

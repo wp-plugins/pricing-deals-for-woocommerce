@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 4.0
-Stable tag: 1.0.8.7
+Stable tag: 1.0.8.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -26,6 +26,7 @@ Power your store to greater success with pricing deals and sales promotions! Jus
 *   Product and Variation Pricing
 *   Schedulable
 *   Works with WooCommerce 2.2+
+*   Now with tax-free Wholesale role pricing 
 
 = Unparalleled Customer Service =
 
@@ -171,6 +172,27 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.8.8 - 2014-10-19 =
+* Enhancement - Added "Wholesale Tax Free" Role.  Added "buy_tax_free" Role Capability.
+		Now **Any** User logged in with a role with the "buy_tax_free" Role Capability 
+		will have 0 tax applied
+		And the tax-free status will apply to the **Role**, regardless of whether a deal is currently active!!
+
+    		**************************************** 
+    		**Setup needed - Requires the addition of a  "Zero Rate Rates" tax class in the wp-admin back end 
+    		*****************************************     
+    		*(1) go to Woocommerce/Settings
+    		*(2) Select (click on) the 'Tax' tab at the top of the page
+    		*(3) You will then see, just below the tabs, the line     
+    		    "Tax Options | Standard Rates | Reduced Rate Rates | Zero Rate Rates " 
+    		*(4) Select (click on) "Zero Rate Rates " 
+    		*(5) Then at the bottom left, click on 'insert row' .  
+    		* Done.
+    		* 
+* Fix - Crossout original value in Catalog discount, in a rare situation
+
+woocommerce_tax_display_shop == incl
+
 = 1.0.8.7 - 2014-09-04 =
 * Fix - Rare Discount by each counting issue
 * Fix - Onsale Switch for Catalog Rules
@@ -301,6 +323,25 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.0.8.8 - 2014-10-19 =
+* Enhancement - Added "Wholesale Tax Free" Role.  Added "buy_tax_free" Role Capability.
+		Now **Any** User logged in with a role with the "buy_tax_free" Role Capability 
+		will have 0 tax applied
+		And the tax-free status will apply to the **Role**, regardless of whether a deal is currently active!!
+
+    		**************************************** 
+    		**Setup needed - Requires the addition of a  "Zero Rate Rates" tax class in the wp-admin back end 
+    		*****************************************     
+    		*(1) go to Woocommerce/Settings
+    		*(2) Select (click on) the 'Tax' tab at the top of the page
+    		*(3) You will then see, just below the tabs, the line     
+    		    "Tax Options | Standard Rates | Reduced Rate Rates | Zero Rate Rates " 
+    		*(4) Select (click on) "Zero Rate Rates " 
+    		*(5) Then at the bottom left, click on 'insert row' .  
+    		* Done.
+    		* 
+* Fix - Crossout original value in Catalog discount, in a rare situation
 
 = 1.0.8.7 - 2014-09-04 =
 * Fix - Rare Discount by each counting issue
