@@ -138,6 +138,11 @@
          products => ''          //'123,456,789'    (ONLY WORKS in the LOOP, or if the Post-id is available as a passed variable ) / 'any' - if on a product page, show any msg for that product
                                        //   )       
   ================================================================================= */
+  
+  //******************************
+  //v1.0.8.9  refactored
+  //******************************
+  
   //
   add_shortcode('pricing_deal_msgs_standard','vtprd_pricing_deal_msgs_standard');
   add_shortcode('pricing_deal_store_msgs','vtprd_pricing_deal_msgs_standard'); //for backwards compatability   
@@ -169,10 +174,48 @@
     $msg_counter = 0;
     
     $vtprd_rules_set = get_option( 'vtprd_rules_set' );
-    
+
+    //Only do this once!!!
+    if (in_the_loop() ) {
+      $prod_cat_list = wp_get_object_terms( $post->ID, $vtprd_info['parent_plugin_taxonomy'], $args = array('fields' => 'ids') );
+      $rule_cat_list = wp_get_object_terms( $post->ID, $vtprd_info['rulecat_taxonomy'], $args = array('fields' => 'ids') ); 
+    }
+ 
+    if ($product_category > ' ') {
+      $product_category_array = explode(",", $product_category); 
+      $product_category_msgs_array = array();
+    } else {
+      $product_category_array = array();
+    }
+    if ($rules > ' ') {
+      $rules_array = explode(",", $rules);   //remove comma separator, make list an array
+      $rules_msgs_array = array();
+    } else {
+      $rules_array = array();
+    }
+    if ($plugin_category > ' ') {
+      $plugin_category_array = explode(",", $plugin_category);   //remove comma separator, make list an array
+      $plugin_category_msgs_array = array();    
+     } else {
+      $plugin_category_array = array();
+    }
+    if ( $products > ' ' ) {                                                                                   
+      $products_array = explode(",", $products);   //remove comma separator, make list an array
+      $products_msgs_array = array();
+     } else {
+      $products_array = array();
+    }
+
+                    
+       
     $sizeof_rules_set = sizeof($vtprd_rules_set);
     for($i=0; $i < $sizeof_rules_set; $i++) { 
 
+//error_log( print_r(  $i, true ) );
+//error_log( print_r(  '$vtprd_rules_set[$i]', true ) );
+//error_log( var_export($vtprd_rules_set[$i], true ) );
+      
+      
       //BEGIN skip tests      
       if ( $vtprd_rules_set[$i]->rule_status != 'publish' ) {
         continue;
@@ -231,84 +274,198 @@
       }
       //END skip tests
       
-      //INclusion test begin  -  all are implicit 'or' functions     
+      //*************************
+      //INclusion test begin  -  all are implicit 'or' functions  
+      //*************************   
       
       //if no lists are present, then the skip tests are all there is.  Print the msg and exit.
-      if (($rules <= ' ' ) && ($products <= ' ') && ($products <= '')) { 
+      if (($rules <= ' ' ) && 
+          ($products <= ' ') &&
+          ($product_category <= ' ')  &&
+          ($plugin_category <= ' ')  ) { 
         $msg_counter++;
         $output .= vtprd_store_deal_msg($i);  //Print
         continue;      
       }
       
       if ($rules > ' ') {
-        $rules_array = explode(",", $rules);   //remove comma separator, make list an array
         if (in_array($vtprd_rules_set[$i]->post_id, $rules_array)) {
           $msg_counter++;
-          $output .= vtprd_store_deal_msg($i);  //Print
+          $rules_msgs_array[] =$i;
           continue;
         }
       } 
       
+      //*******************************
+      //one set of tests for in_the_loop, one for outside
+      //*******************************
+      if (in_the_loop() ) {
 
-
-      if ($product_category > ' ') {
-        $product_category_array = explode(",", $product_category);   //remove comma separator, make list an array
-        if ( ( array_intersect($vtprd_rules_set[$i]->prodcat_in_checked,  $product_category_array ) ) ||
-             ( array_intersect($vtprd_rules_set[$i]->prodcat_out_checked, $product_category_array ) ) ) {  
-           $msg_counter++;
-           $output .= vtprd_category_deal_msg($i);
-            continue; //only output the msg once 
-        }
-      } 
-
-      if ($plugin_category > ' ') {
-        $plugin_category_array = explode(",", $plugin_category);   //remove comma separator, make list an array
-        if ( ( array_intersect($vtprd_rules_set[$i]->rulecat_in_checked,  $plugin_category_array ) ) ||
-             ( array_intersect($vtprd_rules_set[$i]->rulecat_out_checked, $plugin_category_array ) ) ) {  
-           $msg_counter++;
-           $output .= vtprd_category_deal_msg($i);
-            continue; //only output the msg once 
-        }
-      }      
-            
-          //**********************************
-          // ONLY works in the loop
-          //**********************************
-      switch( true ) {
-        /* FUTURE enhancement => needs a bunch of functions pulled from apply-rules and put into pro-functions.php ...
-        http://stackoverflow.com/questions/19558545/check-if-current-page-is-category-page-in-wordpress
-        http://stackoverflow.com/questions/3435945/wordpress-display-other-posts-from-current-category?rq=1
-        case ( $products == 'any' ):
-            //if product in a category rule  OR in a product rule
-            switch( true ) {
-                case ( $vtprd_rules_set[$i]->inPop == 'groups' ):
-                  $prod_cat_list = wp_get_object_terms( $cart_item['product_id'], $vtprd_info['parent_plugin_taxonomy'], $args = array('fields' => 'ids') );
-                  $rule_cat_list = wp_get_object_terms( $cart_item['product_id'], $vtprd_info['rulecat_taxonomy'], $args = array('fields' => 'ids') ); 
-                break;
+          if ($product_category > ' ') {
+            if ( ( ( array_intersect($vtprd_rules_set[$i]->prodcat_in_checked,  $product_category_array ) ) ||
+                   ( array_intersect($vtprd_rules_set[$i]->prodcat_out_checked, $product_category_array ) ) )  
+                    && 
+                   ( array_intersect($prod_cat_list,  $product_category_array ) ) ) {                     
+                $msg_counter++;
+                $product_category_msgs_array[] = $i;
+                continue; //only output the msg once 
             }
-          break;   */
-        case ( $products > ' ' ):                                                                                   
-            $products_array = explode(",", $products);   //remove comma separator, make list an array
-            // $post->ID = $product_id in this instance
-            if (in_array($post->ID, $products_array)) {
+          } 
+    
+          if ($plugin_category > ' ') {
+            if ( ( ( array_intersect($vtprd_rules_set[$i]->rulecat_in_checked,  $plugin_category_array ) ) ||
+                   ( array_intersect($vtprd_rules_set[$i]->rulecat_out_checked, $plugin_category_array ) ) ) 
+                    &&
+                   ( array_intersect($rule_cat_list,  $plugin_category_array ) ) ) {                      
+                $msg_counter++;
+                $plugin_category_msgs_array[] = $i;
+                continue; //only output the msg once 
+            }
+          }     
+          
+          if ( $products > ' ' ) { 
+            if ( ( ($vtprd_rules_set[$i]->inPop_singleProdID     ==  $post->ID ) ||
+                   ($vtprd_rules_set[$i]->inPop_varProdID        ==  $post->ID ) ||
+                   ($vtprd_rules_set[$i]->actionPop_singleProdID ==  $post->ID ) ||
+                   ($vtprd_rules_set[$i]->actionPop_varProdID    ==  $post->ID ) )
+                    &&                                                                                            
+                   (in_array($post->ID, $products_array)) ) {
               $msg_counter++;
-              $output .= vtprd_store_deal_msg($i);  //Print
-              $exit_stage_left = 'yes';
-            }  
-          break;
-        default:
-          break; 
-      }     
-      if ($exit_stage_left == 'yes') {
-         continue;
-      }     
+              $products_msgs_array[] = $i;
+              continue; //only output the msg once 
+            }      
+          }
+          
+      } else {
+
+          if ($product_category > ' ') {
+            if ( ( array_intersect($vtprd_rules_set[$i]->prodcat_in_checked,  $product_category_array ) ) ||
+                 ( array_intersect($vtprd_rules_set[$i]->prodcat_out_checked, $product_category_array ) ) ) {  
+               $msg_counter++;
+               $product_category_msgs_array[] = $i;
+                continue; //only output the msg once 
+            }
+          } 
+    
+          if ($plugin_category > ' ') {
+            if ( ( array_intersect($vtprd_rules_set[$i]->rulecat_in_checked,  $plugin_category_array ) ) ||
+                 ( array_intersect($vtprd_rules_set[$i]->rulecat_out_checked, $plugin_category_array ) ) ) {  
+               $msg_counter++;
+               $plugin_category_msgs_array[] = $i;
+                continue; //only output the msg once 
+            }
+          }  
+          
+          if ( $products > ' ' ) { 
+            if   ( (in_array($vtprd_rules_set[$i]->inPop_singleProdID, $products_array)) ||
+                   (in_array($vtprd_rules_set[$i]->inPop_varProdID , $products_array)) ||
+                   (in_array($vtprd_rules_set[$i]->actionPop_singleProdID, $products_array)) ||
+                   (in_array($vtprd_rules_set[$i]->actionPop_varProdID, $products_array)) ) {
+              $msg_counter++;
+              $products_msgs_array[] = $i;
+              continue; //only output the msg once 
+            }             
+          }
+               
+      } //if (in_the_loop()  end
+    
+
+  
       //PRINT test end     
        
     } //end 'for' loop
-    
+
+
     if ($msg_counter == 0) {
       return;
     }
+
+//error_log( print_r(  '$product_category_array', true ) );
+//error_log( var_export($product_category_array, true ) );
+//error_log( print_r(  '$product_category_msgs_array', true ) );
+//error_log( var_export($product_category_msgs_array, true ) );
+
+      /*
+      *******************************
+      OUTPUT MESSAGES IN SORT ORDER
+      *******************************
+     msgs_array holds the list of rules matching the criteria
+     - spin through the input criteria list (cat, prods)
+     - spin through msgs array, looking for **individual** input criteria, in order
+     
+      msg sort hierarchy;
+      -by rule ID list
+      -by product_category list
+      -by plugin_category list
+      -by product list   
+      */
+      switch( true ) {
+        case ($rules > ' '):
+            //*  Rules list already access the rules directly, no 2nd lookiup required
+            $sizeof_rules_array = sizeof($rules_array);
+            $sizeof_rules_msgs_array = sizeof($rules_msgs_array);
+            for($p=0; $p < $sizeof_rules_array; $p++) {
+                $rules_array_ruleID = $rules_array[$p];
+                for($a=0; $a < $sizeof_rules_msgs_array; $a++) {
+                    $rule_ind_val = $rules_msgs_array [$a] ;
+                    if ( $rules_array_ruleID == $vtprd_rules_set[$rule_ind_val]->post_id ) {                          
+                        $output .= vtprd_category_deal_msg($rule_ind_val);
+                    }
+                }                
+            }
+          break;
+          
+        case ($product_category > ' '):                                                                                   
+            $sizeof_product_category_array = sizeof($product_category_array);
+            $sizeof_product_category_msgs_array = sizeof($product_category_msgs_array);
+            for($p=0; $p < $sizeof_product_category_array; $p++) {
+                $cat = $product_category_array[$p];
+                for($a=0; $a < $sizeof_product_category_msgs_array; $a++) {
+                    $rule_ind_val = $product_category_msgs_array[$a];
+//error_log( print_r(  '$cat= ' .$cat, true ) ); 
+//error_log( print_r(  '$rule_ind_val= ' .$rule_ind_val, true ) );                    
+                    
+                    if ( ( in_array($cat, $vtprd_rules_set[$rule_ind_val]->prodcat_in_checked) ) ||
+                         ( in_array($cat, $vtprd_rules_set[$rule_ind_val]->prodcat_out_checked) ) ) {                          
+                        $output .= vtprd_category_deal_msg($rule_ind_val);
+                    }
+                }
+            }   
+          break;
+          
+        case ($plugin_category > ' '):                                                                                   
+            $sizeof_plugin_category_array = sizeof($plugin_category_array);
+            $sizeof_plugin_category_msgs_array = sizeof($plugin_category_msgs_array);
+            for($p=0; $p < $sizeof_plugin_category_array; $p++) {
+                $cat = $plugin_category_array[$p];
+                for($a=0; $a < $sizeof_plugin_category_msgs_array; $a++) {
+                    $rule_ind_val = $plugin_category_msgs_array[$a];
+                    if ( ( in_array($cat, $vtprd_rules_set[$rule_ind_val]->rulecat_in_checked) ) ||
+                         ( in_array($cat, $vtprd_rules_set[$rule_ind_val]->rulecat_out_checked) ) ) {                         
+                        $output .= vtprd_category_deal_msg($rule_ind_val);
+                    }
+                }
+            } 
+          break;
+          
+        case ( $products > ' ' ):                                                                                   
+            $sizeof_products_array = sizeof($products_array);
+            $sizeof_products_msgs_array = sizeof($products_msgs_array);
+            for($p=0; $p < $sizeof_products_array; $p++) {
+                $prod = $products_array[$p];
+                for($a=0; $a < $sizeof_products_msgs_array; $a++) {
+                    $rule_ind_val = $products_msgs_array[$a];
+                    if   ( ($vtprd_rules_set[$rule_ind_val]->inPop_singleProdID == $prod) ||
+                           ($vtprd_rules_set[$rule_ind_val]->inPop_varProdID == $prod) ||
+                           ($vtprd_rules_set[$rule_ind_val]->actionPop_singleProdID == $prod) ||
+                           ($vtprd_rules_set[$rule_ind_val]->actionPop_varProdID == $prod) ) {  
+                        $output .= vtprd_category_deal_msg($rule_ind_val);
+                    }
+                }
+            }     
+          break;          
+      }
+
 
     //close owning div 
     $output .= '</div>';
@@ -1249,3 +1406,27 @@ function vtprd_the_product_price_display( $args = array() ) {
        
      return;
   }
+/*
+$salesargs = array(
+'post_type' => 'product',
+'showposts' => '4',
+'orderby' => 'rand',
+'tax_query' => array(
+array(
+'taxonomy' => 'vtprd_rule_category',
+'field' => 'slug',
+'terms' => 'sale-25-percent'
+)
+)
+);
+
+query_posts($salesargs);
+
+if (have_posts()) : woocommerce_product_loop_start(); while (have_posts()) : the_post();
+
+$woocommerce_loop['columns'] = 4; //* Important! *
+
+wc_get_template_part( 'content', 'product' );
+
+endwhile; woocommerce_product_loop_end(); endif; wp_reset_query()
+*/

@@ -3154,6 +3154,7 @@
     **Now  any role with the capability 'buy_tax_free' will have 0 taxes applied!                               
    */
 
+
     add_filter( 'woocommerce_product_tax_class', 'vtprd_maybe_tax_free_tax_class', 1, 2 );
  
     function vtprd_maybe_tax_free_tax_class( $tax_class, $product ) {
@@ -3164,7 +3165,6 @@
     return $tax_class;
   }
 
-  
   //****************************************
   //v1.0.7.4 new function
   //****************************************
@@ -3335,7 +3335,7 @@
   **   Process both reg product and var product taxation
   *************************************************** */
   function vtprd_product_taxable_check($prodID, $varID) {
-     
+/*     Commented out in v1.0.8.9 => this is incorrect, and should not be executed...
      if ($varID > ' ') {
         $var_tax_status = get_post_meta( $varID, '_tax_class', true );
         switch($var_tax_status) {
@@ -3356,7 +3356,10 @@
       return true; 
     } else {
       return false;                                              
-    }   
+    } 
+    
+   */ 
+   return true;  // v1.0.8.9 
   }
 
   //**v1.0.7.5 begin
@@ -3428,3 +3431,4 @@ function vtprd_w3_flush_page_custom( $post_id ) {
   add_action( 'trash_post',   'vtprd_w3_flush_page_custom', 10, 1 );
   add_action( 'untrash_post', 'vtprd_w3_flush_page_custom', 10, 1 );
  */ 
+

@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 4.0
-Stable tag: 1.0.8.8
+Stable tag: 1.0.8.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -172,6 +172,15 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.8.9 - 2014-11-11 =
+* Fix - pricing issue - doing_ajax
+* Fix - pricing issue - login on the fly at checkout
+* Fix - is_taxable Issue
+* Fix - Product-level rule include/exclude list
+* Enhancement - Shortcode Standard version now produces messages 'in the loop' only 
+		when matching the product information 
+* Enhancement - Shortcode Standard version now sorts msgs based on request 
+
 = 1.0.8.8 - 2014-10-19 =
 * Enhancement - Added "Wholesale Tax Free" Role.  Added "buy_tax_free" Role Capability.
 		Now **Any** User logged in with a role with the "buy_tax_free" Role Capability 
@@ -184,14 +193,12 @@ Direct support requests can be made here on the support tab, or at the [Support]
     		*(1) go to Woocommerce/Settings
     		*(2) Select (click on) the 'Tax' tab at the top of the page
     		*(3) You will then see, just below the tabs, the line     
-    		    "Tax Options | Standard Rates | Reduced Rate Rates | Zero Rate Rates " 
-    		*(4) Select (click on) "Zero Rate Rates " 
+    		    "Tax Options | Standard Rates | Reduced Rate Rates | Zero Rate Rates (or Exempt from Vat)" 
+    		*(4) Select (click on) "Zero Rate Rates (or Exempt from Vat) " 
     		*(5) Then at the bottom left, click on 'insert row' .  
     		* Done.
     		* 
 * Fix - Crossout original value in Catalog discount, in a rare situation
-
-woocommerce_tax_display_shop == incl
 
 = 1.0.8.7 - 2014-09-04 =
 * Fix - Rare Discount by each counting issue
@@ -324,6 +331,15 @@ woocommerce_tax_display_shop == incl
 
 == Upgrade Notice ==
 
+= 1.0.8.9 - 2014-11-11 =
+* Fix - pricing issue - doing_ajax
+* Fix - pricing issue - login on the fly at checkout
+* Fix - is_taxable Issue
+* Fix - Product-level rule include/exclude list
+* Enhancement - Shortcode Standard version now produces messages 'in the loop' only 
+		when matching the product information 
+* Enhancement - Shortcode Standard version now sorts msgs based on request 
+
 = 1.0.8.8 - 2014-10-19 =
 * Enhancement - Added "Wholesale Tax Free" Role.  Added "buy_tax_free" Role Capability.
 		Now **Any** User logged in with a role with the "buy_tax_free" Role Capability 
@@ -336,8 +352,8 @@ woocommerce_tax_display_shop == incl
     		*(1) go to Woocommerce/Settings
     		*(2) Select (click on) the 'Tax' tab at the top of the page
     		*(3) You will then see, just below the tabs, the line     
-    		    "Tax Options | Standard Rates | Reduced Rate Rates | Zero Rate Rates " 
-    		*(4) Select (click on) "Zero Rate Rates " 
+    		    "Tax Options | Standard Rates | Reduced Rate Rates | Zero Rate Rates (or Exempt from Vat)" 
+    		*(4) Select (click on) "Zero Rate Rates (or Exempt from Vat) " 
     		*(5) Then at the bottom left, click on 'insert row' .  
     		* Done.
     		* 

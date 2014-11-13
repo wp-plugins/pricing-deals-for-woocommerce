@@ -173,7 +173,18 @@ class VTPRD_Parent_Cart_Validation {
     //'woocommerce_cart_updated' RUNS EVERY TIME THE CART OR CHECKOUT PAGE DISPLAYS!!!!!!!!!!!!!
     add_action( 'woocommerce_cart_updated',                   array(&$this, 'vtprd_cart_updated') );   //AFTER cart update completed, all totals computed 
     add_action( 'wp_login',                                   array(&$this, 'vtprd_maybe_update_cart_on_login'), 10, 2 );   //v1.0.8.4   re-applies rules on login immediately!
-    
+   
+    //*************************
+    //v1.0.8.9 begin
+    //  when new customer account created on the fly at checkout, discount amount for coupon will be zero **when it gets to PayPal**
+    //  however, even though this action 'woocommerce_created_customer' adds the customer, the zeroed amount error is only
+    //  available at the last action before adding the order - 'woocommerce_check_cart_items'
+    add_action( 'woocommerce_check_cart_items',               array(&$this, 'vtprd_maybe_update_coupon_on_check_cart_items'), 10 );   //v1.0.8.9 
+     
+    //v1.0.8.9 end
+    //*************************
+   
+       
     //this runs BEFORE the qty is zeroed, not much use...
     //add_action( 'woocommerce_before_cart_item_quantity_zero', array(&$this, 'vtprd_test_quantity_zero'), 10,1 );     //cart_item_removed
 
@@ -963,14 +974,27 @@ wp_die( __('<strong>Looks like you\'re running an older version of WordPress, yo
     }
 */  
     //in place of is_admin, which doesn't work in AJAX...
-     if ( (function_exists( 'get_current_screen' ) ) ||    // get_current_screen ONLY exists in ADMIN!!!  
-          ( is_admin() ) ) {                //v1.0.7.4
-       if ( (isset($post->post_type)) &&    //v1.0.7.4
-            ($post->post_type == 'product'  ) ) {    //in admin, don't run this on the PRODUCT screen!!
-         return $price;
-       }
+     
+     //********************
+     //v1.0.8.9 begin
+     //  rarely at checkout screen the "return $price" was happening!!
+     //  added in the 'doing_ajax' logic
+     //    needed because 'is_admin' doesn't work in ajax...
+     //********************
+     if ( defined('DOING_AJAX') && DOING_AJAX ) {
+        $do_nothing;
+     } else {
+         if ( (function_exists( 'get_current_screen' ) ) ||    // get_current_screen ONLY exists in ADMIN!!!  
+              ( is_admin() ) ) {                //v1.0.7.4
+           if ( (isset($post->post_type)) &&    //v1.0.7.4
+                ($post->post_type == 'product'  ) ) {    //in admin, don't run this on the PRODUCT screen!!
+             return $price;
+           }
+         }
      }
-         
+     //v1.0.8.9 end
+     //********************
+              
     if ($product_info->variation_id > ' ') {      
       $product_id  = $product_info->variation_id;
     } else { 
@@ -1234,6 +1258,44 @@ public function vtprd_get_product_catalog_price_add_to_cart( $product_id, $param
       }
       return; 
    }
+ 
+       
+   //*************************************
+   // v1.0.8.9  new function
+   /*
+      When new customer account created on the fly at checkout, discount amount for coupon will be zero **when it gets to PayPal**
+      however, even though this action 'woocommerce_created_customer' adds the customer, the zeroed amount error is only
+      available at the last action before adding the order - 'woocommerce_check_cart_items'
+      
+    if a coupon discount is due, while the coupon remains in the cart, 
+    the actual coupon discount AMOUNT is zero when it gets here.  Identify and fix.
+   */
+   //*************************************
+   public function vtprd_maybe_update_coupon_on_check_cart_items() {
+ //   public function vtprd_maybe_update_cart_on_created_customer($customer_id, $new_customer_data, $password_generated) {  
+      global $woocommerce, $vtprd_info, $vtprd_cart;
+
+      $coupon_title = $vtprd_info['coupon_code_discount_deal_title'];    
+ 
+      $woocommerce->cart->get_cart();
+            
+      if ( empty( $woocommerce->cart->coupon_discount_amounts[ $coupon_title ] ) ) {  
+        //Open Session Variable, get rules_set and cart if not there....
+        $data_chain = $this->vtprd_get_data_chain();
+        if ($vtprd_cart->yousave_cart_total_amt > 0) {
+  				$woocommerce->cart->coupon_discount_amounts[ $code ] = 0;
+  
+  			  $woocommerce->cart->coupon_discount_amounts[ $code ] += $vtprd_cart->yousave_cart_total_amt;
+          
+          $woocommerce->cart->calculate_totals();
+
+        }
+     }
+          
+    return; 
+    
+   }  
+ 
  
    // do_action( 'woocommerce_add_to_cart', $cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data );
    public function vtprd_cart_updated() {
