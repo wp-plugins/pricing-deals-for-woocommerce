@@ -2208,8 +2208,19 @@ DITTO ie10!!
                                                      };
                                                      //disallow here!!  only allow 'applies to each' 
                                                      $('.discount_applies_to_all').attr('disabled', true); 
-                                                     $('.discount_applies_to_each').attr('disabled', false);
-                                                     $('#discount_applies_to_each_0').attr('selected', true);
+                                                                                                          
+                                                     //v1.0.8.9 begin
+                                                     // for cheapest, do NOT force select applies_to_each !!!!!!!!!!!!!!
+                                                      switch( $("#rule_template_framework").val() ) {
+                                                        case "C-cheapest-inCart":       break;
+                                                        case "C-cheapest-Next":         break;
+                                                        default:              
+                                                           $('.discount_applies_to_each').attr('disabled', false);
+                                                           $('#discount_applies_to_each_0').attr('selected', true);                                                        
+                                                         break;                              
+                                                      };                                                     
+                                                     //v1.0.8.9 end
+                                                     
                                                      break;
                                                                                                           
                                 case "forThePriceOf_Units":   
