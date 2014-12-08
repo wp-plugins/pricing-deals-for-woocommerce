@@ -179,7 +179,9 @@ Direct support requests can be made here on the support tab, or at the [Support]
 * Fix - Product-level rule include/exclude list
 * Enhancement - Shortcode Standard version now produces messages 'in the loop' only 
 		when matching the product information 
-* Enhancement - Shortcode Standard version now sorts msgs based on request 
+* Enhancement - Shortcode Standard version now sorts msgs based on request
+* Fix - 'excluding taxable' option in subtotal reporting.
+* Fix - 'cheapest/most expensive' discount type sometimes would not remain selected - JS.
 
 = 1.0.8.8 - 2014-10-19 =
 * Enhancement - Added "Wholesale Tax Free" Role.  Added "buy_tax_free" Role Capability.
@@ -339,6 +341,8 @@ Direct support requests can be made here on the support tab, or at the [Support]
 * Enhancement - Shortcode Standard version now produces messages 'in the loop' only 
 		when matching the product information 
 * Enhancement - Shortcode Standard version now sorts msgs based on request 
+* Fix - 'excluding taxable' option in subtotal reporting.
+* Fix - 'cheapest/most expensive' discount type sometimes would not remain selected - JS.
 
 = 1.0.8.8 - 2014-10-19 =
 * Enhancement - Added "Wholesale Tax Free" Role.  Added "buy_tax_free" Role Capability.

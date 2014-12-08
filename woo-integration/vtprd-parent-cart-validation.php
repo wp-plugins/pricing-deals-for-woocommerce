@@ -197,7 +197,7 @@ class VTPRD_Parent_Cart_Validation {
     add_filter( 'woocommerce_checkout_init',         array(&$this, 'vtprd_woo_maybe_add_remove_discount_cart_coupon'), 10);
       
     //change the value of the Pricing Deals 'dummy' coupon instance to the Pricing Deals discount amount
-    add_filter( 'woocommerce_get_shop_coupon_data',  array(&$this, 'vtprd_woo_maybe_load_discount_amount_to_coupon'), 10,2);
+    add_filter( 'woocommerce_get_shop_coupon_data',  array(&$this, 'vtprd_woo_maybe_load_discount_amount_to_coupon'), 99,2); //v1.0.8.9 changed from 10,2 to 99,2 due to conflict with Woo Points and Rewards
     //*************************                                                                               
  
    /*  =============+++++++++++++++++++++++++++++++++++++++++++++++++++++++++    */                       
@@ -1532,7 +1532,9 @@ wp_die( __('<strong>die again.</strong>', 'vtprd'), __('VT Pricing Deals not com
       
       
       if ($code != $vtprd_info['coupon_code_discount_deal_title']) {
-         return false;    
+        //v1.0.8.9 change return
+        // return false;  //this steps on other plugins using the same action
+        return;   
       }
 
                  
