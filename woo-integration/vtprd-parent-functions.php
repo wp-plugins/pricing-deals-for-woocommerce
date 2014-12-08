@@ -375,11 +375,24 @@
       $vtprd_cart_item->quantity              = 1;
       $vtprd_cart_item->unit_price            = $price;
       $vtprd_cart_item->db_unit_price         = $price;
-      $vtprd_cart_item->db_unit_price_list    = $price;
+  //    $vtprd_cart_item->db_unit_price_list    = $price;  //v1.0.8.9
       $vtprd_cart_item->db_unit_price_special = $price;    
       $vtprd_cart_item->total_price           = $price;
       
       
+      //*****************
+      //v1.0.8.9  begin - copied from vtprd_load_vtprd_cart_for_processing()
+      //***************** 
+      $regular_price = get_post_meta( $product_id, '_regular_price', true );
+      if ($regular_price > 0) {
+         $vtprd_cart_item->db_unit_price_list  =  $regular_price;
+      } else {
+         $vtprd_cart_item->db_unit_price_list  =  get_post_meta( $product_id, '_price', true );
+      }           
+      //v1.0.8.9  end
+       //*****************
+       
+             
       //*****************
       //v1.0.8.7  begin
       //*****************
@@ -1251,8 +1264,14 @@
 			$subtotal = $woocommerce->cart->subtotal;
     }
 
+
+    //v1.0.8.9a begin               
+    // pick up included, excluded or yousave_cart_total_amt Total       
+    //$subTotal -= $vtprd_cart->cart_discount_subtotal;
+
+    $subtotal -= vtprd_load_cart_total_incl_excl();
+    //v1.0.8.9a end  
     
-    $subtotal -= $vtprd_cart->cart_discount_subtotal;
 
     $amt = vtprd_format_money_element($subtotal);
 
@@ -1577,12 +1596,20 @@
       $output .= '</span>';
   
       //$subTotal = $vtprd_cart->cart_original_total_amt - $vtprd_cart->yousave_cart_total_amt;    //show as a credit
-      $subTotal  = $woocommerce->cart->subtotal;
-  
-   //no longer used...   $subTotal -= $vtprd_cart->yousave_cart_total_amt;
-      $subTotal  -= $vtprd_cart->cart_discount_subtotal;
-      
-      $amt = vtprd_format_money_element($subTotal);      
+      //v1.0.8.9a begin  
+      //$subTotal  = $woocommerce->cart->subtotal;
+       
+      if ( $woocommerce->cart->tax_display_cart == 'excl' ) {
+    		$subtotal = $woocommerce->cart->subtotal_ex_tax ;
+    	} else {
+    		$subtotal = $woocommerce->cart->subtotal;
+      }  
+             
+      // pick up included, excluded or yousave_cart_total_amt Total       
+      //$subTotal -= $vtprd_cart->cart_discount_subtotal;
+      $subtotal -= vtprd_load_cart_total_incl_excl();
+      $amt = vtprd_format_money_element($subtotal); 
+      //v1.0.8.9a end  
       
       $labelType = $execType . '_credit_detail_label';  
       $output .= '<span class="vtprd-discount-totAmtCol-' .$execType. ' vtprd-new-subtotal-amt"> &nbsp;&nbsp;' .$amt . '</span>';
@@ -1672,8 +1699,15 @@
     
     if ($vtprd_setup_options['show_checkout_discount_total_line'] == 'yes') {
       if ($msgType == 'html') {
-        $amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);
+        
+        //v1.0.8.9a begin               
+        //$amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);        
+        $amt = vtprd_load_cart_total_incl_excl();
+        $amt = vtprd_format_money_element($amt);        
+        //v1.0.8.9a end  
+               
         $amt .= vtprd_maybe_load_incl_excl_vat_lit();  //v1.0.7.4        
+        
         $output .= '<tr>';
         $output .= '<td style="text-align:left;vertical-align:middle;border:1px solid #eee;word-wrap:break-word;font-weight:bold"  colspan="2">'. $vtprd_setup_options['checkout_credit_total_title'] .'</td>';						
         $output .= '<td style="text-align:left;vertical-align:middle;border:1px solid #eee">'  . $vtprd_setup_options['checkout_credit_total_label'] .$amt .'</td>';		
@@ -1859,8 +1893,15 @@
     global $vtprd_cart, $vtprd_rules_set, $vtprd_setup_options;
 
       $output = ''; //v1.0.7.9
-  
-      $amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);
+        
+      //v1.0.8.9a begin               
+      // pick up included, excluded or yousave_cart_total_amt Total       
+      $amt = vtprd_load_cart_total_incl_excl();
+      //$amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);
+      $amt = vtprd_format_money_element($amt);
+      $amt .= vtprd_maybe_load_incl_excl_vat_lit(); 
+      //v1.0.8.9a end  
+
  
     if ($msgType == 'html')  {
       $output .= '<tr>';
@@ -1889,16 +1930,29 @@
       // for wpec $vtprd_cart->cart_original_total_amt is not accurate - use wpec's own routine
       //$subTotal = $vtprd_cart->cart_original_total_amt - $vtprd_cart->yousave_cart_total_amt;    //show as a credit
       
-      $subTotal  = $woocommerce->cart->subtotal;
-      
-      vtprd_load_cart_total_incl_excl(); //v1.0.7.4 
-      
+      //v1.0.8.9a begin  
+      //$subTotal  = $woocommerce->cart->subtotal;
+       
+      if ( $woocommerce->cart->tax_display_cart == 'excl' ) {
+    		$subtotal = $woocommerce->cart->subtotal_ex_tax ;
+    	} else {
+    		$subtotal = $woocommerce->cart->subtotal;
+      }  
+      //v1.0.8.9a end   
+            
+      //v1.0.8.9a no longer needed  vtprd_load_cart_total_incl_excl(); //v1.0.7.4 
+    
+
       //*****************************
       //No longer used - $subTotal -= $vtprd_cart->yousave_cart_total_amt;
       //*****************************
-      $subTotal -= $vtprd_cart->cart_discount_subtotal;   //may or may not contain the coupon amount, depending on passed value calling function
-            
-      $amt = vtprd_format_money_element($subTotal);
+      //v1.0.8.9a begin               
+      // pick up included, excluded or yousave_cart_total_amt Total       
+      //$subTotal -= $vtprd_cart->cart_discount_subtotal;  /may or may not contain the coupon amount, depending on passed value calling function
+      $subtotal -= vtprd_load_cart_total_incl_excl();
+      $amt = vtprd_format_money_element($subtotal);
+      //v1.0.8.9a end              
+ 
       $amt .= vtprd_maybe_load_incl_excl_vat_lit();  //v1.0.7.4
       
       if ($msgType == 'html')  {
@@ -1942,8 +1996,16 @@
         ($vtprd_setup_options['checkout_new_subtotal_line']        == 'yes')) {
         $output .= '<tfoot>';
         if ($vtprd_setup_options['show_checkout_discount_total_line'] == 'yes') {
-            $amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);
+
+            //v1.0.8.9a begin               
+            // pick up included, excluded or yousave_cart_total_amt Total       
+            $amt = vtprd_load_cart_total_incl_excl();
+            //$amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);
+            $amt = vtprd_format_money_element($amt);
+            //v1.0.8.9a end            
+            
             $amt .= vtprd_maybe_load_incl_excl_vat_lit();  //v1.0.7.4  
+
             $output .= '<tr class="checkout_credit_total">';
             $output .= '<th scope="row">'. $vtprd_setup_options['checkout_credit_total_title'] .'</th>';						
             $output .= '<td><span class="amount">'  . $vtprd_setup_options['checkout_credit_total_label'] .$amt .'</span></td>';		
@@ -2146,7 +2208,16 @@
         $output .= '<tfoot>';
          if ($vtprd_setup_options['show_checkout_discount_total_line'] == 'yes') {
             $amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);
+      
+            //v1.0.8.9a begin               
+            // pick up included, excluded or yousave_cart_total_amt Total       
+            $amt = vtprd_load_cart_total_incl_excl();
+            //$amt = vtprd_format_money_element($vtprd_cart->yousave_cart_total_amt);
+            $amt = vtprd_format_money_element($amt);
+            //v1.0.8.9a end
+      
             $amt .= vtprd_maybe_load_incl_excl_vat_lit();  //v1.0.7.4  
+
             $output .= '<tr class="checkout_discount_total_line">';
             $output .= '<th scope="row" colspan="2">'. $vtprd_setup_options['checkout_credit_total_title'] .'</th>';						
             $output .= '<td ><span class="amount">'  . $vtprd_setup_options['checkout_credit_total_label'] .$amt .'</span></td>';		
@@ -2160,9 +2231,14 @@
         		} else {
         			$subtotal = $woocommerce->cart->subtotal;
             }   
-            $subtotal -= $vtprd_cart->yousave_cart_total_amt;
 
+            //v1.0.8.9a begin               
+            // pick up included, excluded or yousave_cart_total_amt Total       
+            //$subtotal -= $vtprd_cart->yousave_cart_total_amt;
+            $subtotal -= vtprd_load_cart_total_incl_excl();
             $amt = vtprd_format_money_element($subtotal);
+            //v1.0.8.9a end  
+           
             $amt .= vtprd_maybe_load_incl_excl_vat_lit();  //v1.0.7.4
                                
             $output .= '<tr class="checkout_new_subtotal">';
@@ -2418,7 +2494,7 @@
 
       //Include or Exclude list
       foreach ($rule_id_list as $rule_id) {     //($rule_ids as $rule_id => $info)
-          $post = get_post($rule_id);
+          $rule_for_title = get_post($rule_id);  //v1.0.8.9 changed field name here and below...
           $output  = '<li id="inOrEx-li-' .$rule_id. '">' ;
           $output  .= '<label class="selectit inOrEx-list-checkbox-label">' ;
           $output  .= '<input id="inOrEx-input-' .$rule_id. '" class="inOrEx-list-checkbox-class" ';
@@ -2432,7 +2508,7 @@
               }                
           }
           $output  .= '>'; //end input statement
-          $output  .= '&nbsp;' . $post->post_title;
+          $output  .= '&nbsp;' . $rule_for_title->post_title; //v1.0.8.9 
           $output  .= '</label>';            
           $output  .= '</li>';
           echo  $output ;
@@ -2885,7 +2961,7 @@
 
       global $woocommerce;
       $amt = $woocommerce->cart->get_cart_subtotal();
-      
+
       return $amt;
   }
 
@@ -3179,23 +3255,31 @@
       }
     } 
  */   
+    //v1.0.8.9a  initialize the return base amt
+    $return_amt = $vtprd_cart->yousave_cart_total_amt; //v1.0.8.9a
+    
     if ( get_option( 'woocommerce_calc_taxes' )  == 'yes' ) {
        switch (get_option('woocommerce_prices_include_tax')) {
           case 'yes':
               if (get_option('woocommerce_tax_display_cart')   == 'excl') {
-                 $excl_vat_lit .= ' <small>' . $woocommerce->countries->ex_tax_or_vat() . '</small>';  //v1.0.7.5
+                 //v1.0.8.9a begin  re-fix!!!
+                 //$excl_vat_lit .= ' <small>' . $woocommerce->countries->ex_tax_or_vat() . '</small>';  //v1.0.7.5
+                 $return_amt =  $vtprd_cart->yousave_cart_total_amt_excl_tax; //The return value is only accessed in a very few executions if this function!
+                 //v1.0.8.9a end
               }   
              break;         
           case 'no':
               if (get_option('woocommerce_tax_display_cart')   == 'incl') {
-                 $vtprd_cart->yousave_cart_total_amt =  $vtprd_cart->yousave_cart_total_amt_incl_tax;   
+                 $vtprd_cart->yousave_cart_total_amt =  $vtprd_cart->yousave_cart_total_amt_incl_tax; 
+                 $return_amt = $vtprd_cart->yousave_cart_total_amt;  //v1.0.8.9a  The return value is only accessed in a very few executions if this function!
               }           
              break;
        }          
     }    
 
  
-    return;
+    //v1.0.8.9a  The return_amt is ONLY accessed when reporting on CART DISCOUNT (sub)TOTAL in the detail area
+    return $return_amt; //v1.0.8.9a
   }
 
   
