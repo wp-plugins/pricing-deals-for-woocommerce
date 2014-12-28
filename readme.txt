@@ -182,6 +182,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 * Enhancement - Shortcode Standard version now sorts msgs based on request
 * Fix - 'excluding taxable' option in subtotal reporting.
 * Fix - 'cheapest/most expensive' discount type sometimes would not remain selected - JS.
+* Fix - rare issue - backbone fix for recursive creation of custom taxonomy
 
 = 1.0.8.8 - 2014-10-19 =
 * Enhancement - Added "Wholesale Tax Free" Role.  Added "buy_tax_free" Role Capability.
