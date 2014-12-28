@@ -10,6 +10,12 @@ class VTPRD_Backbone{
   
   public function vtprd_register_post_types() {
    global $vtprd_info;
+
+  //v1.0.8.9  begin - if taxonomy already there, exit stage left!
+  if(taxonomy_exists('vtprd_rule_category')){
+    return;
+  }  
+  //v1.0.8.9  end
   
   $tax_labels = array(
 		'name' => _x( 'Pricing Deals Categories', 'taxonomy general name', 'vtprd' ),
