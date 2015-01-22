@@ -127,3 +127,6 @@
         opacity:1;
         border: 1px solid #268A16;
         }
+      /*select#discount_taken_where {margin-left:-120px;}   v1.0.9.0*/
+      /*select#give_more_or_less_discount {margin-left:-100px;}   v1.0.9.0*/
+      #show_price_suffix { width: 350px;}  /*v1.0.9.0*/

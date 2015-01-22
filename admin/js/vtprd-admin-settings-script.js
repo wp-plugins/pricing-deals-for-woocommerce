@@ -1,5 +1,32 @@
      jQuery(document).ready(function($) {
-      
+            
+            //v1.0.9.0 begin             
+            //****************************
+            // Show Discount Where
+            //****************************  
+                        unitPriceOrCoupon_Control();      
+                        $("#discountUnitPrice").click(function(){
+                             unitPriceOrCoupon_Control();                           
+                         });
+                         $("#discountCoupon").click(function(){
+                             unitPriceOrCoupon_Control();                           
+                         });                                 
+                          function unitPriceOrCoupon_Control() {                     
+                            switch( $("#discount_taken_where").val() ) {
+                               case 'discountUnitPrice':
+                                  //whole bunch of switches
+                                  $(".unitPriceOrCoupon").hide();
+                                  $(".unitPriceOnly").show("slow");
+                                 break; 
+                               default:
+                                  //whole bunch of switches
+                                  $(".unitPriceOrCoupon").show("slow");
+                                  $(".unitPriceOnly").hide();
+                                 break;                                                                  
+                            }; 
+                        };                       
+             //v1.0.9.0 end 
+       
             //****************************
             // HELP PANELS "drop-ups/downs"   Begin  (with more/less anchors)
             //****************************  
@@ -464,6 +491,17 @@
           });   
            $("#help47").click(function(){
               $("#help47-text").toggle("slow");                           
-          });                 
+          }); 
+          //v1.0.9.0 begin 
+           $("#help48").click(function(){
+              $("#help48-text").toggle("slow");                           
+          }); 
+           $("#help49").click(function(){
+              $("#help49-text").toggle("slow");                           
+          }); 
+           $("#help50").click(function(){
+              $("#help50-text").toggle("slow");                           
+          });
+          //v1.0.9.0 end                           
       });  
   
