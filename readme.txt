@@ -174,7 +174,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 = 1.0.9.2 - 2015-01-23 =
 * Fix - Release Rollback - A small but significant number of clients continue to have
-		Issues with rleases v 1.0.9.0 and fix release 1.0.9.1 . Rather than
+		issues with release v 1.0.9.0 and fix release 1.0.9.1 . Rather than
 		leaving users with issues while a fix is being identified,  
 		Release 1.0.9.2 rolls all the code back to v1.0.8.9, 
 		prior to the code changes and the issues
