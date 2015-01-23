@@ -42,11 +42,13 @@ class VTPRD_Parent_Cart_Validation {
     //  variation products (priced in one a variaty of the _html filters in AJAX)
     //**********======================================================================================
         
-
-    global $vtprd_info, $vtprd_setup_options;  //v1.0.9.0
+//v1.0.9.1  no globals here
+//v1.0.9.1    global $vtprd_info, $vtprd_setup_options;  //v1.0.9.0
     
     //Only do these if there's an active display rule
-    if ($vtprd_info['ruleset_has_a_display_rule'] == 'yes') {   //v1.0.9.0
+
+//v1.0.9.1  moved if statement to function
+//v1.0.9.1    if ($vtprd_info['ruleset_has_a_display_rule'] == 'yes') {   //v1.0.9.0
  
       //???v1.0.9.0 covered by 'woocommerce_get_price_html'
       //  add_filter('woocommerce_grouped_price_html',          array(&$this, 'vtprd_maybe_grouped_price_html'), 10, 2);
@@ -75,10 +77,12 @@ class VTPRD_Parent_Cart_Validation {
 
         //v1.0.9.0   MOVED HERE  ==>>  THIS IS EXECUTED as often as "woocommerce_get_price"
         //NOT needed for CART rules, but needed for catalog
+        
+
         add_filter('woocommerce_get_price_html',              array(&$this, 'vtprd_maybe_catalog_price_html'), 10, 2);
         add_filter('woocommerce_get_variation_price_html',    array(&$this, 'vtprd_maybe_catalog_price_html'), 10, 2);
          
-    }
+//v1.0.9.1    }
 
     // =====================++++++++++
     //get_price is used in the line subtotal, cart subtotal and total....
@@ -141,7 +145,8 @@ class VTPRD_Parent_Cart_Validation {
     //*************************
     //add or remove Pricing Deals 'dummy' fixed_cart coupon
     //   NEED BOTH to pick up going to view cart and going directly to checkout.  Exits quickly if already done.
-    if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon')  {   //v1.0.9.0    not needed for inline-pricing
+//v1.0.9.1  moved if statement to function
+//v1.0.9.1     if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon')  {   //v1.0.9.0    not needed for inline-pricing
       add_filter( 'woocommerce_before_cart_table',     array(&$this, 'vtprd_woo_maybe_add_remove_discount_cart_coupon'), 10);
       add_filter( 'woocommerce_checkout_init',         array(&$this, 'vtprd_woo_maybe_add_remove_discount_cart_coupon'), 10);
         
@@ -151,7 +156,7 @@ class VTPRD_Parent_Cart_Validation {
       //created in v1.0.9.0 , now no longer necessary
       //add_action( 'woocommerce_check_cart_items',               array(&$this, 'vtprd_maybe_update_coupon_on_check_cart_items'), 10 );   //v1.0.8.9 
           
-    }
+//v1.0.9.1     }
     //*************************                                                                               
  
    /*  =============+++++++++++++++++++++++++++++++++++++++++++++++++++++++++    */                       
@@ -214,9 +219,10 @@ class VTPRD_Parent_Cart_Validation {
     //  $return = apply_filters( 'woocommerce_email_order_items_table', ob_get_clean(), $this );
     //      ob_get_clean() = the whole output buffer 
     //USING THIS filter in this way, puts discounts within the existing products table, after products are shown, but before the close of the table...     
-    if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon')  {   //v1.0.9.0    not needed for inline-pricing
+//v1.0.9.1  moved if statement to function
+//v1.0.9.1    if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon')  {   //v1.0.9.0    not needed for inline-pricing
       add_filter('woocommerce_email_order_items_table', array( &$this, 'vtprd_post_purchase_maybe_email' ), 10,2);
-    }
+//v1.0.9.1     }
     
     // PRIOR to WOO version ++2.13++ - won't work - as this filter only does not have $order_info (2nd variable) in prior versions
     
@@ -225,9 +231,10 @@ class VTPRD_Parent_Cart_Validation {
     //DON'T USE ANYMORE  add_filter('woocommerce_order_details_after_order_table', array( &$this, 'vtprd_post_purchase_maybe_thankyou' ), 10,1);
     
     //do_action( 'woocommerce_thankyou', $order->id );  IS EXECUTED in WOO to place order info on thankyou page.   Put our stuff in front of thankyou.
-    if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon')  {   //v1.0.9.0    not needed for inline-pricing
+//v1.0.9.1  moved if statement to function
+//v1.0.9.1    if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon')  {   //v1.0.9.0    not needed for inline-pricing
       add_filter('woocommerce_thankyou', array( &$this, 'vtprd_post_purchase_maybe_before_thankyou' ), -1,1); //put our stuff in front of thankyou
-    }
+//v1.0.9.1    }
     //last filter/hook which uses the session variables, also nukes the session vars...
 //    add_filter('woocommerce_checkout_order_processed', array( &$this, 'vtprd_post_purchase_maybe_purchase_log' ), 10,2);   
 
@@ -551,6 +558,13 @@ class VTPRD_Parent_Cart_Validation {
 //error_log( print_r(  'immed exit $price_html= ' .$price_html, true ) );   
 //return $price_html;
     global $post, $vtprd_info, $vtprd_setup_options;
+    
+    //v1.0.9.1 begin
+    if ($vtprd_info['ruleset_has_a_display_rule'] != 'yes') {   //v1.0.9.1 
+      return;
+    } 
+    //v1.0.9.1 end
+      
     vtprd_debug_options();  //v1.0.5  
 //return $price_html;
 //error_log( print_r(  'immed exit $price_html= ' .$price_html, true ) );   
@@ -1512,7 +1526,14 @@ public function vtprd_get_product_catalog_price_add_to_cart( $product_id, $param
 
 //error_log( print_r(  'in maybe_add_remove_discount_cart_coupon ', true ) ); 
       
-    global $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $wpsc_coupons;  
+    global $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $wpsc_coupons, $vtprd_setup_options; //v1.0.9.1
+     
+    //v1.0.9.1 begin
+    if ($vtprd_setup_options['discount_taken_where'] != 'discountCoupon')  {   		
+    	return;
+    }
+    //v1.0.9.1 end  
+      
     vtprd_debug_options();  //v1.0.5                 
     //Open Session Variable, get rules_set and cart if not there....
     $data_chain = $this->vtprd_get_data_chain();
@@ -1593,6 +1614,14 @@ wp_die( __('<strong>die again.</strong>', 'vtprd'), __('VT Pricing Deals not com
    //****************************************************************
    public function vtprd_woo_maybe_load_discount_amount_to_coupon($status, $code) {
       global $vtprd_rules_set, $wpdb, $vtprd_cart, $vtprd_setup_options, $vtprd_info, $woocommerce;
+     
+    //v1.0.9.1 begin
+    if ($vtprd_setup_options['discount_taken_where'] != 'discountCoupon')  {   		
+    	return;
+    }
+    //v1.0.9.1 end  
+            
+      
       vtprd_debug_options();  //v1.0.5      
   //echo '$code= ' .$code. '<br>';
   //echo 'coupon_code_discount_deal= ' .$vtprd_info['coupon_code_discount_deal_title']. '<br>';
@@ -1821,6 +1850,13 @@ echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
   *************************************************** */ 
  public function vtprd_post_purchase_maybe_email($message, $order_info) {   
     global $wpdb, $vtprd_rules_set, $vtprd_cart, $vtprd_setup_options; 
+     
+    //v1.0.9.1 begin
+    if ($vtprd_setup_options['discount_taken_where'] != 'discountCoupon')  {   		
+    	return;
+    }
+    //v1.0.9.1 end      
+    
      vtprd_debug_options();  //v1.0.5   
 
 
@@ -1858,6 +1894,13 @@ echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
   *************************************************** */ 
   public function vtprd_post_purchase_maybe_before_thankyou($order_id) {   
     global $wpdb, $vtprd_rules_set, $vtprd_cart, $vtprd_setup_options; 
+     
+    //v1.0.9.1 begin
+    if ($vtprd_setup_options['discount_taken_where'] != 'discountCoupon')  {   		
+    	return;
+    }
+    //v1.0.9.1 end      
+      
      vtprd_debug_options();  //v1.0.5
     
     $message = '';  //v1.0.8.0

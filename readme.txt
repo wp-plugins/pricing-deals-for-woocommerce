@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 4.1
-Stable tag: 1.0.9.0
+Stable tag: 1.0.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -178,7 +178,10 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
-= 1.0.9.0 - 2014-11-24 =
+= 1.0.9.1 - 2015-01-23 =
+* Fix - pricing issue - for some installations, no discounts made it to checkout. Fixed.
+
+= 1.0.9.0 - 2015-01-22 =
 * Enhancement - Added Settings Switch to SHOW DISCOUNT AS:
 		**COUPON DISCOUNT** or 
 		**UNIT COST DISCOUNT**
@@ -351,6 +354,17 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Upgrade Notice ==
 
+= 1.0.9.1 - 2015-01-23 =
+* Fix - pricing issue - for some installations, no discounts made it to checkout. Fixed.
+
+= 1.0.9.0 - 2015-01-22 =
+* Enhancement - Added Settings Switch to SHOW DISCOUNT AS:
+		**COUPON DISCOUNT** or 
+		**UNIT COST DISCOUNT**
+* Enhancement - Added Settings Switch to show *Catalog Price discount suffix*, with wildcards.
+		So you can represent "Save xx" by putting in "Save {price_save_percent} {price_save_amount}" 
+		and the plugin will automatically fill in the saved percentage as "25%".
+ 
 = 1.0.8.9 - 2014-11-11 =
 * Fix - pricing issue - doing_ajax
 * Fix - pricing issue - login on the fly at checkout
