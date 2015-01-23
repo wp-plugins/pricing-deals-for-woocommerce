@@ -35,10 +35,11 @@ class VTPRD_Rules_UI{
 	}
                                
     
-  public function vtprd_enqueue_admin_scripts() {
+  public function vtprd_enqueue_admin_scripts() {  
     global $post_type, $vtprd_info;
-    if( get_post_type() == 'vtprd-rule' ){         //v1.0.8.2   can't just test $post_type here, not always accurate!
-        
+
+      if( get_post_type() == 'vtprd-rule' ){         //v1.0.8.2   can't just test $post_type here, not always accurate!
+    
         //QTip Resources
         wp_register_style ('vtprd-qtip-style', VTPRD_URL.'/admin/css/vtprd.qtip.min.css' );  
         wp_enqueue_style  ('vtprd-qtip-style'); 
@@ -70,6 +71,8 @@ class VTPRD_Rules_UI{
         }
        
       }
+      
+      
     //These are for the include/exclude meta box on the parent plugin PRODUCT page
     if( $post_type == $vtprd_info['parent_plugin_cpt']){
       wp_register_style('vtprd-admin-product-metabox-style', VTPRD_URL.'/admin/css/vtprd-admin-product-metabox-style.css' );  
@@ -531,25 +534,7 @@ class VTPRD_Rules_UI{
                      
               </span>
           </div> <?php //end blue-line ?>
-                
-          <?php //v1.0.9.0 begin  
-           $memory = wc_let_to_num( WP_MEMORY_LIMIT );
-      
-      		 if ( $memory < 67108864 ) {     //test for 64mb     
-          ?>
-          <div class="blue-line  clear-left"> 
-              <span class="left-column">                                                      
-                &nbsp;
-              </span>
-              <span class="right-column"> 
-    			     <?php
-               echo 'WP Memory Limit: ' . sprintf( __( '%s - We recommend setting memory to at least 64MB. See: <a href="%s">Increasing memory allocated to PHP</a>', 'woocommerce' ), size_format( $memory ), 'http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP' ) ;
-    		       ?> 
-              </span>                 
-          </div> <?php //end blue-line ?>
-          <?php } //v1.0.9.0 end ?>
-          
-          
+                                               
       </div> <?php //end template-area ?>                       
 
      </div> <?php //end top-box ?>                
@@ -1211,12 +1196,10 @@ class VTPRD_Rules_UI{
                       &nbsp;
                         <img  class="hasHoverHelp2" width="11px" alt=""  src="<?php echo VTPRD_URL;?>/admin/images/help.png" /> 
                        <?php vtprd_show_object_hover_help ('discount_product_full_msg', 'small') ?>
-                     </span>  
-                                            
+                     </span>                               
                   </span> 
             
              </span>
-
            </span>
          </div>    
       </div>
@@ -1886,7 +1869,7 @@ class VTPRD_Rules_UI{
   } 
   
     public    function vtprd_rule_resources() {          
-        echo '<a id="vtprd-rr-doc"  href="' . VTPRD_DOCUMENTATION_PATH . '"  title="Access Plugin Documentation">' . __('Plugin', 'vtprd'). '<br>' . __('Documentation', 'vtprd'). '</a>';
+        echo '<a id="vtprd-rr-doc"  href="' . VTPRD_DOCUMENTATION_PATH_PRO_BY_PARENT . '"  title="Access Plugin Documentation">' . __('Plugin', 'vtprd'). '<br>' . __('Documentation', 'vtprd'). '</a>';
         //Back to the Top box, fixed at lower right corner!!!!!!!!!!
         echo '<a href="#" id="back-to-top-tab" class="show-tab">' . __('Back to Top', 'vtprd'). ' <strong>&uarr;</strong></a>';
   }   

@@ -459,7 +459,7 @@ class VTPRD_Apply_Rules{
          $this->vtprd_mark_products_in_an_all_rule($i);
       }      
       //v1.0.8.4 begin  
-           
+      
     }  //ruleset for loop
     return;    
   }
@@ -606,7 +606,7 @@ class VTPRD_Apply_Rules{
             //SETS action amt "window" for the actionPop_exploded_group
             $this->vtprd_set_action_group_end($i, $d, $ar );  //vtprd_action_amt_process 
           }
-          //v1.0.8.1 end                
+          //v1.0.8.1 end                               
         break;  
       case 'nextInInPop':   
           if ($vtprd_rules_set[$i]->rule_deal_info[$d]['action_amt_type'] == 'zero' ) {  //means we are acting on the already-found 'buy' unit
@@ -631,7 +631,8 @@ class VTPRD_Apply_Rules{
              break;
           }        
           //v1.0.8.7 end
-         
+          
+          
         break;  
       case 'nextInActionPop':         
           //first time actionPop_exploded_group_end arrives here = 0...
@@ -1179,8 +1180,8 @@ class VTPRD_Apply_Rules{
         $vtprd_cart->cart_items[$k]->cartAuditTrail[$vtprd_rules_set[$i]->post_id]['discount_msgs'][] = 'No Discount - part of an "all" rule group from previous discount, no more allowed';
         return;     
     }
-    //v1.0.8.4 end
-       
+    //v1.0.8.4 begin
+    
     if ( isset( $vtprd_cart->cart_items[$k]->yousave_by_rule_info[$rule_id] ) ) {
       if ( (sizeof ($vtprd_cart->cart_items[$k]->yousave_by_rule_info) > 1 ) &&   //only 1 allowed in this case...
            ($vtprd_rules_set[$i]->cumulativeRulePricing == 'no') ) {
@@ -1695,7 +1696,9 @@ class VTPRD_Apply_Rules{
        $product_id = $vtprd_cart->cart_items[$k]->product_id;
        switch( true ) {
           case ( get_option( 'woocommerce_calc_taxes' ) == 'no' ):
-          case ( vtprd_maybe_customer_tax_exempt() ) :      //v1.0.7.9 
+          case ( !$vtprd_cart->cart_items[$k]->product_is_taxable ):
+      //  case ( $woocommerce->customer->is_vat_exempt() ):
+          case ( vtprd_maybe_customer_tax_exempt() ) :      //v1.0.7.9  
              $prod_discount_amt_excl_tax  =  $curr_prod_array['prod_discount_amt'];
              $prod_discount_amt_incl_tax  =  $curr_prod_array['prod_discount_amt'];
             break; 
@@ -2714,7 +2717,7 @@ class VTPRD_Apply_Rules{
     
     return;
   }  
-  
+ 
    //*******************************************************
    //v1.0.8.4 new function
    //  for next rule iterations, if cumulativeRulePricing == 'no'

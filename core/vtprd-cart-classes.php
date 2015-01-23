@@ -47,7 +47,7 @@ class VTPRD_Cart {
   //  public $wpsc_orig_coupons_amount;
     public $cumulativeCouponPricing_maybe_rollout_needed; //in support of auto add free products timing - 'NO' now needs a rollout...
     public $customer_is_tax_exempt;        //v1.0.7.9
-               
+           
  //   CART-LEVEL UNITS AND AMOUNTS AS RELATES TO RULES ITERATIONS, INPUT AND OUTPUT..  mAYBE PUT THE NEW CART-ITEM STUFF HERE....
     
     
@@ -71,7 +71,7 @@ class VTPRD_Cart {
         */
     ); 
     $this->error_messages_processed;
-    $this->customer_is_tax_exempt = false;        //v1.0.7.9              
+    $this->customer_is_tax_exempt = false;        //v1.0.7.9         
   }
   
 
@@ -81,7 +81,7 @@ class VTPRD_Cart_Item {
 
     public $product_id; 
     public $variation_id; //woo and jigo only 
-    public $variation_array; //woo and jigo only 
+    public $variation_array; //woo and jigo only
     public $product_variation_key; //woo, combo of other fields... //v1.0.8.6
     public $product_name;
     public $parent_product_name;  //woo and jigo only 
@@ -135,26 +135,8 @@ class VTPRD_Cart_Item {
     public $product_in_rule_allowing_display;
     public $product_auto_insert_state;    //used only during auto insert processing ...
     public $variation_name_html;    //v1.0.7.9  pre-load variation name... 
-    public $lifetime_line_subtotal;     //v1.0.8.0  for lifetime processing only...      
+    public $lifetime_line_subtotal;     //v1.0.8.0  for lifetime processing only...
     public $product_already_in_an_all_rule;     //v1.0.8.4  for cumulativeRulePricing processing only...                            
-    
-        
-    //v1.0.9.0 begin                 
-    public $product_list_price_html_woo;                  //unit price list
-    public $product_discount_price_woo;           //unit price with Catalog discount applied
-    public $product_discount_price_incl_tax_woo;          
-    public $product_discount_price_excl_tax_woo;            
-    public $product_discount_price_incl_tax_html_woo;            
-    public $product_discount_price_excl_tax_html_woo;                       
-    public $product_discount_price_suffix_html_woo;
-    
-    public $product_inline_discount_price_woo;           //unit price with Catalog + Cart Discount applied, spread across the Unit Price rather than in Coupon     
-    public $product_inline_discount_price_incl_tax_woo;          
-    public $product_inline_discount_price_excl_tax_woo;            
-    public $product_inline_discount_price_incl_tax_html_woo;            
-    public $product_inline_discount_price_excl_tax_html_woo;                       
-    public $product_inline_discount_price_suffix_html_woo;   
-    //v1.0.9.0 begin  end                                  
   
 	public function __construct(){
     $this->product_id;
@@ -177,7 +159,7 @@ class VTPRD_Cart_Item {
                [variation]     => $cart_item['variation']
             )
      
-      */      
+      */                 
     $this->product_name;
     $this->parent_product_name;
     $this->quantity = 0.00;
@@ -291,7 +273,8 @@ class VTPRD_Cart_Item {
           'pricing_rule_currency_discount' => ''
         */
      ); 
-                        
+     
+                   
     $this->discount_price = '';
     $this->yousave_total_amt = 0.00;
     $this->yousave_total_pct = 0;
@@ -299,29 +282,9 @@ class VTPRD_Cart_Item {
     $this->yousave_total_unit_price = 0;
     $this->save_orig_unit_price = 0;     //v1.0.7.4
     $this->product_is_taxable = '';    //v1.0.7.4
-    $this->variation_name_html = '';    //v1.0.7.9
-    $this->lifetime_line_subtotal = 0;     //v1.0.8.0  for lifetime processing only... 
+    $this->variation_name_html = '';    //v1.0.7.9 
+    $this->lifetime_line_subtotal = 0;     //v1.0.8.0  for lifetime processing only...
     $this->product_already_in_an_all_rule = '';     //v1.0.8.4  for cumulativeRulePricing processing only...  
-    
-    
-    //v1.0.9.0 begin
-    $this->product_list_price_html_woo = '';
-    $this->product_discount_price_woo = 0;             
-    $this->product_discount_price_html_woo = '';          
-    $this->product_discount_price_incl_tax_woo = '';          
-    $this->product_discount_price_excl_tax_woo = '';            
-    $this->product_discount_price_incl_tax_html_woo = '';            
-    $this->product_discount_price_excl_tax_html_woo = '';                       
-    $this->product_discount_price_suffix_html_woo = ''; 
-    
-    $this->product_inline_discount_price_woo = 0;       
-    $this->product_inline_discount_price_incl_tax_woo = '';          
-    $this->product_inline_discount_price_excl_tax_woo = '';            
-    $this->product_inline_discount_price_incl_tax_html_woo = '';            
-    $this->product_inline_discount_price_excl_tax_html_woo = '';                       
-    $this->product_inline_discount_price_suffix_html_woo = '';    
-    //v1.0.9.0 begin  end      
-    
 	}
 
 } //end class

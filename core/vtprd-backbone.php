@@ -16,7 +16,7 @@ class VTPRD_Backbone{
     return;
   }  
   //v1.0.8.9  end
-    
+  
   $tax_labels = array(
 		'name' => _x( 'Pricing Deals Categories', 'taxonomy general name', 'vtprd' ),
 		'singular_name' => _x( 'Pricing Deals Category', 'taxonomy singular name', 'vtprd' ),
@@ -47,7 +47,7 @@ class VTPRD_Backbone{
 
   //this only works after the setup has been updated, and after a refresh...
   global $vtprd_setup_options;
-//  $vtprd_setup_options = get_option( 'vtprd_setup_options' );  //v1.0.9.0 commmented
+  $vtprd_setup_options = get_option( 'vtprd_setup_options' );
   if ( (isset( $vtprd_setup_options['register_under_tools_menu'] ))  && 
        ($vtprd_setup_options['register_under_tools_menu'] == 'yes') ) {       
       $this->vtprd_register_under_tools_menu();
