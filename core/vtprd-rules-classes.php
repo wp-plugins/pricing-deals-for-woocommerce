@@ -365,7 +365,9 @@ class VTPRD_Rule {
      
      public  $rule_type_select;
      
-     public  $wizard_on_off_sw_select; //addition of wizard to screen... defaults to  'on' 
+     public  $wizard_on_off_sw_select; //addition of wizard to screen... defaults to  'on'
+     
+     public  $advertising_msg_badge_sw; //v1.0.9.0  if this is on, span is created which allows a badge to be attached using css
      //*********************
    
      //******************************************
@@ -455,8 +457,8 @@ class VTPRD_Rule {
      
      $this->rule_execution_type;
           
-   //  $this->rule_type_framework_key;   //reference to $vtprd_rule_type_[x]_framework, guides editing and logic  //v1.0.8.9
-   //  $this->rule_type_name;  //v1.0.8.9
+     $this->rule_type_framework_key;   //reference to $vtprd_rule_type_[x]_framework, guides editing and logic
+     $this->rule_type_name;
      
      //*************************************
         //    PRICING DEAL TABLE INFO
@@ -510,7 +512,7 @@ class VTPRD_Rule {
      //*****************
      //  actionPop
     //*****************
-      $this->set_actionPop_same_as_inPop; //v1.0.8.9 edit
+      $this->actionPop_same_as_inPop; 
       $this->actionPop; // cart or single or groups
             
       $this->actionPop_varProdID;
@@ -528,10 +530,10 @@ class VTPRD_Rule {
       
      $this->specChoice_out; // all or each or any 
      
-     $this->anyChoiceout_max; //v1.0.8.9 case changed on out
+     $this->anyChoiceOut_max;
 
      $this->amtSelectedOut; //quantity or currency 
-    // $this->actionPop_threshHold_amt;   //v1.0.8.9
+     $this->actionPop_threshHold_amt;
      $this->end_of_actionPop_reached;
           
      //******************************************
@@ -563,7 +565,7 @@ class VTPRD_Rule {
      $this->rule_error_message = array();
      $this->rule_error_red_fields = array();
      $this->rule_error_box_fields = array();
-           
+     $this->advertising_msg_badge_sw;  //v1.0.9.0         
      /* ************************************************* */
      /* Rule Processing at Purchase
      *  data is loaded here only at purchase processing time

@@ -3,7 +3,7 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.0.9.2
+Version: 1.0.9.3
 Author: Vark
 Author URI: http://varktech.com
 */
@@ -33,8 +33,8 @@ ASK YOUR HOST TO TURN OFF magic_quotes_gpc !!!!!
    $vtprd_template_structures_framework;
    
    //initial setup only, overriden later in function vtprd_debug_options
-   error_reporting(E_ERROR | E_CORE_ERROR | E_COMPILE_ERROR); //1.0.7.7
-   
+   error_reporting(E_ERROR | E_CORE_ERROR | E_COMPILE_ERROR); //v1.0.7.7
+
      
 class VTPRD_Controller{
 	
@@ -46,17 +46,17 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.0.9.2');
-    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.5.9');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2015-01-23');
+		define('VTPRD_VERSION',                               '1.0.9.3');
+    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.0.6.1');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2015-04-09');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
     define('VTPRD_EARLIEST_ALLOWED_PHP_VERSION',          '5');
     define('VTPRD_PLUGIN_SLUG',                           plugin_basename(__FILE__));
     define('VTPRD_PRO_PLUGIN_NAME',                      'Varktech Pricing Deals Pro for WooCommerce');    //v1.0.7.1
-    
-
+    define('VTPRD_FILE_VERSION',                          'v002'); //V1.0.9.3  ==> use to FORCE pickup of new JS files and the like - JS actual file must be renamed as well
+   
     require_once ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-definitions.php');
             
     // overhead stuff
@@ -86,7 +86,6 @@ class VTPRD_Controller{
         
         //get rid of bulk actions on the edit list screen, which aren't compatible with this plugin's actions...
         add_action('bulk_actions-edit-vtprd-rule', array($this, 'vtprd_custom_bulk_actions') );
-     
     } //v1.0.7.2  end
     
 	}   //end constructor
@@ -104,16 +103,17 @@ class VTPRD_Controller{
        
     load_plugin_textdomain( 'vtprd', null, dirname( plugin_basename( __FILE__ ) ) . '/languages' );  //v1.0.8.4  moved here above defs
 
-
-    
-    //v1.0.8.5 begin
-    // instead of translation, using filter to allow title change!!!!!!!!
-    //  this propagates throughout all plugin code execution through global...
-    $coupon_title  = apply_filters('vtprd_coupon_code_discount_title','' );
-    if ($coupon_title) {
-       global $vtprd_info; 
-       $vtprd_info['coupon_code_discount_deal_title'] = $coupon_title;
-    }
+    //v1.0.9.3 info not avail here
+    //if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon') { //v1.0.9.0  doesn't apply if 'discountUnitPrice'
+      //v1.0.8.5 begin
+      // instead of translation, using filter to allow title change!!!!!!!!
+      //  this propagates throughout all plugin code execution through global...
+      $coupon_title  = apply_filters('vtprd_coupon_code_discount_title','' );
+      if ($coupon_title) {
+         global $vtprd_info; 
+         $vtprd_info['coupon_code_discount_deal_title'] = $coupon_title;
+      }
+   // }  //v1.0.9.0
     /*
     // Sample filter execution ==>>  put into your theme's functions.php file, so it's not affected by plugin updates
           function coupon_code_discount_title() {
@@ -122,8 +122,8 @@ class VTPRD_Controller{
           add_filter('vtprd_coupon_code_discount_title', 'coupon_code_discount_title', 10);         
     */
     //v1.0.8.5 end
-   
-
+    
+    
     //Split off for AJAX add-to-cart, etc for Class resources.  Loads for is_Admin and true INIT loads are kept here.
     //require_once ( VTPRD_DIRNAME . '/core/vtprd-load-execution-resources.php' );
 
@@ -132,7 +132,7 @@ class VTPRD_Controller{
     require_once  ( VTPRD_DIRNAME . '/admin/vtprd-rules-ui-framework.php' );
     require_once  ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-functions.php');
     require_once  ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-theme-functions.php');
-    require_once  ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-cart-validation.php');   
+    require_once  ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-cart-validation.php');
 //  require_once  ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-definitions.php');    //v1.0.8.4  moved above
     require_once  ( VTPRD_DIRNAME . '/core/vtprd-cart-classes.php');
     
@@ -146,6 +146,41 @@ class VTPRD_Controller{
     }
 
     $vtprd_setup_options = get_option( 'vtprd_setup_options' );  //put the setup_options into the global namespace 
+    
+    //**************************
+    //v1.0.9.0 begin  
+    //**************************
+    switch( true ) { 
+      
+      case  is_admin() : //absolutely REQUIRED!!!
+        $do_nothing;
+        break;
+         
+      case ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon') :
+        $do_nothing;
+        break;
+             
+      case ($vtprd_setup_options['discount_taken_where'] == 'discountUnitPrice') :
+        //turn off switches not allowed for "discountUnitPrice" ==> done on the fly, rather than at update time...
+        $vtprd_setup_options['show_checkout_purchases_subtotal']     =   'none';                           
+        $vtprd_setup_options['show_checkout_discount_total_line']    =   'no'; 
+        $vtprd_setup_options['checkout_new_subtotal_line']           =   'no'; 
+        $vtprd_setup_options['show_cartWidget_purchases_subtotal']   =   'none';                           
+        $vtprd_setup_options['show_cartWidget_discount_total_line']  =   'no'; 
+        $vtprd_setup_options['cartWidget_new_subtotal_line']         =   'no';         
+        break;
+                
+      default:
+        // supply default for new variables as needed for upgrade v1.0.8.9 => v1.0.9.0 as needed
+        $vtprd_setup_options['discount_taken_where']        =   'discountCoupon';  
+        $vtprd_setup_options['give_more_or_less_discount']  =   'more'; 
+        $vtprd_setup_options['show_unit_price_cart_discount_crossout']     =   'yes'; //v1.0.9.3 ==> for help when switching to unit pricing...
+        $vtprd_setup_options['show_unit_price_cart_discount_computation']  =   'no'; //v1.0.9.3 
+        update_option( 'vtprd_setup_options',$vtprd_setup_options);  //v1.0.9.1
+        break;
+    
+    }
+    //v1.0.9.0 end 
     
     if (function_exists('vtprd_debug_options')) { 
       vtprd_debug_options();  //v1.0.5
@@ -175,11 +210,7 @@ class VTPRD_Controller{
         require_once ( VTPRD_DIRNAME . '/admin/vtprd-checkbox-classes.php');
         require_once ( VTPRD_DIRNAME . '/admin/vtprd-rules-delete.php');
         
-        $this->vtprd_admin_init();
-            
-        //always check if the manually created coupon codes are there - if not create them.
-        vtprd_woo_maybe_create_coupon_types();   
-
+        $this->vtprd_admin_init();  
         
         //v1.0.7.1 begin
         if ( (defined('VTPRD_PRO_DIRNAME')) &&
@@ -188,16 +219,22 @@ class VTPRD_Controller{
         }
         //v1.0.7.1 end 
       
-      //v1.0.7.4 begin  
-      //****************************************
-      //INSIST that coupons be enabled in woo, in order for this plugin to work!!
-      //****************************************
-      $coupons_enabled = get_option( 'woocommerce_enable_coupons' ) == 'no' ? false : true;
-      if (!$coupons_enabled) {  
-        add_action( 'admin_notices',array(&$this, 'vtprd_admin_notice_coupon_enable_required') );            
-      } 
-
-      vtprd_maybe_add_wholesale_role();
+      /* //v1.0.9.3 moved to functions to be run at admin-init time
+        if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon') { //v1.0.9.3  doesn't apply if 'discountUnitPrice'
+        //v1.0.7.4 begin  
+          //****************************************
+          //INSIST that coupons be enabled in woo, in order for this plugin to work!!
+          //****************************************
+          //always check if the manually created coupon codes are there - if not create them.
+          vtprd_woo_maybe_create_coupon_types();        
+          $coupons_enabled = get_option( 'woocommerce_enable_coupons' ) == 'no' ? false : true;
+          if (!$coupons_enabled) {  
+            add_action( 'admin_notices',array(&$this, 'vtprd_admin_notice_coupon_enable_required') );            
+          } 
+        }
+        */
+  // don't have to do this EXCEPT at install time....
+  //    $this->vtprd_maybe_add_wholesale_role(); //v1.0.9.0
  
       //v1.0.7.4 end 
       
@@ -478,8 +515,8 @@ class VTPRD_Controller{
             $includeOrExclude_checked_list = null; //initialize to null, as it's used later...
           break;
         case 'includeList':                  
-        case 'excludeList': 
-            $includeOrExclude_checked_list = $_REQUEST['includeOrExclude-checked_list']; //contains list of checked rule post-id"s  v1.0.8.9                                                
+        case 'excludeList':
+            $includeOrExclude_checked_list = $_REQUEST['includeOrExclude-checked_list']; //contains list of checked rule post-id"s  v1.0.8.9                                               
           break;
       }
 
@@ -509,46 +546,45 @@ class VTPRD_Controller{
         
     $this->vtprd_create_discount_log_tables();
 
-		$earliest_allowed_wp_version = 3.3;
-    if( (version_compare(strval($earliest_allowed_wp_version), strval($wp_version), '>') == 1) ) {   //'==1' = 2nd value is lower  
-        $message  =  '<strong>' . __('Looks like you\'re running an older version of WordPress, you need to be running at least WordPress 3.3 to use the Varktech Pricing Deals plugin.' , 'vtprd') . '</strong>' ;
-        $message .=  '<br>' . __('Current Wordpress Version = ' , 'vtprd')  . $wp_version ;
-        $admin_notices = '<div id="message" class="error fade" style="background-color: #FFEBE8 !important;"><p>' . $message . ' </p></div>';
-        add_action( 'admin_notices', create_function( '', "echo '$admin_notices';" ) );
-        return;
-		}
-   
-            
-   if (version_compare(PHP_VERSION, VTPRD_EARLIEST_ALLOWED_PHP_VERSION) < 0) {    //'<0' = 1st value is lower  
-        $message  =  '<strong>' . __('Looks like you\'re running an older version of PHP.   - your PHP version = ' , 'vtprd') .PHP_VERSION. '</strong>' ;
-        $message .=  '<br>' . __('You need to be running **at least PHP version 5** to use this plugin. Please contact your host and request an upgrade to PHP 5+ .  Once that has been installed, you can activate this plugin.' , 'vtprd');
-        $admin_notices = '<div id="message" class="error fade" style="background-color: #FFEBE8 !important;"><p>' . $message . ' </p></div>';
-        add_action( 'admin_notices', create_function( '', "echo '$admin_notices';" ) );
-        return;      
-      
-		}
+    $this->vtprd_maybe_add_wholesale_role(); //v1.0.9.0
 
     
-    if(defined('WOOCOMMERCE_VERSION') && (VTPRD_PARENT_PLUGIN_NAME == 'WooCommerce')) { 
-      $new_version =      VTPRD_EARLIEST_ALLOWED_PARENT_VERSION;
-      $current_version =  WOOCOMMERCE_VERSION;
-      if( (version_compare(strval($new_version), strval($current_version), '>') == 1) ) {   //'==1' = 2nd value is lower 
-        $message  =  '<strong>' . __('Looks like you\'re running an older version of WooCommerce. You need to be running at least ** WooCommerce 2.0 **, to use the Varktech Pricing Deals plugin' , 'vtprd') . '</strong>' ;
-        $message .=  '<br>' . __('Your current WooCommerce version = ' , 'vtprd') .WOOCOMMERCE_VERSION;
-        $admin_notices = '<div id="message" class="error fade" style="background-color: #FFEBE8 !important;"><p>' . $message . ' </p></div>';
-        add_action( 'admin_notices', create_function( '', "echo '$admin_notices';" ) );
-        return;         
-  		}
-    }   else 
-    if (VTPRD_PARENT_PLUGIN_NAME == 'WooCommerce') {
-        $message  =  '<strong>' . __('Varktech Pricing Deals for WooCommerce requires that WooCommerce be installed and activated. ' , 'vtprd') . '</strong>' ;
-        $message .=  '<br>' . __('It looks like WooCommerce is either not installed, or not activated. ' , 'vtprd');
-        $admin_notices = '<div id="message" class="error fade" style="background-color: #FFEBE8 !important;"><p>' . $message . ' </p></div>';
-        add_action( 'admin_notices', create_function( '', "echo '$admin_notices';" ) );
-        return;         
+    //v1.0.9.3 begin 
+ 
+    //other edits moved to function vtprd_check_for_deactivation_action run at admin-init time
+       
+    //if plugin updated/installed, wipe out session for fresh start.
+    if(!isset($_SESSION)){
+      session_start();
+      header("Cache-Control: no-cache");
+      header("Pragma: no-cache");
+    }    
+    session_destroy(); 
+    
+    // Check if get_plugins() function exists. This is required on the front end of the
+    // site, since it is in a file that is normally only loaded in the admin.
+    if ( ! function_exists( 'get_plugins' ) ) {
+    	require_once ABSPATH . 'wp-admin/includes/plugin.php';
     }
+    
+    $all_plugins = get_plugins();
 
-    return; 
+    foreach ($all_plugins as $key => $data) { 
+      if ($key == 'pricing-deals-pro-for-woocommerce/vt-pricing-deals-pro.php') {
+        $message  =  '<strong>' . __('Varktech Pricing Deals for WooCommerce has been updated / activated.' , 'vtprd') . '</strong>' ;
+        $message .=  '<br><br><strong>' . __('Please Re-Activate  ** Varktech Pricing Deals PRO for WooCommerce **, if desired.' , 'vtprd') . '</strong>';
+        $admin_notices = '<div id="message" class="error fade" style="background-color: #FFEBE8 !important;"><p>' . $message . ' </p></div>';
+        
+        //activation notices must be deferred =>>  fatal test for Woo, etc in parent-functions
+        $notices= get_option('vtprd_deferred_admin_notices', array());
+        $notices[]= $admin_notices;
+        update_option('vtprd_deferred_admin_notices', $notices);
+               
+        return;      
+      } 
+    }
+    //v1.0.9.3 end
+
   }
 
    //v1.0.7.1 begin                          
@@ -556,12 +592,19 @@ class VTPRD_Controller{
       $message  =  '<strong>' . __('Please also update plugin: ' , 'vtprd') . ' &nbsp;&nbsp;'  .VTPRD_PRO_PLUGIN_NAME . '</strong>' ;
       $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Your Pro Version = ' , 'vtprd') .VTPRD_PRO_VERSION. ' &nbsp;&nbsp;' . __(' The Minimum Required Pro Version = ' , 'vtprd') .VTPRD_MINIMUM_PRO_VERSION ;      
       $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Please delete the old Pro plugin from your installation (no rules will be affected).'  , 'vtprd');
+      $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Use your original download credentials, or your name and email address, and'  , 'vtprd');
       $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Go to ', 'vtprd');
       $message .=  '<a target="_blank" href="http://www.varktech.com/download-pro-plugins/">Varktech Downloads</a>';
       $message .=   __(', download and install the newest <strong>'  , 'vtprd') .VTPRD_PRO_PLUGIN_NAME. '</strong>' ;
       
       $admin_notices = '<div id="message" class="error fade" style="background-color: #FFEBE8 !important;"><p>' . $message . ' </p></div>';
       echo $admin_notices;
+      //v1.0.9.3 begin
+      $plugin = VTPRD_PRO_PLUGIN_SLUG;
+			if( is_plugin_active($plugin) ) {
+			   deactivate_plugins( $plugin );
+      }
+      //v1.0.9.3 end
       return;    
   }   
    //v1.0.7.1 end  
@@ -684,6 +727,52 @@ class VTPRD_Controller{
       return; 
    } 
                             
+                            
+ 
+  //****************************************
+  //v1.0.7.4 new function
+  //v1.0.8.8 refactored for new 'Wholesale Tax Free' role, buy_tax_free role capability
+  //  adds in default 'Wholesale Buyer' + new 'Wholesale Tax Free'  role at iadmin time  
+  //v1.0.9.0 moved here from functions.php, so it only executes on insall...
+  //****************************************
+  Public function vtprd_maybe_add_wholesale_role(){ 
+		global $wp_roles;
+	
+		if ( class_exists( 'WP_Roles' ) ) {
+      if ( !isset( $wp_roles ) ) { 
+			   $wp_roles = new WP_Roles();
+      }
+    }
+
+		$capabilities = array( 
+			'read' => true,
+			'edit_posts' => false,
+			'delete_posts' => false,
+		); 
+     
+    $wholesale_buyer_role_name    =  __('Wholesale Buyer' , 'vtprd');
+    $wholesale_tax_free_role_name =  __('Wholesale Tax Free' , 'vtprd');
+  
+
+		if ( is_object( $wp_roles ) ) { 
+
+      If ( !get_role( $wholesale_buyer_role_name ) ) {
+    			add_role ('wholesale_buyer', $wholesale_buyer_role_name, $capabilities );    
+    			$role = get_role( 'wholesale_buyer' ); 
+    			$role->add_cap( 'buy_wholesale' );
+      }
+
+      If ( !get_role(  $wholesale_tax_free_role_name ) ) {
+    			add_role ('wholesale_tax_free',  $wholesale_tax_free_role_name, $capabilities );    
+    			$role = get_role( 'wholesale_tax_free' ); 
+    			$role->add_cap( 'buy_tax_free' );
+      }
+
+		}
+       
+    return;
+  }  
+
 
   
 } //end class

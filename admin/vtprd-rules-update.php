@@ -869,7 +869,7 @@ action amt condition can be an amt or $$
       add_option( 'vtprd_ruleset_timestamp',$current_time );
     }
     //v1.0.8.4 timestamp  end
-
+        
     if (session_id() == "") {
       session_start();    
     } 
@@ -879,8 +879,6 @@ action amt condition can be an amt or $$
     session_write_close();
     // mwn20140414 end
     
-    
-     
     return;
   } 
   

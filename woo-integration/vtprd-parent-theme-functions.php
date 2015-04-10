@@ -69,9 +69,15 @@
         $rule_has_reached_lifetime_limit = vtprd_rule_lifetime_validity_test($i,'shortcode');
         if ($rule_has_reached_lifetime_limit) {
            continue;
-        }
+        } 
+        
       }
-
+      
+      //v1.0.9.3 new skipt test
+      if (vtprd_store_deal_msg($i) == "Get 10% off Laptops Today! (sample)" ) {
+         continue;      
+      }
+       
       //END skip tests
       
       //INclusion test begin  -  all are implicit 'or' functions     
@@ -150,20 +156,20 @@
     global $vtprd_rules_set, $post, $vtprd_setup_options, $vtprd_info, $wpdb;
     extract(shortcode_atts (
       array (
-        type => 'cart',            //'cart' (default) / 'catalog' / 'all' ==> "cart" msgs = cart rules type, "catalog" msgs = realtime catalog rules type        
+        'type' => 'cart',            //'cart' (default) / 'catalog' / 'all' ==> "cart" msgs = cart rules type, "catalog" msgs = realtime catalog rules type        
                                        // AND (implicit)
-        wholestore_msgs_only => 'no',  //'yes' / 'no' (default) 
+        'wholestore_msgs_only' => 'no',  //'yes' / 'no' (default) 
                                        // AND [implicit]
                                        //   (  
-        roles => '',          //'Administrator,Customer,Not logged in (just visiting),Member'  
+        'roles' => '',          //'Administrator,Customer,Not logged in (just visiting),Member'  
                                        // OR  [implicit]
-        rules => '',            //'123,456,789'     
+        'rules' => '',            //'123,456,789'     
                                        // OR  [implicit]
-        product_category => '',  //'123,456,789'    / 'any' - if on a category page, show any msg for that category   
+        'product_category' => '',  //'123,456,789'    / 'any' - if on a category page, show any msg for that category   
                                         // OR  [implicit]
-        plugin_category => '',   //'123,456,789'       
+        'plugin_category' => '',   //'123,456,789'       
                                                 // OR  [implicit]                                   
-        products => ''          //'123,456,789'    (ONLY WORKS in the LOOP, or if the Post is available )   / 'any' - if on a product page, show any msg for that product
+        'products' => ''          //'123,456,789'    (ONLY WORKS in the LOOP, or if the Post is available )   / 'any' - if on a product page, show any msg for that product
                                        //   )                                  
       ), $atts));  //override default value with supplied parameters...
     
@@ -272,6 +278,12 @@
           continue;
         }
       }
+      
+      //v1.0.9.3 new skipt test
+      if (vtprd_store_deal_msg($i) == "Get 10% off Laptops Today! (sample)" ) {
+         continue;      
+      }
+            
       //END skip tests
       
       //*************************
@@ -528,12 +540,12 @@
     global $vtprd_rules_set, $vtprd_setup_options;
     extract(shortcode_atts (
       array (
-        type => 'cart',     //'cart' (default) / 'catalog' / 'all' ==> "cart" msgs = cart rules type, "catalog" msgs = realtime catalog rules type 
+        'type' => 'cart',     //'cart' (default) / 'catalog' / 'all' ==> "cart" msgs = cart rules type, "catalog" msgs = realtime catalog rules type 
                                 // AND [implicit]                                               
                                 //   ( 
-        product_category => '',  //'123,456,789'      only active if in this list
+        'product_category' => '',  //'123,456,789'      only active if in this list
                                 // OR  [implicit]
-        plugin_category => ''   //'123,456,789'      only active if in this list
+        'plugin_category' => ''   //'123,456,789'      only active if in this list
                                 //   ) 
       ), $atts));               
     
@@ -566,7 +578,12 @@
            continue;
         }
       }
-
+      
+      //v1.0.9.3 new skipt test
+      if (vtprd_store_deal_msg($i) == "Get 10% off Laptops Today! (sample)" ) {
+         continue;      
+      }
+       
       $exit_stage_left = 'no';
       switch( $type ) {
         case 'cart':
@@ -700,21 +717,21 @@
     extract(shortcode_atts (
       array (
                                                    //   (  group 1
-        group1_type => 'cart',                   //'cart' (default) / 'catalog' / 'all' ==> "cart" msgs = cart rules type, "catalog" msgs = realtime catalog rules type  
-        group1_and_or_wholestore_msgs_only => 'and', //'and'(default) / 'or' 
-        group1_wholestore_msgs_only => 'no',         //'yes' / 'no' (default)   only active if rule active for whole store
+        'group1_type' => 'cart',                   //'cart' (default) / 'catalog' / 'all' ==> "cart" msgs = cart rules type, "catalog" msgs = realtime catalog rules type  
+        'group1_and_or_wholestore_msgs_only' => 'and', //'and'(default) / 'or' 
+        'group1_wholestore_msgs_only' => 'no',         //'yes' / 'no' (default)   only active if rule active for whole store
                                                    //   )
-        and_or_group1_to_group2 => 'and',              //'and'(default) / 'or' 
+        'and_or_group1_to_group2' => 'and',              //'and'(default) / 'or' 
                                                    //   (  group 2
-        group2_rules => '',                   //'123,456,789'          only active if in this list
-        group2_and_or_roles => 'and',       //'and'(default) / 'or' 
-        group2_roles => '',                 //'Administrator,Customer,Not logged in (just visiting),Member'         Only active if in this list 
+        'group2_rules' => '',                   //'123,456,789'          only active if in this list
+        'group2_and_or_roles' => 'and',       //'and'(default) / 'or' 
+        'group2_roles' => '',                 //'Administrator,Customer,Not logged in (just visiting),Member'         Only active if in this list 
                                                    //   )
-        and_or_group2_to_group3 => 'and',              //'and'(default) / 'or' 
+        'and_or_group2_to_group3' => 'and',              //'and'(default) / 'or' 
                                                    //   (  group 3
-        group3_product_category => '',                //'123,456,789'      only active if in this list
-        group3_and_or_plugin_category => 'or',       //'and' / 'or'(default) 
-        group3_plugin_category => ''                 //'123,456,789'      only active if in this list
+        'group3_product_category' => '',                //'123,456,789'      only active if in this list
+        'group3_and_or_plugin_category' => 'or',       //'and' / 'or'(default) 
+        'group3_plugin_category' => ''                 //'123,456,789'      only active if in this list
                                                    //   )
       ), $atts));  //override default value with supplied parameters...
     
@@ -744,6 +761,11 @@
         }
       }
       
+      //v1.0.9.3 new skipt test
+      if (vtprd_store_deal_msg($i) == "Get 10% off Laptops Today! (sample)" ) {
+         continue;      
+      }
+             
       $status =       array (
         'group1_type' => '',                  
         'group1_wholestore_msgs_only' => '',           

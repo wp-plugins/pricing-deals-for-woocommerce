@@ -14,12 +14,20 @@ class VTPRD_Setup_Plugin_Options {
     add_action( 'admin_init',            array(&$this, 'vtprd_initialize_options' ) );
     add_action( 'admin_menu',            array(&$this, 'vtprd_add_admin_menu_setup_items' ) );
     add_action( "admin_enqueue_scripts", array(&$this, 'vtprd_enqueue_setup_scripts') );
+    
+    //this picks up any taxation changes which will radically alter the saved data...
+    add_action( "woocommerce_settings_saved", array(&$this, 'vtprd_destroy_session') ); //v1.0.9.3    
   } 
 
 function vtprd_add_admin_menu_setup_items() {
  // add items to the Pricing Deals custom post type menu structure
   global $vtprd_setup_options;
-  $vtprd_setup_options = get_option( 'vtprd_setup_options' );
+  
+  //V1.0.9.0 ADD WRAPPING 'IF'
+  if (!isset( $vtprd_setup_options['register_under_tools_menu'] ))  {
+    $vtprd_setup_options = get_option( 'vtprd_setup_options' );
+  }
+  
   if ( (isset( $vtprd_setup_options['register_under_tools_menu'] ))  && 
        ($vtprd_setup_options['register_under_tools_menu'] == 'yes') ) {      
       $settingsLocation = 'options-general.php';
@@ -175,7 +183,7 @@ function vtprd_pro_upgrade_cntl() {
 	background-color:#5a8939;
   color:white;
 } 
-    
+   
   </style>
    
 	<div class="wrap">
@@ -361,11 +369,11 @@ function vtprd_setup_options_cntl() {
 					do_settings_sections( 'vtprd_setup_options_page' );   //activates the section settings setup below 
 			?>	
 			
-      <span id="floating-buttons" class="show-buttons">
+      <div id="floating-buttons" class="show-buttons">
         <?php	submit_button(); ?>       			     
         <input name="vtprd_setup_options[options-reset]"      type="submit" class="button-secondary"  value="<?php esc_attr_e('Reset to Defaults', 'vtprd'); ?>" />
         <a class="button-secondary" target="_blank" href="http://www.varktech.com/documentation/pricing-deals/settings"><?php _e('Help!', 'vtprd');?></a> 
-      </span>
+      </div>
       
       <span id="vtprd-system-buttons-anchor"></span>  
        <p id="system-buttons">
@@ -485,19 +493,113 @@ function vtprd_initialize_options() {
 		array(&$this, 'vtprd_nav_callback'),	// Callback used to render the description of the section
 		'vtprd_setup_options_page'		// Page on which to add this section of options
 	);
+
+  //v1.0.9.0 begin  
+  //****************************
+  //  Discount Action Taken  Area
+  //****************************  
+	add_settings_section(
+		'taken_where_settings_section',			// ID used to identify this section and with which to register options
+		__( 'Show Cart Rule Discount', 'vtprd' )	// Title to be displayed on the administration page
+    .'&nbsp;&nbsp; => &nbsp;&nbsp;'.
+    __( 'as a Unit Price Discount, or a Woo Coupon Discount', 'vtprd' ),
+		array(&$this, 'vtprd_taken_where_options_callback'),	// Callback used to render the description of the section
+		'vtprd_setup_options_page'		// Page on which to add this section of options
+	);
+   
+          
+    add_settings_field(	         //opt48
+		'discount_taken_where',						// ID used to identify the field throughout the theme
+		__( 'Unit Price Discount', 'vtprd' ) 
+    .'<br>'.
+    __( 'or Coupon Discount?', 'vtprd' ), // The label to the left of the option interface element
+		array(&$this, 'vtprd_discount_taken_where_callback'), // The name of the function responsible for rendering the option interface
+		'vtprd_setup_options_page',	// The page on which this option will be displayed
+		'taken_where_settings_section',			// The name of the section to which this field belongs
+		array(								// The array of arguments to pass to the callback. In this case, just a description.
+			 __( 'Is the discount to be taken by changing the unit price, or applied separately?', 'vtprd' )
+		)
+	);
+          
+    add_settings_field(	         //opt49
+		'give_more_or_less_discount',						// ID used to identify the field throughout the theme
+		//__( 'if there is a unit price rounding error, do we give more or less discount?', 'vtprd' )
+    '<div class="unitPriceOnly">'.
+    __( 'Give More or Less - Unit Price discount', 'vtprd' )   
+    .'</div>', 
+		array(&$this, 'vtprd_give_more_or_less_discount_callback'), // The name of the function responsible for rendering the option interface
+		'vtprd_setup_options_page',	// The page on which this option will be displayed
+		'taken_where_settings_section',			// The name of the section to which this field belongs
+		array(								// The array of arguments to pass to the callback. In this case, just a description.
+			 __( 'Is the discount to be taken by changing the unit price, or applied separately?', 'vtprd' )
+		)
+	);
+
+  
+  //v1.0.9.0 end
+  
+  //v1.0.9.3 begin 
+            
+    add_settings_field(	         //opt51
+		'show_unit_price_cart_discount_crossout',						// ID used to identify the field throughout the theme
+		//__( 'if there is a unit price rounding error, do we give more or less discount?', 'vtprd' )
+    '<div class="unitPriceOnly">'.
+    __( 'Show original Unit Price ', 'vtprd' )
+    .'<br>'.
+    __( 'Crossed Out in the Cart? ', 'vtprd' )    
+    .'</div>', 
+		array(&$this, 'vtprd_show_unit_price_cart_discount_crossout_callback'), // The name of the function responsible for rendering the option interface
+		'vtprd_setup_options_page',	// The page on which this option will be displayed
+		'taken_where_settings_section',			// The name of the section to which this field belongs
+		array(								// The array of arguments to pass to the callback. In this case, just a description.
+			 __( 'Show the original price crossed out, when a discount is shown in the Unit Price?', 'vtprd' )
+		)
+	);
+            
+    add_settings_field(	         //opt52
+		'show_unit_price_cart_discount_computation',						// ID used to identify the field throughout the theme
+		//__( 'if there is a unit price rounding error, do we give more or less discount?', 'vtprd' )
+    '<div class="unitPriceOnly">'.
+    __( 'Show Unit Price Discount Computation', 'vtprd' )
+    .'</div>', 
+		array(&$this, 'vtprd_show_unit_price_cart_discount_computation_callback'), // The name of the function responsible for rendering the option interface
+		'vtprd_setup_options_page',	// The page on which this option will be displayed
+		'taken_where_settings_section',			// The name of the section to which this field belongs
+		array(								// The array of arguments to pass to the callback. In this case, just a description.
+			 __( 'Show the workings of the discount computation, use only during testing', 'vtprd' )
+		)
+	);
+/*             
+    add_settings_field(	         //opt53
+		'unit_price_cart_savings_message',						// ID used to identify the field throughout the theme
+		//__( 'if there is a unit price rounding error, do we give more or less discount?', 'vtprd' )
+    '<div class="unitPriceOnly">'.
+    __( 'Custom Checkout "Yousave" Message', 'vtprd' )
+    .'</div>',  
+		array(&$this, 'vtprd_unit_price_cart_savings_message_callback'), // The name of the function responsible for rendering the option interface
+		'vtprd_setup_options_page',	// The page on which this option will be displayed
+		'taken_where_settings_section',			// The name of the section to which this field belongs
+		array(								// The array of arguments to pass to the callback. In this case, just a description.
+			 __( 'Show custom savings message at Checkout', 'vtprd' )
+		)
+	);
+*/       
+  //v1.0.9.3 end
+  
+
   //****************************
   //  Checkout Discount Reporting OptionS Area
   //****************************  
 	add_settings_section(
 		'checkout_settings_section',			// ID used to identify this section and with which to register options
-		__( 'Checkout Discount Display<span id="vtprd-checkout-reporting-anchor"></span>', 'vtprd' ),	// Title to be displayed on the administration page
+		__( 'Checkout Discount Display (cart rules only)<span id="vtprd-checkout-reporting-anchor"></span>', 'vtprd' ),	// Title to be displayed on the administration page
 		array(&$this, 'vtprd_checkout_options_callback'),	// Callback used to render the description of the section
 		'vtprd_setup_options_page'		// Page on which to add this section of options
 	);
   
           
     add_settings_field(	         //opt6
-		'show_checkout_discount_detail_lines',						// ID used to identify the field throughout the theme
+		'show_checkout_discount_detail_lines',						// ID used to identify the field throughout the theme  
 		__( 'Show Product Discount Detail Lines?', 'vtprd' ), // The label to the left of the option interface element
 		array(&$this, 'vtprd_show_checkout_discount_detail_lines_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
@@ -532,7 +634,9 @@ function vtprd_initialize_options() {
    
     add_settings_field(	         //opt24
 		'show_checkout_purchases_subtotal',						// ID used to identify the field throughout the theme
-    __( 'Show Cart Purchases Subtotal Line?', 'vtprd' ),    
+    '<span class="unitPriceOrCoupon">'.
+    __( 'Show Cart Purchases Subtotal Line?', 'vtprd' )
+    .'</span>',    
 		array(&$this, 'vtprd_show_checkout_purchases_subtotal_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'checkout_settings_section',			// The name of the section to which this field belongs
@@ -543,8 +647,9 @@ function vtprd_initialize_options() {
     
     add_settings_field(	         //opt30
 		'checkout_credit_subtotal_title',						// ID used to identify the field throughout the theme
-    '&nbsp;&nbsp;&nbsp;&nbsp;'        .__( 'Cart Purchases Subtotal Line', 'vtprd' )
-    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __( ' - Label Title', 'vtprd' ),
+    '<span class="unitPriceOrCoupon"> &nbsp;&nbsp;&nbsp;&nbsp;'        .__( 'Cart Purchases Subtotal Line', 'vtprd' )  //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __( ' - Label Title', 'vtprd' )
+    .'</span>',
     array(&$this, 'vtprd_checkout_credit_subtotal_title_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'checkout_settings_section',			// The name of the section to which this field belongs
@@ -555,7 +660,9 @@ function vtprd_initialize_options() {
  
     add_settings_field(	         //opt5
 		'show_checkout_discount_total_line',						// ID used to identify the field throughout the theme
-		__( 'Show Discounts Grand Totals Line?', 'vtprd' ),	// The label to the left of the option interface element
+		'<span class="unitPriceOrCoupon">'.   //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+    __( 'Show Discounts Grand Totals Line?', 'vtprd' )
+    .'</span>',	
 		array(&$this, 'vtprd_show_checkout_discount_total_line_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'checkout_settings_section',			// The name of the section to which this field belongs
@@ -566,8 +673,9 @@ function vtprd_initialize_options() {
   
     add_settings_field(	         //opt31
 		'checkout_credit_total_title',						// ID used to identify the field throughout the theme
-    '&nbsp;&nbsp;&nbsp;&nbsp;'        .__( 'Discounts Grand Totals Line', 'vtprd' )
-    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __( ' - Label Title', 'vtprd' ),		
+    '<span class="unitPriceOrCoupon">&nbsp;&nbsp;&nbsp;&nbsp;'        .__( 'Discounts Grand Totals Line', 'vtprd' )  //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __( ' - Label Title', 'vtprd' )
+    .'</span>',		
     array(&$this, 'vtprd_checkout_credit_total_title_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'checkout_settings_section',			// The name of the section to which this field belongs
@@ -601,7 +709,9 @@ function vtprd_initialize_options() {
   
     add_settings_field(	         //opt11
 		'checkout_credit_total_label',						// ID used to identify the field throughout the theme
-		__( 'Discount Total Line - Credit Label', 'vtprd' ),	// The label to the left of the option interface element
+		'<span class="unitPriceOrCoupon">'.  //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+    __( 'Discount Total Line - Credit Label', 'vtprd' )
+    .'</span> ',
 		array(&$this, 'vtprd_checkout_credit_total_label_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'checkout_settings_section',			// The name of the section to which this field belongs
@@ -612,8 +722,10 @@ function vtprd_initialize_options() {
 
     add_settings_field(	         //opt43
 		'checkout_new_subtotal_line',						// ID used to identify the field throughout the theme
-		 __( 'Show Products + Discounts', 'vtprd' )
-    . '<br>'  . __( ' Grand Total Line', 'vtprd' ),	// The label to the left of the option interface element
+		 '<span class="unitPriceOrCoupon">'.   //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+     __( 'Show Products + Discounts', 'vtprd' )
+    . '<br>'  . __( ' Grand Total Line', 'vtprd' )
+    .'</span>',
 		array(&$this, 'vtprd_checkout_new_subtotal_line_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'checkout_settings_section',			// The name of the section to which this field belongs
@@ -625,8 +737,10 @@ function vtprd_initialize_options() {
     
     add_settings_field(	         //opt44
 		'checkout_new_subtotal_label',						// ID used to identify the field throughout the theme
+    '<span class="unitPriceOrCoupon">'.  //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
     '&nbsp;&nbsp;&nbsp;&nbsp;'        .__( 'Product + Discount', 'vtprd' )
-    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __( 'Grand Total Line - Label Title', 'vtprd' ),		
+    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __( 'Grand Total Line - Label Title', 'vtprd' )
+    .'</span>',		
     array(&$this, 'vtprd_checkout_new_subtotal_label_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'checkout_settings_section',			// The name of the section to which this field belongs
@@ -643,14 +757,18 @@ function vtprd_initialize_options() {
   //****************************      
 	add_settings_section(
 		'cartWidget_settings_section',			// ID used to identify this section and with which to register options
-		__( 'Cart Widget Discount Display<span id="vtprd-cartWidget-options-anchor"></span>', 'vtprd' ),	// Title to be displayed on the administration page
+		__( 'Cart Widget Discount Display (cart rules only)<span id="vtprd-cartWidget-options-anchor"></span>', 'vtprd' )
+    .'<span class="unitPriceOnly">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+    __( '(... no options when "Unit Price Discount" is chosen.) </span>', 'vtprd' ),	// Title to be displayed on the administration page
 		array(&$this, 'vtprd_cartWidget_options_callback'),	// Callback used to render the description of the section
 		'vtprd_setup_options_page'		// Page on which to add this section of options
 	); 
      
     add_settings_field(	         //opt27
 		'show_cartWidget_discount_detail_lines',						// ID used to identify the field throughout the theme
-		__( 'Show Product Discount Detail Lines?', 'vtprd' ),	// The label to the left of the option interface element
+    '<span class="unitPriceOrCoupon">'.   //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide      
+		__( 'Show Product Discount Detail Lines?', 'vtprd' )
+    .'</span>',	// The label to the left of the option interface element
 		array(&$this, 'vtprd_show_cartWidget_discount_detail_lines_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'cartWidget_settings_section',			// The name of the section to which this field belongs
@@ -661,7 +779,9 @@ function vtprd_initialize_options() {
 
     add_settings_field(	         //opt22
 		'show_cartWidget_discount_details_grouped_by_what',						// ID used to identify the field throughout the theme
-		'&nbsp;&nbsp;&nbsp;&nbsp;'        .__( 'Product Discounts Grouped By?', 'vtprd' ),	// The label to the left of the option interface element
+		'<span class="unitPriceOrCoupon">'.   //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+    '&nbsp;&nbsp;&nbsp;&nbsp;'        .__( 'Product Discounts Grouped By?', 'vtprd' )
+    .'</span>',	// The label to the left of the option interface element
 		array(&$this, 'vtprd_show_cartWidget_discount_details_grouped_by_what_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'cartWidget_settings_section',			// The name of the section to which this field belongs
@@ -672,8 +792,10 @@ function vtprd_initialize_options() {
       
     add_settings_field(	         //opt7
 		'show_cartWidget_discount_titles_above_details',						// ID used to identify the field throughout the theme
-		'&nbsp;&nbsp;&nbsp;&nbsp;'        . __( 'Show Short Checkout Message for', 'vtprd' )
-    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' . __( '"Grouped by Rule within Product"?', 'vtprd' ),   
+		'<span class="unitPriceOrCoupon">'.   //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+    '&nbsp;&nbsp;&nbsp;&nbsp;'        . __( 'Show Short Checkout Message for', 'vtprd' )
+    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' . __( '"Grouped by Rule within Product"?', 'vtprd' )
+    .'</span>',   
     array(&$this, 'vtprd_show_cartWidget_discount_titles_above_details_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'cartWidget_settings_section',			// The name of the section to which this field belongs
@@ -684,7 +806,9 @@ function vtprd_initialize_options() {
       
     add_settings_field(	         //opt25
 		'show_cartWidget_purchases_subtotal',						// ID used to identify the field throughout the theme
-    __( 'Show Cart Purchases Subtotal Line?', 'vtprd' ),
+    '<span class="unitPriceOrCoupon">' .  //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+    __( 'Show Cart Purchases Subtotal Line?', 'vtprd' )
+    .'</span>',
     array(&$this, 'vtprd_show_cartWidget_purchases_subtotal_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'cartWidget_settings_section',			// The name of the section to which this field belongs
@@ -695,8 +819,10 @@ function vtprd_initialize_options() {
     
     add_settings_field(	         //opt32
 		'cartWidget_credit_subtotal_title',						// ID used to identify the field throughout the theme
+    '<span class="unitPriceOrCoupon">'.  //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
     '&nbsp;&nbsp;&nbsp;&nbsp;'        .__( 'Cart Purchases Subtotal Line', 'vtprd' )
-    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __( ' - Label Title', 'vtprd' ),
+    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __( ' - Label Title', 'vtprd' )
+    .'</span>',
 		array(&$this, 'vtprd_cartWidget_credit_subtotal_title_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'cartWidget_settings_section',			// The name of the section to which this field belongs
@@ -707,7 +833,9 @@ function vtprd_initialize_options() {
 
     add_settings_field(	         //opt26
 		'show_cartWidget_discount_total_line',						// ID used to identify the field throughout the theme
-    __( 'Show Discounts Grand Totals Line?', 'vtprd' ),		
+    '<span class="unitPriceOrCoupon">'. //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+    __( 'Show Discounts Grand Totals Line?', 'vtprd' )
+    .'</span>',	
     array(&$this, 'vtprd_show_cartWidget_discount_total_line_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'cartWidget_settings_section',			// The name of the section to which this field belongs
@@ -718,8 +846,10 @@ function vtprd_initialize_options() {
 
     add_settings_field(	         //opt33
 		'cartWidget_credit_total_title',						// ID used to identify the field throughout the theme
+    '<span class="unitPriceOrCoupon">'.  //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
     '&nbsp;&nbsp;&nbsp;&nbsp;'        .__( 'Discounts Grand Totals Line', 'vtprd' )
-    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __( ' - Label Title', 'vtprd' ),	
+    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __( ' - Label Title', 'vtprd' )
+    .'</span>',	
 		array(&$this, 'vtprd_cartWidget_credit_total_title_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'cartWidget_settings_section',			// The name of the section to which this field belongs
@@ -731,7 +861,9 @@ function vtprd_initialize_options() {
          
     add_settings_field(	         //opt28
 		'cartWidget_credit_detail_label',						// ID used to identify the field throughout the theme
-		__( 'Discount Detail Line - Credit Label', 'vtprd' ),	// The label to the left of the option interface element
+		'<span class="unitPriceOrCoupon">'.   //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+    __( 'Discount Detail Line - Credit Label', 'vtprd' )
+    .'</span>',	// The label to the left of the option interface element
 		array(&$this, 'vtprd_cartWidget_credit_detail_label_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'cartWidget_settings_section',			// The name of the section to which this field belongs
@@ -742,7 +874,9 @@ function vtprd_initialize_options() {
   
     add_settings_field(	         //opt29
 		'cartWidget_credit_total_label',						// ID used to identify the field throughout the theme
-		__( 'Discount Total Line - Credit Label', 'vtprd' ),	// The label to the left of the option interface element
+		'<span class="unitPriceOrCoupon">'.  //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+    __( 'Discount Total Line - Credit Label', 'vtprd' )
+    .'</span>',
 		array(&$this, 'vtprd_cartWidget_credit_total_label_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'cartWidget_settings_section',			// The name of the section to which this field belongs
@@ -754,8 +888,10 @@ function vtprd_initialize_options() {
   
     add_settings_field(	         //opt45
 		'cartWidget_new_subtotal_line',						// ID used to identify the field throughout the theme
-		 __( 'Show Products + Discounts', 'vtprd' )
-    . '<br>'  . __( ' Grand Total Line', 'vtprd' ),	// The label to the left of the option interface element
+		 '<span class="unitPriceOrCoupon">'.  //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+     __( 'Show Products + Discounts', 'vtprd' )
+    . '<br>'  . __( ' Grand Total Line', 'vtprd' )
+    .'</span>',
 		array(&$this, 'vtprd_cartWidget_new_subtotal_line_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'cartWidget_settings_section',			// The name of the section to which this field belongs
@@ -767,8 +903,9 @@ function vtprd_initialize_options() {
     
     add_settings_field(	         //opt46
 		'cartWidget_new_subtotal_label',						// ID used to identify the field throughout the theme
-    '&nbsp;&nbsp;&nbsp;&nbsp;'        .__( 'Product + Discount', 'vtprd' )
-    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __( 'Grand Total Line - Label Title', 'vtprd' ),		
+    '<span class="unitPriceOrCoupon">&nbsp;&nbsp;&nbsp;&nbsp;'        .__( 'Product + Discount', 'vtprd' )  //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+    . '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __( 'Grand Total Line - Label Title', 'vtprd' )
+    .'</span>',		
     array(&$this, 'vtprd_cartWidget_new_subtotal_label_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'cartWidget_settings_section',			// The name of the section to which this field belongs
@@ -788,6 +925,7 @@ function vtprd_initialize_options() {
 		)
 	);
  */ 
+
  
   //****************************
   //  Discount Catalog Display - Strikethrough
@@ -804,7 +942,7 @@ function vtprd_initialize_options() {
  
     add_settings_field(	         //opt47
 		'show_catalog_price_crossout',						// ID used to identify the field throughout the theme
-		__( 'Show Catalog Discount Price Crossout', 'vtprd' ),	// The label to the left of the option interface element
+		__( 'Show Catalog Discount Price Crossout', 'vtprd' ),	// The label to the left of the option interface element  //v1.0.9.3
 		array(&$this, 'vtprd_show_catalog_price_crossout_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'catalog_settings_section',			// The name of the section to which this field belongs
@@ -813,6 +951,17 @@ function vtprd_initialize_options() {
 		)
 	);
  
+ 
+    add_settings_field(	         //opt50
+		'show_price_suffix',						// ID used to identify the field throughout the theme
+		'<br>' . __( 'Discount Price Suffix:', 'vtprd' ),	// The label to the left of the option interface element
+		array(&$this, 'vtprd_show_price_suffix_callback'), // The name of the function responsible for rendering the option interface
+		'vtprd_setup_options_page',	// The page on which this option will be displayed
+		'catalog_settings_section',			// The name of the section to which this field belongs
+		array(								// The array of arguments to pass to the callback. In this case, just a description.
+			 __( 'Do we show the original price with a crossout, followed by the sale price?', 'vtprd' )
+		)
+	);
   
   //****************************
   //  Discount Messaging for Theme Area
@@ -1009,7 +1158,7 @@ function vtprd_initialize_options() {
 */
     add_settings_field(	         //opt39
 		'show_error_before_checkout_products_selector',						// ID used to identify the field throughout the theme
-		__( 'Show Error Messages Just Before Checkout', 'vtprd' ) .'<br>'. __( 'Products List - HTML Selector ', 'vtprd' ) .'<em>'. __( '(see => "more info")', 'vtprd' ) .'<em>',							// The label to the left of the option interface element
+		__( 'Show Error Messages Just Before Checkout', 'vtprd' ) .'<br>'. __( 'Products List - HTML Selector ', 'vtprd' ) .'<em>'. __( '(see => "more info")', 'vtprd' ) .'</em>',							// The label to the left of the option interface element
 		array(&$this, 'vtprd_before_checkout_products_selector_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'lifetime_rule_settings_section',			// The name of the section to which this field belongs
@@ -1020,7 +1169,7 @@ function vtprd_initialize_options() {
 
     add_settings_field(	         //opt40
 		'show_error_before_checkout_address_selector',						// ID used to identify the field throughout the theme
-		__( 'Show Error Messages Just Before Checkout', 'vtprd' ) .'<br>'. __( 'Address List - HTML Selector ', 'vtprd' )  .'<em>'. __( '(see => "more info")', 'vtprd' ) .'<em>',		// The label to the left of the option interface element
+		__( 'Show Error Messages Just Before Checkout', 'vtprd' ) .'<br>'. __( 'Address List - HTML Selector ', 'vtprd' )  .'<em>'. __( '(see => "more info")', 'vtprd' ) .'</em>',		// The label to the left of the option interface element
 		array(&$this, 'vtprd_before_checkout_address_selector_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'lifetime_rule_settings_section',			// The name of the section to which this field belongs
@@ -1162,7 +1311,13 @@ function vtprd_set_default_options() {
           'checkout_new_subtotal_label' => 'Subtotal with Discount:', //opt44
           'cartWidget_new_subtotal_line' => 'yes', //opt45  
           'cartWidget_new_subtotal_label' => 'Subtotal with Discount:', //opt46
-          'show_catalog_price_crossout' => 'no' //opt47
+          'show_catalog_price_crossout' => 'yes', //opt47  //v1.0.9.3 changed to 'yes' for default
+          'discount_taken_where'  => 'discountUnitPrice', //opt48  "discountUnitPrice" = 'apply discount directly to product unit cost'/"discountCoupon" = 'apply discount separately, show in coupon'  //v1.0.9.0
+          'give_more_or_less_discount' => 'more',  //opt49  more/less
+          'show_price_suffix' => '',  //opt50
+          'show_unit_price_cart_discount_crossout' => 'yes',  //opt51
+          'show_unit_price_cart_discount_computation' => 'no',  //opt52
+          'unit_price_cart_savings_message' => __('You Saved ', 'vtprd') .'{cart_save_amount}'  //opt53  shown in cartpage, checkout and thankyou
      );
      return $options;
 }
@@ -1189,7 +1344,7 @@ function vtprd_lifetime_rule_options_callback () {
     <?php                                                                                                                                                                                      
 }
 
-function vtprd_nav_callback () {                                      
+function vtprd_nav_callback() {                                      
 
     ?>
 
@@ -1224,13 +1379,7 @@ function vtprd_nav_callback () {
           
     </div>  
            
-                                       
-     <div id="vtprd-options-help-panel"> 
-        <a id="pricing-deal-title-more" class="more-anchor" href="javascript:void(0);"><img class="pricing-deal-title-helpPng" alt="help"  width="14" height="14" src="<?php echo VTPRD_URL;?>/admin/images/help.png" /><?php _e(' Help!', 'vtprd'); echo '&nbsp;'; _e('Tell me about Pricing Deals ... ', 'vtprd'); ?><img class="plus-button" alt="help" height="14px" width="14px" src="<?php echo VTPRD_URL;?>/admin/images/plus-toggle2.png" /></a>            
-        <a id="pricing-deal-title-less" class="more-anchor less-anchor" href="javascript:void(0);"><img class="pricing-deal-title-helpPng" alt="help" width="14" height="14" src="<?php echo VTPRD_URL;?>/admin/images/help.png" /><?php _e('   Less Pricing Deals Help ... ', 'vtprd'); echo '&nbsp;'; ?><img class="minus-button" alt="help" height="14px" width="14px" src="<?php echo VTPRD_URL;?>/admin/images/minus-toggle2.png" /></a>                
-          <?php  vtprd_show_help_selection_panel_0();  ?>
-     </div>
-    
+  
     <?php 
     $options = get_option( 'vtprd_setup_options' );	
     /*  scaring the punters
@@ -1244,54 +1393,73 @@ function vtprd_nav_callback () {
                 <li>
                   <b>JUMP TO: </b>
                 </li>
-                <li>
+                <li class="discount_display_jumps">
                   <a href="#vtprd-checkout-reporting-anchor" title="Discount Checkout Display"><?php _e('Checkout Display', 'vtprd'); ?></a>
+                  <span class="discount_display_jumps">|</span>
                 </li>  
-                <span>|
-                </span>
-                <li>
+                
+                <li class="discount_display_jumps">
                   <a href="#vtprd-cartWidget-options-anchor" title="Discount Cart Widget Display"><?php _e('Cart Widget Display', 'vtprd'); ?></a>
+                  <span class="discount_display_jumps">|</span>
                 </li>  
-                <span>|
-                </span>
+                
                 <li>
-                  <a href="#vtprd-catalog-options-anchor" title="Discount Catalog Display"><?php _e('Catalog Price Display', 'vtprd'); ?></a>
+                  <a href="#vtprd-catalog-options-anchor" title="Discount Catalog Display"><?php _e('Price Display', 'vtprd'); ?></a>
+                  <span>|</span>
                 </li>  
-                <span>|
-                </span>
+                
                 <li>
                   <a href="#vtprd-discount-messaging-anchor" title="Discount Theme Messaging"><?php _e('Messages', 'vtprd'); ?></a>
+                  <span>|</span>
                 </li> 
-                <span>|
-                </span>                
+                
                 <li>
                   <a href="#vtprd-processing-options-anchor" title="Processing Options"><?php _e('Processing Options', 'vtprd'); ?></a>
+                  <span>|</span>
                 </li>  
-                <span>|
-                </span>
+
                 <li>
                   <a href="#vtprd-lifetime-options-anchor" title="Lifetime Discount Options"><?php _e('Customer Limit Options', 'vtprd'); ?></a>
+                  <span>|</span>
                 </li>  
-                <span>|
-                </span>
+
                 <li>
                   <a href="#vtprd-system-options-anchor" title="System and Debug Options"><?php _e('System Options', 'vtprd'); ?></a>
+                  <span>|</span>
                 </li>  
-                <span>|
-                </span>
+
                 <li>
                   <a href="#vtprd-system-buttons-anchor" title="System Buttons"><?php _e('System Buttons', 'vtprd'); ?></a>
+                  <span>|</span>
                 </li>  
-                <span>|
-                </span>                
+              
                 <li>
                 <a href="#vtprd-plugin-info-anchor" title="Plugin Info"><?php _e('Plugin Info', 'vtprd'); ?></a>
                 </li>  
                 <!-- last li does not have spacer at end... -->          
-              </ul>   
+              </ul> 
+      <?php        
+      //v1.0.9.0  added warning for low memory
+      echo '<br>'; 
+      $this->vtprd_check_memory_limit(); 
+      ?>
             </div>            
     <?php
 }
+
+//v1.0.9.0 begin
+
+function vtprd_taken_where_options_callback () {
+                                          
+    ?>                                   
+    <h4 id="vtprd-discount-messaging"><?php // esc_attr_e('Cart Discount Taken Where - in the Unit Price for each product or as a single Woo Coupon?', 'vtprd'); ?> 
+          <strong><?php _e('Cart Discount Taken Where', 'vtprd'); ?></strong>
+          <?php esc_attr_e(' - in the Unit Price for each product, or as a single Woo Coupon?', 'vtprd'); ?>  
+    </h4> 
+    <?php    
+    
+}
+//v1.0.9.0 end
 
 function vtprd_catalog_options_callback () {
                                           
@@ -1386,14 +1554,37 @@ function vtprd_show_catalog_price_crossout_callback () {   //opt47
   $html .= '<option value="yes"' . selected( $options['show_catalog_price_crossout'], 'yes', false) . '>'   . __('Yes', 'vtprd') .  '&nbsp;</option>';
   $html .= '<option value="no"'  . selected( $options['show_catalog_price_crossout'], 'no', false)  . '>'   . __('No', 'vtprd') . '</option>';
 	$html .= '</select>';
-  $html .= '<a id="help47" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
+  
+  $html .= '&nbsp;&nbsp;&nbsp;<em>' . __( 'Crossout shown ONLY at Product Catalog Display time (not in the cart)', 'vtprd' )  . '</em>&nbsp;&nbsp;&nbsp;'  ; 
+  
+  $html .= '<a id="help47" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') ;
+  //$html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . __( '(the switch only applies to prices discounted by Pricing Deals) ', 'vtprd' ) .  '</a>'; //v1.0.9.3
   $html .= '<p><em>&nbsp;&nbsp;';
-  $html .= __('For a Catalog Template Rule, Do we show the original price with a crossout, followed by the sale price?', 'vtprd');
+  $html .= __('For a Catalog Template Rule, Do we show the original price with a crossout, followed by the discounted price?', 'vtprd');
   $html .=  '</em></p>';	
   $html .= '<p id="help47-text" class = "help-text" >'; 
   $html .= __('Useful if an item or group of items are on sale, independant of wholesale pricing...', 'vtprd'); 
   $html .= '</p>';
   
+	echo $html;
+}
+
+function vtprd_show_price_suffix_callback() {    //opt50
+	$options = get_option( 'vtprd_setup_options' );	
+  $html = '<br><input type="text" class="" id="show_price_suffix"  rows="1" cols="100" name="vtprd_setup_options[show_price_suffix]" value="' . $options['show_price_suffix'] . '">';
+
+  $html .= '<a id="help50" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
+  $html .= '<p><em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+  $html .= __( 'Define text to show after your Catalog Discount Price. This could be, for example, "Save 25%", to explain your pricing. 
+        You can also have info substituted here using one of the following: {price_save_percent}, {price_save_amount}.', 'vtprd' );
+  $html .=  '</em></p>';  
+  $html .= '<p id="help50-text" class = "help-text" >'; 
+  $html .= __('Set a Price Deal suffix to show how much has been saved...', 'vtprd');
+  $html .= '<br><br>&nbsp;' .  __('Define text to show after your Product Deal Prices in the Catalog. This could be, for example, "Save 25%", to explain your pricing.', 'vtprd');
+  $html .= '<br><br>&nbsp;' .  __('You can also have info substituted here using one of the following: {price_save_percent}, {price_save_amount}.', 'vtprd');
+  $html .= '<br><br>&nbsp;' .  __('So you can represent "Save xx" by putting in "Save {price_save_percent}"  and the plugin will automatically fill in the saved percentage as "25%".', 'vtprd');
+  $html .= '<br><br>&nbsp;' .  __('(CSS class "pricing-suffix")', 'vtprd'); 
+  $html .= '</p><br><br>';
 	echo $html;
 }
 
@@ -1412,8 +1603,8 @@ function vtprd_show_yousave_one_some_msg_callback () {   //opt34
   $html .= '<p id="help34-text" class = "help-text" >'; 
   $html .= __('"A Display (catlog) pricing deal is in force.  It acts on a product with multiple variations, but only some have a price reduction.', 'vtprd') 
               .'<br><br>&nbsp;&nbsp;'. __('Instead of a "yousave" message, show either:', 'vtprd') 
-              .'<br>&nbsp;&nbsp&nbsp;&nbsp;'. __('"One of these are on sale"', 'vtprd')  
-              .'<br>&nbsp;&nbsp&nbsp;&nbsp;'. __('"Some of these are on sale".', 'vtprd') 
+              .'<br>&nbsp;&nbsp;&nbsp;&nbsp;'. __('"One of these are on sale"', 'vtprd')  
+              .'<br>&nbsp;&nbsp;&nbsp;&nbsp;'. __('"Some of these are on sale".', 'vtprd') 
               .'<br><br>&nbsp;&nbsp;'. 
               __('When messages are requested via the "vtprd_show_product_realtime_discount_full_msgs_action", the "one of these are on sale" message will display also.', 'vtprd'); 
   $html .= '</p>';
@@ -1454,11 +1645,11 @@ function vtprd_use_this_timeZone_callback() {    //opt20
   $html .= '<option value="America/St_Johns"'       .  selected( $options['use_this_timeZone'], 'America/St_Johns', false)        . '>GMT-3.5 &nbsp; America/St_Johns</option>';
   $html .= '<option value="America/Halifax"'        .  selected( $options['use_this_timeZone'], 'America/Halifax', false)         . '>GMT-4 &nbsp&nbsp;&nbsp;&nbsp; America/Halifax</option>';
   $html .= '<option value="America/Caracas"'        .  selected( $options['use_this_timeZone'], 'America/Caracas', false)         . '>GMT-4.5 &nbsp; America/Caracas</option>';
-  $html .= '<option value="America/New_York"'       .  selected( $options['use_this_timeZone'], 'America/New_York', false)        . '>GMT-5 &nbsp&nbsp;&nbsp;&nbsp; America/New_York</option>';
-  $html .= '<option value="America/Chicago"'        .  selected( $options['use_this_timeZone'], 'America/Chicago', false)         . '>GMT-6 &nbsp&nbsp;&nbsp;&nbsp; America/Chicago</option>';
-  $html .= '<option value="America/Denver"'         .  selected( $options['use_this_timeZone'], 'America/Denver', false)          . '>GMT-7 &nbsp&nbsp;&nbsp;&nbsp; America/Denver</option>';
-  $html .= '<option value="America/Los_Angeles"'    .  selected( $options['use_this_timeZone'], 'America/Los_Angeles', false)     . '>GMT-8 &nbsp&nbsp;&nbsp;&nbsp; America/Los_Angeles</option>';
-  $html .= '<option value="America/Anchorage"'      .  selected( $options['use_this_timeZone'], 'America/Anchorage', false)       . '>GMT-9 &nbsp&nbsp;&nbsp;&nbsp; America/Anchorage</option>';
+  $html .= '<option value="America/New_York"'       .  selected( $options['use_this_timeZone'], 'America/New_York', false)        . '>GMT-5 &nbsp;&nbsp;&nbsp;&nbsp; America/New_York</option>';
+  $html .= '<option value="America/Chicago"'        .  selected( $options['use_this_timeZone'], 'America/Chicago', false)         . '>GMT-6 &nbsp;&nbsp;&nbsp;&nbsp; America/Chicago</option>';
+  $html .= '<option value="America/Denver"'         .  selected( $options['use_this_timeZone'], 'America/Denver', false)          . '>GMT-7 &nbsp;&nbsp;&nbsp;&nbsp; America/Denver</option>';
+  $html .= '<option value="America/Los_Angeles"'    .  selected( $options['use_this_timeZone'], 'America/Los_Angeles', false)     . '>GMT-8 &nbsp;&nbsp;&nbsp;&nbsp; America/Los_Angeles</option>';
+  $html .= '<option value="America/Anchorage"'      .  selected( $options['use_this_timeZone'], 'America/Anchorage', false)       . '>GMT-9 &nbsp;&nbsp;&nbsp;&nbsp; America/Anchorage</option>';
   $html .= '<option value="Pacific/Honolulu"'       .  selected( $options['use_this_timeZone'], 'Pacific/Honolulu', false)        . '>GMT-10 &nbsp;&nbsp; Pacific/Honolulu</option>';
   $html .= '<option value="Pacific/Midway"'         .  selected( $options['use_this_timeZone'], 'Pacific/Midway', false)          . '>GMT-11 &nbsp;&nbsp; Pacific/Midway</option>';
   $html .= '<option value="Kwajalein"'              .  selected( $options['use_this_timeZone'], 'Kwajalein', false)               . '>GMT-12 &nbsp;&nbsp; Kwajalein, Marshall Islands</option>';  
@@ -1628,7 +1819,7 @@ function vtprd_show_checkout_discount_details_grouped_by_what_callback() {    //
 
 function vtprd_show_cartWidget_discount_details_grouped_by_what_callback() {    //opt22                                 
 	$options = get_option( 'vtprd_setup_options' );	
-  $html = '<select id="show_cartWidget_discount_details_grouped_by_what" name="vtprd_setup_options[show_cartWidget_discount_details_grouped_by_what]">';
+  $html = '<div class="unitPriceOrCoupon"> <select id="show_cartWidget_discount_details_grouped_by_what" name="vtprd_setup_options[show_cartWidget_discount_details_grouped_by_what]">'; //v1.0.9.3
 	$html .= '<option value="rule"'             .  selected( $options['show_cartWidget_discount_details_grouped_by_what'], 'rule', false)    . '>'   . __('Grouped by Rule within Product ', 'vtprd') .   '&nbsp;</option>';
   $html .= '<option value="product"'          .  selected( $options['show_cartWidget_discount_details_grouped_by_what'], 'product', false) . '>'   . __('Grouped by Product ', 'vtprd') .  '</option>';
   $html .= '</select>';
@@ -1639,7 +1830,7 @@ function vtprd_show_cartWidget_discount_details_grouped_by_what_callback() {    
               You can elect to show the relevant Rule short cart message in a line above each detail line.', 'vtprd') 
               .'<br><br>'.
           __('By product totals up all discounts accrued to that product, and produces a single detail line.', 'vtprd'); 
-  $html .= '</p>';  
+  $html .= '</p></div>';  
   
 	echo $html;
 }
@@ -1662,7 +1853,7 @@ function vtprd_show_checkout_discount_titles_above_details_callback () {    //op
 
 function vtprd_show_cartWidget_discount_titles_above_details_callback () {    //opt7
 	$options = get_option( 'vtprd_setup_options' );	
-	$html = '<select id="show_cartWidget_discount_titles_above_details" name="vtprd_setup_options[show_cartWidget_discount_titles_above_details]">';
+  $html = '<div class="unitPriceOrCoupon"><select id="show_cartWidget_discount_titles_above_details" name="vtprd_setup_options[show_cartWidget_discount_titles_above_details]">';  //v1.0.9.3
 	$html .= '<option value="yes"' . selected( $options['show_cartWidget_discount_titles_above_details'], 'yes', false) . '>'   . __('Yes', 'vtprd')  .   '&nbsp;</option>';
 	$html .= '<option value="no"'  . selected( $options['show_cartWidget_discount_titles_above_details'], 'no', false)  . '>'   . __('No', 'vtprd') . '</option>';
 	$html .= '</select>';
@@ -1671,14 +1862,14 @@ function vtprd_show_cartWidget_discount_titles_above_details_callback () {    //
   
   $html .= '<p id="help7-text" class = "help-text" >'; 
   $html .= __('When discount details display, do we show the Short Checkout Message above Rule Product Discount detail line? Only applicable if Cart Widget "Grouped by Rule" chosen above.', 'vtprd'); 
-  $html .= '</p>'; 
+  $html .= '</p></div>'; 
   
 	echo $html;
 }   
 
 function vtprd_show_checkout_purchases_subtotal_callback () {    //opt24
-	$options = get_option( 'vtprd_setup_options' );	
-	$html = '<select id="show_checkout_purchases_subtotal" name="vtprd_setup_options[show_checkout_purchases_subtotal]">';
+	$options = get_option( 'vtprd_setup_options' );	  //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+	$html = '<div class="unitPriceOrCoupon"> <select id="show_checkout_purchases_subtotal" name="vtprd_setup_options[show_checkout_purchases_subtotal]">';
   $html .= '<option value="withDiscounts"'  . selected( $options['show_checkout_purchases_subtotal'], 'withDiscounts', false)    . '>'   . __('Yes - Show ', 'vtprd') .  '&nbsp;'   . __('After Discounts', 'vtprd') .  '&nbsp;</option>';  
   $html .= '<option value="beforeDiscounts"' . selected( $options['show_checkout_purchases_subtotal'], 'beforeDiscounts', false) . '>'   . __('Yes - Show ', 'vtprd') .  '&nbsp;'   . __('Before Discounts ', 'vtprd') .  '&nbsp;</option>';
 	$html .= '<option value="none"'  . selected( $options['show_checkout_purchases_subtotal'], 'none', false)  . '>'   . __('No - No New Subtotal Line ', 'vtprd') .  '&nbsp;'   . __('for Cart Purchases ', 'vtprd') . '</option>';
@@ -1688,14 +1879,14 @@ function vtprd_show_checkout_purchases_subtotal_callback () {    //opt24
   
   $html .= '<p id="help24-text" class = "help-text" >'; 
   $html .= __('Do we show the purchases subtotal before discounts, with discounts or not at all?', 'vtprd'); 
-  $html .= '</p>'; 
+  $html .= '</p></div>'; 
   
 	echo $html;
 } 
 
 function vtprd_show_cartWidget_purchases_subtotal_callback () {    //opt25
-	$options = get_option( 'vtprd_setup_options' );	
-	$html = '<select id="show_cartWidget_purchases_subtotal" name="vtprd_setup_options[show_cartWidget_purchases_subtotal]">';
+	$options = get_option( 'vtprd_setup_options' );	 //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+	$html = '<div class="unitPriceOrCoupon"> <select id="show_cartWidget_purchases_subtotal" name="vtprd_setup_options[show_cartWidget_purchases_subtotal]">';
 	$html .= '<option value="withDiscounts"'  . selected( $options['show_cartWidget_purchases_subtotal'], 'withDiscounts', false)    . '>'   . __('Yes - Show ', 'vtprd') .  '&nbsp;'   . __('After Discounts ', 'vtprd') .  '&nbsp;</option>';  
   $html .= '<option value="beforeDiscounts"' . selected( $options['show_cartWidget_purchases_subtotal'], 'beforeDiscounts', false) . '>'   . __('Yes - Show ', 'vtprd') .  '&nbsp;'   . __('Before Discounts ', 'vtprd') .  '&nbsp;</option>';
 	$html .= '<option value="none"'  . selected( $options['show_cartWidget_purchases_subtotal'], 'none', false) . '>'   . __('No - No New Subtotal Line ', 'vtprd') .  '&nbsp;'   . __('for Cart Purchases ', 'vtprd') . '</option>';
@@ -1705,14 +1896,14 @@ function vtprd_show_cartWidget_purchases_subtotal_callback () {    //opt25
   
   $html .= '<p id="help25-text" class = "help-text" >'; 
   $html .= __('Do we show the purchases subtotal before discounts, with discounts or not at all? (Default = no)', 'vtprd'); 
-  $html .= '</p>'; 
+  $html .= '</p></div>'; 
   
 	echo $html;
 } 
 
 function vtprd_show_checkout_discount_total_line_callback () {    //opt5
-	$options = get_option( 'vtprd_setup_options' );	
-	$html = '<select id="show_checkout_discount_total_line" name="vtprd_setup_options[show_checkout_discount_total_line]">';
+	$options = get_option( 'vtprd_setup_options' );	//<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+	$html = '<div class="unitPriceOrCoupon"> <select id="show_checkout_discount_total_line" name="vtprd_setup_options[show_checkout_discount_total_line]">';
 	$html .= '<option value="yes"' . selected( $options['show_checkout_discount_total_line'], 'yes', false) . '>'   . __('Yes', 'vtprd') .  '&nbsp;</option>';
 	$html .= '<option value="no"'  . selected( $options['show_checkout_discount_total_line'], 'no', false) . '>'   . __('No', 'vtprd') . '</option>';
 	$html .= '</select>';
@@ -1721,15 +1912,15 @@ function vtprd_show_checkout_discount_total_line_callback () {    //opt5
   
   $html .= '<p id="help5-text" class = "help-text" >'; 
   $html .= __('When Checkout Discounts are taken, do we show a separate discount totals line?', 'vtprd'); 
-  $html .= '</p>'; 
+  $html .= '</p></div>'; 
   
 	echo $html;
 } 
 
 
 function vtprd_show_cartWidget_discount_total_line_callback () {    //opt26
-	$options = get_option( 'vtprd_setup_options' );	
-	$html = '<select id="show_cartWidget_discount_total_line" name="vtprd_setup_options[show_cartWidget_discount_total_line]">';
+	$options = get_option( 'vtprd_setup_options' );	 //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+	$html = '<div class="unitPriceOrCoupon"> <select id="show_cartWidget_discount_total_line" name="vtprd_setup_options[show_cartWidget_discount_total_line]">';
 	$html .= '<option value="yes"' . selected( $options['show_cartWidget_discount_total_line'], 'yes', false) . '>'   . __('Yes', 'vtprd') .  '&nbsp;</option>';
 	$html .= '<option value="no"'  . selected( $options['show_cartWidget_discount_total_line'], 'no', false) . '>'   . __('No', 'vtprd') . '</option>';
 	$html .= '</select>';
@@ -1738,7 +1929,7 @@ function vtprd_show_cartWidget_discount_total_line_callback () {    //opt26
   
   $html .= '<p id="help26-text" class = "help-text" >'; 
   $html .= __('When Cart Widget Discounts are taken, do we show a separate discount totals line?', 'vtprd'); 
-  $html .= '</p>'; 
+  $html .= '</p></div>'; 
   
 	echo $html;
 } 
@@ -1763,7 +1954,7 @@ function vtprd_show_checkout_discount_detail_lines_callback () {    //opt6
 
 function vtprd_show_cartWidget_discount_detail_lines_callback () {    //opt27
 	$options = get_option( 'vtprd_setup_options' );	
-	$html = '<select id="show_cartWidget_discount_detail_lines" name="vtprd_setup_options[show_cartWidget_discount_detail_lines]">';
+  $html = '<div class="unitPriceOrCoupon"> <select id="show_cartWidget_discount_detail_lines" name="vtprd_setup_options[show_cartWidget_discount_detail_lines]">'; //v1.0.9.3
 	$html .= '<option value="yes"' . selected( $options['show_cartWidget_discount_detail_lines'], 'yes', false) . '>'   . __('Yes', 'vtprd') .  '&nbsp;</option>';
 	$html .= '<option value="no"'  . selected( $options['show_cartWidget_discount_detail_lines'], 'no', false) . '>'    . __('No', 'vtprd') . '</option>';
 	$html .= '</select>';
@@ -1772,7 +1963,7 @@ function vtprd_show_cartWidget_discount_detail_lines_callback () {    //opt27
   
   $html .= '<p id="help27-text" class = "help-text" >'; 
   $html .= __('Do we show cartWidget discount detail lines?', 'vtprd'); 
-  $html .= '</p>'; 
+  $html .= '</p></div>'; 
   
 	echo $html;
 }
@@ -1855,8 +2046,8 @@ function vtprd_checkout_credit_detail_label_callback() {    //opt10
 }
 
 function vtprd_checkout_credit_total_label_callback() {    //opt11
-	$options = get_option( 'vtprd_setup_options' );	
-  $html = '<input type="text" class="smallText" id="checkout_credit_total_label"  name="vtprd_setup_options[checkout_credit_total_label]" value="' . $options['checkout_credit_total_label'] . '">';
+	$options = get_option( 'vtprd_setup_options' );	//<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+  $html = '<div class="unitPriceOrCoupon"> <input type="text" class="smallText" id="checkout_credit_total_label"  name="vtprd_setup_options[checkout_credit_total_label]" value="' . $options['checkout_credit_total_label'] . '">';
 
   $html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="help11" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
   $html .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -1864,7 +2055,7 @@ function vtprd_checkout_credit_total_label_callback() {    //opt11
     
   $html .= '<p id="help11-text" class = "help-text" >'; 
   $html .= __('When showing a checkout credit total line, this is a label which is just to the left of the currency sign, indicating that this is a credit.', 'vtprd'); 
-  $html .= '</p><br><br>';
+  $html .= '</p><br><br></div>';
   	
 	echo $html;
 }
@@ -1872,21 +2063,21 @@ function vtprd_checkout_credit_total_label_callback() {    //opt11
 
 function vtprd_cartWidget_credit_detail_label_callback() {    //opt28
 	$options = get_option( 'vtprd_setup_options' );	
-  $html = '<input type="text" class="smallText" id="cartWidget_credit_detail_label" name="vtprd_setup_options[cartWidget_credit_detail_label]" value="' . $options['cartWidget_credit_detail_label'] . '">';
+  $html = '<div class="unitPriceOrCoupon"> <input type="text" class="smallText" id="cartWidget_credit_detail_label" name="vtprd_setup_options[cartWidget_credit_detail_label]" value="' . $options['cartWidget_credit_detail_label'] . '">'; //v1.0.9.3
   $html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="help28" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
   $html .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
   $html .= '<i>'. __( '(suggested: "-" (minus sign) or "cr" (credit) )', 'vtprd' ) .'</i>';
     
   $html .= '<p id="help28-text" class = "help-text" >'; 
   $html .= __('When showing a cartWidget credit detail line, this is a label which is just to the left of the currency sign, indicating that this is a credit.', 'vtprd'); 
-  $html .= '</p><br><br>';
+  $html .= '</p><br><br></div>';
   	
 	echo $html;
 }
 
 function vtprd_cartWidget_credit_total_label_callback() {    //opt29
-	$options = get_option( 'vtprd_setup_options' );	
-  $html = '<input type="text" class="smallText" id="cartWidget_credit_total_label"  name="vtprd_setup_options[cartWidget_credit_total_label]" value="' . $options['cartWidget_credit_total_label'] . '">';
+	$options = get_option( 'vtprd_setup_options' );	 //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+  $html = '<div class="unitPriceOrCoupon"> <input type="text" class="smallText" id="cartWidget_credit_total_label"  name="vtprd_setup_options[cartWidget_credit_total_label]" value="' . $options['cartWidget_credit_total_label'] . '">';
 
   $html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="help29" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
   $html .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -1894,27 +2085,27 @@ function vtprd_cartWidget_credit_total_label_callback() {    //opt29
   
   $html .= '<p id="help29-text" class = "help-text" >'; 
   $html .= __('When showing a cartWidget credit total line, this is a label which is just to the left of the currency sign, indicating that this is a credit.', 'vtprd'); 
-  $html .= '</p><br><br>';
+  $html .= '</p><br><br></div>';
   	
 	echo $html;
 }
-function vtprd_checkout_credit_subtotal_title_callback() {    //opt30
-	$options = get_option( 'vtprd_setup_options' );	
-  $html = '<input type="text" class="largeText" id="checkout_credit_detail_label" name="vtprd_setup_options[checkout_credit_subtotal_title]" value="' . $options['checkout_credit_subtotal_title'] . '">';
+function vtprd_checkout_credit_subtotal_title_callback() {    //opt30  
+	$options = get_option( 'vtprd_setup_options' );	//<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+  $html = '<div class="unitPriceOrCoupon"> <input type="text" class="largeText" id="checkout_credit_detail_label" name="vtprd_setup_options[checkout_credit_subtotal_title]" value="' . $options['checkout_credit_subtotal_title'] . '">';
   $html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="help30" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
   
   $html .= '<p id="help30-text" class = "help-text" >'; 
   $html .= __('When showing a checkout credit detail line, this is title.', 'vtprd')  
           .'<br><br>'.
           __('Default value = "Subtotal - Cart Purchases:".', 'vtprd'); 
-  $html .= '</p>';   
+  $html .= '</p></div>';   
     	
 	echo $html;
 }
 
 function vtprd_checkout_credit_total_title_callback() {    //opt31
-	$options = get_option( 'vtprd_setup_options' );	
-  $html = '<input type="text" class="largeText" id="checkout_credit_total_title"  name="vtprd_setup_options[checkout_credit_total_title]" value="' . $options['checkout_credit_total_title'] . '">';
+	$options = get_option( 'vtprd_setup_options' );	//<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+  $html = '<div class="unitPriceOrCoupon"> <input type="text" class="largeText" id="checkout_credit_total_title"  name="vtprd_setup_options[checkout_credit_total_title]" value="' . $options['checkout_credit_total_title'] . '">';
 
   $html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="help31" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
   
@@ -1922,7 +2113,7 @@ function vtprd_checkout_credit_total_title_callback() {    //opt31
   $html .= __('When showing a checkout credit total line, this is a title.', 'vtprd') 
         .'<br><br>'.
         __('Default value = "Cart Discount Total:".', 'vtprd'); 
-  $html .= '</p>';  
+  $html .= '</p></div>';  
      	
 	echo $html;
 }
@@ -1945,8 +2136,8 @@ function vtprd_show_checkout_credit_total_when_coupon_active_callback() {    //o
 }
 */
 function vtprd_checkout_new_subtotal_line_callback() {    //opt43
-  $options = get_option( 'vtprd_setup_options' );
-	$html = '<select id="checkout_new_subtotal_line" name="vtprd_setup_options[checkout_new_subtotal_line]">';
+  $options = get_option( 'vtprd_setup_options' );  //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+	$html = '<div class="unitPriceOrCoupon"> <select id="checkout_new_subtotal_line" name="vtprd_setup_options[checkout_new_subtotal_line]">';
 	$html .= '<option value="yes"' . selected( $options['checkout_new_subtotal_line'], 'yes', false) . '>'   . __('Yes', 'vtprd') .  '&nbsp;</option>';
 	$html .= '<option value="no"'  . selected( $options['checkout_new_subtotal_line'], 'no', false) . '>'    . __('No', 'vtprd') . '</option>';
 	$html .= '</select>';
@@ -1955,29 +2146,29 @@ function vtprd_checkout_new_subtotal_line_callback() {    //opt43
     
   $html .= '<p id="help43-text" class = "help-text" >'; 
   $html .= __('(If you want a new subtotal line to show after the Purchased Products and Discounts have been totaled, and your theme does not already do so...)', 'vtprd'); 
-  $html .= '</p>';
+  $html .= '</p></div>';
   
 	echo $html;
 }
 
 
 function vtprd_checkout_new_subtotal_label_callback() {    //opt44
-	$options = get_option( 'vtprd_setup_options' );	
-  $html = '<input type="text" class="largeText" id="checkout_new_subtotal_label" name="vtprd_setup_options[checkout_new_subtotal_label]" value="' . $options['checkout_new_subtotal_label'] . '">';
+	$options = get_option( 'vtprd_setup_options' );	//<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide 
+  $html = '<div class="unitPriceOrCoupon"> <input type="text" class="largeText" id="checkout_new_subtotal_label" name="vtprd_setup_options[checkout_new_subtotal_label]" value="' . $options['checkout_new_subtotal_label'] . '">';
   $html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="help44" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
   
   $html .= '<p id="help44-text" class = "help-text" >'; 
   $html .= __('If you want a new subtotal line to show after the Purchased Products and Discounts have been totaled, and your theme does not already do so, this is the label to use.', 'vtprd')  
            .'<br><br>'.
            __('Default value = "Subtotal with Discount"', 'vtprd'); 
-  $html .= '</p>';
+  $html .= '</p></div>';
   	
 	echo $html;
 }
 
 function vtprd_cartWidget_new_subtotal_line_callback() {    //opt45
-  $options = get_option( 'vtprd_setup_options' );
-	$html = '<select id="cartWidget_new_subtotal_line" name="vtprd_setup_options[cartWidget_new_subtotal_line]">';
+  $options = get_option( 'vtprd_setup_options' );   //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+	$html = '<div class="unitPriceOrCoupon"> <select id="cartWidget_new_subtotal_line" name="vtprd_setup_options[cartWidget_new_subtotal_line]">';
 	$html .= '<option value="yes"' . selected( $options['cartWidget_new_subtotal_line'], 'yes', false) . '>'   . __('Yes', 'vtprd') .  '&nbsp;</option>';
 	$html .= '<option value="no"'  . selected( $options['cartWidget_new_subtotal_line'], 'no', false) . '>'    . __('No', 'vtprd') . '</option>';
 	$html .= '</select>';
@@ -1986,22 +2177,22 @@ function vtprd_cartWidget_new_subtotal_line_callback() {    //opt45
     
   $html .= '<p id="help45-text" class = "help-text" >'; 
   $html .= __('(If you want a new subtotal line to show after the Purchased Products and Discounts have been totaled, and your theme does not already do so...)', 'vtprd'); 
-  $html .= '</p>';
+  $html .= '</p></div>';
   
 	echo $html;
 }
 
 
 function vtprd_cartWidget_new_subtotal_label_callback() {    //opt46
-	$options = get_option( 'vtprd_setup_options' );	
-  $html = '<input type="text" class="largeText" id="cartWidget_new_subtotal_label" name="vtprd_setup_options[cartWidget_new_subtotal_label]" value="' . $options['cartWidget_new_subtotal_label'] . '">';
+	$options = get_option( 'vtprd_setup_options' );	 //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+  $html = '<div class="unitPriceOrCoupon"> <input type="text" class="largeText" id="cartWidget_new_subtotal_label" name="vtprd_setup_options[cartWidget_new_subtotal_label]" value="' . $options['cartWidget_new_subtotal_label'] . '">';
   $html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="help46" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
   
   $html .= '<p id="help46-text" class = "help-text" >'; 
   $html .= __('If you want a new subtotal line to show after the Purchased Products and Discounts have been totaled, and your theme does not already do so, this is the label to use.', 'vtprd')  
            .'<br><br>'.
            __('Default value = "Subtotal with Discount"', 'vtprd'); 
-  $html .= '</p>';
+  $html .= '</p></div>';
   	
 	echo $html;
 }
@@ -2010,22 +2201,22 @@ function vtprd_cartWidget_new_subtotal_label_callback() {    //opt46
 
 
 function vtprd_cartWidget_credit_subtotal_title_callback() {    //opt32
-	$options = get_option( 'vtprd_setup_options' );	
-  $html = '<input type="text" class="mediumText" id="cartWidget_credit_detail_label" name="vtprd_setup_options[cartWidget_credit_subtotal_title]" value="' . $options['cartWidget_credit_subtotal_title'] . '">';
+	$options = get_option( 'vtprd_setup_options' );	 //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+  $html = '<div class="unitPriceOrCoupon"> <input type="text" class="mediumText" id="cartWidget_credit_detail_label" name="vtprd_setup_options[cartWidget_credit_subtotal_title]" value="' . $options['cartWidget_credit_subtotal_title'] . '">';
   $html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="help32" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
   
   $html .= '<p id="help32-text" class = "help-text" >'; 
   $html .= __('When showing a cartWidget credit detail line, this is title.', 'vtprd') 
           .'<br><br>'.
           __('Default value = "Products:".', 'vtprd'); 
-  $html .= '</p>';
+  $html .= '</p></div>';
   	
 	echo $html;
 }
 
 function vtprd_cartWidget_credit_total_title_callback() {    //opt33
-	$options = get_option( 'vtprd_setup_options' );	
-  $html = '<input type="text" class="mediumText" id="cartWidget_credit_total_title"  name="vtprd_setup_options[cartWidget_credit_total_title]" value="' . $options['cartWidget_credit_total_title'] . '">';
+	$options = get_option( 'vtprd_setup_options' );	 //<span class="unitPriceOrCoupon">  added v1.0.9.0 , is accessed for show/hide
+  $html = '<div class="unitPriceOrCoupon"> <input type="text" class="mediumText" id="cartWidget_credit_total_title"  name="vtprd_setup_options[cartWidget_credit_total_title]" value="' . $options['cartWidget_credit_total_title'] . '">';
 
   $html .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="help33" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
   
@@ -2033,7 +2224,7 @@ function vtprd_cartWidget_credit_total_title_callback() {    //opt33
   $html .= __('When showing a cartWidget credit total line, this is a title.', 'vtprd') 
           .'<br><br>'.
           __('Default value = "Discounts:".', 'vtprd'); 
-  $html .= '</p>';
+  $html .= '</p></div>';
   	
 	echo $html;
 }
@@ -2251,6 +2442,159 @@ function vtprd_lifetime_purchase_button_error_msg_callback() {    //opt41
 	echo $html;
 }
 
+//v1.0.9.0 begin
+
+function vtprd_discount_taken_where_callback () {    //opt48
+	$options = get_option( 'vtprd_setup_options' );	                                                                                                             
+	$html = '<select id="discount_taken_where" name="vtprd_setup_options[discount_taken_where]">';
+	$html .= '<option id="discountUnitPrice" value="discountUnitPrice"'   . selected( $options['discount_taken_where'], 'discountUnitPrice', false)  . '>'  . __('** Unit Price Discount **', 'vtprd') . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __('(unit price reduced for discount)', 'vtprd')  . '&nbsp; </option>';
+	$html .= '<option id="discountCoupon"    value="discountCoupon"'      . selected( $options['discount_taken_where'], 'discountCoupon', false)     . '>'  . __('** Coupon Discount **', 'vtprd') . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'  . __('(Discount shown in a separate coupon [most accurate] )', 'vtprd')  . '&nbsp; </option>';
+	$html .= '</select>';
+
+  $html .= '<a id="help48" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
+ 
+  $html .= '<br><br><p><em>';
+  $html .= __( 'When **switching between **  Unit Price discount / Coupon discount, please be sure to empty your cart.
+            and go back to the shop page.  Then you can carry on adding to cart and testing.', 'vtprd' );
+  $html .=  '</em></p>'; 
+  
+  $html .= '<p id="help48-text" class = "help-text" >'; 
+  $html .= __('Pricing Deal discounts can now be shown in one of two modes.', 'vtprd')
+        .'<br><br>'.
+        __('<strong>COUPON DISCOUNT</strong> - The default mode is to report on the discounts in its own area, after the 
+        cart is summarized by Woo.  The actual discount is supplied to Woo via a Pricing Deal Coupon, called "Deals".  So the discount is reported in
+        the mini-cart, and is shown applied on the Cart and Checkout pages. This mode is the most accurate way to apply discounts.  
+        The total discount is always accurate.', 'vtprd')
+        .'<br><br>'.
+        __('<strong>UNIT COST DISCOUNT</strong> - Apply the Rule discount directly to the affected Unit Price.  For example, if an Apple costs $100 and there is a $10 discount per apple,
+        the unit price is reduced to $90.', 'vtprd')
+        .'<br>'.
+        __('However, if Apples are $100 and the Rule is $10 off only the 1st Apple, and 3 Apples are purchased, the discount cannot be accurately represented.
+        In this case, the discount is $10 / 3 = $3.3333 and the unit price is $100 - $3.33 (or $3.34) ... = $99.99 or $100.02 .  Neither one of these multiplies out
+        accurately to a $10 discount, so we have to choose whether to give more discount or less.... .', 'vtprd') 
+        .'<br><br><strong>'.
+        __('33.33 * 3 = 99.99 ==>> this would be the "More Discount" setting', 'vtprd') 
+        .'</strong><br><strong>'.
+        __('33.34 * 3 = 100.02 ==>> this would be the "Less Discount" setting', 'vtprd') .'</strong>';                 
+  $html .= '</p>';
+
+	echo $html;
+/*  MWNTEST REmove  
+  if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon') { 
+    //always check if the manually created coupon codes are there - if not create them.
+    vtprd_woo_maybe_create_coupon_types();
+  } 
+      
+  //clear any session variables which could affect things after this update...
+  $this->vtprd_destroy_session(); 
+*/
+}
+
+function vtprd_give_more_or_less_discount_callback () {    //opt49
+	$options = get_option( 'vtprd_setup_options' );	
+	$html = '<div class="unitPriceOnly"> <select id="give_more_or_less_discount" name="vtprd_setup_options[give_more_or_less_discount]">';
+	$html .= '<option id="discountMore"    value="more"'      . selected( $options['give_more_or_less_discount'], 'more', false)  . '>'  . __('Give More Discount', 'vtprd') . '&nbsp; </option>';
+	$html .= '<option id="discountLess"    value="less"'      . selected( $options['give_more_or_less_discount'], 'less', false)  . '>'  . __('Give Less Discount', 'vtprd') . '&nbsp; </option>';
+	$html .= '</select>';
+  
+  $html .= '&nbsp;&nbsp;&nbsp;<em>' . __( '(if the discount does not divide out equally)', 'vtprd' )  . '</em>&nbsp;&nbsp;&nbsp;'  ; 
+  
+  $html .= '<a id="help49" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
+  
+  $html .= '<p id="help49-text" class = "help-text" >'; 
+  $html .=  __('If Apples are $100 and the Rule is $10 off only the 1st Apple, and 3 Apples are purchased, the discount cannot be accurately represented.
+        In this case, the discount is $10 / 3 = $3.3333 and the unit price is $100 - $3.33 (or $3.34) ... = $99.99 or $100.02 .  Neither one of these multiplies out
+        accurately to a $10 discount, so we have to choose whether to give more discount or less.... .', 'vtprd') 
+        .'<br><br><strong>'.
+        __('33.33 * 3 = 99.99 ==>> this would be the "More Discount" setting', 'vtprd') 
+        .'</strong><br><strong>'.
+        __('33.34 * 3 = 100.02 ==>> this would be the "Less Discount" setting', 'vtprd') .'</strong>';    
+  $html .= '</p></div>'; 
+  
+	echo $html;
+}
+
+  //v1.0.9.3 begin 
+     
+function vtprd_show_unit_price_cart_discount_crossout_callback () {    //opt51
+	$options = get_option( 'vtprd_setup_options' );	
+	$html = '<div class="unitPriceOnly"> <select id="show_unit_price_cart_discount_crossout" name="vtprd_setup_options[show_unit_price_cart_discount_crossout]">';
+	$html .= '<option id="discountYesCrossout"    value="yes"'      . selected( $options['show_unit_price_cart_discount_crossout'], 'yes', false)  . '>'  . __('Yes', 'vtprd') . '&nbsp; </option>';
+	$html .= '<option id="discountNoCrossout"     value="no"'       . selected( $options['show_unit_price_cart_discount_crossout'], 'no', false)   . '>'  . __('No', 'vtprd') . '&nbsp; </option>';
+	$html .= '</select>'; 
+  $html .= '&nbsp;&nbsp;&nbsp;<em>' . __( '(Cart Discount Only)', 'vtprd' )  . '</em>&nbsp;&nbsp;&nbsp;'  ; 
+
+  $html .= '<a id="help51" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
+  
+  $html .= '<p id="help51-text" class = "help-text" >'; 
+  $html .= __('If you select, when showing discount in the Unit Price field, you can show the current Catalog unit price crossed out, followed by the Cart rule discounted Unit Price.', 'vtprd'); 
+  $html .= '</p></div>'; 
+  
+	echo $html;
+}
+     
+function vtprd_show_unit_price_cart_discount_computation_callback () {    //opt52
+	$options = get_option( 'vtprd_setup_options' );	
+	$html = '<div class="unitPriceOnly"> <select id="give_more_or_less_discount" name="vtprd_setup_options[show_unit_price_cart_discount_computation]">';
+	$html .= '<option id="discountYesShowComputation"    value="yes"'      . selected( $options['show_unit_price_cart_discount_computation'], 'yes', false)  . '>'  . __('Yes', 'vtprd') . '&nbsp; </option>';
+	$html .= '<option id="discountNoShowComputation"     value="no"'       . selected( $options['show_unit_price_cart_discount_computation'], 'no', false)   . '>'  . __('No', 'vtprd') . '&nbsp; </option>';
+	$html .= '</select>'; 
+  
+  $html .= '&nbsp;&nbsp;&nbsp;<em>' . __( '(For Testing only)', 'vtprd' )  . '</em>&nbsp;&nbsp;&nbsp;'  ; 
+  
+  $html .= '<a id="help52" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
+  
+  $html .= '<p id="help52-text" class = "help-text" >'; 
+  $html .= __('If there is a Cart-rule based Unit Price discount, the computations forming the basis of that discount number are shown in the detail reporting below the cart summary.', 'vtprd'); 
+  $html .= '</p></div>'; 
+  
+	echo $html;
+}
+
+function vtprd_unit_price_cart_savings_message_callback() {    //opt53
+	$options = get_option( 'vtprd_setup_options' );	
+  $html = '<div class="unitPriceOnly"> <input type="text" class="" id="unit_price_cart_savings_message"  rows="1" cols="100" name="vtprd_setup_options[unit_price_cart_savings_message]" value="' . $options['unit_price_cart_savings_message'] . '">';
+  $html .= '<a id="help53" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
+  $html .= '<p><em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+  $html .= __( 'Custom Message appearing on Cart Page, Checkout Page, Thankyou and Customer Email. This could be, for example, " You Saved 25% !". 
+        You can also have info substituted into this message using one of the following: {cart_save_percent}, {cart_save_amount}.', 'vtprd' );
+  $html .=  '</em></p>';  
+  $html .= '<p id="help53-text" class = "help-text" >'; 
+  $html .= __('Set a Custom Checkout Message to underscore the customer savings!', 'vtprd');
+  $html .= '<br><br>&nbsp;' .  __('Define text to show on Cart Page, Checkout Page, Thankyou and Customer Email. This could be, for example, "You Saved 25% !",.', 'vtprd');
+  $html .= '<br><br>&nbsp;' .  __('You can also have info substituted into this message using one of the following: {cart_save_percent}, {cart_save_amount}.', 'vtprd');
+  $html .= '<br><br>&nbsp;' .  __('So you can represent "Save xx" by putting in "Save {price_save_percent}"  and the plugin will automatically fill in the saved percentage as "25%".', 'vtprd');
+  $html .= '<br><br>&nbsp;' .  __('{cart_save_amount} is formatted with currency symbol.', 'vtprd');
+  $html .= '<br><br>&nbsp;' .  __('(CSS class "cart-savings-message")', 'vtprd'); 
+  $html .= '</p><br><br></div>';
+	echo $html;
+}
+
+  //v1.0.9.3 end 
+     
+
+function vtprd_check_memory_limit() {    
+		//from woocommerce/includes/admin/views/html-admin-page-status-report.php
+    $memory = wc_let_to_num( WP_MEMORY_LIMIT );
+
+		if ( $memory < 67108864 ) {
+			echo '<strong>WP Memory Limit: ' . sprintf( __( '%s - We recommend setting memory to at least 64MB. See: <a href="%s">Increasing memory allocated to PHP</a>', 'woocommerce' ), size_format( $memory ), 'http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP' ) .'</strong>';
+      //echo '<mark class="error">WP Memory Limit: ' . sprintf( __( '%s - We recommend setting memory to at least 64MB. See: <a href="%s">Increasing memory allocated to PHP</a>', 'woocommerce' ), size_format( $memory ), 'http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP' ) . '</mark>';
+		} 
+    return;
+}
+
+function vtprd_destroy_session() {    
+    if(!isset($_SESSION)){
+      session_start();
+      header("Cache-Control: no-cache");
+      header("Pragma: no-cache");
+    }    
+    session_destroy(); 
+    return;
+}
+//v1.0.9.0 end
+
   public function vtprd_enqueue_setup_scripts($hook_suffix) {
     switch( $hook_suffix) {        //weird but true
       case 'vtprd-rule_page_vtprd_setup_options_page':  
@@ -2260,8 +2604,8 @@ function vtprd_lifetime_purchase_button_error_msg_callback() {    //opt41
         wp_enqueue_style ('vtprd-admin-style');
         wp_register_style('vtprd-admin-settings-style', VTPRD_URL.'/admin/css/vtprd-admin-settings-style.css' );  
         wp_enqueue_style ('vtprd-admin-settings-style');
-        wp_register_script('vtprd-admin-settings-script', VTPRD_URL.'/admin/js/vtprd-admin-settings-script.js' );  
-        wp_enqueue_script ('vtprd-admin-settings-script');
+        wp_register_script('vtprd-admin-settings-script-'.VTPRD_FILE_VERSION, VTPRD_URL.'/admin/js/vtprd-admin-settings-script-'.VTPRD_FILE_VERSION.'.js' );  
+        wp_enqueue_script ('vtprd-admin-settings-script-'.VTPRD_FILE_VERSION);
       break;
     }
   }    
@@ -2312,12 +2656,8 @@ function vtprd_validate_setup_input( $input ) {
         $output = get_option( 'vtprd_setup_options' );  
       break;      
     case $nuke_session === true :    
-        if(!isset($_SESSION)){
-          session_start();
-          header("Cache-Control: no-cache");
-          header("Pragma: no-cache");
-        }    
-        session_destroy();
+        //clear any session variables
+        $this->vtprd_destroy_session();
         $output = get_option( 'vtprd_setup_options' );  
       break; 
     case $nuke_cart === true :    
@@ -2333,10 +2673,25 @@ function vtprd_validate_setup_input( $input ) {
       		if( isset( $input[$key] ) ) {
       			$output[$key] = strip_tags( stripslashes( $input[ $key ] ) );	
       		} // end if		
-      	} // end foreach        
+      	} // end foreach  
+        $this->vtprd_destroy_session(); //v1.0.9.3      
       break;
   }
-   
+
+  
+  //V1.0.9.0 Begin
+  //   if "discount_taken_where" changed
+  global $vtprd_setup_options;
+  if ($vtprd_setup_options['discount_taken_where'] != $output['discount_taken_where'] ) {
+      if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon') { 
+        //always check if the manually created coupon codes are there - if not create them.
+        vtprd_woo_maybe_create_coupon_types();
+      } 
+          
+      //clear any session variables which could affect things after this update...
+      // $this->vtprd_destroy_session(); v1.0.9.3  now done with all updates
+  }
+  //V1.0.9.0 end    
 
 
      //one of these switches must be on
@@ -2399,6 +2754,7 @@ function vtprd_validate_setup_input( $input ) {
    
   $tempMsg =    str_replace(array("\r\n", "\r", "\n", "\t"), ' ', $input['lifetime_purchase_button_error_msg']);
   $input['lifetime_purchase_button_error_msg'] = $tempMsg;
+
 /* 
     //In this situation, this 'id or class Selector' may not be blank, supply wpsc checkout default - must include '.' or '#'
   if ( $input['show_error_before_checkout_products_selector']  <= ' ' ) {
@@ -2417,3 +2773,10 @@ function vtprd_validate_setup_input( $input ) {
 } //end class
  $vtprd_setup_plugin_options = new VTPRD_Setup_Plugin_Options;
   
+  
+  /*
+show_checkout_discount_detail_lines		         Show Product Discount Detail Lines?		           yes/no
+show_checkout_discount_titles_above_details	  Show Short Checkout Message for "Grouped "?	       yes/no
+show_checkout_purchases_subtotal		          Show Cart Purchases Subtotal Line?		             withDiscounts / beforeDiscounts / none
+show_checkout_discount_total_line		          Show Products + Discounts Grand Total Line	       yes/no
+  */

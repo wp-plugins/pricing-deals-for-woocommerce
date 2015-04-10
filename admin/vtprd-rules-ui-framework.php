@@ -422,6 +422,32 @@ class VTPRD_Rules_UI_Framework {
                    ) 
                  )
             ),
+
+          //v1.0.9.0            
+          'msg_badge_on_off_sw_select' =>  array ( 
+              //dropdown select info
+                'select'    => array(
+                    'id'    => 'msg_badge-on-off-sw-select',
+                    'class' => 'select-group clear-left',
+                    'name'  => 'msg_badge-on-off-sw-select',
+                    'tabindex'  => ''
+                ),
+              //dropdown options
+              'option'  => array(
+                  array (
+                    'id'       => 'msg_badge-on-off-sw-on',
+                    'class'    => '',
+                    'value'    => 'on',
+                    'title'    => __('msg_badge is On', 'vtprd')    
+                   ),                                                        
+                  array (
+                    'id'       => 'msg_badge-on-off-sw-off',
+                    'class'    => '',
+                    'value'    => 'off',
+                    'title'    => __('msg_badge is Off', 'vtprd')   
+                   ) 
+                 )
+            ),
                             
       //REST of the  discount_rule_max stuff in the deal_info template...  
       'discount_rule_max_amt_msg' => array (   

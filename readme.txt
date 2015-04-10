@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 4.1
-Stable tag: 1.0.9.2
+Stable tag: 1.0.9.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,7 +12,7 @@ Dynamic Pricing, Wholesale Pricing,  BOGO Deals and more - Pricing Deals can do 
 
 == Description ==
 
-Power your store to greater success with pricing deals and sales promotions! Just about any type of pricing deal you can think of, Pricing Deals for WooCommerce is your one-stop shop to accomplish it. 
+Power your store to greater success with pricing deals and sales promotions! Just about any type of pricing deal you can think of, Pricing Deals for WooCommerce is your one-stop shop to accomplish it.
 
 = What can you do with Pricing Deals? =
 
@@ -26,7 +26,15 @@ Power your store to greater success with pricing deals and sales promotions! Jus
 *   Product and Variation Pricing
 *   Schedulable
 *   Works with WooCommerce 2.3+
-*   Now with tax-free Wholesale role pricing 
+
+
+= New Features =
+
+*   Show a Cart Rule dynamic discount directly in the Unit Price, or as an automatic Woo Coupon
+     - Select Unit Price discount, and you can show the dynamic discount with or without an original price crossout
+*   Catalog (Wholesale) Pricing Additional Messages - add a message after the price - "Save 25%"
+*   "Wholesale Tax Free" Role now available, as well as a "buy_tax_free" Role Capability
+
 
 = Unparalleled Customer Service =
 
@@ -172,6 +180,23 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.9.3 - 2015-04-09 =
+* Enhancement - Redux - Added **Settings Switches** to SHOW DISCOUNT AS:
+		**UNIT COST DISCOUNT** or **COUPON DISCOUNT**
+		- "Unit Cost Discount" discounts the unit price in the cart immediately
+			- Old price crossed out, followed by discounted price is the default
+			- can show discount computation for testing purposes
+		- "Coupon Discount" places the discount in a Plugin-specific Woo coupon
+		- "Unit Cost Discount" is the new default
+		
+* Enhancement - Added Settings Switch to show *Catalog Price discount suffix*, with wildcards.
+		So you can represent "Save xx" 
+		by putting in "Save {price_save_percent} or {price_save_amount}" 
+		and the plugin will automatically fill in the saved percentage as "25%".
+
+* Fix - For Catalog Rules, price crossout for variable products now fully controlled
+		using Settings switch
+
 = 1.0.9.2 - 2015-01-23 =
 * Fix - Release Rollback - A small but significant number of clients continue to have
 		issues with release v 1.0.9.0 and fix release 1.0.9.1 . Rather than
@@ -179,6 +204,18 @@ Direct support requests can be made here on the support tab, or at the [Support]
 		Release 1.0.9.2 rolls all the code back to v1.0.8.9, 
 		prior to the code changes and the issues
 		these customers are experiencing.
+
+= 1.0.9.1 - 2015-01-23 =
+* Fix - pricing issue - for some installations, no discounts made it to checkout. Fixed.
+
+= 1.0.9.0 - 2015-01-22 =
+* Enhancement - Added Settings Switch to SHOW DISCOUNT AS:
+		**COUPON DISCOUNT** or 
+		**UNIT COST DISCOUNT**
+* Enhancement - Added Settings Switch to show *Catalog Price discount suffix*, with wildcards.
+		So you can represent "Save xx" by putting in "Save {price_save_percent} {price_save_amount}" 
+		and the plugin will automatically fill in the saved percentage as "25%".
+ 
 
 = 1.0.8.9 - 2014-11-11 =
 * Fix - pricing issue - doing_ajax
@@ -190,7 +227,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 * Enhancement - Shortcode Standard version now sorts msgs based on request
 * Fix - 'excluding taxable' option in subtotal reporting.
 * Fix - 'cheapest/most expensive' discount type sometimes would not remain selected - JS.
-* Fix - rare issue - backbone fix for recursive creation of custom taxonomy
+ 
 
 = 1.0.8.8 - 2014-10-19 =
 * Enhancement - Added "Wholesale Tax Free" Role.  Added "buy_tax_free" Role Capability.
@@ -210,6 +247,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
     		* Done.
     		* 
 * Fix - Crossout original value in Catalog discount, in a rare situation
+
 
 = 1.0.8.7 - 2014-09-04 =
 * Fix - Rare Discount by each counting issue
@@ -342,6 +380,43 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Upgrade Notice ==
 
+= 1.0.9.3 - 2015-04-09 =
+* Enhancement - Redux - Added **Settings Switches** to SHOW DISCOUNT AS:
+		**UNIT COST DISCOUNT** or **COUPON DISCOUNT**
+		- "Unit Cost Discount" discounts the unit price in the cart immediately
+			- Old price crossed out, followed by discounted price is the default
+			- can show discount computation for testing purposes
+		- "Coupon Discount" places the discount in a Plugin-specific Woo coupon
+		- "Unit Cost Discount" is the new default
+		
+* Enhancement - Added Settings Switch to show *Catalog Price discount suffix*, with wildcards.
+		So you can represent "Save xx" 
+		by putting in "Save {price_save_percent} or {price_save_amount}" 
+		and the plugin will automatically fill in the saved percentage as "25%".
+
+* Fix - For Catalog Rules, price crossout for variable products now fully controlled
+		using Settings switch
+
+= 1.0.9.2 - 2015-01-23 =
+* Fix - Release Rollback - A small but significant number of clients continue to have
+		issues with release v 1.0.9.0 and fix release 1.0.9.1 . Rather than
+		leaving users with issues while a fix is being identified,  
+		Release 1.0.9.2 rolls all the code back to v1.0.8.9, 
+		prior to the code changes and the issues
+		these customers are experiencing.
+
+= 1.0.9.1 - 2015-01-23 =
+* Fix - pricing issue - for some installations, no discounts made it to checkout. Fixed.
+
+= 1.0.9.0 - 2015-01-22 =
+* Enhancement - Added Settings Switch to SHOW DISCOUNT AS:
+		**COUPON DISCOUNT** or 
+		**UNIT COST DISCOUNT**
+* Enhancement - Added Settings Switch to show *Catalog Price discount suffix*, with wildcards.
+		So you can represent "Save xx" by putting in "Save {price_save_percent} {price_save_amount}" 
+		and the plugin will automatically fill in the saved percentage as "25%".
+	and the plugin will automatically fill in the saved percentage as "25%".
+ 
 = 1.0.8.9 - 2014-11-11 =
 * Fix - pricing issue - doing_ajax
 * Fix - pricing issue - login on the fly at checkout
@@ -349,9 +424,10 @@ Direct support requests can be made here on the support tab, or at the [Support]
 * Fix - Product-level rule include/exclude list
 * Enhancement - Shortcode Standard version now produces messages 'in the loop' only 
 		when matching the product information 
-* Enhancement - Shortcode Standard version now sorts msgs based on request 
+* Enhancement - Shortcode Standard version now sorts msgs based on request
 * Fix - 'excluding taxable' option in subtotal reporting.
 * Fix - 'cheapest/most expensive' discount type sometimes would not remain selected - JS.
+
 
 = 1.0.8.8 - 2014-10-19 =
 * Enhancement - Added "Wholesale Tax Free" Role.  Added "buy_tax_free" Role Capability.
@@ -387,7 +463,8 @@ Direct support requests can be made here on the support tab, or at the [Support]
 = 1.0.8.4 - 2014-08-6 =
 * Enhancement - Pick up User Login and apply to Cart realtime 
 * Enhancement - Upgraded discount exclusion for pricing tiers, when "Discount Applies to ALL" 
-* Enhancement - Pick up admin changes to Catalog rules realtime
+* Enhancement - Pick up admin changes to Catalog rules realtime for all customers
+* Fix - JS and/or initialization on Group
 
 = 1.0.8.3 - 2014-08-3 =
 * Fix - "Apply to All" rare issue 
@@ -398,6 +475,9 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 = 1.0.8.1 - 2014-07-27 =
 * Fix - Refactored "Discount This" limits
+	If 'Buy Something, Discount This Item' is selected,
+	Get Group Amount is now *an absolute amount* of units/$$ applied to
+	working with the Get Group Repeat amount 
 
 = 1.0.8.0 - 2014-07-25 =
 * Fix - Customer Limits
@@ -407,7 +487,6 @@ Direct support requests can be made here on the support tab, or at the [Support]
 * Enhancement - Custom Variation Usage
 * Enhancement - Variation Reporting in receipts
 * Enhancement - Woo Customer tax exempt
-
 
 = 1.0.7.8 - 2014-07-15 =
 * Fix - variation usage  ...

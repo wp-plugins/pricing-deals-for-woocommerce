@@ -5,12 +5,19 @@
             // Show Discount Where
             //****************************  
                         unitPriceOrCoupon_Control();      
-                        $("#discountUnitPrice").click(function(){
+                        $("#discount_taken_where").change(function(){ //v1.0.9.3 use 'change' rather than 'click'
+                             //v1.0.9.3 begin
+                             //set crossout to 'yes' as default, only on change
+                             if ($("#discount_taken_where").val() == 'discountUnitPrice') {                                                              
+                                $("#show_unit_price_cart_discount_crossout").val('yes');
+                                $('#discountYesCrossout').attr('selected', true);
+                                $('#discountNoCrossout').attr('selected', false);                                  
+                             }
+                             //v1.0.9.3 end
+                             
                              unitPriceOrCoupon_Control();                           
                          });
-                         $("#discountCoupon").click(function(){
-                             unitPriceOrCoupon_Control();                           
-                         });                                 
+                                
                           function unitPriceOrCoupon_Control() {                     
                             switch( $("#discount_taken_where").val() ) {
                                case 'discountUnitPrice':
@@ -502,6 +509,23 @@
            $("#help50").click(function(){
               $("#help50-text").toggle("slow");                           
           });
-          //v1.0.9.0 end                           
+          //v1.0.9.0 end 
+          //v1.0.9.3 begin 
+           $("#help51").click(function(){
+              $("#help51-text").toggle("slow");                           
+          });          
+           $("#help52").click(function(){
+              $("#help52-text").toggle("slow");                           
+          });          
+           $("#help53").click(function(){
+              $("#help53-text").toggle("slow");                           
+          });          
+           $("#help54").click(function(){
+              $("#help54-text").toggle("slow");                           
+          });          
+           $("#help55").click(function(){
+              $("#help55-text").toggle("slow");                           
+          });          
+          //v1.0.9.3 bend                         
       });  
   

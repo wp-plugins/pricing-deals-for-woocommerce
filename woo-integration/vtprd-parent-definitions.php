@@ -11,8 +11,7 @@ class VTPRD_Parent_Definitions {
     define('VTPRD_PARENT_PLUGIN_NAME',                      'WooCommerce');
     define('VTPRD_EARLIEST_ALLOWED_PARENT_VERSION',         '2.0.14');  //all due to support for hook 'woocommerce_email_order_items_table' - requires the 2nd order_info variable...
     define('VTPRD_TESTED_UP_TO_PARENT_VERSION',             '2.1.9');
-    define('VTPRD_DOCUMENTATION_PATH_PRO_BY_PARENT',        'http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/?active_tab=tutorial');                                                                                                     //***
-    define('VTPRD_DOCUMENTATION_PATH_FREE_BY_PARENT',       'http://www.varktech.com/woocommerce/pricing-deals-for-woocommerce/?active_tab=tutorial');      
+    define('VTPRD_DOCUMENTATION_PATH',                      'http://www.varktech.com/documentation/pricing-deals/introrule/');                                                                                                     //***
     define('VTPRD_INSTALLATION_INSTRUCTIONS_BY_PARENT',     'http://www.varktech.com/woocommerce/pricing-deals-for-woocommerce/?active_tab=instructions');
     define('VTPRD_PRO_INSTALLATION_INSTRUCTIONS_BY_PARENT', 'http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/?active_tab=instructions');
     define('VTPRD_PURCHASE_PRO_VERSION_BY_PARENT',          'http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/');
@@ -42,7 +41,6 @@ class VTPRD_Parent_Definitions {
     }
     
     $coupon_code_discount_deal_title  = __('deals', 'vtprd');
-        
     $default_short_msg  =  __('Short checkout message required', 'vtprd');
     $default_full_msg   =  __('Get 10% off Laptops Today! (sample)', 'vtprd');
     
@@ -98,7 +96,8 @@ class VTPRD_Parent_Definitions {
             'show_yousave_one_some_msg'    => $show_yousave_one_some_msg, 
             //for later ajaxVariations pricing
             'this_is_a_parent_product_with_variations' => $vtprd_cart->cart_items[0]->this_is_a_parent_product_with_variations,            
-            'pricing_by_rule_array'        => $vtprd_cart->cart_items[0]->pricing_by_rule_array                   
+            'pricing_by_rule_array'        => $vtprd_cart->cart_items[0]->pricing_by_rule_array,
+            'product_id'                   => $product_id    //v1.0.9.0                                     
           ) ;
          */
          'ruleset_has_a_display_rule' => $ruleset_has_a_display_rule,
@@ -153,14 +152,17 @@ class VTPRD_Parent_Definitions {
         'purchaser_ip_address'  => $this->vtprd_get_ip_address(), //v1.0.7.4    >>> must be here!!
         'default_short_msg' => $default_short_msg,
         'default_full_msg'  => $default_full_msg,
-        'applied_value_of_discount_applies_to' =>  ''   //v1.0.8.4   
+        'user_is_tax_exempt'  => '',  //v1.0.9.0
+        'product_catalog_price_array' => array ()
 
-      ); //end vtprd_info
+      ); //end vtprd_info      
       
     if ($vtprd_info['purchaser_ip_address'] <= ' ' ) {
       $vtprd_info['purchaser_ip_address'] = $this->vtprd_get_ip_address(); 
     } 
  
+    //load up 'user_is_tax_exempt'   //v1.0.9.0 
+    //vtprd_get_current_user_role();   //v1.0.9.0 
 
                                                                                             
 	}
