@@ -146,8 +146,10 @@ class VTPRD_Parent_Cart_Validation {
 
     //'woocommerce_cart_updated' RUNS EVERY TIME THE CART OR CHECKOUT PAGE DISPLAYS!!!!!!!!!!!!!
     add_action( 'woocommerce_cart_updated',                   array(&$this, 'vtprd_cart_updated') );   //AFTER cart update completed, all totals computed
-    add_action( 'wp_login',                                   array(&$this, 'vtprd_maybe_update_cart_on_login'), 10, 2 );   //v1.0.8.4   re-applies rules on login immediately!
-        
+    add_action( 'wp_login',                                   array(&$this, 'vtprd_update_on_login_change'), 10, 2 );   //v1.0.8.4   re-applies rules on login immediately!
+    
+    add_action( 'wp_logout',                                  array(&$this, 'vtprd_update_on_login_change'), 10, 2 );   //v1.0.9.4   re-applies rules on logout immediately!
+             
     //this runs BEFORE the qty is zeroed, not much use...
     //add_action( 'woocommerce_before_cart_item_quantity_zero', array(&$this, 'vtprd_test_quantity_zero'), 10,1 );     //cart_item_removed
 
@@ -1855,14 +1857,27 @@ public function vtprd_get_product_catalog_price_add_to_cart( $product_id, $param
    // v1.0.8.4  new function
    //recalc the cart if user changes, to pick up user/role-based rules
    //*************************************
-   public function vtprd_maybe_update_cart_on_login($user_login, $user) {
+   public function vtprd_update_on_login_change($user_login, $user) {
       global $woocommerce;
       
+      //v1.0.9.4 begin - force the CATALOG rules to be redone
+      vtprd_debug_options();  
+      
+      if(!isset($_SESSION)){
+        session_start();
+        header("Cache-Control: no-cache");
+        header("Pragma: no-cache");
+      }    
+      session_destroy(); 
+      //v1.0.9.4 end
+      
+                 
       $woocommerce_cart_contents = $woocommerce->cart->get_cart();
       if ( sizeof($woocommerce_cart_contents) > 0 ) {       
          //this re-does the CART rules
-         $this->vtprd_cart_updated();                     
+         $this->vtprd_cart_updated();                  
       }
+               
       return; 
    }
 
