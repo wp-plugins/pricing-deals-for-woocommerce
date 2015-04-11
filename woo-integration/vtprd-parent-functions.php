@@ -526,7 +526,9 @@
 	
 	function vtprd_move_vtprd_single_product_to_session($product_id){
       global $post, $wpdb, $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_setup_options, $vtprd_rules_set;  
-
+      
+      vtprd_debug_options();  //v1.0.5 
+      
       $short_msg_array = array();
       $full_msg_array = array();
       $msg_already_done = 'no';
