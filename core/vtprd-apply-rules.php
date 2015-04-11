@@ -4,7 +4,7 @@ class VTPRD_Apply_Rules{
 	
 	public function __construct(){
 		global $woocommerce, $vtprd_cart, $vtprd_rules_set, $vtprd_info, $vtprd_setup_options, $vtprd_rule;
-//echo '<br>AT TOP of APPLY RULES<br>' ; //mwnecho  
+
     //GET RULES SET     
     $vtprd_rules_set = get_option( 'vtprd_rules_set' );
     if ($vtprd_rules_set == FALSE) {
@@ -12,12 +12,18 @@ class VTPRD_Apply_Rules{
     }
 
     if ($vtprd_info['current_processing_request'] == 'cart') {  
- /* FIX FIX FIX
+ /* 
       //If Cart processing and nothing in the cart, exit...
       if (sizeof($woocommerce->cart_items) == 0) {
         return;
       } 
   */   
+      
+     //v1.0.9.4  moved here to cover 
+     //  when JUST a catalog discount was processed, but CART still needs loading               
+     //Move parent cart contents to vtprd_cart 
+      vtprd_load_vtprd_cart_for_processing(); 
+      
       //sort for "cart" rules and delete "display" rules
       $this->vtprd_sort_rules_set_for_cart();
             
@@ -35,21 +41,25 @@ class VTPRD_Apply_Rules{
             (i) after the previous auto adds have been rolled out and
             (ii) before any new auto adds are rolled in 
       */
-      vtprd_count_other_coupons();
+      //v1.0.9.4 added if
+      if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon')  { 
+        vtprd_count_other_coupons();
+      }
       //**********************
                
+     //v1.0.9.4  moved above
      //Move parent cart contents to vtprd_cart 
-      vtprd_load_vtprd_cart_for_processing(); 
+     // vtprd_load_vtprd_cart_for_processing(); 
 
 
-      //autoAdds into internal arrays, as needed 
-      //EDITED * + * +  * + * +  * + * +  * + * +  
-    
+      //autoAdd into internal arrays, as needed 
+      //EDITED * + * +  * + * +  * + * +  * + * +      
+      
       $this->vtprd_process_cart(); 
    
       
-      //autoAdds  Update the parent cart for any auto add free products...
-      //EDITED * + * +  * + * +  * + * +  * + * + 
+      //Update the parent cart for any auto add free products...
+      //EDITED * + * +  * + * +  * + * +  * + * +  
 
     } else {
       
@@ -70,29 +80,44 @@ class VTPRD_Apply_Rules{
     }  
 
     if ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ){   
-      error_log( print_r(  '$vtprd_info', true ) );
+      error_log( print_r(  '$woocommerce->cart at APPLY-RULES END', true ) );
+      error_log( var_export($woocommerce->cart, true ) );
+      error_log( print_r(  '$vtprd_info at APPLY-RULES END', true ) );
       error_log( var_export($vtprd_info, true ) );
       session_start();    //mwntest
-      error_log( print_r(  '$_SESSION', true ) );
+      error_log( print_r(  '$_SESSION at APPLY-RULES END', true ) );
       error_log( var_export($_SESSION, true ) );
-      error_log( print_r(  '$vtprd_rules_set', true ) );
+      error_log( print_r(  '$vtprd_rules_set at APPLY-RULES END', true ) );
       error_log( var_export($vtprd_rules_set, true ) );
-      error_log( print_r(  '$vtprd_cart', true ) );
+      error_log( print_r(  '$vtprd_cart at APPLY-RULES END', true ) );
       error_log( var_export($vtprd_cart, true ) );
-      error_log( print_r(  '$vtprd_setup_options', true ) );
-      error_log( var_export($vtprd_setup_options, true ) ); 
-      $woocommerce_cart_contents = $woocommerce->cart->get_cart();
-      error_log( print_r(  '$woocommerce', true ) );
-      error_log( var_export($woocommerce, true ) );    
+      error_log( print_r(  '$vtprd_setup_options at APPLY-RULES END', true ) );
+      error_log( var_export($vtprd_setup_options, true ) );  
     }
-    
+
+/*
+echo '<pre>'.print_r($vtprd_cart, true).'</pre>' ;
+echo '<pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
+echo '<pre>'.print_r($woocommerce->cart, true).'</pre>' ;
+echo 'vtprd_info <pre>'.print_r($vtprd_info, true).'</pre>' ;
+echo 'SESSION data <pre>'.print_r($_SESSION, true).'</pre>' ;      
+ 
+
+echo '<pre>'.print_r($vtprd_setup_options, true).'</pre>' ;
+echo '<pre>'.print_r($vtprd_info, true).'</pre>' ; 
+wp_die( __('<strong>Looks like</strong>', 'vtmin'), __('VT Minimum Purchase not compatible - WP', 'vtmin'), array('back_link' => true));         
+   
+*/
+
+
+ 
     return;      
 	}
  
 
   public function vtprd_process_cart() { 
     global $post, $vtprd_setup_options, $vtprd_cart, $vtprd_rules_set, $vtprd_rule, $vtprd_info;	
-//echo 'in vtprd_process_cart' .'<br>';
+
     //cart may be empty...
     if (sizeof($vtprd_cart) == 0) {
       $vtprd_cart->cart_level_status = 'rejected';
@@ -101,11 +126,13 @@ class VTPRD_Apply_Rules{
     }
     
     //v1.0.7.4 begin
-    if ( ($vtprd_info['current_processing_request'] == 'cart') &&
-         ($vtprd_info['skip_cart_processing_due_to_coupon_individual_use']) )  {
-      $vtprd_cart->cart_level_status = 'rejected';
-      $vtprd_cart->cart_level_auditTrail_msg = 'Another Coupon with Individual_use = "yes" has been activated.  Cart processing may not continue.';          
-      return;
+    if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon')  { //v1.0.9.4
+      if ( ($vtprd_info['current_processing_request'] == 'cart') &&
+           ($vtprd_info['skip_cart_processing_due_to_coupon_individual_use']) )  {
+        $vtprd_cart->cart_level_status = 'rejected';
+        $vtprd_cart->cart_level_auditTrail_msg = 'Another Coupon with Individual_use = "yes" has been activated.  Cart processing may not continue.';          
+        return;
+      }
     }
     //v1.0.7.4 end
         
@@ -134,8 +161,15 @@ class VTPRD_Apply_Rules{
       return;
     }
 
+    //v1.0.9.3 begin
+    if ($vtprd_info['current_processing_request'] == 'cart') {
+      $vtprd_cart->cart_contents_orig_subtotal = vtprd_get_Woo_cartSubtotal(); 
+    }
+    //v1.0.9.3 end
+
     //test all rules whether in and out counts satisfied    
     $this->vtprd_process_cart_for_rules_discounts();
+
 
     return;
  }   
@@ -182,15 +216,13 @@ class VTPRD_Apply_Rules{
       //  - timing of this overwrite is different for auto adds...
       //  - NON auto adds are done below
       //**************************************************** 
-  
-      //EDITED * + * +  * + * +  * + * +  * + * 
+      //EDITED * + * +  * + * +  * + * +  * + * +  
       
       
        
       //Cart Main Processing
       $sizeof_cart_items = sizeof($vtprd_cart->cart_items);
       for($k=0; $k < $sizeof_cart_items; $k++) {                 
-
         //only do this check if the product is on special!!
         if ($vtprd_cart->cart_items[$k]->product_is_on_special == 'yes')  { 
           $do_continue = '';  //v1.0.4 set = to ''
@@ -215,11 +247,10 @@ class VTPRD_Apply_Rules{
               break;
           } //end cumulativeSalePricing check
                    
-          if ($do_continue) {
+          if ($do_continue) {            
             continue; //skip further processing for this iteration of the "for" loop
           }
         }  //end product is on special check
-
         //set up cart audit trail info, keyed to rule prod_id
         $this->vtprd_init_cartAuditTrail($i,$k);
         
@@ -233,8 +264,8 @@ class VTPRD_Apply_Rules{
 
       } //end cart-items 'for' loop
 
-/* 
-      //mwn0402  => moved from outside the loop, inside!! 
+/* no longer useful....
+     //mwn0402  => moved from outside the loop, inside!! 
       //****************************************************
       // ONLY FOR non- AUTO ADD - overwrite actionPop and discountAppliesWhere
       //******************
@@ -256,12 +287,12 @@ class VTPRD_Apply_Rules{
               }   
             break; 
         }  
-      }
-*/
+      }   
+*/    
     
     }  //end rules 'for' loop
-   
-    
+ 
+
       return;   
    }                              
  
@@ -295,21 +326,49 @@ class VTPRD_Apply_Rules{
         
    public function vtprd_test_if_inPop_product($i, $k) { 
       global $vtprd_cart, $vtprd_rules_set, $vtprd_rule, $vtprd_info, $vtprd_setup_options;
-
+      /*  v1.0.5 
+      ADDTIONAL RULE CRITERIA FILTER - optional, default = TRUE   (useful to add additional checks on a specific rule)
+      
+      all data needed accessible through global statement, eg global $vtprd_cart, $vtprd_rules_set, $vtprd_rule, $vtprd_info, $vtprd_setup_options;
+        Rule ID = $vtprd_rules_set[$i]->post_id
+       filter can check for specific rule_id, and apply criteria.
+         if failed additional criteria check, return FALSE, so that the rule is not executed 
+      To Execute, sample:
+        add_filter('vtprd_additional_inpop_include_criteria', 'your function name', 10, 3);
+        $i = ruleset occurrence ($vtprd_rules_set[$i])
+        $k = cart occurence  ($vtprd_cart->cart_items[$k])
+        
+      LOOK FOR 'process_additional_inpop_include_criteria'  example at the bottom of the document... 
+      */
       switch( $vtprd_rules_set[$i]->inPop ) {  
            case 'wholeStore':                                                                                      
+                
+                //v1.0.5 begin                
+                $additional_include_criteria = apply_filters('vtprd_additional_inpop_include_criteria',TRUE,$i, $k );
+                if ($additional_include_criteria == FALSE) {
+                   $vtprd_cart->cart_items[$k]->cartAuditTrail[$vtprd_rules_set[$i]->post_id]['inPop_participation_msgs'][] = 'Product rejected by additional criteria filter';
+                   continue;
+                }
+                //v1.0.5 end
+                
                 //load whole cart into inPop
                 $this->vtprd_load_inPop_found_list($i, $k);                              
             break;
-          case 'cart':                                                                                      
+          case 'cart':  
+                
+                //v1.0.5 begin                
+                $additional_include_criteria = apply_filters('vtprd_additional_inpop_include_criteria',TRUE,$i, $k );
+                if ($additional_include_criteria == FALSE) {
+                   $vtprd_cart->cart_items[$k]->cartAuditTrail[$vtprd_rules_set[$i]->post_id]['inPop_participation_msgs'][] = 'Product rejected by additional criteria filter';
+                   continue;
+                }
+                //v1.0.5 end
+                                                                                                              
                 //load whole cart into inPop               
                 $this->vtprd_load_inPop_found_list($i, $k);                              
             break;
-          
-          //EDITED * + * +  * + * +  * + * +  * + * +
-      
-      }
-      
+          //EDITED * + * +  * + * +  * + * +  * + * +  
+        } 
     } 
 
 
@@ -319,9 +378,29 @@ class VTPRD_Apply_Rules{
            
    public function vtprd_test_if_actionPop_product($i, $k) { 
       global $vtprd_cart, $vtprd_rules_set, $vtprd_rule, $vtprd_info, $vtprd_setup_options;
-
+      /*  v1.0.5 
+      ADDTIONAL RULE CRITERIA FILTER - optional, default = TRUE   (useful to add additional checks on a specific rule)
+      
+      all data needed accessible through global statement, eg global $vtprd_cart, $vtprd_rules_set, $vtprd_rule, $vtprd_info, $vtprd_setup_options;
+        Rule ID = $vtprd_rules_set[$i]->post_id
+       filter can check for specific rule_id, and apply criteria.
+         if failed additional criteria check, return FALSE, so that the rule is not executed 
+      To Execute, sample:
+        add_filter('vtprd_additional_actionpop_include_criteria', 'your function name', 10, 3);
+        $i = ruleset occurrence ($vtprd_rules_set[$i])
+        $k = cart occurence  ($vtprd_cart->cart_items[$k])
+      */
       switch( $vtprd_rules_set[$i]->actionPop ) {  
           case 'sameAsInPop':
+                
+                //v1.0.5 begin                
+                $additional_include_criteria = apply_filters('vtprd_additional_actionpop_include_criteria',TRUE,$i, $k );
+                if ($additional_include_criteria == FALSE) {
+                   $vtprd_cart->cart_items[$k]->cartAuditTrail[$vtprd_rules_set[$i]->post_id]['actionPop_participation_msgs'][] = 'Actionpop Product rejected by additional criteria filter';
+                   continue;
+                }
+                //v1.0.5 end
+                                                
                 //if current product in inpop products array...
                 if ( in_array($vtprd_cart->cart_items[$k]->product_id, $vtprd_rules_set[$i]->inPop_prodIds_array) ) {
                   $this->vtprd_load_actionPop_found_list($i, $k);
@@ -330,15 +409,32 @@ class VTPRD_Apply_Rules{
                 }
             break;
           case 'wholeStore':
+                
+                //v1.0.5 begin                
+                $additional_include_criteria = apply_filters('vtprd_additional_actionpop_include_criteria',TRUE,$i, $k );
+                if ($additional_include_criteria == FALSE) {
+                   $vtprd_cart->cart_items[$k]->cartAuditTrail[$vtprd_rules_set[$i]->post_id]['actionPop_participation_msgs'][] = 'Actionpop Product rejected by additional criteria filter';
+                   continue;
+                }
+                //v1.0.5 end
+                                
                 $this->vtprd_load_actionPop_found_list($i, $k);
             break;            
           case 'cart':                                                                                      
+                
+                //v1.0.5 begin                
+                $additional_include_criteria = apply_filters('vtprd_additional_actionpop_include_criteria',TRUE,$i, $k );
+                if ($additional_include_criteria == FALSE) {
+                   $vtprd_cart->cart_items[$k]->cartAuditTrail[$vtprd_rules_set[$i]->post_id]['actionPop_participation_msgs'][] = 'Actionpop Product rejected by additional criteria filter';
+                   continue;
+                }
+                //v1.0.5 end
+                
                 //load whole cart into actionPop
                 $this->vtprd_load_actionPop_found_list($i, $k);
             break;
-          
-          //EDITED * + * +  * + * +  * + * +  * + * +
-          
+            
+          //EDITED * + * +  * + * +  * + * +  * + * +  
         } 
     } 
 
@@ -393,7 +489,7 @@ class VTPRD_Apply_Rules{
       // ends with sizeof being reached, OR  $vtprd_rules_set[$i]->discount_processing_status == 'yes'
       $sizeof_rule_deal_info = sizeof($vtprd_rules_set[$i]->rule_deal_info);
       for($d=0; $d < $sizeof_rule_deal_info; $d++) {
-       switch( $vtprd_rules_set[$i]->rule_deal_info[$d]['buy_repeat_condition'] ) {
+        switch( $vtprd_rules_set[$i]->rule_deal_info[$d]['buy_repeat_condition'] ) {
             case 'none':     //only applies to 1st rule deal line
                  /* 
                  There can be multiple conditions which are covered by inserting a repeat count = 1.
@@ -410,7 +506,7 @@ class VTPRD_Apply_Rules{
                 $buy_repeat_count = $vtprd_rules_set[$i]->rule_deal_info[$d]['buy_repeat_count'];
               break;  
         }  
-
+  
         //REPEAT count only augments IF a discount successfully processes...
         for($br=0; $br < $buy_repeat_count; $br++) {
            $this->vtprd_repeating_group_discount_cntl($i, $d, $br );             
@@ -420,9 +516,9 @@ class VTPRD_Apply_Rules{
         } // $buy_repeat_count for loop        
     
         //v1.0.4 begin => lifetime counted by group (= 'all') up count here, once per rule/cart
-            //EDITED * + * +  * + * +  * + * +  * + * + 
+        //EDITED * + * +  * + * +  * + * +  * + * +  
         //v1.0.4 end 
-               
+                  
       }  //rule_deal_info for loop
        
       
@@ -450,18 +546,25 @@ class VTPRD_Apply_Rules{
       if (sizeof($vtprd_rules_set[$i]->free_product_array) > 0) {
         $this->vtprd_roll_free_products_out_of_other_rules($i); 
       }
-                            
+      
       //v1.0.8.4 begin
-      //  for next rule iterations, if cumulativeRulePricing == 'no'
+      //  used in following rule processing iterations, if cumulativeRulePricing == 'no'
       //v1.0.9.3 added if isset
       if ( (isset ($vtprd_info['applied_value_of_discount_applies_to']) ) &&
          ( ($vtprd_info['applied_value_of_discount_applies_to']  == 'cheapest') ||
            ($vtprd_info['applied_value_of_discount_applies_to']  == 'most_expensive') ||
            ($vtprd_info['applied_value_of_discount_applies_to']  == 'all') ) ) {
          $this->vtprd_mark_products_in_an_all_rule($i);
-      }      
+      } 
+      /*
+      if ( ($vtprd_info['applied_value_of_discount_applies_to']  == 'cheapest') ||
+           ($vtprd_info['applied_value_of_discount_applies_to']  == 'most_expensive') ||
+           ($vtprd_info['applied_value_of_discount_applies_to']  == 'all') ) {
+         $this->vtprd_mark_products_in_an_all_rule($i);
+      } 
+      */     
       //v1.0.8.4 begin  
-           
+                  
     }  //ruleset for loop
     return;    
   }
@@ -608,7 +711,8 @@ class VTPRD_Apply_Rules{
             //SETS action amt "window" for the actionPop_exploded_group
             $this->vtprd_set_action_group_end($i, $d, $ar );  //vtprd_action_amt_process 
           }
-          //v1.0.8.1 end                
+          //v1.0.8.1 end              
+          
         break;  
       case 'nextInInPop':   
           if ($vtprd_rules_set[$i]->rule_deal_info[$d]['action_amt_type'] == 'zero' ) {  //means we are acting on the already-found 'buy' unit
@@ -631,9 +735,29 @@ class VTPRD_Apply_Rules{
           if ($vtprd_rules_set[$i]->actionPop_exploded_group_begin >= $sizeOf_actionPop_exploded_found_list ) {
              $vtprd_rules_set[$i]->rule_processing_status = 'cartGroupFailedTest';
              break;
-          }        
+          }
+      
           //v1.0.8.7 end
-         
+          
+/*
+//echo 'group begin= ' . $ss . 'group begin ProdID= ' .$ProdID .'<br>';
+      error_log( print_r(  'SizeOf exploded list= ' . $sizeOf_actionPop_exploded_found_list, true ) );
+                
+$ss = $vtprd_rules_set[$i]->actionPop_exploded_group_begin;
+$ProdID = $vtprd_rules_set[$i]->actionPop_exploded_found_list[$ss]['prod_id'];
+//echo 'group begin= ' . $ss . 'group begin ProdID= ' .$ProdID .'<br>';
+      error_log( print_r(  'group begin= ' . $ss . ' group begin ProdID= ' .$ProdID, true ) );
+
+
+
+$ss = $vtprd_rules_set[$i]->actionPop_exploded_group_end;
+$ProdID = $vtprd_rules_set[$i]->actionPop_exploded_found_list[$ss]['prod_id'];
+//echo 'group end = ' . $ss . 'group begin ProdID= ' .$ProdID .'<br>';
+    error_log( print_r(  'group end= ' . $ss . ' group end ProdID= ' .$ProdID, true ) );
+          //here for test  MWN
+          
+*/          
+          
         break;  
       case 'nextInActionPop':         
           //first time actionPop_exploded_group_end arrives here = 0...
@@ -652,6 +776,9 @@ class VTPRD_Apply_Rules{
     //only possible if  vtprd_set_action_group_end  executed
     if ($vtprd_rules_set[$i]->rule_processing_status == 'cartGroupFailedTest') {
       //THIS PATH can either end processing for the rule, or just this iteration of actionPop processing, based on settings in set_action_group...    
+
+//error_log( print_r(  'Inpop end reached ' , true ) );      
+      
       $vtprd_rules_set[$i]->discount_processing_status = 'InPopEnd';
       return;
     }         
@@ -675,6 +802,7 @@ class VTPRD_Apply_Rules{
           *free
           *fixed price                        
     */
+    
     switch( true ) {
       case ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'forThePriceOf_Units') :
       case ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'forThePriceOf_Currency') :
@@ -703,7 +831,8 @@ class VTPRD_Apply_Rules{
           $this->vtprd_apply_discount_to_each_product($i, $d, $ar );       
         break;
     } 
- 
+
+
     $vtprd_info['applied_value_of_discount_applies_to']  =  $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_applies_to'];   //v1.0.8.4  store value for processing
 
     $sizeof_actionpop_list = sizeof($vtprd_rules_set[$i]->actionPop_exploded_found_list); //v 1.0.3
@@ -724,7 +853,7 @@ class VTPRD_Apply_Rules{
           break;          
       }    
     }
-            
+             
   } // end  vtprd_process_actionPop_and_discount
 
  
@@ -757,7 +886,6 @@ class VTPRD_Apply_Rules{
   public function vtprd_apply_discount_as_a_group($i, $d, $ar ) {   
      global $post, $vtprd_setup_options, $vtprd_cart, $vtprd_rules_set, $vtprd_rule, $vtprd_info, $vtprd_template_structures_framework;        
     $prod_discount = 0;    
-   
     switch( true ) {
       case ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_type']   == 'forThePriceOf_Units') :
          // buy 5 ( $vtprd_rules_set[$i]->rule_deal_info[$d]['buy_amt_count'] ) 
@@ -788,15 +916,15 @@ class VTPRD_Apply_Rules{
         //$per_unit_savings = $total_savings / $forThePriceOf_Divisor;
 
         //compute remainder
-        //$per_unit_savings_2decimals = bcdiv($total_savings , $forThePriceOf_Divisor , 2); 
-        $per_unit_savings_2decimals = round( ($total_savings / $forThePriceOf_Divisor) , 2);    
+        //$per_unit_savings_2decimals = bcdiv($total_savings , $forThePriceOf_Divisor , 2);
+        $per_unit_savings_2decimals = round( ($total_savings / $forThePriceOf_Divisor) , 2); 
+            
         $running_total =  $per_unit_savings_2decimals * $forThePriceOf_Divisor;
-       
-        
+
         //$remainder = $total_savings - $running_total;
         $remainder = round($total_savings - $running_total, 2); //v1.0.7.4   floating point...
-
-        if ($remainder <> 0) {      //v1.0.7.2 changed > 0 to <>0 ==>> pick up positive or negative rounding error
+        
+        if ($remainder <> 0) {      //v1.0.5.1 changed > 0 to <>0 ==>> pick up positive or negative rounding error
           $add_a_penny_to_first = $remainder;
         } else {
           $add_a_penny_to_first = 0;
@@ -843,19 +971,20 @@ class VTPRD_Apply_Rules{
         $total_savings = $cart_group_total_price - $cart_group_new_fixed_price;
 
         //compute remainder
-        //$per_unit_savings_2decimals = bcdiv($total_savings , $forThePriceOf_Divisor , 2); 
-        $per_unit_savings_2decimals = round( ($total_savings / $forThePriceOf_Divisor) , 2);    
+        //$per_unit_savings_2decimals = bcdiv($total_savings , $forThePriceOf_Divisor , 2);
+        $per_unit_savings_2decimals = round( ($total_savings / $forThePriceOf_Divisor) , 2); 
+            
         $running_total =  $per_unit_savings_2decimals * $forThePriceOf_Divisor;
-      
-        //$remainder = $total_savings - $running_total;
+        
+      //$remainder = $total_savings - $running_total;
         $remainder = round($total_savings - $running_total, 2); //v1.0.7.4   floating point...
         
-        if ($remainder <> 0) {      //v1.0.7.2 changed > 0 to <>0 ==>> pick up positive or negative rounding error
+        if ($remainder <> 0) {      //v1.0.5.1 changed > 0 to <>0 ==>> pick up positive or negative rounding error
           $add_a_penny_to_first = $remainder;
         } else {
           $add_a_penny_to_first = 0;
         }
-        
+       
         //apply the per unit savings to each unit       
         for ( $s=$vtprd_rules_set[$i]->actionPop_exploded_group_begin; $s < $vtprd_rules_set[$i]->actionPop_exploded_group_end; $s++) {
             $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_discount_amt'] = $per_unit_savings_2decimals;
@@ -933,14 +1062,15 @@ class VTPRD_Apply_Rules{
         
 
         //compute remainder
-        //$per_unit_savings_2decimals = bcdiv($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] , $unit_count , 2); 
-        $per_unit_savings_2decimals = round( ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] / $unit_count ) , 2);    
-   
+        //$per_unit_savings_2decimals = bcdiv($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] , $unit_count , 2);
+        $per_unit_savings_2decimals = round( ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] / $unit_count ) , 2);     
+     
         $running_total =  $per_unit_savings_2decimals * $unit_count;
-        
+
         //$remainder = $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] - $running_total;
         $remainder = round($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] - $running_total, 2);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
         
+        //if ($remainder > 0) {
         if ($remainder != 0) {      //v1.0.8.1  allow for negative remainder!
           $add_a_penny_to_first = $remainder;
         } else {
@@ -962,7 +1092,6 @@ class VTPRD_Apply_Rules{
          } 
 
         break;
-      
          
       //v1.0.7.4 begin
       //*******************************************
@@ -1001,7 +1130,7 @@ class VTPRD_Apply_Rules{
                $current_unit_count++;
                $current_total_price += $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_unit_price'];
                $current_unit_price = $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_unit_price'];
-           
+          
             } else {
                //insert the totals of the previous product id     
                $cart_group_total[] = array(
@@ -1020,7 +1149,7 @@ class VTPRD_Apply_Rules{
                $current_unit_count = 1;
                $current_total_price = $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_unit_price'];
                $current_unit_price = $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_unit_price']; 
-                                                      
+                                                     
             }
 
             //handle last in list
@@ -1039,6 +1168,7 @@ class VTPRD_Apply_Rules{
 
             $grand_total_exploded_group += $vtprd_rules_set[$i]->actionPop_exploded_found_list[$s]['prod_unit_price']; 
             
+           
          }
 
          $percent_off = $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] / 100;
@@ -1138,7 +1268,7 @@ class VTPRD_Apply_Rules{
 
       break;
       //v1.0.7.4 end
-       
+        
     }
     
     return;           
@@ -1174,15 +1304,15 @@ class VTPRD_Apply_Rules{
     //*********************************************************************
     //CHECK THE MANY DIFFERENT MAX LIMITS BEFORE UPDATING THE DISCOUNT TO THE ARRAY
     //********************************************************************* 
-
+ 
     //v1.0.8.4 begin
     if ( ($vtprd_rules_set[$i]->cumulativeRulePricing == 'no') &&
          ($vtprd_cart->cart_items[$k]->product_already_in_an_all_rule == 'yes') ) {
-        $vtprd_cart->cart_items[$k]->cartAuditTrail[$vtprd_rules_set[$i]->post_id]['discount_msgs'][] = 'No Discount - part of an "all" rule group from previous discount, no more allowed';
+        $vtprd_cart->cart_items[$k]->cartAuditTrail[$vtprd_rules_set[$i]->post_id]['discount_msgs'][] = 'No Discount - counted as part of an "all" rule group from previous discount, no more allowed';
         return;     
     }
-    //v1.0.8.4 end
-       
+    //v1.0.8.4 begin
+      
     if ( isset( $vtprd_cart->cart_items[$k]->yousave_by_rule_info[$rule_id] ) ) {
       if ( (sizeof ($vtprd_cart->cart_items[$k]->yousave_by_rule_info) > 1 ) &&   //only 1 allowed in this case...
            ($vtprd_rules_set[$i]->cumulativeRulePricing == 'no') ) {
@@ -1202,7 +1332,7 @@ class VTPRD_Apply_Rules{
       } 
 
       //v1.0.7.4 begin
-      //CHECK if catalog discount already applied
+      //CHECK if catalog discount already applied , from v1.0.7.4 in free version
       if ($vtprd_info['current_processing_request'] == 'cart') { 
          if ( ($vtprd_cart->cart_items[$k]->unit_price < $vtprd_cart->cart_items[$k]->save_orig_unit_price) &&
               ($vtprd_rules_set[$i]->cumulativeRulePricing == 'no') ) {
@@ -1212,7 +1342,7 @@ class VTPRD_Apply_Rules{
          }
       }      
       //v1.0.7.4 end
-      
+            
       switch( $vtprd_rules_set[$i]->rule_deal_info[0]['discount_rule_max_amt_type'] ) {
         case 'none':
             $do_nothing;
@@ -1291,8 +1421,7 @@ class VTPRD_Apply_Rules{
       //compute yousave_pct_at_upd_begin
       $computed_pct =  $curr_prod_array['prod_discount_amt'] /  $curr_prod_array['prod_unit_price'] ;
       //$computed_pct_2decimals = bcdiv($curr_prod_array['prod_discount_amt'] , $curr_prod_array['prod_unit_price'] , 2);
-
-      $computed_pct_2decimals = round( ($curr_prod_array['prod_discount_amt'] / $curr_prod_array['prod_unit_price'] ) , 2); 
+      $computed_pct_2decimals = round( ($curr_prod_array['prod_discount_amt'] / $curr_prod_array['prod_unit_price'] ) , 2);
                 
       //$remainder = $computed_pct - $computed_pct_2decimals;
       $remainder = round($computed_pct - $computed_pct_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
@@ -1336,8 +1465,8 @@ class VTPRD_Apply_Rules{
             //*********************************************************************
             //reduce discount amount to max allowed by rule percentage
             //*********************************************************************
-         // $discount_2decimals = bcmul(($yousave_pct / 100) , $curr_prod_array['prod_unit_price'] , 2);
-            $discount_2decimals = round(($yousave_pct / 100) * $curr_prod_array['prod_unit_price'] , 2);  //v1.0.7.6 
+          //$discount_2decimals = bcmul(($yousave_pct / 100) , $curr_prod_array['prod_unit_price'] , 2);
+            $discount_2decimals = round(($yousave_pct / 100) * $curr_prod_array['prod_unit_price'] , 2); //v1.0.7.6
           
             //compute rounding
             $temp_discount = ($yousave_pct / 100) * $curr_prod_array['prod_unit_price'];
@@ -1356,7 +1485,7 @@ class VTPRD_Apply_Rules{
             }  else {
               $discount = $discount_2decimals;
             } 
-            
+                     
             $curr_prod_array['prod_discount_amt']  = $discount;
             $max_msg = $vtprd_rules_set[$i]->discount_rule_max_amt_msg;
  
@@ -1380,6 +1509,12 @@ class VTPRD_Apply_Rules{
 
             $curr_prod_array['prod_discount_amt']  = $curr_prod_array['prod_discount_amt'] - $reduction_amt;
             
+            //v1.0.9.3 begin
+            if ($curr_prod_array['prod_discount_amt'] > $curr_prod_array['prod_unit_price']) {
+              $curr_prod_array['prod_discount_amt'] = $curr_prod_array['prod_unit_price'];
+            }
+            //v1.0.9.3 end
+            
             $max_msg = $vtprd_rules_set[$i]->discount_rule_max_amt_msg;
              
             $yousave_pct_temp = $curr_prod_array['prod_discount_amt'] / $curr_prod_array['prod_unit_price'];
@@ -1387,8 +1522,8 @@ class VTPRD_Apply_Rules{
             // $yousave_pct = $yousave_amt / $curr_prod_array['prod_unit_price'] * 100;        
             //compute remainder
             //$yousave_pct_2decimals = bcdiv($curr_prod_array['prod_discount_amt'] , $curr_prod_array['prod_unit_price'] , 2);
-
-            $yousave_pct_2decimals = round( ($curr_prod_array['prod_discount_amt'] / $curr_prod_array['prod_unit_price'] ) , 2);      
+            
+            $yousave_pct_2decimals = round( ($curr_prod_array['prod_discount_amt'] / $curr_prod_array['prod_unit_price'] ) , 2);
                               
           //$remainder = $yousave_pct_temp - $yousave_pct_2decimals;
             $remainder = round($yousave_pct_temp - $yousave_pct_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
@@ -1416,7 +1551,7 @@ class VTPRD_Apply_Rules{
     //yousave pct whole number = (total discount amount / (orig unit price * number of units discounted))
     $yousave_pct_prod_temp = $yousave_product_total_amt / $yousave_total_unit_price;
     //$yousave_pct_prod_2decimals = bcdiv($yousave_product_total_amt , $yousave_total_unit_price , 2);
-    $yousave_pct_prod_2decimals = round( ($yousave_product_total_amt / $yousave_total_unit_price ) , 2); 
+    $yousave_pct_prod_2decimals = round( ($yousave_product_total_amt / $yousave_total_unit_price ) , 2);
        
   //$remainder = $yousave_pct_prod_temp - $yousave_pct_prod_2decimals;
     $remainder = round($yousave_pct_prod_temp - $yousave_pct_prod_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
@@ -1443,11 +1578,11 @@ class VTPRD_Apply_Rules{
           //    compute the allowed remainder percentage
           // % = floor minus product % totaled *before now*
           $yousave_pct = $vtprd_setup_options['discount_floor_pct_per_single_item'] - $vtprd_cart->cart_items[$k]->yousave_total_pct;
-         
+          
           $percent_off = $yousave_pct / 100;         
           //compute rounding
         //$discount_2decimals = bcmul($curr_prod_array['prod_unit_price'] , $percent_off , 2);
-          $discount_2decimals = round($curr_prod_array['prod_unit_price'] * $percent_off , 2);   //v1.0.7.6    
+          $discount_2decimals = round($curr_prod_array['prod_unit_price'] * $percent_off , 2);  //v1.0.7.6
           
           $temp_discount = $curr_prod_array['prod_unit_price'] * $percent_off;
           
@@ -1464,7 +1599,7 @@ class VTPRD_Apply_Rules{
             $curr_prod_array['prod_discount_amt'] = $discount_2decimals + $increment;   //v1.0.7.4  PHP floating point
           }  else {
             $curr_prod_array['prod_discount_amt'] = $discount_2decimals;
-          }          
+          }                   
           $refigure_yousave_product_totals = 'yes';
           //$curr_prod_array['prod_discount_amt']  = ($yousave_pct / 100) * $curr_prod_array['prod_unit_price'];
         } 
@@ -1486,8 +1621,8 @@ class VTPRD_Apply_Rules{
             //*********************************************************************
             //reduce discount amount to max allowed by rule percentage
             //*********************************************************************
-        //  $discount_2decimals = bcmul(($yousave_pct / 100) , $curr_prod_array['prod_unit_price'] , 2);
-            $discount_2decimals = round(($yousave_pct / 100) * $curr_prod_array['prod_unit_price'] , 2);  //v1.0.7.6 
+          //$discount_2decimals = bcmul(($yousave_pct / 100) , $curr_prod_array['prod_unit_price'] , 2);
+            $discount_2decimals = round(($yousave_pct / 100) * $curr_prod_array['prod_unit_price'] , 2); //v1.0.7.6
          
             //compute rounding
             $temp_discount = ($yousave_pct / 100) * $curr_prod_array['prod_unit_price'];
@@ -1506,11 +1641,7 @@ class VTPRD_Apply_Rules{
             }  else {
               $discount = $discount_2decimals;
             } 
-            
-            $curr_prod_array['prod_discount_amt']  = $discount;
-            $max_msg = $vtprd_rules_set[$i]->discount_rule_max_amt_msg; 
-            $refigure_yousave_product_totals = 'yes';           
-          }
+          } 
  
         break;       
       case 'quantity':
@@ -1527,6 +1658,12 @@ class VTPRD_Apply_Rules{
 
             $curr_prod_array['prod_discount_amt']  = $curr_prod_array['prod_discount_amt'] - $reduction_amt;
             
+            //v1.0.9.3 begin
+            if ($curr_prod_array['prod_discount_amt'] > $curr_prod_array['prod_unit_price']) {
+              $curr_prod_array['prod_discount_amt'] = $curr_prod_array['prod_unit_price'];
+            }
+            //v1.0.9.3 end
+                        
             $max_msg = $vtprd_rules_set[$i]->discount_rule_cum_max_amt_msg;
              
             $yousave_pct_temp = $curr_prod_array['prod_discount_amt'] / $curr_prod_array['prod_unit_price'];
@@ -1534,8 +1671,8 @@ class VTPRD_Apply_Rules{
             // $yousave_pct = $yousave_amt / $curr_prod_array['prod_unit_price'] * 100;        
             //compute remainder
             //$yousave_pct_2decimals = bcdiv($curr_prod_array['prod_discount_amt'] , $curr_prod_array['prod_unit_price'] , 2);
-            $yousave_pct_2decimals = round( ($curr_prod_array['prod_discount_amt'] / $curr_prod_array['prod_unit_price'] ) , 2);     
-                            
+            $yousave_pct_2decimals = round( ($curr_prod_array['prod_discount_amt'] / $curr_prod_array['prod_unit_price'] ) , 2);
+                           
           //$remainder = $yousave_pct_temp - $yousave_pct_2decimals;
             $remainder = round($yousave_pct_temp - $yousave_pct_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
              
@@ -1558,8 +1695,8 @@ class VTPRD_Apply_Rules{
     //*************************************
     // PURCHASE HISTORY LIFETIME LIMIT
     //*************************************   
-
-    //EDITED * + * +  * + * +  * + * +  * + * + 
+        
+    //EDITED * + * +  * + * +  * + * +  * + * +  
     
     //EXIT if Sale Price already lower than Discount
     if ( ($vtprd_cart->cart_items[$k]->product_is_on_special == 'yes') &&
@@ -1578,8 +1715,8 @@ class VTPRD_Apply_Rules{
     //*********************************************************************
     //eND MAX LIMITS CHECKING
     //*********************************************************************
-
-
+           
+      
     //*************************************
     // Add Discount Totals into the Array
     //*************************************       
@@ -1642,20 +1779,19 @@ class VTPRD_Apply_Rules{
       //yousave pct whole number = (total discount amount / (orig unit price * number of units discounted))
       $yousave_pct_prod_temp = $yousave_product_total_amt / $yousave_total_unit_price;
       //$yousave_pct_prod_2decimals = bcdiv($yousave_product_total_amt , $yousave_total_unit_price , 2);
- 
-      $yousave_pct_prod_2decimals = round( ($yousave_product_total_amt / $yousave_total_unit_price ) , 2);     
-        
+      $yousave_pct_prod_2decimals = round( ($yousave_product_total_amt / $yousave_total_unit_price ) , 2);  
+         
       //$remainder = $yousave_pct_prod_temp - $yousave_pct_prod_2decimals;
-      $remainder = round($yousave_pct_prod_temp - $yousave_pct_prod_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
-       
+      $remainder = round($$yousave_pct_prod_temp - $yousave_pct_prod_2decimals, 4);   //v1.0.7.4  PHP floating point error fix - limit to 4 places right of the decimal!!
+
       if ($remainder > 0.005) {
-      //v1.0.7.4 begin
-      $increment = round($remainder, 2); //round the rounding error to 2 decimal points!  floating point
-      if ($increment < .01) {
-        $increment = .01;
-      }
-      ////v1.0.7.4 end
-        $yousave_product_total_pct = ($yousave_pct_prod_2decimals + $increment) * 100;    //v1.0.7.4  PHP floating point 
+        //v1.0.7.4 begin
+        $increment = round($remainder, 2); //round the rounding error to 2 decimal points!  floating point
+        if ($increment < .01) {
+          $increment = .01;
+        }
+        //v1.0.7.4 end     
+        $yousave_product_total_pct = ($yousave_pct_prod_2decimals + $increment) * 100;  //v1.0.7.4   floating point
       } else {
         $yousave_product_total_pct = $yousave_pct_prod_2decimals * 100;
       } 
@@ -1667,7 +1803,13 @@ class VTPRD_Apply_Rules{
     
     //keep track of historical discount totals 
      //instead of $yousave_product_total_qty;, we're actually counting home many times the RULE was used, not the total qty it was applied to... 
-    $vtprd_rules_set[$i]->purch_hist_rule_row_qty_total_plus_discounts    +=  1; // +1 for each RULE OCCURRENCE usage...
+    
+    //v1.0.4 begin => lifetime counted by group (= 'all') added only after group processing for rule is complete
+    if ($vtprd_rules_set[$i]->rule_deal_info[$d]['discount_applies_to'] != 'all') {
+      $vtprd_rules_set[$i]->purch_hist_rule_row_qty_total_plus_discounts    +=  1; // +1 for each RULE OCCURRENCE usage...
+    }
+    //v1.0.4 end    
+        
     $vtprd_rules_set[$i]->purch_hist_rule_row_price_total_plus_discounts  +=  $curr_prod_array['prod_discount_amt'];
     
     //used in lifetime limits
@@ -1689,15 +1831,16 @@ class VTPRD_Apply_Rules{
     
     
     //add in total saved to yousave_total_amt for PRODUCT
-    if ($curr_prod_array['prod_discount_amt'] > 0) {
- 
-    //v1.0.7.4 begin 
-    //  the vtprd_cart unit price and discounts all reflect the TAX STATE of 'woocommerce_prices_include_tax'      
+   
+    if ($curr_prod_array['prod_discount_amt'] > 0) {  
+
+      //v1.0.5.3 begin 
+      //  the vtprd_cart unit price and discounts all reflect the TAX STATE of 'woocommerce_prices_include_tax'      
 		   global $woocommerce;
        $product_id = $vtprd_cart->cart_items[$k]->product_id;
        switch( true ) {
           case ( get_option( 'woocommerce_calc_taxes' ) == 'no' ):
-          case ( vtprd_maybe_customer_tax_exempt() ) :      //v1.0.7.9 
+          case ( $woocommerce->customer->is_vat_exempt() ):  
              $prod_discount_amt_excl_tax  =  $curr_prod_array['prod_discount_amt'];
              $prod_discount_amt_incl_tax  =  $curr_prod_array['prod_discount_amt'];
             break; 
@@ -1708,14 +1851,14 @@ class VTPRD_Apply_Rules{
           case ( get_option( 'woocommerce_prices_include_tax' ) == 'no' ): 
              $prod_discount_amt_excl_tax  =  $curr_prod_array['prod_discount_amt'];
              $prod_discount_amt_incl_tax  =  vtprd_get_price_including_tax($product_id, $curr_prod_array['prod_discount_amt']);
-            break;                      
+            break;              
 		   }
        //THIS is where the cart SAVE TOTALS are stored!!             
        $vtprd_cart->yousave_cart_total_amt_excl_tax      += $prod_discount_amt_excl_tax;
        $vtprd_cart->yousave_cart_total_amt_incl_tax      += $prod_discount_amt_incl_tax;
-    //v1.0.7.4 end    
+        //v1.0.5.3 end    
          
-                 
+                                
       $vtprd_rules_set[$i]->discount_total_qty += 1;     
       $vtprd_rules_set[$i]->discount_total_amt += $curr_prod_array['prod_discount_amt'];
       $vtprd_cart->yousave_cart_total_qty      += 1;
@@ -1751,11 +1894,11 @@ class VTPRD_Apply_Rules{
       case 'fixedPrice':
           $discount = $prod_unit_price - $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'];                               
         break;
-      case 'percent': 
+      case 'percent':
           $percent_off = $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'] / 100;   
-       // $discount_2decimals = bcmul($prod_unit_price , $percent_off , 2); 
-          $discount_2decimals = round($prod_unit_price * $percent_off , 2);   //v1.0.7.6
-               
+        //$discount_2decimals = bcmul($prod_unit_price , $percent_off , 2);
+          $discount_2decimals = round($prod_unit_price * $percent_off , 2); //v1.0.7.6
+                          
           //compute rounding
           $temp_discount = $prod_unit_price * $percent_off;
           
@@ -1775,7 +1918,14 @@ class VTPRD_Apply_Rules{
           }             
         break;              
       case 'currency': 
-          $discount = $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'];     
+          $discount = $vtprd_rules_set[$i]->rule_deal_info[$d]['discount_amt_count'];
+                      
+          //v1.0.9.3 begin
+          if ($discount > $prod_unit_price) {
+            $discount = $prod_unit_price;
+          }
+          //v1.0.9.3 end 
+              
         break;
     }
     return $discount;
@@ -1791,9 +1941,8 @@ class VTPRD_Apply_Rules{
     * if nth, end is a multiple of ($r + 1) * buy_amt_count        
     */
     $templateKey = $vtprd_rules_set[$i]->rule_template;    
-    
-    $for_loop_current_prod_id = ''; //v1.0.7.2        
-
+      
+    $for_loop_current_prod_id = '';
     $for_loop_unit_count = 0;
     $for_loop_price_total = 0;
     $for_loop_elapsed_count = 0;
@@ -2017,7 +2166,7 @@ class VTPRD_Apply_Rules{
     
     $templateKey = $vtprd_rules_set[$i]->rule_template;
     
-    $for_loop_current_prod_id;
+    $for_loop_current_prod_id = ''; //v1.0.8.7
     $for_loop_unit_count = 0;
     $for_loop_price_total = 0;
     $for_loop_elapsed_count = 0;
@@ -2252,11 +2401,9 @@ class VTPRD_Apply_Rules{
     return;
  }
 
-  /*
+/*
   NO LONGER USED!!!!!!!!!!!!!
-  
-  //EDITED  -+-+-+-+-+-+-+-+-------
-  
+    
   public function vtprd_test_actionPop_conditions($i) {
     global $post, $vtprd_setup_options, $vtprd_cart, $vtprd_rules_set, $vtprd_rule, $vtprd_info;         
     
@@ -2323,49 +2470,49 @@ class VTPRD_Apply_Rules{
     return;  
          
   }
-  */  
+ */ 
         
    public function vtprd_is_product_in_inPop_group($i, $k) { 
- 
-     //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
- 
+      
+      //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
+      
       return false;
    } 
   
     public function vtprd_is_role_in_inPop_list_check($i,$k) {
- 
-     //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
- 
+    	
+      //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
+      
       return false;
     }
     
     public function vtprd_are_cats_in_inPop_list_check($i,$k) {
- 
-     //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
- 
+    	
+      //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
+      
       return false;
     }    
 
 
          
    public function vtprd_is_product_in_actionPop_group($i,$k) { 
- 
-     //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
- 
+      
+      //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
+      
       return false;
    } 
   
     public function vtprd_is_role_in_actionPop_list_check($i,$k) {
- 
-     //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
- 
+    	
+      //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
+      
       return false;
     }
     
     public function vtprd_are_cats_in_actionPop_list_check($i,$k) {
- 
-     //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
- 
+    	
+      //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
+      
       return false;
     }    
 
@@ -2386,10 +2533,10 @@ class VTPRD_Apply_Rules{
     
       //******************************************
       //****  CHECK for PRODUCT EXCLUSIONS 
-      //******************************************   
- 
-     //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
-   
+      //******************************************  
+       
+      //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
+        
       //END product exclusions check
        
        
@@ -2405,7 +2552,8 @@ class VTPRD_Apply_Rules{
                                                        'prod_running_total_price' => $vtprd_cart->cart_items[$k]->total_price,
                                                        'prod_cat_list' => $vtprd_cart->cart_items[$k]->prod_cat_list,
                                                        'rule_cat_list' => $vtprd_cart->cart_items[$k]->rule_cat_list,
-                                                       'prod_id_cart_occurrence' => $k //used to mark product in cart if failed a rule                                                    
+                                                       'prod_id_cart_occurrence' => $k, //used to mark product in cart if failed a rule 
+                                                       'product_variation_key' =>  $vtprd_cart->cart_items[$k]->product_variation_key //v1.0.8.6                                                 
                                                       );
      $vtprd_rules_set[$i]->inPop_qty_total   += $vtprd_cart->cart_items[$k]->quantity;
      $vtprd_rules_set[$i]->inPop_total_price += $vtprd_cart->cart_items[$k]->total_price;
@@ -2431,7 +2579,8 @@ class VTPRD_Apply_Rules{
                                                        'prod_id_cart_occurrence' => $k, //used to mark product in cart if failed a rule
                                                        'exploded_group_occurrence' => $e,
                                                        'prod_discount_amt'  => 0,
-                                                       'prod_discount_applied'  => ''
+                                                       'prod_discount_applied'  => '',
+                                                       'product_variation_key' =>  $vtprd_cart->cart_items[$k]->product_variation_key //v1.0.8.6
                                                       );          
   //    $vtprd_rules_set[$i]->inPop_exploded_group_occurrence++;
       $vtprd_rules_set[$i]->inPop_exploded_group_occurrence = $e;
@@ -2451,9 +2600,8 @@ class VTPRD_Apply_Rules{
       //******************************************
       //****  CHECK for PRODUCT EXCLUSIONS 
       //******************************************     
- 
-     //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * + 
- 
+      
+      //EDITED * + * +  * + * +  * + * +  * + * + * + * +  * + * +  * + * +  * + * +  
                          
       //END product exclusions check
       
@@ -2483,7 +2631,8 @@ class VTPRD_Apply_Rules{
                                                        'prod_running_total_price' => $vtprd_cart->cart_items[$k]->total_price,
                                                        'prod_cat_list' => $vtprd_cart->cart_items[$k]->prod_cat_list,
                                                        'rule_cat_list' => $vtprd_cart->cart_items[$k]->rule_cat_list,
-                                                       'prod_id_cart_occurrence' => $k //used to access product in later processing
+                                                       'prod_id_cart_occurrence' => $k, //used to access product in later processing
+                                                       'product_variation_key' =>  $vtprd_cart->cart_items[$k]->product_variation_key //v1.0.8.6
                                                       );
      $vtprd_rules_set[$i]->actionPop_qty_total   += $vtprd_cart->cart_items[$k]->quantity;
      $vtprd_rules_set[$i]->actionPop_total_price += $vtprd_cart->cart_items[$k]->total_price;
@@ -2511,7 +2660,8 @@ class VTPRD_Apply_Rules{
                                                        'prod_id_cart_occurrence' => $k, //used to mark product in cart if failed a rule
                                                        'exploded_group_occurrence' => $e,
                                                        'prod_discount_amt'  => 0,
-                                                       'prod_discount_applied'  => ''
+                                                       'prod_discount_applied'  => '',
+                                                       'product_variation_key' =>  $vtprd_cart->cart_items[$k]->product_variation_key //v1.0.8.6
                                                       );          
    //   $vtprd_rules_set[$i]->actionPop_exploded_group_occurrence++;
       $vtprd_rules_set[$i]->actionPop_exploded_group_occurrence = $e;
@@ -2545,7 +2695,12 @@ class VTPRD_Apply_Rules{
         foreach ($vtprd_rules_set as $key => $rule )  {
            if ($rule->rule_execution_type == 'display') {
               unset( $vtprd_rules_set[$key]);           
-           }      
+           }  
+           //v1.0.9.3 begin
+           if ( $rule->rule_status != 'publish' ) { 
+             unset( $vtprd_rules_set[$key]);
+           }
+           //v1.0.9.3 end               
         } 
                 
         //reknit the array to get rid of any holes
@@ -2657,11 +2812,11 @@ class VTPRD_Apply_Rules{
   }
                                        
 
-
-      //autoadds AREA
+       //autoadds AREA
       //EDITED * + * +  * + * +  * + * +  * + * + 
        
       //EXCEPT::::::::::::  ====>>>>>>>>>>
+                                       
   
   //***********************************************************
   // If a product(s) has been given a 'Free' discount, it can't get
@@ -2680,8 +2835,8 @@ class VTPRD_Apply_Rules{
       for($rule=0; $rule < $sizeof_ruleset; $rule++) {
 
         //skip if we're on the rule initiating the free product array logic
-        if  ( ($vtprd_rules_set[$rule]->post_id == $vtprd_rules_set[$i]->post_id) ||      //1.0.7.2
-              ($vtprd_rules_set[$rule]->rule_status != 'publish') ) {                     //1.0.7.2 added in != 'publish' test
+        if ( ($vtprd_rules_set[$rule]->post_id == $vtprd_rules_set[$i]->post_id) ||      //1.0.5.1
+             ($vtprd_rules_set[$rule]->rule_status != 'publish') ) {                     //1.0.5.1 added in != 'publish' test
           continue; 
         }
         
@@ -2716,10 +2871,86 @@ class VTPRD_Apply_Rules{
     
     return;
   }  
+
+
+
+  /*******************************************************  
+      
+  ******************************************************** */
+	public function vtprd_pre_process_cart_for_autoAdds(){
+
+      //EDITED * + * +  * + * +  * + * +  * + * + 
+
+    return;
+  } //end  vtprd_pre_process_cart_for_autoAdds
+
+
+  /*  ***************************************************************************************
+   AUTO add - test here if inpop criteria reached for auto add rule
+    InPop has JUST been loaded, and THIS rule is an auto-add rule,
+            (a) is the product already in cart somewhere - 
+                if not ADD it right now...
+            (b) If SO, will its quantity suffice or should it be increased
+        (if the auto add switch is on, free products are always auto-added, 
+                regardless of whether that product is already in the cart...)
+       ***************************************************************************************                    
+  */
+  //$i = rule index, $d = deal index, $k = product index
+  public function vtprd_maybe_auto_add_to_vtprd_cart($i, $d, $k) {
+
+      //EDITED * + * +  * + * +  * + * +  * + * + 
+
+    $auto_add_done = 'yes';
   
+    return $auto_add_done;
+     
+  }
+
+
+  //******************************
+  //insert/delete free stuff as warranted...
+  //******************************	
+	public function vtprd_maybe_update_parent_cart_for_autoAdds(){ 
+
+      //EDITED * + * +  * + * +  * + * +  * + * + 
+
+     return;    
+  }  //end vtprd_maybe_update_parent_cart_for_autoAdds  
+  
+        
+   //**********************************
+   //test for auto-add pre-process
+   //**********************************
+   public function vtprd_maybe_product_in_inPop($i, $k) { 
+
+      //EDITED * + * +  * + * +  * + * +  * + * + 
+
+      return $in_inPop;
+   }
+
+   //test for auto-add pre-process
+   public function vtprd_load_inPop_exploded_for_autoAdd($i, $k) {
+
+      //EDITED * + * +  * + * +  * + * +  * + * + 
+       
+  } 
+       
+  //************
+  //AUTO ADD to vtprd-cart, only used for free items... 
+  //************
+	public function vtprd_auto_add_to_vtprd_cart($free_product_id, $free_product_to_be_added_qty, $i) {
+      
+      //EDITED * + * +  * + * +  * + * +  * + * + 
+
+
+      return $vtprd_cart_item->total_price;      
+  }
+
+ 
+ 
    //*******************************************************
    //v1.0.8.4 new function
-   //  for next rule iterations, if cumulativeRulePricing == 'no'
+   //  used in following rule processing iterations, if cumulativeRulePricing == 'no'
    //*******************************************************
    public  function vtprd_mark_products_in_an_all_rule($i) {
 		  global $vtprd_cart, $vtprd_rules_set, $vtprd_info, $vtprd_setup_options, $vtprd_rule; 
@@ -2735,7 +2966,36 @@ class VTPRD_Apply_Rules{
           }
       }
    }      
-      //v1.0.8.4 begin 
+  
+  
+/*
+ADDTIONAL RULE CRITERIA FILTER - Execution example
 
+add_filter('vtprd_additional_inpop_include_criteria', 'process_additional_inpop_include_criteria', 10, 3);
+
+function process_additional_inpop_include_criteria ($return_status, $i, $k) {
+  global $vtprd_cart, $vtprd_rules_set, $vtprd_rule, $vtprd_info, $vtprd_setup_options;
+  $return_status = TRUE;
+  
+  //$vtprd_rules_set[$i]->post_id = Rule ID
+  //$vtprd_cart is the cart contents ==> look at  core/vtprd-cart-classes.php  for cart contents structure
+  //   and check this document for examples of how to access the cart data items.
+  
+  
+  switch( $vtprd_rules_set[$i]->post_id ) { 
+     //ONLY test those ids for which additional criteria is needed
+     case '001':    //rule id 001
+         //  **do add-on-criteria test
+         //  *if failed test,
+             $return_status = FALSE;                      
+        break;
+     case '002':    etc
+                 
+        break;        
+  }
+  return $return_status;
+}
+
+*/
    
 } //end class

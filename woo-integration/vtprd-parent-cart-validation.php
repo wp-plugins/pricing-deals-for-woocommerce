@@ -2017,6 +2017,10 @@ public function vtprd_get_product_catalog_price_add_to_cart( $product_id, $param
     } else {
       $catalog_or_inline =  null;
     }
+//error_log( print_r(  '$vtprd_cart in vtprd_process_discount', true ) );
+//error_log( var_export($vtprd_cart, true ) );
+//error_log( print_r(  '$vtprd_cart_items in vtprd_process_discount', true ) );
+//error_log( var_export($vtprd_cart->cart_items, true ) );
 //error_log( print_r(  'go to vtprd_get_cart_html_prices', true ) );              
     $number_of_times = sizeof($vtprd_cart->cart_items);  
     vtprd_get_cart_html_prices($number_of_times,$catalog_or_inline);

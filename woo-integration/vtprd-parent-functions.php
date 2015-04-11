@@ -195,7 +195,8 @@
  //error_log( print_r(  'product_session_info', true ) );
  //$product_session_info = $vtprd_info['product_session_info'];
  //error_log( var_export($product_session_info, true ) );
- //error_log( print_r(  'END LOAD CART CONTENTS ', true ) );
+// error_log( print_r(  'END LOAD CART CONTENTS ', true ) );
+// error_log( var_export($vtprd_cart, true ) );
   }
 
 
