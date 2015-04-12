@@ -591,7 +591,7 @@ class VTPRD_Parent_Cart_Validation {
          return $price_html;
      }
 //return $price_html;  
-    if ($product_info->variation_id > ' ') {      
+    if ($product_info->variation_id > ' ') {         
       $product_id  = $product_info->variation_id;
     } else { 
       if ($product_info->id > ' ') {
@@ -601,6 +601,11 @@ class VTPRD_Parent_Cart_Validation {
       }     
     }
 //return $price_html;
+//echo '<pre> $product_info->variation_id = '.print_r($product_info->variation_id, true).'</pre>' ; 
+//echo '<pre> $product_info->id = '.print_r($product_info->id, true).'</pre>' ; 
+//echo '<pre> $product_info->product_id = '.print_r($product_info->product_id, true).'</pre>' ; 
+
+//echo '<pre> $product_info = '.print_r($product_info, true).'</pre>' ; 
 
     //v1.0.9.3 begin
     //moved here to store vtprd_product_old_price, used in showing cart crossouts
@@ -643,7 +648,16 @@ class VTPRD_Parent_Cart_Validation {
     Then do new pricing.
     
      */ 
-    if ($product_info->product_type == 'variable') {
+     
+    //v1.0.9.5 begin
+    //catches product widget sending variable type info with no children listed
+    if ( ($product_info->product_type == 'variable') &&
+         (sizeof($product_info->children) == 0) ) {  
+      $product_info->get_children();   
+    }    
+    //v1.0.9.5 end      
+     
+    if ($product_info->product_type == 'variable')  {  
       //This is the 1st time thru for the original WOO message.  Parse the message for use later.
       $del_end = '</del>';
       $span_end = '</span>'; 
@@ -675,7 +689,65 @@ class VTPRD_Parent_Cart_Validation {
       //add '</span>' back into both occurrences
       $oldprice_split_array[0] .= '</span>';
       $oldprice_split_array[1] .= '</span>';
+       
+      //v1.0.9.5 begin
       
+      $vtprd_info['current_processing_request'] = 'display';
+      $justThePricing = 'yes';
+      $discount_found = false;
+      
+      $first_child_price_hold = 99999;
+      $last_child_price_hold = 0;
+      
+      $sizeof_children = sizeof($product_info->children);
+    
+      //sort for least/most expensive
+      for($k=0; $k < $sizeof_children; $k++) {
+        vtprd_get_product_session_info($product_info->children[$k]);
+        if ($vtprd_info['product_session_info']['product_unit_price'] < $first_child_price_hold) {
+          $first_child_price_hold = $vtprd_info['product_session_info']['product_unit_price'];
+          $first_child_price_ID_hold = $product_info->children[$k];
+          $first_child_session_hold = $vtprd_info['product_session_info'];
+        } 
+        //most expensive could be first one...
+        if ($vtprd_info['product_session_info']['product_unit_price'] > $last_child_price_hold) {
+          $last_child_price_hold = $vtprd_info['product_session_info']['product_unit_price'];
+          $last_child_price_ID_hold = $product_info->children[$k];
+          $last_child_session_hold = $vtprd_info['product_session_info'];
+        }       
+      } 
+      
+      $vtprd_info['product_session_info'] = $first_child_session_hold;
+      if ($vtprd_info['product_session_info']['product_yousave_total_amt'] > 0)  { 
+        $first_child_price = $this->vtprd_show_shop_price_html($justThePricing);
+        $first_child_price_html = '<span class="amount">' . $first_child_price .'</span>';
+        $discount_found = true;
+      } else {
+        $first_child_price_html = $oldprice_split_array[0];  
+      }
+      
+      $vtprd_info['product_session_info'] = $last_child_session_hold;
+      if ($vtprd_info['product_session_info']['product_yousave_total_amt'] > 0)  { 
+        $last_child_price = $this->vtprd_show_shop_price_html($justThePricing);
+        $last_child_price_html = '&ndash;<span class="amount">' . $last_child_price .'</span>';
+        $discount_found = true;
+      } else {
+        $last_child_price_html = $oldprice_split_array[1];
+      }
+
+/* 
+error_log( print_r(  '$first_child_session_hold= ', true ) );
+error_log( var_export($first_child_session_hold, true ) );  
+error_log( print_r(  '$first_child_price_html= ' .$first_child_price_html, true ) );
+ 
+error_log( print_r(  '$last_child_session_hold= ', true ) );
+error_log( var_export($last_child_session_hold, true ) );  
+error_log( print_r(  '$last_child_price_html= ' .$last_child_price_html, true ) );
+error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
+*/            
+      //v1.0.9.5 end     
+      
+     /* //v1.0.9.5 replaced by above       
       //find the new values for the 1st and last entries in the variable product list...
       $first_child = $product_info->children[0];
       $sizeof_children = sizeof($product_info->children);
@@ -705,6 +777,8 @@ class VTPRD_Parent_Cart_Validation {
       } else {
         $last_child_price_html = $oldprice_split_array[1];
       }
+      */
+      
  //error_log( print_r(  '$discount_found = ' .$discount_found, true ) );
       //build $price_html
       if ($discount_found) {  //if no discount, original value of $price_html is used

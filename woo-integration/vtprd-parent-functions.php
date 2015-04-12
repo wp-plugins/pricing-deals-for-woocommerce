@@ -111,7 +111,8 @@
  //error_log( print_r(  'Pricing in Cart, from session_info, product = ' .$product_id. ' unit price= ' .$vtprd_cart_item->db_unit_price_list .' qty= ' .$vtprd_cart_item->quantity, true ) );
               } else { 
  //error_log( print_r(  'no session_info', true ) );                           
-                  
+//echo '<pre> CALL to vtprd_get_current_active_price 001 - product= '.print_r($product_id), true).'</pre>' ;
+//echo '<pre> before call 001 $product_id = '.print_r($product_id, true).'</pre>' ;                   
                   $price = vtprd_get_current_active_price($product_id);
  //error_log( print_r(  'price 001= ' .$price, true ) );                   
                   $vtprd_previous_cart = '';
@@ -371,7 +372,8 @@
       $vtprd_cart_item->product_name          = $post->post_name;
       $vtprd_cart_item->quantity              = 1;
       
-      
+//echo '<pre> CALL to vtprd_get_current_active_price 002 - product= '.print_r($product_id), true).'</pre>' ;   
+//echo '<pre> before call 002 $product_id = '.print_r($product_id, true).'</pre>' ;   
       $price = vtprd_get_current_active_price($product_id);
 
       //product and taxable
@@ -503,7 +505,20 @@
       if ( ( get_option( 'woocommerce_calc_taxes' ) == 'yes' ) &&
            ( get_option( 'woocommerce_prices_include_tax' ) == 'yes' ) ) {           
          $_tax  = new WC_Tax();                
-         $product = get_product( $product_id ); 
+         $product = get_product( $product_id );
+ /*        
+ error_log( print_r(  'vtprd_get_current_active_price - cart_item', true ) );
+ error_log( var_export($vtprd_cart_item, true ) );  
+error_log( print_r(  '$product_id = ' .$product_id, true ) ); 
+ error_log( print_r(  '$product', true ) );
+ error_log( var_export($product, true ) ); 
+ */ 
+//echo 'SESSION data <pre>'.print_r($_SESSION, true).'</pre>' ;      
+//echo '<pre> vtprd_get_current_active_price - cart_item= '.print_r($vtprd_cart_item, true).'</pre>' ; 
+//echo '<pre> $product_id = '.print_r($product_id, true).'</pre>' ;
+//echo '<pre> $product = '.print_r($product, true).'</pre>' ;    
+
+   
          $tax_rates  = $_tax->get_rates( $product->get_tax_class() );
 			 	 $taxes      = $_tax->calc_tax( $price , $tax_rates, false );
 				 //back out taxes!!!
