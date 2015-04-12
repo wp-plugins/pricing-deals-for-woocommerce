@@ -185,9 +185,10 @@ Direct support requests can be made here on the support tab, or at the [Support]
 * Fix - Variation Catalog Discount pricing showing least-to-most expensive had an issue 
 	when the actual variations were not in ascending sequence by price.  
 	Now sorted for least/most expensive.
+* Fix - Different decimal separator for Unit Price discount crossout value in cart/mini-cart.
 
 = 1.0.9.4 - 2015-04-10 =
-* Fix - Cart issue if only Catalog discount used, now fixed.
+* Fix - Cart issue if only Catalog discount used.
 
 = 1.0.9.3 - 2015-04-09 =
 * Enhancement - Redux - Added **Settings Switches** to SHOW DISCOUNT AS:
@@ -394,6 +395,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 * Fix - Variation Catalog Discount pricing showing least-to-most expensive had an issue 
 	when the actual variations were not in ascending sequence by price.  
 	Now sorted for least/most expensive.
+* Fix - Different decimal separator for Unit Price discount crossout value in cart/mini-cart.
 
 = 1.0.9.4 - 2015-04-10 =
 * Fix - Cart issue if only Catalog discount used, now fixed.
