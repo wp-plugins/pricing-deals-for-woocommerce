@@ -801,14 +801,22 @@ error_log( print_r(  'product_session_info= ' , true ) );
                 $oldPrice_array2 = explode('</ins>', $oldPrice_array1[1]); //this removes the delimiter string... 
                 $oldprice_formatted = $oldPrice_array2[0];                
               }
-              
+   
               $currency_symbol = get_woocommerce_currency_symbol();
               
               //strip out currency symbol
               $oldprice =  str_replace($currency_symbol,'',$oldprice_formatted);
              
-              //remove formatting, turn it into a number
-              $oldprice =  preg_replace("/([^0-9\\.])/i", "", $oldprice); 
+              //********************************* 
+              //v1.0.9.5 begin crossout price fix
+              //strip out thousands separator ==>>(getting it this way covers pre-2.3 versions...)  
+              $thousands_sep = wp_specialchars_decode( stripslashes( get_option( 'woocommerce_price_thousand_sep' ) ), ENT_QUOTES );
+              $oldprice =  str_replace($thousands_sep,'',$oldprice);
+              
+              //reformat into decimal as needed if decimal separator not "." , turn decimal into floatval
+              $oldprice = wc_format_decimal($oldprice, 2);
+              //v1.0.9.5  end
+              //*********************************
 
             } else {              
               if ( ($vtprd_cart->cart_items[$z]->db_unit_price_special > 0 ) &&
