@@ -808,13 +808,15 @@ error_log( print_r(  'product_session_info= ' , true ) );
               $oldprice =  str_replace($currency_symbol,'',$oldprice_formatted);
              
               //********************************* 
-              //v1.0.9.5 begin crossout price fix
+              //v1.0.9.5 begin - crossout price fix for using different decimal/thousands separators
+              
               //strip out thousands separator ==>>(getting it this way covers pre-2.3 versions...)  
               $thousands_sep = wp_specialchars_decode( stripslashes( get_option( 'woocommerce_price_thousand_sep' ) ), ENT_QUOTES );
               $oldprice =  str_replace($thousands_sep,'',$oldprice);
               
-              //reformat into decimal as needed if decimal separator not "." , turn decimal into floatval
+              //reformat into decimal as needed if decimal separator not "." AND turn decimal into floatval
               $oldprice = wc_format_decimal($oldprice, 2);
+              
               //v1.0.9.5  end
               //*********************************
 
@@ -2444,7 +2446,7 @@ error_log( print_r(  'product_session_info= ' , true ) );
     global $vtprd_cart, $vtprd_cart_item, $vtprd_rules_set, $vtprd_info, $vtprd_setup_options, $woocommerce;
     $output = ''; //v1.0.7.9
    	
-    $output .=  '<h2 id="vtprd-thankyou-title">' . __('Cart Discount Details', 'vtprd') .'<h2>';
+    $output .=  '<h2 id="vtprd-thankyou-title">' . __('Cart Discount Details', 'vtprd') .'</h2>'; //v1.0.9.5  closing '</h2>' fixed
      	
     $output .= '<table class="shop_table order_details vtprd-thankyou-table">';
     $output .= '<thead>';
