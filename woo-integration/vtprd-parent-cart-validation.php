@@ -782,15 +782,28 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
  //error_log( print_r(  '$discount_found = ' .$discount_found, true ) );
       //build $price_html
       if ($discount_found) {  //if no discount, original value of $price_html is used
-                
+        
+        //v1.0.9.6  begin 
+        if  ($first_child_price_hold == $last_child_price_hold) {
+          $newprice = $first_child_price_html;  //don't show 2nd price if both are the same!!
+        } else {
+          $newprice = $first_child_price_html . $last_child_price_html ;
+        }   
+        //v1.0.9.6  end
+        
         if ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes')  {  
           //create 'del' string
           $price_html  = '<del>' .$oldPrice .'</del>'; //created above from input 
-          $price_html .= '<ins>' .$first_child_price_html . $last_child_price_html .'</ins>';        
+          
+          //$price_html .= '<ins>' .$first_child_price_html . $last_child_price_html .'</ins>';   //v1.0.9.6  replaced
+          $price_html .= '<ins>' .$newprice .'</ins>'; //v1.0.9.6 
+                
           //attach 'ins' string        
         } else {       
           //add new price to string
-          $price_html =  $first_child_price_html . $last_child_price_html;
+          
+          //$price_html =  $first_child_price_html . $last_child_price_html;  //v1.0.9.6  replaced
+          $price_html =  $newprice;  //v1.0.9.6 
         }  
 
         

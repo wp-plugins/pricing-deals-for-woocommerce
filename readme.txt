@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 4.1
-Stable tag: 1.0.9.5
+Stable tag: 1.0.9.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -179,6 +179,10 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Changelog ==
+
+= 1.0.9.6 - 2015-04-14 =
+* Fix - Catalog rule variation discounts (from-to) changed to only show a single price, when all
+	variation prices are the same.
 
 = 1.0.9.5 - 2015-04-11 =
 * Fix - Widget Catalog discount pricing for variations had an issue.
@@ -389,6 +393,10 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.0.9.6 - 2015-04-14 =
+* Fix - Catalog rule variation discounts (from-to) changed to only show a single price, when all
+	variation prices are the same.
 
 = 1.0.9.5 - 2015-04-11 =
 * Fix - Widget Catalog discount pricing for variations had an issue.
