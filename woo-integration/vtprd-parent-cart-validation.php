@@ -704,14 +704,23 @@ class VTPRD_Parent_Cart_Validation {
       //sort for least/most expensive
       for($k=0; $k < $sizeof_children; $k++) {
         vtprd_get_product_session_info($product_info->children[$k]);
-        if ($vtprd_info['product_session_info']['product_unit_price'] < $first_child_price_hold) {
-          $first_child_price_hold = $vtprd_info['product_session_info']['product_unit_price'];
+        
+        //v1.0.9.7 begin
+        if ($vtprd_info['product_session_info']['product_yousave_total_amt'] > 0) {
+          $current_price = $vtprd_info['product_session_info']['product_discount_price'];
+        } else {
+          $current_price = $vtprd_info['product_session_info']['product_unit_price'];
+        }
+        //v1.0.9.7 end
+      
+        if ($current_price < $first_child_price_hold) { //v1.0.9.7 
+          $first_child_price_hold = $current_price; //v1.0.9.7 
           $first_child_price_ID_hold = $product_info->children[$k];
           $first_child_session_hold = $vtprd_info['product_session_info'];
         } 
         //most expensive could be first one...
-        if ($vtprd_info['product_session_info']['product_unit_price'] > $last_child_price_hold) {
-          $last_child_price_hold = $vtprd_info['product_session_info']['product_unit_price'];
+        if ($current_price > $last_child_price_hold) { //v1.0.9.7 
+          $last_child_price_hold = $current_price; //v1.0.9.7 
           $last_child_price_ID_hold = $product_info->children[$k];
           $last_child_session_hold = $vtprd_info['product_session_info'];
         }       

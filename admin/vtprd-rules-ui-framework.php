@@ -7,6 +7,17 @@
     deprecated - commented out in framework only
 */
 
+/*
+v1.1 global changes
+
+change "By Single Product with Variations"
+to "By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp; 
+
+change "By Single Product"
+to "By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp; 
+
+*/
+
 class VTPRD_Rules_UI_Framework {
 	
 	public function __construct(){
@@ -254,19 +265,19 @@ class VTPRD_Rules_UI_Framework {
                     'id'       => 'buy-group-filter-Vargroup',
                     'class'    => '',
                     'value'    => 'vargroup',
-                    'title'    => __('By Single Product with Variations  ... (pro only) ... ', 'vtprd'),      //free version
-                    'title2'   => __('By Single Product with Variations  ... (pro only) ... ', 'vtprd'),   //free version
-                    'title3'   => __('By Single Product with Variations', 'vtprd'),
-                    'title4'   => __('By Single Product with Variations', 'vtprd')   
+                    'title'    => __('By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;   ... (pro only) ... ', 'vtprd'),      //free version
+                    'title2'   => __('By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;   ... (pro only) ... ', 'vtprd'),   //free version
+                    'title3'   => __('By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp; ', 'vtprd'),
+                    'title4'   => __('By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp; ', 'vtprd')   
                    ),                   
                   array (
                     'id'       => 'buy-group-filter-Single',
                     'class'    => '',
                     'value'    => 'single',
-                    'title'    => __('By Single Product ... (pro only) ... ', 'vtprd'),          //free version
-                    'title2'   => __('By Single Product ... (pro only) ... ', 'vtprd'),      //free version
-                    'title3'   => __('By Single Product', 'vtprd'), 
-                    'title4'   => __('By Single Product', 'vtprd') 
+                    'title'    => __('By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ... (pro only) ... ', 'vtprd'),          //free version
+                    'title2'   => __('By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ... (pro only) ... ', 'vtprd'),      //free version
+                    'title3'   => __('By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp; ', 'vtprd'), 
+                    'title4'   => __('By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp; ', 'vtprd') 
                    )                    
                  )
             ),
@@ -336,15 +347,15 @@ class VTPRD_Rules_UI_Framework {
                     'id'       => 'get-group-filter-Vargroup',
                     'class'    => '',
                     'value'    => 'vargroup',
-                    'title'    => __('By Single Product with Variations  ... (pro only) ...  ', 'vtprd'),
-                    'title3'   => __('By Single Product with Variations ', 'vtprd')    //pro version   
+                    'title'    => __('By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;   ... (pro only) ...  ', 'vtprd'),
+                    'title3'   => __('By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ', 'vtprd')    //pro version   
                    ),                   
                   array (
                     'id'       => 'get-group-filter-Single',
                     'class'    => '',
                     'value'    => 'single',
-                    'title'    => __('By Single Product  ... (pro only) ...  ', 'vtprd'),
-                    'title3'   => __('By Single Product ', 'vtprd')    //pro version   
+                    'title'    => __('By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;   ... (pro only) ...  ', 'vtprd'),
+                    'title3'   => __('By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ', 'vtprd')    //pro version   
                    )                    
                  )
             ), 
@@ -616,19 +627,19 @@ class VTPRD_Rules_UI_Framework {
                 'id'       => 'varChoiceIn',
                 'class'    => 'popChoiceInOptions',
                 'value'    => 'vargroup',
-                'title'    => __('By Single Product with Variations ... (pro only) ...', 'vtprd'),
-                'title2'   => __('By Single Product with Variations ... (pro only) ...', 'vtprd'),   //free version
-                'title3'   => __('By Single Product with Variations  ', 'vtprd'),    //pro version
-                'title4'   => __('By Single Product with Variations ', 'vtprd')      //pro version  
+                'title'    => __('By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ... (pro only) ...', 'vtprd'),
+                'title2'   => __('By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ... (pro only) ...', 'vtprd'),   //free version
+                'title3'   => __('By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;   ', 'vtprd'),    //pro version
+                'title4'   => __('By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ', 'vtprd')      //pro version  
                ),
                array (
                 'id'       => 'singleChoiceIn',
                 'class'    => 'popChoiceInOptions',
                 'value'    => 'single',
-                'title'    => __('By Single Product ... (pro only) ...', 'vtprd'),
-                'title2'   => __('By Single Product ... (pro only) ...', 'vtprd'),   //free version
-                'title3'   => __('By Single Product ', 'vtprd'),    //pro version
-                'title4'   => __('By Single Product ', 'vtprd')      //pro version      
+                'title'    => __('By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ... (pro only) ...', 'vtprd'),
+                'title2'   => __('By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ... (pro only) ...', 'vtprd'),   //free version
+                'title3'   => __('By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ', 'vtprd'),    //pro version
+                'title4'   => __('By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ', 'vtprd')      //pro version      
                )             
             )          
         ),
@@ -788,15 +799,15 @@ class VTPRD_Rules_UI_Framework {
                 'id'       => 'varChoiceOut',
                 'class'    => 'popChoiceOutOptions',
                 'value'    => 'vargroup',
-                'title'    => __('By Single Product with Variations ... (pro only) ...', 'vtprd'),   //free version
-                'title3'   => __('By Single Product with Variations ', 'vtprd')    //pro version 
+                'title'    => __('By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ... (pro only) ...', 'vtprd'),   //free version
+                'title3'   => __('By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ', 'vtprd')    //pro version 
                ),
                array (
                 'id'       => 'singleChoiceOut',
                 'class'    => 'popChoiceOutOptions',
                 'value'    => 'single',
-                'title'    => __('By Single Product ... (pro only) ...', 'vtprd'),   //free version
-                'title3'   => __('By Single Product ', 'vtprd')    //pro version    
+                'title'    => __('By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ... (pro only) ...', 'vtprd'),   //free version
+                'title3'   => __('By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ', 'vtprd')    //pro version    
                )             
             )          
         ),

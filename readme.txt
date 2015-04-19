@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 4.1
-Stable tag: 1.0.9.6
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -30,6 +30,7 @@ Power your store to greater success with pricing deals and sales promotions! Jus
 
 = New Features =
 
+*   Create rules by Product + Logged-in Role, or Variation + Logged-in Role (pro).
 *   Show a Cart Rule dynamic discount directly in the Unit Price, or as an automatic Woo Coupon
      - Select Unit Price discount, and you can show the dynamic discount with or without an original price crossout
 *   Catalog (Wholesale) Pricing Additional Messages - add a message after the price - "Save 25%"
@@ -179,6 +180,14 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Changelog ==
+
+= 1.1 - 2015-04-19 =
+* Enhancement - In the Buy Group Filter, added Logged-in Role to Single product and single product with variations:
+	By Single Product with Variations   (+ Logged-in Role) 
+	By Single Product    (+ Logged-in Role)          
+
+= 1.0.9.7 - 2015-04-19 =
+* Fix - Catalog rule variation discounts (from-to) *crossout* value had a rare issue
 
 = 1.0.9.6 - 2015-04-14 =
 * Fix - Catalog rule variation discounts (from-to) changed to only show a single price, when all
@@ -393,6 +402,11 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.1 - 2015-04-19 =
+* Enhancement - In the Buy Group Filter, added Logged-in Role to Single product and single product with variations:
+	By Single Product with Variations   (+ Logged-in Role) 
+	By Single Product    (+ Logged-in Role)          
 
 = 1.0.9.6 - 2015-04-14 =
 * Fix - Catalog rule variation discounts (from-to) changed to only show a single price, when all

@@ -2600,7 +2600,7 @@ function vtprd_destroy_session() {
       case 'vtprd-rule_page_vtprd_setup_options_page':  
       case 'vtprd-rule_page_vtprd_show_help_page':  
       case 'vtprd-rule_page_vtprd_show_faq_page':              
-        wp_register_style('vtprd-admin-style', VTPRD_URL.'/admin/css/vtprd-admin-style.css' );  
+        wp_register_style('vtprd-admin-style', VTPRD_URL.'/admin/css/vtprd-admin-style-v002.css' );  //v1.1
         wp_enqueue_style ('vtprd-admin-style');
         wp_register_style('vtprd-admin-settings-style', VTPRD_URL.'/admin/css/vtprd-admin-settings-style.css' );  
         wp_enqueue_style ('vtprd-admin-settings-style');

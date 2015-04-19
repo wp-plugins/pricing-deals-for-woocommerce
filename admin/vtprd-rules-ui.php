@@ -47,10 +47,10 @@ class VTPRD_Rules_UI{
         wp_register_script('jquery-qtip', VTPRD_URL.'/admin/js/vtprd.qtip.min.js' );  
         wp_enqueue_script ('jquery-qtip', array('jquery'), false, true);
 
-        wp_register_style ('vtprd-admin-style', VTPRD_URL.'/admin/css/vtprd-admin-style.css' );  
+        wp_register_style ('vtprd-admin-style', VTPRD_URL.'/admin/css/vtprd-admin-style-v002.css' );  //v1.1
         wp_enqueue_style  ('vtprd-admin-style');
         
-        wp_register_script('vtprd-admin-script', VTPRD_URL.'/admin/js/vtprd-admin-script.js' );  
+        wp_register_script('vtprd-admin-script', VTPRD_URL.'/admin/js/vtprd-admin-script-v002.js' );  //v1.1
         //create ajax resource
         wp_localize_script('vtprd-admin-script', 'variationsInAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )  ));        
         //create ajax resource
@@ -625,17 +625,8 @@ class VTPRD_Rules_UI{
                   <?php $this->vtprd_buy_group_cntl(); ?> 
                </span>                
                
-               <span class="shortIntro  shortIntro2" >
-                  <em>
-                  <?php _e('Product must be in the Filter Group', 'vtprd');?>
-                  </em><br>
-                  <em>
-                  <?php _e('to be valid for the Deal', 'vtprd');?>
-                  </em> 
-                &nbsp;
-                  <img  class="hasHoverHelp2" width="11px" alt=""  src="<?php echo VTPRD_URL;?>/admin/images/help.png" /> 
-                  <?php vtprd_show_object_hover_help ('inPop', 'small') ?>
-               </span>                               
+               <?php  /* v1.1 "Product must be in the Filter Group" messaging removed!  */ ?>
+                                          
                                         
             </span>                                                                          
 
@@ -858,17 +849,7 @@ class VTPRD_Rules_UI{
                 <?php $this->vtprd_action_group_cntl(); ?> 
                </span>
                
-               <span class="shortIntro  shortIntro2">
-                  <em>
-                  <?php _e('Product must be in the Filter Group', 'vtprd');?>
-                  </em><br>
-                  <em>
-                  <?php _e('to be valid for the Deal', 'vtprd');?>
-                  </em> 
-                &nbsp;
-                  <img  class="hasHoverHelp2" width="11px" alt=""  src="<?php echo VTPRD_URL;?>/admin/images/help.png" /> 
-                  <?php vtprd_show_object_hover_help ('actionPop', 'small') ?> 
-               </span>                               
+               <?php  /* v1.1 "Product must be in the Filter Group" messaging removed!  */ ?>                               
                     
             </span>
 
@@ -1677,20 +1658,29 @@ class VTPRD_Rules_UI{
            ?>                 
           </div>
         
+        <?php //v1.1  div role-in moved from here?>
         
-        <div id="role-in">
-          <h3 id="role-in-label"><?php _e('Logged-in Role', 'vtprd');?></h3>
-          
-          <?php
-          // ********************************
-          $this->vtprd_post_category_meta_box($post, array( 'args' => array( 'taxonomy' => 'roles', 'tax_class' => 'role-in', 'checked_list' => $vtprd_rule->role_in_checked,  'pop_in_out_sw' => ' '  )));     //v1.0.7.9 'pop_in_out_sw' => ' '
-          // ********************************
-          ?>
-        </div>
-        
-       </div> <?php //end vtprd-pop-in-groups-cntl ?>  
+       </div> <?php //end vtprd-pop-in-groups-cntl ?>
+
+         
        </div> <?php //end vtprd-pop-in-cntl ?>  
-      
+       
+       
+      <?php //v1.1  div role-in moved here to apply to categories, products and to variations!!  also 'optional' titles added?>       
+      <div id="role-in">
+        <h3 id="role-in-label">
+          <span class="role-in-label-optional"><?php _e('- And -', 'vtprd');?> &nbsp;&nbsp;&nbsp;</span>
+          <?php _e('Logged-in Role', 'vtprd');?> 
+          <span class="role-in-label-optional">&nbsp;&nbsp;&nbsp;<em><?php _e('(optional)', 'vtprd');?> </em></span></h3>
+        
+        <?php
+        // ********************************
+        $this->vtprd_post_category_meta_box($post, array( 'args' => array( 'taxonomy' => 'roles', 'tax_class' => 'role-in', 'checked_list' => $vtprd_rule->role_in_checked,  'pop_in_out_sw' => ' '  )));     //v1.0.7.9 'pop_in_out_sw' => ' '
+        // ********************************
+        ?>
+      </div>
+
+             
     <?php
  
 }
