@@ -1035,6 +1035,9 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
 	public function vtprd_maybe_before_mini_cart(){ 
     global $woocommerce, $vtprd_info, $vtprd_setup_options, $vtprd_cart, $vtprd_cart_item, $vtprd_rules_set;
 //error_log( print_r(  'IN vtprd_maybe_before_mini_cart ' , true ) );
+    
+    vtprd_debug_options();  //v1.1
+    
     if ($vtprd_cart == null) {
        $data_chain = $this->vtprd_get_data_chain();
       if ($vtprd_cart == null) {  //haven't had the cart call yet...         
@@ -1189,7 +1192,7 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
     }
            
              
-    vtprd_debug_options(); 
+    vtprd_debug_options(); //v1.1
  //error_log( print_r(  'BEGIN vtprd_maybe_before_calculate_totals , $cart_object= ', true ) );
    //error_log( var_export($cart_object  , true ) ); 
     //get saved vtprd_cart with discount info
@@ -1449,6 +1452,8 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
   //****************************
   public function vtprd_show_shop_price_html($justThePricing = null) {
     global $vtprd_info, $vtprd_setup_options, $woocommerce, $vtprd_cart; 
+    
+    vtprd_debug_options();  //v1.1
     
     $price_html = '';  //v1.0.8.0 
     
@@ -1957,7 +1962,7 @@ public function vtprd_get_product_catalog_price_add_to_cart( $product_id, $param
       global $woocommerce;
       
       //v1.0.9.4 begin - force the CATALOG rules to be redone
-      vtprd_debug_options();  
+      vtprd_debug_options(); //v1.1  
       
       if(!isset($_SESSION)){
         session_start();
@@ -2024,6 +2029,9 @@ public function vtprd_get_product_catalog_price_add_to_cart( $product_id, $param
       global $woocommerce, $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $wpsc_coupons, $vtprd_setup_options;  
  //error_log( print_r(  'Begin vtprd_cart_updated', true ) );            
     //Open Session Variable, get rules_set and cart if not there....
+    
+    vtprd_debug_options();  //v1.1
+    
     $data_chain = $this->vtprd_get_data_chain();
     
     //v1.0.8.0  begin
@@ -2873,7 +2881,9 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
   *************************************************** */ 
   public function vtprd_display_rule_error_msg_at_checkout(){
     global $vtprd_info, $vtprd_cart, $vtprd_setup_options;
-     
+    
+    vtprd_debug_options();  //v1.1 
+    
     //error messages are inserted just above the checkout products, and above the checkout form
      ?>     
         <script type="text/javascript">
@@ -3025,6 +3035,8 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
         unset( $_SESSION['data_chain'], $contents );    
     }    
     
+    vtprd_debug_options();  //v1.1
+    
     global  $vtprd_info;
     $coupon_title = $vtprd_info['coupon_code_discount_deal_title'];
     $this->vtprd_woo_maybe_remove_coupon_from_cart($coupon_title);
@@ -3036,6 +3048,8 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
    //  really only needed if ALL products have a catalog discount which ends up with ALL products FREE ...
    public function vtprd_maybe_recalc_woo_totals() {
      global $woocommerce;
+      
+     vtprd_debug_options();  //v1.1
         
      //v1.0.9.3 - mark call as internal only - 
      //	accessed in parent-cart-validation/ function vtprd_maybe_before_calculate_totals
@@ -3053,6 +3067,7 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
   */
 	public function vtprd_pro_lifetime_log_roll_out($log_id ){  
     if ( (is_admin()) && (defined('VTPRD_PRO_DIRNAME')) ) {     
+       vtprd_debug_options();  //v1.1
        vtprd_maybe_lifetime_roll_log_totals_out($log_id);
     }
     return;   
@@ -3064,6 +3079,7 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
   */
 	public function vtprd_pro_lifetime_bulk_log_roll_out($current_action){  
     if ( (is_admin()) && (defined('VTPRD_PRO_DIRNAME')) ) {     
+       vtprd_debug_options();  //v1.1
        vtprd_maybe_lifetime_bulk_roll_log_totals_out($current_action);
     }
     return;   
@@ -3074,7 +3090,8 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
   //********************************************************
 	public function vtprd_set_woo_customer_tax_exempt(){  
 		global $woocommerce, $current_user;
-
+    
+    vtprd_debug_options();  //v1.1
 
     if ( (!is_object($woocommerce->customer) ) ||
          (empty( $woocommerce->customer) )     ||
