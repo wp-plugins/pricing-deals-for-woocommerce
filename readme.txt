@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 4.2
-Stable tag: 1.1
+Stable tag: 1.1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -179,7 +179,12 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 
-== Changelog ==
+== Changelog == 1.1.0.1
+
+= 1.1.0.1 - 2015-04-23 =
+* Fix - Compatability issue with other Coupon-based plugins resolved,
+	in particular Woo Points and Rewards
+* Enhancement - New notification of mismatch between Free and Pro versions
 
 = 1.1 - 2015-04-19 =
 * Enhancement - In the Buy Group Filter, added Logged-in Role to Single product and single product with variations:
@@ -402,6 +407,11 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.1.0.1 - 2015-04-23 =
+* Fix - Compatability issue with other Coupon-based plugins resolved,
+	in particular Woo Points and Rewards
+* Enhancement - New notification of mismatch between Free and Pro versions
 
 = 1.1 - 2015-04-19 =
 * Enhancement - In the Buy Group Filter, added Logged-in Role to Single product and single product with variations:

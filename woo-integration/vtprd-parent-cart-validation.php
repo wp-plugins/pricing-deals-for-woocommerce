@@ -160,8 +160,8 @@ class VTPRD_Parent_Cart_Validation {
     //   NEED BOTH to pick up going to view cart and going directly to checkout.  Exits quickly if already done.
 //v1.0.9.1  moved if statement to function
 //v1.0.9.1     if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon')  {   //v1.0.9.0    not needed for inline-pricing
-      add_filter( 'woocommerce_before_cart_table',     array(&$this, 'vtprd_woo_maybe_add_remove_discount_cart_coupon'), 10);
-      add_filter( 'woocommerce_checkout_init',         array(&$this, 'vtprd_woo_maybe_add_remove_discount_cart_coupon'), 10);
+      add_action( 'woocommerce_before_cart_table',     array(&$this, 'vtprd_woo_maybe_add_remove_discount_cart_coupon'), 10);  //v1.1.0.1 chged to action
+      add_action( 'woocommerce_checkout_init',         array(&$this, 'vtprd_woo_maybe_add_remove_discount_cart_coupon'), 10);  //v1.1.0.1 chged to action
         
       //change the value of the Pricing Deals 'dummy' coupon instance to the Pricing Deals discount amount
       add_filter( 'woocommerce_get_shop_coupon_data',  array(&$this, 'vtprd_woo_maybe_load_discount_amount_to_coupon'), 10,2);
@@ -2182,8 +2182,8 @@ public function vtprd_get_product_catalog_price_add_to_cart( $product_id, $param
      
     //v1.0.9.1 begin
     if ($vtprd_setup_options['discount_taken_where'] != 'discountCoupon')  {   		
-    	return;
-    }
+    	return false; //v1.1.0.1
+    }  
     //v1.0.9.1 end  
       
     vtprd_debug_options();  //v1.0.5                 
@@ -2274,8 +2274,9 @@ wp_die( __('<strong>die again.</strong>', 'vtprd'), __('VT Pricing Deals not com
      
     //v1.0.9.1 begin
     if ($vtprd_setup_options['discount_taken_where'] != 'discountCoupon')  {   		
-    	return;
+    	return $code; //v1.1.0.1
     }
+    
     //v1.0.9.1 end  
             
       
@@ -2287,7 +2288,7 @@ wp_die( __('<strong>die again.</strong>', 'vtprd'), __('VT Pricing Deals not com
       if ($code != $vtprd_info['coupon_code_discount_deal_title']) {
         //v1.0.8.9 change return
         // return false;  //this steps on other plugins using the same action
-        return;  
+        return $code; //v1.1.0.1 
       }
 
                  

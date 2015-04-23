@@ -3,7 +3,7 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.1
+Version: 1.1.0.1
 Author: Vark
 Author URI: http://varktech.com
 */
@@ -46,9 +46,9 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.1');
+		define('VTPRD_VERSION',                               '1.1.0.1');
     define('VTPRD_MINIMUM_PRO_VERSION',                   '1.1');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2015-04-19');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2015-04-23');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
@@ -61,6 +61,9 @@ class VTPRD_Controller{
             
     // overhead stuff
     add_action('init', array( &$this, 'vtprd_controller_init' ));
+    
+    add_action( 'admin_init', array( &$this, 'vtprd_maybe_plugin_mismatch' ) ); //v1.1.0.1
+                
         
     /*  =============+++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
     //  these control the rules ui, add/save/trash/modify/delete
@@ -196,6 +199,7 @@ class VTPRD_Controller{
         
     if (is_admin()){ 
         add_filter( 'plugin_action_links_' . VTPRD_PLUGIN_SLUG , array( $this, 'vtprd_custom_action_links' ) );
+
         require_once ( VTPRD_DIRNAME . '/admin/vtprd-setup-options.php');
         require_once ( VTPRD_DIRNAME . '/admin/vtprd-rules-ui.php' );
            
@@ -213,10 +217,12 @@ class VTPRD_Controller{
         $this->vtprd_admin_init();  
         
         //v1.0.7.1 begin
+        /* v1.1.0.1  replaced with new notification at admin_init
         if ( (defined('VTPRD_PRO_DIRNAME')) &&
              (version_compare(VTPRD_PRO_VERSION, VTPRD_MINIMUM_PRO_VERSION) < 0) ) {    //'<0' = 1st value is lower  
           add_action( 'admin_notices',array(&$this, 'vtprd_admin_notice_version_mismatch') );            
         }
+        */
         //v1.0.7.1 end 
       
       /* //v1.0.9.3 moved to functions to be run at admin-init time
@@ -278,6 +284,19 @@ class VTPRD_Controller{
 
     return; 
   }
+  
+  //v1.1.0.1  new function 
+  public function vtprd_maybe_plugin_mismatch(){
+ 
+      if ( (defined('VTPRD_PRO_DIRNAME')) &&
+           (version_compare(VTPRD_PRO_VERSION, VTPRD_MINIMUM_PRO_VERSION) < 0) ) {    //'<0' = 1st value is lower  
+        add_action( 'admin_notices',array(&$this, 'vtprd_admin_notice_version_mismatch') );            
+      }
+    
+    return;
+  
+  }  
+  
 
   public function vtprd_enqueue_frontend_scripts(){
     global $vtprd_setup_options;
@@ -590,7 +609,7 @@ class VTPRD_Controller{
    //v1.0.7.1 begin                          
    public function vtprd_admin_notice_version_mismatch() {
       $message  =  '<strong>' . __('Please also update plugin: ' , 'vtprd') . ' &nbsp;&nbsp;'  .VTPRD_PRO_PLUGIN_NAME . '</strong>' ;
-      $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Your Pro Version = ' , 'vtprd') .VTPRD_PRO_VERSION. ' &nbsp;&nbsp;' . __(' The Minimum Required Pro Version = ' , 'vtprd') .VTPRD_MINIMUM_PRO_VERSION ;      
+      $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Your Pro Version = ' , 'vtprd') .VTPRD_PRO_VERSION. ' &nbsp;&nbsp;<strong>' . __(' The minimum required Pro Version = ' , 'vtprd') .VTPRD_MINIMUM_PRO_VERSION .'</strong>' ;      
       $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Please delete the old Pro plugin from your installation (no rules will be affected).'  , 'vtprd');
       $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Use your original download credentials, or your name and email address, and'  , 'vtprd');
       $message .=  '<br>&nbsp;&nbsp;&bull;&nbsp;&nbsp;' . __('Go to ', 'vtprd');
@@ -600,10 +619,12 @@ class VTPRD_Controller{
       $admin_notices = '<div id="message" class="error fade" style="background-color: #FFEBE8 !important;"><p>' . $message . ' </p></div>';
       echo $admin_notices;
       //v1.0.9.3 begin
+      /*  v1.1.0.1 removed, so that the message will stay active until sorted!
       $plugin = VTPRD_PRO_PLUGIN_SLUG;
 			if( is_plugin_active($plugin) ) {
 			   deactivate_plugins( $plugin );
       }
+      */
       //v1.0.9.3 end
       return;    
   }   
