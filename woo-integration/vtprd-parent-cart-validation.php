@@ -164,7 +164,9 @@ class VTPRD_Parent_Cart_Validation {
       add_action( 'woocommerce_checkout_init',         array(&$this, 'vtprd_woo_maybe_add_remove_discount_cart_coupon'), 10);  //v1.1.0.1 chged to action
         
       //change the value of the Pricing Deals 'dummy' coupon instance to the Pricing Deals discount amount
-      add_filter( 'woocommerce_get_shop_coupon_data',  array(&$this, 'vtprd_woo_maybe_load_discount_amount_to_coupon'), 10,2);
+      //    v1.1.0.2 change priority to fall **before** other coupon plugins
+      //    - same filter gets executed in Woo points and Rewards, and at 10,2 they fight (same thing happens if Pricing Deals falls afterwards)
+      add_filter( 'woocommerce_get_shop_coupon_data',  array(&$this, 'vtprd_woo_maybe_load_discount_amount_to_coupon'), 5,2); //v1.1.0.2 change priority to fall **before** other coupon plugins
      
       //created in v1.0.9.0 , now no longer necessary
       //add_action( 'woocommerce_check_cart_items',               array(&$this, 'vtprd_maybe_update_coupon_on_check_cart_items'), 10 );   //v1.0.8.9 
@@ -2271,12 +2273,11 @@ wp_die( __('<strong>die again.</strong>', 'vtprd'), __('VT Pricing Deals not com
    //****************************************************************
    public function vtprd_woo_maybe_load_discount_amount_to_coupon($status, $code) {
       global $vtprd_rules_set, $wpdb, $vtprd_cart, $vtprd_setup_options, $vtprd_info, $woocommerce;
-     
+  
     //v1.0.9.1 begin
     if ($vtprd_setup_options['discount_taken_where'] != 'discountCoupon')  {   		
-    	return $code; //v1.1.0.1
-    }
-    
+    	return; //v1.1.0.2
+    }   
     //v1.0.9.1 end  
             
       
@@ -2286,9 +2287,7 @@ wp_die( __('<strong>die again.</strong>', 'vtprd'), __('VT Pricing Deals not com
       
       
       if ($code != $vtprd_info['coupon_code_discount_deal_title']) {
-        //v1.0.8.9 change return
-        // return false;  //this steps on other plugins using the same action
-        return $code; //v1.1.0.1 
+         return;  //v1.1.0.2 
       }
 
                  
@@ -3118,8 +3117,6 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
     
     return;   
   }
-   
-       
-   
+
 } //end class
 $vtprd_parent_cart_validation = new VTPRD_Parent_Cart_Validation;
