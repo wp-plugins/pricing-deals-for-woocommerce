@@ -512,7 +512,7 @@ function vtprd_initialize_options() {
 		'discount_taken_where',						// ID used to identify the field throughout the theme
 		__( 'Unit Price Discount', 'vtprd' ) 
     .'<br>'.
-    __( 'or Coupon Discount?', 'vtprd' ), // The label to the left of the option interface element
+    __( 'or Coupon Discount', 'vtprd' ), // The label to the left of the option interface element
 		array(&$this, 'vtprd_discount_taken_where_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed
 		'taken_where_settings_section',			// The name of the section to which this field belongs
@@ -546,7 +546,7 @@ function vtprd_initialize_options() {
     '<div class="unitPriceOnly">'.
     __( 'Show original Unit Price ', 'vtprd' )
     .'<br>'.
-    __( 'Crossed Out in the Cart? ', 'vtprd' )    
+    __( 'Crossed Out in the Cart ', 'vtprd' )    
     .'</div>', 
 		array(&$this, 'vtprd_show_unit_price_cart_discount_crossout_callback'), // The name of the function responsible for rendering the option interface
 		'vtprd_setup_options_page',	// The page on which this option will be displayed

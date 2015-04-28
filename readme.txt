@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 4.2
-Stable tag: 1.1.0.2
+Stable tag: 1.1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -179,7 +179,11 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 
-== Changelog == 1.1.0.1
+== Changelog ==
+
+= 1.1.0.3 - 2015-04-28 =
+* Enhancement - Unit Price Discount subtotal crossouts now on Checkout and Thankyou pages,
+	and also on Customer Email.
 
 = 1.1.0.2 - 2015-04-25 =
 * Fix - Woo Points and Rewards + regular coupons
@@ -410,6 +414,10 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.1.0.3 - 2015-04-28 =
+* Enhancement - Unit Price Discount subtotal crossouts now on Checkout and Thankyou pages,
+	and also on Customer Email.
 
 = 1.1.0.2 - 2015-04-25 =
 * Fix - Woo Points and Rewards + regular coupons

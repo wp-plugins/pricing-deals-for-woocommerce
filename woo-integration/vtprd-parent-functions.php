@@ -740,7 +740,7 @@ error_log( print_r(  '$product_id = ' .$product_id, true ) );
             //for later ajaxVariations pricing
             'this_is_a_parent_product_with_variations' => $vtprd_cart->cart_items[0]->this_is_a_parent_product_with_variations,            
             'pricing_by_rule_array'        => $vtprd_cart->cart_items[0]->pricing_by_rule_array,
-            'product_id'                   => $product_id    //v1.0.9.0                  
+            'product_id'                   => $product_id    //v1.0.9.0             
       ) ;          
     //v1.0.9.0 end           
 /*
@@ -3498,8 +3498,7 @@ error_log( print_r(  'product_session_info= ' , true ) );
   //***** v1.0.4 end 
   
   //v1.0.7 change
-  function vtprd_debug_options(){ 
-    
+  function vtprd_debug_options(){     
     global $vtprd_setup_options;
     if ( ( isset( $vtprd_setup_options['debugging_mode_on'] )) &&
          ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ) ) {  
@@ -3518,8 +3517,7 @@ error_log( print_r(  'product_session_info= ' , true ) );
       global $woocommerce;
       $woocommerce = WC();
     }
-    //v1.0.7.8 end 
-       
+    //v1.0.7.8 end        
   }
   
   //****************************************
