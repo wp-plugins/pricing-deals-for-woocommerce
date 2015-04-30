@@ -133,9 +133,23 @@
 
               // db_unit_price_special CAN be zero if item is FREE!!
               //if ($vtprd_cart_item->unit_price < $vtprd_cart_item->db_unit_price_list )  {
-              if ($vtprd_cart_item->db_unit_price_special < $vtprd_cart_item->db_unit_price_list )  {
-                  $vtprd_cart_item->product_is_on_special = 'yes';             
-              }               
+              //v1.1.0.4 begin  added >= 0 and != null test
+              
+              if ( ($vtprd_cart_item->db_unit_price_special != null) && 
+                   ($vtprd_cart_item->db_unit_price_special >= 0) &&
+                   ($vtprd_cart_item->db_unit_price_special < $vtprd_cart_item->db_unit_price_list ) ) {
+              //v1.1.0.4 end
+                  $vtprd_cart_item->product_is_on_special = 'yes';
+              
+              } 
+/*
+if  ($vtprd_cart_item->db_unit_price_special == null) {
+ $vtprd_cart_item->product_is_on_special = 'It"s null, dummy!!!';
+} else 
+if  ($vtprd_cart_item->db_unit_price_special <= 0 ) {
+ $vtprd_cart_item->product_is_on_special = 'It"s not numeric, dummy!!!';
+} 
+ */                           
 
               $vtprd_cart_item->total_price   = $vtprd_cart_item->quantity * $vtprd_cart_item->unit_price;
               
@@ -627,8 +641,13 @@ error_log( print_r(  '$product_id = ' .$product_id, true ) );
       if ( ($vtprd_cart->cart_items[0]->yousave_total_amt > 0) &&
            ($vtprd_setup_options['show_catalog_price_crossout'] == 'yes') )  {
         switch( true ) {
+          //v1.1.0.4 begin 
+          case ($vtprd_cart->cart_items[0]->product_is_on_special == 'yes') :
+          /*
           case ( ($vtprd_cart->cart_items[0]->db_unit_price_special > 0 ) &&
                  ($vtprd_cart->cart_items[0]->db_unit_price_special < $vtprd_cart->cart_items[0]->db_unit_price_list ) ) :                  //there is a discount...
+          */ 
+          //v1.1.0.4 end      
               $product_orig_price = $vtprd_cart->cart_items[0]->db_unit_price_special; //special_price needs formatting ...
               
             break;
@@ -821,8 +840,13 @@ error_log( print_r(  'product_session_info= ' , true ) );
               //*********************************
 
             } else {              
+              //v1.1.0.4 begin - replace with status test
+              if ($vtprd_cart->cart_items[$z]->product_is_on_special == 'yes') {
+              /*
               if ( ($vtprd_cart->cart_items[$z]->db_unit_price_special > 0 ) &&
                    ($vtprd_cart->cart_items[$z]->db_unit_price_special < $vtprd_cart_item->db_unit_price_list) ) {
+              */
+              //v1.1.0.4 end
                 $oldprice_formatted = wc_price( $vtprd_cart->cart_items[$z]->db_unit_price_special ) ;
                 $oldprice = $vtprd_cart->cart_items[$z]->db_unit_price_special;
               } else {
