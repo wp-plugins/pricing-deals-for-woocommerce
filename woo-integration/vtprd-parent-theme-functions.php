@@ -31,7 +31,7 @@
   //
   add_shortcode('pricing_deal_msgs_by_rule','vtprd_pricing_deal_msgs_by_rule');   
   function vtprd_pricing_deal_msgs_by_rule($atts) {
-    global $vtprd_rules_set, $post, $vtprd_setup_options;
+    global $vtprd_rules_set, $post, $vtprd_setup_options, $vtprd_info;
     extract(shortcode_atts (
       array (
         rules => '',            //'123,456,789'                                      
@@ -74,7 +74,7 @@
       }
       
       //v1.0.9.3 new skipt test
-      if (vtprd_store_deal_msg($i) == "Get 10% off Laptops Today! (sample)" ) {
+      if ($vtprd_rules_set[$i]->discount_product_full_msg == $vtprd_info['default_full_msg'] ) { //v1.1.0.5
          continue;      
       }
        
@@ -168,23 +168,87 @@
         'product_category' => '',  //'123,456,789'    / 'any' - if on a category page, show any msg for that category   
                                         // OR  [implicit]
         'plugin_category' => '',   //'123,456,789'       
+                                                // OR  [implicit]   
                                                 // OR  [implicit]                                   
+        'force_in_the_loop' => '',     //   //'yes' / 'no' (default)  //v1.1.0.5
+        'force_in_the_loop_product' => '',     //must be a single product  //v1.1.0.5        
+        // MUST BE USED WITH 'products' which MUST have a SINGLE VALUE ==> emulating being in the loop  //v1.1.0.5
+                                    // and (implicit)  //v1.1.0.5                                                                                  
         'products' => ''          //'123,456,789'    (ONLY WORKS in the LOOP, or if the Post is available )   / 'any' - if on a product page, show any msg for that product
                                        //   )                                  
       ), $atts));  //override default value with supplied parameters...
+
+    
+    
+    /* //v1.1.0.5 new sample shortcode
+
+      $product_id = get_the_ID();
+      echo do_shortcode( '[pricing_deal_msgs_standard  force_in_the_loop="yes"  force_in_the_loop_product="'.$product_id.'"]');
+      
+    */
+    
+/*    
+error_log( print_r(  '*** SHORTCODE *** ' , true ) );
+error_log( print_r(  '$type= ' .$type, true ) );
+error_log( print_r(  '$wholestore_msgs_only= ' .$wholestore_msgs_only, true ) );
+error_log( print_r(  '$roles= ' .$roles, true ) );
+error_log( print_r(  '$rules= ' .$rules, true ) );
+error_log( print_r(  '$product_category= ' .$product_category, true ) );
+error_log( print_r(  '$plugin_category= ' .$plugin_category, true ) );
+error_log( print_r(  '$force_in_the_loop= ' .$force_in_the_loop, true ) );
+error_log( print_r(  '$force_in_the_loop_product= ' .$force_in_the_loop_product, true ) );
+*/
     
     vtprd_set_selected_timezone();
 
 
     $output = '<div class="vtprd-store-deal-msg-area">';
     $msg_counter = 0;
+
+
+/*
+$userRole = vtprd_get_current_user_role();
+$userRole_name = translate_user_role( $userRole );
+if ($userRole_name = "Administrator") {
+    $output .= '*** STANDARD SHORTCODE Passed values, shows for ADMINISTRATOR only ' .'<br>';
+    $output .= '$type= ' .$type .'<br>';
+    $output .= '$wholestore_msgs_only= ' .$wholestore_msgs_only .'<br>';
+    $output .= '$roles= ' .$roles .'<br>';
+    $output .= '$rules= ' .$rules .'<br>';
+    $output .= '$product_category= ' .$product_category .'<br>';
+    $output .= '$plugin_category= ' .$plugin_category .'<br>';
+    $output .= '$force_in_the_loop= ' .$force_in_the_loop .'<br>';
+    $output .= '$force_in_the_loop_product= ' .$force_in_the_loop_product.'<br>';
+    
+    $output .= '</div>';
+  //  vtprd_enqueue_front_end_css();
+        
+    return $output;  
+}
+*/
+
+
     
     $vtprd_rules_set = get_option( 'vtprd_rules_set' );
-
+    
+    //v1.1.0.5 begin
+    if ($force_in_the_loop_product > '') {
+      $post->ID = $force_in_the_loop_product;
+//error_log( print_r(  '$post->ID = ' .$post->ID , true ) );      
+    }
     //Only do this once!!!
-    if (in_the_loop() ) {
+    if ( (in_the_loop() ) ||
+        // ($force_in_the_loop == 'yes') ) { 
+         ($force_in_the_loop_product > '') ) {
+     $loop_msgs_array = array();
+     //v1.1.0.5 end  
+       
       $prod_cat_list = wp_get_object_terms( $post->ID, $vtprd_info['parent_plugin_taxonomy'], $args = array('fields' => 'ids') );
       $rule_cat_list = wp_get_object_terms( $post->ID, $vtprd_info['rulecat_taxonomy'], $args = array('fields' => 'ids') ); 
+//error_log( print_r(  '$prod_cat_list= ' , true ) );
+//error_log( var_export($prod_cat_list, true ) );
+//error_log( print_r(  '$rule_cat_list= ' , true ) );
+//error_log( var_export($rule_cat_list, true ) );
     }
  
     if ($product_category > ' ') {
@@ -211,30 +275,28 @@
      } else {
       $products_array = array();
     }
-
+    
                     
        
     $sizeof_rules_set = sizeof($vtprd_rules_set);
     for($i=0; $i < $sizeof_rules_set; $i++) { 
-
-//error_log( print_r(  $i, true ) );
-//error_log( print_r(  '$vtprd_rules_set[$i]', true ) );
-//error_log( var_export($vtprd_rules_set[$i], true ) );
-      
-      
+//error_log( print_r(  '$i= ' . $i, true ) );
       //BEGIN skip tests      
       if ( $vtprd_rules_set[$i]->rule_status != 'publish' ) {
+//error_log( print_r(  'shortcode skip 001 ', true ) );        
         continue;
       }      
 
       $rule_is_date_valid = vtprd_rule_date_validity_test($i);
       if (!$rule_is_date_valid) {
+//error_log( print_r(  'shortcode skip 002 ', true ) );
          continue;
       }  
       //IP is immediately available, check against Lifetime limits
       if ( (defined('VTPRD_PRO_DIRNAME')) && ($vtprd_setup_options['use_lifetime_max_limits'] == 'yes') )  {  
         $rule_has_reached_lifetime_limit = vtprd_rule_lifetime_validity_test($i,'shortcode');
         if ($rule_has_reached_lifetime_limit) {
+//error_log( print_r(  'shortcode skip 003 ', true ) );        
            continue;
         }
       }
@@ -244,11 +306,13 @@
         case 'cart':
           if ($vtprd_rules_set[$i]->rule_execution_type == 'display') {
             $exit_stage_left = 'yes';
+//error_log( print_r(  'shortcode skip 004 ', true ) );            
           }
           break;
         case 'catalog':                                                                                   
           if ($vtprd_rules_set[$i]->rule_execution_type == 'cart') {
             $exit_stage_left = 'yes';
+//error_log( print_r(  'shortcode skip 005 ', true ) );
           }  
           break;
         default:
@@ -260,6 +324,7 @@
     
       if ($wholestore_msgs_only == 'yes') {
         if ( ($vtprd_rules_set[$i]->inPop != 'wholeStore') && ($vtprd_rules_set[$i]->actionPop != 'wholeStore' ) ) {
+//error_log( print_r(  'shortcode skip 006 ', true ) );          
           continue;
         }
       } 
@@ -272,15 +337,17 @@
         } else {
           $userRole_name = translate_user_role( $userRole );
         }
-        
+//error_log( print_r(  'current user role=  ' .$userRole_name, true ) );        
         $roles_array = explode(",", $roles);   //remove comma separator, make list an array
         if (!in_array($userRole_name, $roles_array)) {
+//error_log( print_r(  'shortcode skip 007 ', true ) );        
           continue;
         }
       }
-      
+
       //v1.0.9.3 new skipt test
-      if (vtprd_store_deal_msg($i) == "Get 10% off Laptops Today! (sample)" ) {
+      if ($vtprd_rules_set[$i]->discount_product_full_msg == $vtprd_info['default_full_msg']   ) { //v1.1.0.5
+//error_log( print_r(  'shortcode skip 008 ', true ) );
          continue;      
       }
             
@@ -292,11 +359,14 @@
       
       //if no lists are present, then the skip tests are all there is.  Print the msg and exit.
       if (($rules <= ' ' ) && 
+          ($roles <= ' ' ) &&  //v1.1.0.5      
           ($products <= ' ') &&
           ($product_category <= ' ')  &&
-          ($plugin_category <= ' ')  ) { 
+          ($plugin_category <= ' ')  &&
+          ($force_in_the_loop != 'yes') ) {  //v1.1.0.5
         $msg_counter++;
         $output .= vtprd_store_deal_msg($i);  //Print
+//error_log( print_r(  'shortcode PRINT Msg 001 ', true ) );        
         continue;      
       }
       
@@ -304,6 +374,7 @@
         if (in_array($vtprd_rules_set[$i]->post_id, $rules_array)) {
           $msg_counter++;
           $rules_msgs_array[] =$i;
+//error_log( print_r(  'shortcode PRINT Msg 002 ', true ) ); 
           continue;
         }
       } 
@@ -311,8 +382,17 @@
       //*******************************
       //one set of tests for in_the_loop, one for outside
       //*******************************
-      if (in_the_loop() ) {
-
+      //v1.1.0.5 begin
+    if ( (in_the_loop() ) ||
+         ($force_in_the_loop == 'yes') ) {
+     
+              /*
+              $product_category_array                   =  categories passed in with shortcode
+              $product_cat_list                         =  categories selected in product
+              $vtprd_rules_set[$i]->prodcat_XX_checked  =  categories selected in RULE
+              */  
+       //v1.1.0.5 end 
+               
           if ($product_category > ' ') {
             if ( ( ( array_intersect($vtprd_rules_set[$i]->prodcat_in_checked,  $product_category_array ) ) ||
                    ( array_intersect($vtprd_rules_set[$i]->prodcat_out_checked, $product_category_array ) ) )  
@@ -320,10 +400,21 @@
                    ( array_intersect($prod_cat_list,  $product_category_array ) ) ) {                     
                 $msg_counter++;
                 $product_category_msgs_array[] = $i;
+//error_log( print_r(  'shortcode PRINT Msg 003 ', true ) );                
                 continue; //only output the msg once 
             }
-          } 
-    
+          } else {  //v1.1.0.5 begin
+            //if RULE list intersects with PRODUCT participation list
+            if ( ( array_intersect($vtprd_rules_set[$i]->prodcat_in_checked,  $prod_cat_list ) ) ||
+                 ( array_intersect($vtprd_rules_set[$i]->prodcat_out_checked, $prod_cat_list ) ) ) {
+                $msg_counter++;
+                $loop_msgs_array[] = $i;
+//error_log( print_r(  'shortcode PRINT Msg 003a ', true ) ); 
+                continue; //only output the msg once  
+            } 
+          }
+           //v1.1.0.5 end
+          
           if ($plugin_category > ' ') {
             if ( ( ( array_intersect($vtprd_rules_set[$i]->rulecat_in_checked,  $plugin_category_array ) ) ||
                    ( array_intersect($vtprd_rules_set[$i]->rulecat_out_checked, $plugin_category_array ) ) ) 
@@ -331,9 +422,20 @@
                    ( array_intersect($rule_cat_list,  $plugin_category_array ) ) ) {                      
                 $msg_counter++;
                 $plugin_category_msgs_array[] = $i;
+//error_log( print_r(  'shortcode PRINT Msg 004 ', true ) );                
                 continue; //only output the msg once 
             }
-          }     
+          } else {  //v1.1.0.5 begin
+            //if RULE list intersects with PRODUCT participation list
+            if ( ( array_intersect($vtprd_rules_set[$i]->rulecat_in_checked,  $rule_cat_list ) ) ||
+                 ( array_intersect($vtprd_rules_set[$i]->rulecat_out_checked, $rule_cat_list ) ) ) {
+                $msg_counter++;
+                $loop_msgs_array[] = $i;
+//error_log( print_r(  'shortcode PRINT Msg 004a ', true ) );
+                continue; //only output the msg once  
+            } 
+          } 
+            //v1.1.0.5 end    
           
           if ( $products > ' ' ) { 
             if ( ( ($vtprd_rules_set[$i]->inPop_singleProdID     ==  $post->ID ) ||
@@ -344,17 +446,21 @@
                    (in_array($post->ID, $products_array)) ) {
               $msg_counter++;
               $products_msgs_array[] = $i;
+//error_log( print_r(  'shortcode PRINT Msg 005 ', true ) );              
               continue; //only output the msg once 
             }      
           }
-          
-      } else {
+//error_log( print_r(  'shortcode NO MESSAGE 001 ', true ) );          
+      } else {  //************************************************
+                //*****  NOT IN THE LOOP from here on **********
+                //************************************************
 
           if ($product_category > ' ') {
             if ( ( array_intersect($vtprd_rules_set[$i]->prodcat_in_checked,  $product_category_array ) ) ||
                  ( array_intersect($vtprd_rules_set[$i]->prodcat_out_checked, $product_category_array ) ) ) {  
                $msg_counter++;
                $product_category_msgs_array[] = $i;
+//error_log( print_r(  'shortcode PRINT Msg 006 ', true ) );               
                 continue; //only output the msg once 
             }
           } 
@@ -364,6 +470,7 @@
                  ( array_intersect($vtprd_rules_set[$i]->rulecat_out_checked, $plugin_category_array ) ) ) {  
                $msg_counter++;
                $plugin_category_msgs_array[] = $i;
+//error_log( print_r(  'shortcode PRINT Msg 007 ', true ) );               
                 continue; //only output the msg once 
             }
           }  
@@ -375,20 +482,27 @@
                    (in_array($vtprd_rules_set[$i]->actionPop_varProdID, $products_array)) ) {
               $msg_counter++;
               $products_msgs_array[] = $i;
+//error_log( print_r(  'shortcode PRINT Msg 008 ', true ) );              
               continue; //only output the msg once 
             }             
           }
-               
+//error_log( print_r(  'shortcode NO MESSAGE 002 ', true ) ); 
+              
       } //if (in_the_loop()  end
     
 
+//error_log( print_r(  '$vtprd_rules_set[$i], $i= ' . $i, true ) );
+//error_log( var_export($vtprd_rules_set[$i], true ) );
+      
   
       //PRINT test end     
        
     } //end 'for' loop
 
 
+    
     if ($msg_counter == 0) {
+//error_log( print_r(  'shortcode NO MESSAGEs by counter ', true ) );     
       return;
     }
 
@@ -413,6 +527,7 @@
       */
       switch( true ) {
         case ($rules > ' '):
+//error_log( print_r(  'printing based on $rules', true ) );         
             //*  Rules list already access the rules directly, no 2nd lookiup required
             $sizeof_rules_array = sizeof($rules_array);
             $sizeof_rules_msgs_array = sizeof($rules_msgs_array);
@@ -427,7 +542,8 @@
             }
           break;
           
-        case ($product_category > ' '):                                                                                   
+        case ($product_category > ' '): 
+//error_log( print_r(  'printing based on $product_category', true ) );                                                                                          
             $sizeof_product_category_array = sizeof($product_category_array);
             $sizeof_product_category_msgs_array = sizeof($product_category_msgs_array);
             for($p=0; $p < $sizeof_product_category_array; $p++) {
@@ -445,7 +561,8 @@
             }   
           break;
           
-        case ($plugin_category > ' '):                                                                                   
+        case ($plugin_category > ' '):  
+//error_log( print_r(  'printing based on $plugin_category', true ) );                                                                                         
             $sizeof_plugin_category_array = sizeof($plugin_category_array);
             $sizeof_plugin_category_msgs_array = sizeof($plugin_category_msgs_array);
             for($p=0; $p < $sizeof_plugin_category_array; $p++) {
@@ -460,8 +577,9 @@
             } 
           break;
           
-        case ( $products > ' ' ):                                                                                   
-            $sizeof_products_array = sizeof($products_array);
+        case ( $products > ' ' ): 
+//error_log( print_r(  'printing based on $products', true ) );                                                                                            
+            $sizeof_msgs_array = sizeof($products_array);
             $sizeof_products_msgs_array = sizeof($products_msgs_array);
             for($p=0; $p < $sizeof_products_array; $p++) {
                 $prod = $products_array[$p];
@@ -475,7 +593,22 @@
                     }
                 }
             }     
-          break;          
+          break;  
+          
+        //v1.1.0.5 begin 
+        default:  
+//error_log( print_r(  'printing based on default path', true ) ); 
+            if ( (in_the_loop() ) ||
+               ($force_in_the_loop == 'yes') ) {                                                                                         
+              $sizeof_loop_msgs_array = sizeof($loop_msgs_array);
+              for($p=0; $p < $sizeof_loop_msgs_array ; $p++) {
+                $rule_ind_val = $loop_msgs_array[$p]; 
+                $output .= vtprd_category_deal_msg($rule_ind_val);
+              } 
+             }    
+          break;                    
+        //v1.1.0.5 end  
+            
       }
 
 
@@ -537,7 +670,7 @@
   add_shortcode('pricing_deal_msgs_by_category','vtprd_pricing_deal_msgs_by_category');   
   add_shortcode('pricing_deal_category_msgs','vtprd_pricing_deal_msgs_by_category');  
   function vtprd_pricing_deal_msgs_by_category($atts) {
-    global $vtprd_rules_set, $vtprd_setup_options;
+    global $vtprd_rules_set, $vtprd_setup_options, $vtprd_info;
     extract(shortcode_atts (
       array (
         'type' => 'cart',     //'cart' (default) / 'catalog' / 'all' ==> "cart" msgs = cart rules type, "catalog" msgs = realtime catalog rules type 
@@ -580,7 +713,7 @@
       }
       
       //v1.0.9.3 new skipt test
-      if (vtprd_store_deal_msg($i) == "Get 10% off Laptops Today! (sample)" ) {
+      if ($vtprd_rules_set[$i]->discount_product_full_msg == $vtprd_info['default_full_msg']  ) { //v1.1.0.5
          continue;      
       }
        
@@ -713,7 +846,7 @@
   add_shortcode('pricing_deal_msgs_advanced','vtprd_pricing_deal_msgs_advanced'); 
   add_shortcode('pricing_deal_advanced_msgs','vtprd_pricing_deal_msgs_advanced');  //for backwards compatability  
   function vtprd_pricing_deal_msgs_advanced($atts) {
-    global $vtprd_rules_set, $vtprd_setup_options;
+    global $vtprd_rules_set, $vtprd_setup_options, $vtprd_info;
     extract(shortcode_atts (
       array (
                                                    //   (  group 1
@@ -762,7 +895,7 @@
       }
       
       //v1.0.9.3 new skipt test
-      if (vtprd_store_deal_msg($i) == "Get 10% off Laptops Today! (sample)" ) {
+      if ($vtprd_rules_set[$i]->discount_product_full_msg == $vtprd_info['default_full_msg'] ) { //v1.1.0.5
          continue;      
       }
              

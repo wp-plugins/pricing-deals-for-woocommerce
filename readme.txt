@@ -3,8 +3,8 @@ Contributors: vark
 Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
-Tested up to: 4.2.1
-Stable tag: 1.1.0.4
+Tested up to: 4.2.2
+Stable tag: 1.1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -180,6 +180,21 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Changelog ==
+
+= 1.1.0.5 - 2015-05-22 =
+* Fix - Older email clients dropping strikethrough, added css strikethrough
+* Fix - Obscure PHP computation issue (floating point comparison)
+* Enhancement - New Template Tag
+		vtprd_the_discount() ==> Show the formatted total discount
+		Template code: if ( vtprd_the_discount() ) { echo vtprd_the_discount();}
+* Enhancement - Shortcode ==> pricing_deal_msgs_standard
+		new functionality
+		Sample template code:
+      			$product_id = get_the_ID();
+      			echo do_shortcode( '[pricing_deal_msgs_standard  
+						force_in_the_loop="yes"  
+						force_in_the_loop_product="'.$product_id.'"]');
+* Enhancement - Cleanup if last rule deleted (admin/..rules-delete...)
 
 = 1.1.0.4 - 2015-05-01 =
 * Fix - Sale Price Discount exclusion switch issue resolved
@@ -417,6 +432,21 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.1.0.5 - 2015-05-22 =
+* Fix - Older email clients dropping strikethrough, added css strikethrough
+* Fix - Obscure PHP computation issue (floating point comparison)
+* Enhancement - New Template Tag
+		vtprd_the_discount() ==> Show the formatted total discount
+		Template code: if ( vtprd_the_discount() ) { echo vtprd_the_discount();}
+* Enhancement - Shortcode ==> pricing_deal_msgs_standard
+		new functionality
+		Sample template code:
+      			$product_id = get_the_ID();
+      			echo do_shortcode( '[pricing_deal_msgs_standard  
+						force_in_the_loop="yes"  
+						force_in_the_loop_product="'.$product_id.'"]');
+* Enhancement - Cleanup if last rule deleted (admin/..rules-delete...)
 
 = 1.1.0.4 - 2015-05-01 =
 * Fix - Sale Price Discount exclusion switch issue resolved

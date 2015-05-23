@@ -881,7 +881,11 @@ error_log( print_r(  'product_session_info= ' , true ) );
            //Test New Unit price for rounding error and fix
            if ($vtprd_setup_options['discount_taken_where'] == 'discountUnitPrice') { 
               
-              $test_total_discount_price  = $discount_price * $vtprd_cart->cart_items[$z]->quantity;
+              //v1.1.0.5 begin  FIX floating point error  ==>> value comparison was not working due to floating point number precision
+              //$test_total_discount_price  = $discount_price * $vtprd_cart->cart_items[$z]->quantity;
+              $test_total_discount_price                   = round($discount_price * $vtprd_cart->cart_items[$z]->quantity , 2);
+              $vtprd_cart->cart_items[$z]->discount_price  = round($vtprd_cart->cart_items[$z]->discount_price + 0 , 2); //this fixes floating point issue...
+              //v1.1.0.5 end 
               
               $vtprd_cart->cart_items[$z]->computation_summary .= '- Test new subtotal = Initial discounted Unit Price * quantity = ' .$test_total_discount_price .'<br>'; //v1.0.9.3
                          
@@ -891,7 +895,7 @@ error_log( print_r(  'product_session_info= ' , true ) );
                     $all_good;
                   break;
 
-                case ($test_total_discount_price > $vtprd_cart->cart_items[$z]->discount_price):  //not enough discount
+                case ($test_total_discount_price > $vtprd_cart->cart_items[$z]->discount_price):  //not enough discount                
                     if ($vtprd_setup_options['give_more_or_less_discount'] == 'more')  {
                       $discount_price = $discount_price - .01; //smaller unit price = MORE discount
                       
@@ -3523,6 +3527,7 @@ error_log( print_r(  'product_session_info= ' , true ) );
   
   //v1.0.7 change
   function vtprd_debug_options(){     
+
     global $vtprd_setup_options;
     if ( ( isset( $vtprd_setup_options['debugging_mode_on'] )) &&
          ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ) ) {  
@@ -3541,7 +3546,8 @@ error_log( print_r(  'product_session_info= ' , true ) );
       global $woocommerce;
       $woocommerce = WC();
     }
-    //v1.0.7.8 end        
+    //v1.0.7.8 end 
+           
   }
   
   //****************************************
@@ -4088,6 +4094,38 @@ error_log( print_r(  'product_session_info= ' , true ) );
         $notices[]= $admin_notices;
         update_option('vtprd_deferred_admin_notices', $notices);
   */
+  
+  /*
+  
+  //v1.1.0.5 new function ==>> template tag TO SHOW THE TOTAL DISCOUNT!!
+  
+  
+  
+  HOW TO USE:
+  
+
+  < ?php  //<<==remove space between '<' and '?'   -wrapped in php tags, *******ONLY AS NEEDED -  
+  
+  if ( vtprd_the_discount() ) { echo vtprd_the_discount(); }
+  
+ // remove space between '?' and '>' in next line ==>>
+   ? > 
+   
+   
+  */
+  
+  function vtprd_the_discount() {
+    global $vtprd_cart; 
+    if ( (isset($vtprd_cart->yousave_cart_total_amt)) &&
+         ($vtprd_cart->yousave_cart_total_amt > 0) ) {
+      $the_discount = wc_price($vtprd_cart->yousave_cart_total_amt); 
+    } else {
+      $the_discount = false;
+    }     
+    return $the_discount;  
+  }
+  //v1.1.0.5 end   
+  
   add_action('admin_notices', 'vtprd_admin_notices');
   function vtprd_admin_notices() {
     if ($notices= get_option('vtprd_deferred_admin_notices')) {

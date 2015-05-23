@@ -1534,7 +1534,9 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
          ($_SESSION['vtprd_product_cart_unit_price_oldprice_'.$product_id] > ' ' ) ) {
         $oldprice_subtotal = ($_SESSION['vtprd_product_cart_unit_price_oldprice_'.$product_id] * $item['qty']);
         $oldprice_subtotal_html = wc_price( $oldprice_subtotal );                
-        $subtotal = '<del>' . $oldprice_subtotal_html  . '</del> &nbsp; <ins>' . $subtotal . '</ins>';             
+        //$subtotal = '<del>' . $oldprice_subtotal_html  . '</del> &nbsp; <ins>' . $subtotal . '</ins>';
+        $subtotal = '<del> <span style="text-decoration: line-through;">' . $oldprice_subtotal_html  . '</span></del> &nbsp; <ins>' . $subtotal . '</ins>';  //v1.1.0.5 added line-through span for old email clients           
+                
     }
 
          
