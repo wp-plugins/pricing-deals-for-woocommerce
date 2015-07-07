@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 4.2.2
-Stable tag: 1.1.0.5
+Stable tag: 1.1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -180,6 +180,14 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Changelog ==
+
+= 1.1.0.6 - 2015-07-07 =
+* Fix - Auto add free item function. 
+* Enhancement - Auto add free item function:
+		- Can now add multiple free items using the Get Group Amount count.
+		- New Filter ==> $0 Price shown as 'Free' unless overridden by filter:
+			add_filter('vtprd_show_zero_price_as_free',FALSE); 
+			(in your theme's functions.php file)
 
 = 1.1.0.5 - 2015-05-22 =
 * Fix - Older email clients dropping strikethrough, added css strikethrough
@@ -432,6 +440,14 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.1.0.6 - 2015-07-07 =
+* Fix - Auto add free item function. 
+* Enhancement - Auto add free item function:
+		- Can now add multiple free items using the Get Group Amount count.
+		- New Filter ==> $0 Price shown as 'Free' unless overridden by filter:
+			add_filter('vtprd_show_zero_price_as_free',FALSE); 
+			(in your theme's functions.php file)
 
 = 1.1.0.5 - 2015-05-22 =
 * Fix - Older email clients dropping strikethrough, added css strikethrough

@@ -219,7 +219,7 @@ class VTPRD_Parent_Cart_Validation {
     }   
   
     //v1.0.7.2  needed if all prices are zero from Catalog rules, otherwise subtotal reflects list price!
-    add_action( 'woocommerce_before_mini_cart', array(&$this, 'vtprd_maybe_recalc_woo_totals'), 10, 1 );  
+    add_action( 'woocommerce_before_mini_cart', array(&$this, 'vtprd_maybe_recalc_woo_totals'), 5, 1 );  //v1.1.0.6 changed priority from 10 to 5
 
     
     //*************************************************
@@ -1061,11 +1061,18 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
 //error_log( var_export($cart_object , true ) ); 
   
     foreach ( $cart_object as $key => $value ) {
- 
+    
+  //error_log( print_r(  'IN vtprd_maybe_before_mini_cart FOReach1', true ) );        
+    //error_log( print_r(  '$woo_cart_item ' , true ) );
+    //error_log( var_export($value , true ) ); 
+       
+      /* v1.1.0.6  REMOVED
+      //  If formerly free item is purchased, mini-cart update may be needed
       //price already at zero, no update needed
       if ($value['data']->price == 0) {
         continue;
       }
+      */
       
       if ($value['variation_id'] > ' ') {      
           $woo_product_id  =  $value['variation_id'];
@@ -1077,15 +1084,15 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
 
         foreach($vtprd_cart->cart_items as $vtprd_key => $vtprd_cart_item) {      
   
-  //error_log( print_r(  'IN vtprd_maybe_before_mini_cart FOReach', true ) );        
+  //error_log( print_r(  'IN vtprd_maybe_before_mini_cart FOReach2', true ) );        
   
    //error_log( print_r(  'discount_price= ' .$vtprd_cart_item->discount_price . ' for PRODUCT= ' .$vtprd_cart_item->product_id , true ) ); 
    //error_log( print_r(  'product_inline_discount_price_woo= ' .$vtprd_cart_item->product_inline_discount_price_woo, true ) ); 
     //error_log( print_r(  '$vtprd_cart_item ' , true ) );
     //error_log( var_export($vtprd_cart_item , true ) );       
           
-          if ($vtprd_cart_item->product_id == $woo_product_id ) {
-  
+          if ($vtprd_cart_item->product_id ==$woo_product_id  ) {
+   //error_log( print_r(  '$woo_product_id FOUND= ' .$woo_product_id  , true ) );  
           //this will now pick up BOTH inline discounts, and solo CATLOG discounts...
   
               switch( true ) {
@@ -1110,9 +1117,10 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
                     $mini_cart_updated = true;
 //error_log( print_r(  'case 3' , true ) );                    
                   break;  
-//default:
-//error_log( print_r(  'NO CASE Action' , true ) ); 
-//break;                   
+/*efault:
+error_log( print_r(  'NO CASE Action' , true ) ); 
+break;  
+*/                 
               }
             
 
@@ -1124,15 +1132,16 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
         //check to be sure any Catalog deal prices are reflected here - *** 2nd-nth time, these numbers are not reflected in the mini-cart ***
         vtprd_maybe_get_product_session_info($woo_product_id);
         
-        if ( ( ($vtprd_info['product_session_info']['product_discount_price']  > 0) ||  
-              (($vtprd_info['product_session_info']['product_discount_price'] == 0) &&  //price can be zero if item is free
-               ($vtprd_info['product_session_info']['product_yousave_total_amt']  > 0)) )
-                  &&
-               ($vtprd_info['product_session_info']['product_discount_price'] < $value['data']->price ) )  {
-          $value['data']->price = $vtprd_info['product_session_info']['product_discount_price'];  
-          $mini_cart_updated = true;
+        if (isset($vtprd_info['product_session_info']['product_discount_price'])) {  //v1.1.0.6 added isset test
+          if ( ( ($vtprd_info['product_session_info']['product_discount_price']  > 0) ||  
+                (($vtprd_info['product_session_info']['product_discount_price'] == 0) &&  //price can be zero if item is free
+                 ($vtprd_info['product_session_info']['product_yousave_total_amt']  > 0)) )
+                    &&
+                 ($vtprd_info['product_session_info']['product_discount_price'] < $value['data']->price ) )  {
+            $value['data']->price = $vtprd_info['product_session_info']['product_discount_price'];  
+            $mini_cart_updated = true;
+          }
         }
-        
       }
     }
   
@@ -1324,7 +1333,16 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
       header("Pragma: no-cache");
     }
     //v1.1.0.3 end
+        
+    //v1.1.0.6 begin
 
+    if ( (isset($cart_item['line_subtotal'])) &&
+         ($cart_item['line_subtotal'] == 0)   &&
+         (apply_filters('vtprd_show_zero_price_as_free',TRUE)) ) { //if zero is preferred, send back FALSE
+        $price_html = __('Free', 'vtprd');         
+    }    
+    //v1.1.0.6 end
+    
     //If discount in coupon, or show no crossouts, exit stage left
     if ( ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon') ||
          ($vtprd_setup_options['show_unit_price_cart_discount_crossout'] == 'no') )  {
@@ -1358,7 +1376,7 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
       
       //already free, no crossout !!!!!!
       if ( ($vtprd_cart_item->product_catalog_price_displayed == 0) ||
-           ($vtprd_cart_item->product_catalog_price_displayed == __('Free!', 'vtprd')) ) {
+           ($vtprd_cart_item->product_catalog_price_displayed == __('Free', 'vtprd')) ) {
          continue;  //skip to next in foreach
       }
       
@@ -1436,6 +1454,7 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
 
   //**************************************
 	//v1.1.0.3 new function 
+  //v1.1.0.6 refactored for 'free' processing
   //  add crossouts when at checkout (not on the Cart page)
   //**************************************
   public function vtprd_maybe_cart_item_subtotal($subtotal, $item, $data){  
@@ -1448,25 +1467,9 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
  error_log( var_export($item, true ) );
   error_log( print_r(  '$data', true ) );
  error_log( var_export($data, true ) );
- */ 
-    //If discount in coupon, or show no crossouts, exit stage left
-    if ( (!isset($vtprd_setup_options)) ||
-         ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon') ||
-         ($vtprd_setup_options['show_unit_price_cart_discount_crossout'] == 'no') )  {
-// error_log( print_r(  'line_subtotal, $exit 001', true ) );      
-      return $subtotal;    
-    } 
+*/  
     
-    global $wp_query;
-    $page_id = $wp_query->post->ID;
-    //if ( get_the_ID () == get_option ( "woocommerce_cart_page_id" ) ) {
-    //******
-    //DO NOT do subtotal crossoutss on the Cart page product line, already doing the Unit Price crossouts.
-    //******
-    if ( $page_id == get_option ( "woocommerce_cart_page_id" ) ) {
-      return $subtotal;    
-    }
-    
+    //v1.1.0.6 moved these 2 ifs to the top   
     if(!isset($_SESSION)){
       session_start();
       header("Cache-Control: no-cache");
@@ -1478,7 +1481,47 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
     } else { 
       $product_id  = $item['product_id'];    
     }     
-   
+       
+    //v1.1.0.6 added
+    if ($item['line_subtotal'] == 0) {
+//error_log( print_r(  'Subtotal=0', true ) );    
+      if (isset($_SESSION['previous_auto_add_array']))  {
+//error_log( print_r(  'session found', true ) );       
+        $previous_auto_add_array = unserialize($_SESSION['previous_auto_add_array']);
+        if ( ($product_id  == $previous_auto_add_array['free_product_id']) &&
+             (apply_filters('vtprd_show_zero_price_as_free',TRUE) ) ) { //if zero is preferred, send back FALSE
+//error_log( print_r(  'FREE', true ) );         
+           $subtotal = __('Free', 'vtprd');   
+        }
+      } 
+
+      
+      
+    }    
+    //v1.1.0.6 end
+    
+    //If discount in coupon, or show no crossouts, exit stage left
+    if ( (!isset($vtprd_setup_options)) ||
+         ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon') ||
+         ($vtprd_setup_options['show_unit_price_cart_discount_crossout'] == 'no') )  {
+// error_log( print_r(  'line_subtotal, $exit 001', true ) );      
+      return $subtotal;    
+    } 
+  
+    global $wp_query;
+    $page_id = $wp_query->post->ID; 
+    //if ( get_the_ID () == get_option ( "woocommerce_cart_page_id" ) ) {
+    //******
+    //DO NOT do subtotal crossoutss on the Cart page product line, already doing the Unit Price crossouts.
+    //******
+// error_log( print_r(  '$page_id= ' .$page_id, true ) );   
+ // error_log( print_r(  '$wp_query', true ) );
+// error_log( var_export($wp_query, true ) );
+ 
+    if ( $page_id == get_option ( "woocommerce_cart_page_id" ) ) {
+      return $subtotal;    
+    }
+
     //pick up the previously stored crossout info
     if ( (isset($_SESSION['vtprd_product_cart_unit_price_oldprice_'.$product_id]) ) &&
          ($_SESSION['vtprd_product_cart_unit_price_oldprice_'.$product_id] > ' ' ) ) {
@@ -1496,6 +1539,7 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
 
   //**************************************
 	//v1.1.0.3 new function 
+  //v1.1.0.6 refactored for 'free' processing
   //  add crossouts when order placed, to order-details and emails
   //**************************************
   public function vtprd_maybe_order_formatted_line_subtotal($subtotal, $item, $data){  
@@ -1509,13 +1553,8 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
   error_log( print_r(  '$data', true ) );
  error_log( var_export($data, true ) );
 */ 
-    //If discount in coupon, or show no crossouts, exit stage left
-    if ( (!isset($vtprd_setup_options)) ||
-         ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon') ||
-         ($vtprd_setup_options['show_unit_price_cart_discount_crossout'] == 'no') )  {
-// error_log( print_r(  'line_subtotal, $exit 001', true ) );      
-      return $subtotal;    
-    } 
+
+    //v1.1.0.6 moved these 2 ifs to the top 
     
     if(!isset($_SESSION)){
       session_start();
@@ -1528,7 +1567,32 @@ error_log( print_r(  '$oldPrice= ' .$oldPrice, true ) );
     } else { 
       $product_id  = $item['product_id'];    
     }     
-   
+       
+    //v1.1.0.6 added
+    if ($item['line_subtotal'] == 0) {
+//error_log( print_r(  'Subtotal=0', true ) );    
+      if (isset($_SESSION['previous_auto_add_array']))  {
+//error_log( print_r(  'session found', true ) );       
+        $previous_auto_add_array = unserialize($_SESSION['previous_auto_add_array']);
+        if ( ($product_id  == $previous_auto_add_array['free_product_id']) &&
+             (apply_filters('vtprd_show_zero_price_as_free',TRUE)) ) { //if zero is preferred, send back FALSE
+//error_log( print_r(  'FREE', true ) );         
+           $subtotal = __('Free', 'vtprd');   
+        }
+      } 
+      
+    }    
+    //v1.1.0.6 end
+         
+
+    //If discount in coupon, or show no crossouts, exit stage left
+    if ( (!isset($vtprd_setup_options)) ||
+         ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon') ||
+         ($vtprd_setup_options['show_unit_price_cart_discount_crossout'] == 'no') )  {
+// error_log( print_r(  'line_subtotal, $exit 001', true ) );      
+      return $subtotal;    
+    } 
+
     //pick up the previously stored crossout info
     if ( (isset($_SESSION['vtprd_product_cart_unit_price_oldprice_'.$product_id]) ) &&
          ($_SESSION['vtprd_product_cart_unit_price_oldprice_'.$product_id] > ' ' ) ) {
@@ -2570,8 +2634,11 @@ echo '$woocommerce cart= <pre>'.print_r($woocommerce, true).'</pre>' ;
 echo '$vtprd_cart= <pre>'.print_r($vtprd_cart, true).'</pre>' ; 
 echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ; 
 */         
-    
-    if ($vtprd_cart->yousave_cart_total_amt > 0) {  
+
+    //v1.1.0.6 begin
+    if ( ($vtprd_cart->yousave_cart_total_amt > 0) || 
+         ($vtprd_cart->cart_has_zero_price_auto_add_free_item == 'yes') ) {
+    //v1.1.0.6 end    
     //    vtprd_print_checkout_discount();
         $msgType = 'plainText';                         //v1.0.8.0
         vtprd_checkout_cart_reporting($msgType);        //v1.0.8.0
@@ -2775,7 +2842,15 @@ echo '$vtprd_rules_set= <pre>'.print_r($vtprd_rules_set, true).'</pre>' ;
     }                                                                                                                        
 
     //NO discount found, no msg changes
-    if (!($vtprd_cart->yousave_cart_total_amt > 0)) {
+
+    //v1.1.0.6 begin
+    //if (!($vtprd_cart->yousave_cart_total_amt > 0)) {
+    if ( ($vtprd_cart->yousave_cart_total_amt > 0) || 
+         ($vtprd_cart->cart_has_zero_price_auto_add_free_item == 'yes') ) {
+      $carry_on = true;
+    } else {
+    //v1.1.0.6 end    
+        
       return;    
     } 
     
@@ -2894,7 +2969,15 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
 
     
     //NO discount found, no msg changes
-    if (!($vtprd_cart->yousave_cart_total_amt > 0)) {
+
+    //v1.1.0.6 begin
+    //if (!($vtprd_cart->yousave_cart_total_amt > 0)) {
+    if ( ($vtprd_cart->yousave_cart_total_amt > 0) || 
+         ($vtprd_cart->cart_has_zero_price_auto_add_free_item == 'yes') ) {
+      $carry_on = true;
+    } else {
+    //v1.1.0.6 end    
+        
       $this->vtprd_nuke_session_variables();
       return $message;    
     } 
@@ -3174,7 +3257,11 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
     } 
     if (isset($_SESSION['previous_auto_add_array']))  {
         $contents = $_SESSION['previous_auto_add_array'];
-        unset( $_SESSION['previous_auto_add_array'], $contents );    
+        unset( $_SESSION['previous_auto_add_array'], $contents );
+        //v1.1.0.6 begin
+        global $vtprd_info;
+        $vtprd_info['previous_auto_add_array'] = ''; //$vtprd_info['previous_auto_add_array'] used when session variable disappears due to age
+        //v1.1.0.6 end    
     }
     if (isset($_SESSION['current_auto_add_array']))  {
         $contents = $_SESSION['current_auto_add_array'];

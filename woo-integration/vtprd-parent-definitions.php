@@ -153,7 +153,8 @@ class VTPRD_Parent_Definitions {
         'default_short_msg' => $default_short_msg,
         'default_full_msg'  => $default_full_msg,
         'user_is_tax_exempt'  => '',  //v1.0.9.0
-        'product_catalog_price_array' => array ()
+        'product_catalog_price_array' => array (),
+        'previous_auto_add_array' => ''  //v1.1.0.6  added - init to spaces so is_array test can be used
 
       ); //end vtprd_info      
       

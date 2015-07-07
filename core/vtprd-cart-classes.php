@@ -49,7 +49,7 @@ class VTPRD_Cart {
     public $customer_is_tax_exempt;        //v1.0.7.9
     public $cart_contents_count;        //v1.0.9.3
     public $cart_contents_orig_subtotal;        //v1.0.9.3
-               
+    public $cart_has_zero_price_auto_add_free_item = ''; //v1.1.0.6               
  //   CART-LEVEL UNITS AND AMOUNTS AS RELATES TO RULES ITERATIONS, INPUT AND OUTPUT..  mAYBE PUT THE NEW CART-ITEM STUFF HERE....
     
     
@@ -75,7 +75,8 @@ class VTPRD_Cart {
     $this->error_messages_processed;
     $this->customer_is_tax_exempt = false;        //v1.0.7.9 
     $this->cart_contents_count = 0;        //v1.0.9.3
-    $this->cart_contents_orig_subtotal = '';        //v1.0.9.3                 
+    $this->cart_contents_orig_subtotal = '';        //v1.0.9.3   
+    $this->cart_has_zero_price_auto_add_free_item = ''; //v1.1.0.6                    
   }
   
 
@@ -167,7 +168,8 @@ class VTPRD_Cart_Item {
     public $product_catalog_yousave_total_amt_excl_tax_woo;       
     public $computation_summary; //text summary of unitPrice computation 
     //v1.0.9.3 end                        
-  
+    public $zero_price_auto_add_free_item; //v1.1.0.6
+    
 	public function __construct(){
     $this->product_id;
     $this->variation_id;
@@ -340,7 +342,8 @@ class VTPRD_Cart_Item {
     $this->product_catalog_yousave_total_amt_incl_tax_woo; 
     $this->product_catalog_yousave_total_amt_excl_tax_woo;       
     $this->computation_summary = '';  
-    //v1.0.9.3 end         
+    //v1.0.9.3 end 
+    $this->zero_price_auto_add_free_item = '';  //v1.1.0.6            
 	}
 
 } //end class

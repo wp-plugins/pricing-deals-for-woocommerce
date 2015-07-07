@@ -1881,7 +1881,9 @@ error_log( print_r(  'product_session_info= ' , true ) );
   
       $sizeof_cart_items = sizeof($vtprd_cart->cart_items);
       for($k=0; $k < $sizeof_cart_items; $k++) {  
-       	if ( $vtprd_cart->cart_items[$k]->yousave_total_amt > 0) {            
+
+       	if ( ($vtprd_cart->cart_items[$k]->yousave_total_amt > 0) ||  //v1.1.0.6
+             ($vtprd_cart->cart_items[$k]->zero_price_auto_add_free_item == 'yes') ) {    //v1.1.0.6        
             if ((($execType == 'checkout')   && ($vtprd_setup_options['show_checkout_discount_details_grouped_by_what']   == 'rule')) ||
                 (($execType == 'cartWidget') && ($vtprd_setup_options['show_cartWidget_discount_details_grouped_by_what'] == 'rule'))) {
               //these rows are indexed by ruleID, so a foreach is needed...
@@ -1902,7 +1904,7 @@ error_log( print_r(  'product_session_info= ' , true ) );
                   echo  $output;                  
                   }
                   
-                  $amt = $yousave_by_rule['yousave_amt']; 
+                  $amt = $yousave_by_rule['yousave_amt'];
                   $units = $yousave_by_rule['discount_applies_to_qty'];                  
                   vtprd_print_discount_detail_line($amt, $units, $execType, $k);
                 }
@@ -1956,12 +1958,19 @@ error_log( print_r(  'product_session_info= ' , true ) );
     
     $output .= '<span class="vtprd-discount-unitCol-' .$execType. '">' . $units . '</span>';
 
-     //v1.0.7.4 begin      
-    $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
+     //v1.1.0.6 begin      
+    if ( ($amt == 0) &&
+         (apply_filters('vtprd_show_zero_price_as_free',TRUE)) ) { //if zero is preferred, send back FALSE
+      $amt = __('Free', 'vtprd');
+      $output .= '<span class="vtprd-discount-amtCol-' .$execType. '">' .$amt . '</span>';
+    } else {
+      $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn  //v1.0.7.4 begin
+      $output .= '<span class="vtprd-discount-amtCol-' .$execType. '">' . $vtprd_setup_options['' .$execType. '_credit_detail_label'] . ' ' .$amt . '</span>';      
+    }
     // $amt = vtprd_format_money_element($amt);
-    //v1.0.7.4 end   
+    //v1.1.0.6 end   
     
-    $output .= '<span class="vtprd-discount-amtCol-' .$execType. '">' . $vtprd_setup_options['' .$execType. '_credit_detail_label'] . ' ' .$amt . '</span>';
+
     
     $output .= '</div>'; //end prodline
     $output .= '</td>';
@@ -2245,7 +2254,11 @@ error_log( print_r(  'product_session_info= ' , true ) );
 
       $sizeof_cart_items = sizeof($vtprd_cart->cart_items);
       for($k=0; $k < $sizeof_cart_items; $k++) {  
-       	if ( $vtprd_cart->cart_items[$k]->yousave_total_amt > 0) {            
+       	//if ( $vtprd_cart->cart_items[$k]->yousave_total_amt > 0) { 
+        //v1.1.0.6 end
+        if ( ($vtprd_cart->cart_items[$k]->yousave_total_amt > 0) || 
+             ($vtprd_cart->cart_items[$k]->zero_price_auto_add_free_item == 'yes') ) {
+        //v1.1.0.6 end           
             if ($vtprd_setup_options['show_checkout_discount_details_grouped_by_what']   == 'rule') {
               //these rows are indexed by ruleID, so a foreach is needed...
               foreach($vtprd_cart->cart_items[$k]->yousave_by_rule_info as $key => $yousave_by_rule) {
@@ -2287,9 +2300,22 @@ error_log( print_r(  'product_session_info= ' , true ) );
       $output = ''; //v1.0.7.9
           
       //v1.0.7.4 begin      
-      $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
+      //$amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
       // $amt = vtprd_format_money_element($amt); //mwn
       //v1.0.7.4 end 
+         
+     
+     //v1.1.0.6 begin      
+    if ( ($amt == 0) && 
+         (apply_filters('vtprd_show_zero_price_as_free',TRUE)) ) { //if zero is preferred, send back FALSE
+      $amt = __('Free', 'vtprd');
+    } else {
+      $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn  //v1.0.7.4 begin
+    }
+    // $amt = vtprd_format_money_element($amt);
+    //v1.1.0.6 end   
+        
+         
          
     if ($msgType == 'html')  {
       $output .= '<tr>';
@@ -2552,7 +2578,11 @@ error_log( print_r(  'product_session_info= ' , true ) );
 
       $sizeof_cart_items = sizeof($vtprd_cart->cart_items);
       for($k=0; $k < $sizeof_cart_items; $k++) {  
-       	if ( $vtprd_cart->cart_items[$k]->yousave_total_amt > 0) {            
+       	//if ( $vtprd_cart->cart_items[$k]->yousave_total_amt > 0) {  
+        //v1.1.0.6 end
+        if ( ($vtprd_cart->cart_items[$k]->yousave_total_amt > 0) || 
+             ($vtprd_cart->cart_items[$k]->zero_price_auto_add_free_item == 'yes') ) {
+        //v1.1.0.6 end          
             if ($vtprd_setup_options['show_checkout_discount_details_grouped_by_what']   == 'rule') {
               //these rows are indexed by ruleID, so a foreach is needed...
               foreach($vtprd_cart->cart_items[$k]->yousave_by_rule_info as $key => $yousave_by_rule) {
@@ -2591,9 +2621,21 @@ error_log( print_r(  'product_session_info= ' , true ) );
       $output = ''; //v1.0.7.9
     
     //v1.0.7.4 begin      
-    $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
+    //$amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
     // $amt = vtprd_format_money_element($amt); //mwn
     //v1.0.7.4 end
+
+    //v1.1.0.6 begin      
+    if ( ($amt == 0) && 
+         (apply_filters('vtprd_show_zero_price_as_free',TRUE)) ) { //if zero is preferred, send back FALSE
+      $amt = __('Free', 'vtprd');
+    } else {
+      $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn  //v1.0.7.4 begin
+    }
+    // $amt = vtprd_format_money_element($amt);
+    //v1.1.0.6end
+    
+    
     
     $output .= '<tr class = "order_table_item">';
     /*
@@ -2798,7 +2840,9 @@ error_log( print_r(  'product_session_info= ' , true ) );
 
       $sizeof_cart_items = sizeof($vtprd_cart->cart_items);
       for($k=0; $k < $sizeof_cart_items; $k++) {  
-       	if ( $vtprd_cart->cart_items[$k]->yousave_total_amt > 0) {            
+       	//if (  $vtprd_cart->cart_items[$k]->yousave_total_amt > 0) { 
+       	if ( ($vtprd_cart->cart_items[$k]->yousave_total_amt > 0) ||  //v1.1.0.6
+             ($vtprd_cart->cart_items[$k]->zero_price_auto_add_free_item == 'yes') ) {    //v1.1.0.6                        
             if ($vtprd_setup_options['show_checkout_discount_details_grouped_by_what']   == 'rule') {
               //these rows are indexed by ruleID, so a foreach is needed...
               foreach($vtprd_cart->cart_items[$k]->yousave_by_rule_info as $key => $yousave_by_rule) {
@@ -2844,10 +2888,15 @@ error_log( print_r(  'product_session_info= ' , true ) );
     global $vtprd_cart, $vtprd_cart_item, $vtprd_info, $vtprd_rules_set, $vtprd_rule, $vtprd_setup_options;
       $output = ''; //v1.0.7.9
 
-      //v1.0.7.4 begin      
-      $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn
+      //v1.1.0.6 begin      
+      if ( ($amt == 0) &&
+           (apply_filters('vtprd_show_zero_price_as_free',TRUE)) ) { //if zero is preferred, send back FALSE 
+        $amt = __('Free', 'vtprd');
+      } else {
+        $amt = vtprd_format_amt_and_adjust_for_taxes($amt, $k);  //has both formatted amount and suffix, prn  //v1.0.7.4 begin
+      }
       // $amt = vtprd_format_money_element($amt);
-      //v1.0.7.4 end
+      //v1.1.0.6end
     
     $output .= '<tr class = "order_table_item">';
 
@@ -2899,7 +2948,15 @@ error_log( print_r(  'product_session_info= ' , true ) );
     $output .= '<td  class="product-quantity" style="text-align:middle;">' . $units .'</td>';
     
     $output .= '<td  class="product-total">';
-    $output .= '<span class="amount">' . $vtprd_setup_options['checkout_credit_detail_label'] .$amt .'</span>';				
+    
+    //v1.1.0.6 begin
+    if ( $amt == __('Free', 'vtprd') ) {
+      $output .= '<span class="amount">'  .$amt .'</span>';
+    } else {
+      $output .= '<span class="amount">' . $vtprd_setup_options['checkout_credit_detail_label'] .$amt .'</span>';	
+    }
+    //v1.1.0.6 end
+          			
     $output .= '</td>';
                           
     $output .= '</tr>'; 
@@ -3527,7 +3584,6 @@ error_log( print_r(  'product_session_info= ' , true ) );
   
   //v1.0.7 change
   function vtprd_debug_options(){     
-
     global $vtprd_setup_options;
     if ( ( isset( $vtprd_setup_options['debugging_mode_on'] )) &&
          ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ) ) {  
@@ -3546,8 +3602,7 @@ error_log( print_r(  'product_session_info= ' , true ) );
       global $woocommerce;
       $woocommerce = WC();
     }
-    //v1.0.7.8 end 
-           
+    //v1.0.7.8 end            
   }
   
   //****************************************
@@ -4113,9 +4168,25 @@ error_log( print_r(  'product_session_info= ' , true ) );
    
    
   */
-  
-  function vtprd_the_discount() {
+
+    function vtprd_the_discount() {
+           
+    if(!isset($_SESSION)){
+      session_start();
+      header("Cache-Control: no-cache");
+      header("Pragma: no-cache");
+    }   
     global $vtprd_cart; 
+    if (empty($vtprd_cart)) {      
+
+      if (isset($_SESSION['data_chain'])) {
+        $data_chain      = unserialize($_SESSION['data_chain']);
+        if (isset($data_chain[1])) {  
+          $vtprd_cart      = $data_chain[1];
+        }        
+      }       
+    }
+
     if ( (isset($vtprd_cart->yousave_cart_total_amt)) &&
          ($vtprd_cart->yousave_cart_total_amt > 0) ) {
       $the_discount = wc_price($vtprd_cart->yousave_cart_total_amt); 
@@ -4125,6 +4196,41 @@ error_log( print_r(  'product_session_info= ' , true ) );
     return $the_discount;  
   }
   //v1.1.0.5 end   
+
+ 
+  /* ************************************************
+  **   //v1.1.0.6 new function
+  *     repair the ruleset if rapid updates have put things OUT OF SYNC 
+  *     run after **every PRO rule screen update only**  
+  *************************************************** */
+  function vtprd_maybe_resync_rules_set() {
+    global $wpdb, $post, $vtprd_info, $vtprd_rules_set, $vtprd_rule;    
+    $update_required = false;
+    $vtprd_temp_rules_set = array();
+    $vtprd_rules_set = get_option( 'vtprd_rules_set' ) ;   
+    for($i=0; $i < sizeof($vtprd_rules_set); $i++) { 
+       $post = get_post($vtprd_rules_set[$i]->post_id); 
+       if ($post)  {       
+          if ($vtprd_rules_set[$i]->rule_status != $post->post_status) {
+            $vtprd_rules_set[$i]->rule_status = $post->post_status;
+            $update_required = true;
+          }          
+          $vtprd_temp_rules_set[] = $vtprd_rules_set[$i];
+       } else {
+          //don't copy iteration, post no longer there
+          //need to update the array
+          $update_required = true;
+       }
+    }
+    
+    if ($update_required) {
+      $vtprd_rules_set = $vtprd_temp_rules_set;
+      update_option( 'vtprd_rules_set', $vtprd_rules_set );    
+    }
+    
+    return;
+ }       
+
   
   add_action('admin_notices', 'vtprd_admin_notices');
   function vtprd_admin_notices() {
@@ -4306,3 +4412,4 @@ show_checkout_purchases_subtotal		                Show Cart Purchases Subtotal L
 show_checkout_discount_total_line		                Show Products + Discounts Grand Total Line
 
 */
+//add_filter('vtprd_show_zero_price_as_free',FALSE);  //$0 Price shown as 'Free' unless overridden by filter

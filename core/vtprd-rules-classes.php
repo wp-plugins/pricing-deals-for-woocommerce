@@ -446,7 +446,9 @@ class VTPRD_Rule {
         );
         */
         
-      public  $coupons_amount_without_rule_discounts;  //TOTAL $$ value of USER-ENTERED coupons (only the 0 iteration is used) 
+     public  $coupons_amount_without_rule_discounts;  //TOTAL $$ value of USER-ENTERED coupons (only the 0 iteration is used)
+     public  $auto_add_inserted_total_for_rule_repeat;  //v1.1.0.6
+     public  $auto_add_inserted_total_for_rule;   //v1.1.0.6       
      //******************************************
    
 	public function __construct(){
@@ -652,7 +654,9 @@ class VTPRD_Rule {
       $this->purch_hist_rule_row_price_total_plus_discounts = 0;
       $this->purch_hist_rule_percent_total = 0; 
       $this->auto_add_inserted_array = array();
-      $this->coupons_amount_without_rule_discounts = 0;  //TOTAL $$ value of USER-ENTERED coupons (only the 0 iteration is used)        
+      $this->coupons_amount_without_rule_discounts = 0;  //TOTAL $$ value of USER-ENTERED coupons (only the 0 iteration is used) 
+      $this->auto_add_count_for_rule_repeat = 0;  //v1.1.0.6  ==> cleared at begine of each rule repeat
+      $this->auto_add_count_for_rule = 0;   //v1.1.0.6      
   } //end function 
     
 } //end class    

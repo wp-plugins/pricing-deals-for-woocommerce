@@ -16,6 +16,20 @@ class VTPRD_Rule_delete {
           $vtprd_temp_rules_set[] = $vtprd_rules_set[$i];
        }
     }
+
+    //v1.1.0.5 begin
+    //If no more rules posts, delete the rules_set
+    global $wpdb;
+    $varsql = "SELECT posts.`id`
+          			FROM `".$wpdb->posts."` AS posts			
+          			WHERE posts.`post_type`= 'vtprd-rule'";                    
+  	$rule_id_list = $wpdb->get_col($varsql);
+    if (sizeof($rule_id_list) == 0) {
+      delete_option( 'vtprd_rules_set' );
+      return;
+    }
+    //v1.1.0.5 end
+
     $vtprd_rules_set = $vtprd_temp_rules_set;
    
     if (count($vtprd_rules_set) == 0) {

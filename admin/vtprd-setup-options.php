@@ -1263,7 +1263,7 @@ function vtprd_set_default_options() {
      $options = array(           
           'register_under_tools_menu'=> 'no',  //opt1         
           'use_lifetime_max_limits' => 'yes',    //opt2           //v1.0.7.3 changed to always be YES, as we always check for PRO anyway when using the switch
-          'discount_floor_pct_per_single_item' => '', //opt3  STORE-WIDE Discount max percent
+          'discount_floor_pct_per_single_item' => '100', //opt3  STORE-WIDE Discount max percent  //v1.1.0.6 changed to 100% to prevent going negative!!!!!!
           'discount_floor_pct_msg' => 'System Max xx% Discount reached.',  //opt4
           'show_checkout_discount_total_line' => 'yes', //opt5  yes/no => show total of discounts AFTER products displayed
           'show_checkout_discount_detail_lines' => 'yes', //opt6  yes/no => show detail of discounts AFTER products displayed
@@ -2575,12 +2575,20 @@ function vtprd_unit_price_cart_savings_message_callback() {    //opt53
 
 function vtprd_check_memory_limit() {    
 		//from woocommerce/includes/admin/views/html-admin-page-status-report.php
-    $memory = wc_let_to_num( WP_MEMORY_LIMIT );
-
-		if ( $memory < 67108864 ) {
-			echo '<strong>WP Memory Limit: ' . sprintf( __( '%s - We recommend setting memory to at least 64MB. See: <a href="%s">Increasing memory allocated to PHP</a>', 'woocommerce' ), size_format( $memory ), 'http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP' ) .'</strong>';
-      //echo '<mark class="error">WP Memory Limit: ' . sprintf( __( '%s - We recommend setting memory to at least 64MB. See: <a href="%s">Increasing memory allocated to PHP</a>', 'woocommerce' ), size_format( $memory ), 'http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP' ) . '</mark>';
-		} 
+    
+    //******************************
+    //v1.1.0.5  added function exists check ==>> pre woo 2.1 can go boom!
+    //******************************
+    if (function_exists('wc_let_to_num')) {
+    
+      $memory = wc_let_to_num( WP_MEMORY_LIMIT );
+  
+  		if ( $memory < 67108864 ) {
+  			echo '<strong>WP Memory Limit: ' . sprintf( __( '%s - We recommend setting memory to at least 64MB. See: <a href="%s">Increasing memory allocated to PHP</a>', 'woocommerce' ), size_format( $memory ), 'http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP' ) .'</strong>';
+        //echo '<mark class="error">WP Memory Limit: ' . sprintf( __( '%s - We recommend setting memory to at least 64MB. See: <a href="%s">Increasing memory allocated to PHP</a>', 'woocommerce' ), size_format( $memory ), 'http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP' ) . '</mark>';
+  		}
+     
+    }
     return;
 }
 
