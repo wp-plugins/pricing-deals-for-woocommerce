@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the VarkTech Pricing Deals for WooCommerce package.
 msgid ""
 msgstr ""
-"Project-Id-Version: VarkTech Pricing Deals for WooCommerce 1.0.9.3\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/pricing-deals-for-"
+"Project-Id-Version: VarkTech Pricing Deals for WooCommerce 1.1.0.6\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pricing-deals-for-"
 "woocommerce\n"
-"POT-Creation-Date: 2015-04-11 03:01:03+00:00\n"
+"POT-Creation-Date: 2015-07-07 22:25:28+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,277 +13,289 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: admin/vtprd-rules-ui-framework.php:34
+#: admin/vtprd-rules-ui-framework.php:45
 msgid "Cart or Catalog "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:34 admin/vtprd-rules-ui.php:1044
+#: admin/vtprd-rules-ui-framework.php:45 admin/vtprd-rules-ui.php:1025
 msgid "Discount "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:50
+#: admin/vtprd-rules-ui-framework.php:61
 msgid " - Cart or Catalog Discount?"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:56
+#: admin/vtprd-rules-ui-framework.php:67
 msgid "CART Purchase Discount"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:62
+#: admin/vtprd-rules-ui-framework.php:73
 msgid "CATALOG Price Reduction"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:62
+#: admin/vtprd-rules-ui-framework.php:73
 msgid "(Wholesale Pricing +)"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:70
+#: admin/vtprd-rules-ui-framework.php:81
 msgid "Deal Type"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:84
+#: admin/vtprd-rules-ui-framework.php:95
 msgid "- Deal Type ? - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:92
+#: admin/vtprd-rules-ui-framework.php:103
 msgid "Just Discount the Items "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:94
+#: admin/vtprd-rules-ui-framework.php:105
 msgid "Catalog Discount by Category, Logged-in Role ... "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:100
+#: admin/vtprd-rules-ui-framework.php:111
 msgid "Buy One Get One "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:100
+#: admin/vtprd-rules-ui-framework.php:111
 msgid " (Bogo)"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:106
+#: admin/vtprd-rules-ui-framework.php:117
 msgid "Package Pricing"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:112
+#: admin/vtprd-rules-ui-framework.php:123
 msgid "Discount Cheapest / Most Expensive"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:119
+#: admin/vtprd-rules-ui-framework.php:130
 msgid "Whole store on sale"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:121
+#: admin/vtprd-rules-ui-framework.php:132
 msgid "Whole Catalog on sale"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:141
+#: admin/vtprd-rules-ui-framework.php:152
 msgid "Deal Action"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:162
+#: admin/vtprd-rules-ui-framework.php:173
 msgid " - Discount Next Item / This Item ?  - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:169
+#: admin/vtprd-rules-ui-framework.php:180
 msgid "Buy something, discount the *next* item"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:176
+#: admin/vtprd-rules-ui-framework.php:187
 msgid "Buy something, discount the item"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:179
+#: admin/vtprd-rules-ui-framework.php:190
 msgid "Apply Discount to Catalog Item"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:199
+#: admin/vtprd-rules-ui-framework.php:210
 msgid "Buy Filter"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:202
-#: admin/vtprd-rules-ui-framework.php:205
+#: admin/vtprd-rules-ui-framework.php:213
+#: admin/vtprd-rules-ui-framework.php:216
 msgid "Discount Group"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:208
+#: admin/vtprd-rules-ui-framework.php:219
 msgid "Buy a Laptop"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:211
+#: admin/vtprd-rules-ui-framework.php:222
 msgid "Buy 5 apples"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:214
-#: admin/vtprd-rules-ui-framework.php:217
+#: admin/vtprd-rules-ui-framework.php:225
+#: admin/vtprd-rules-ui-framework.php:228
 msgid "Buy 5 items"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:232
+#: admin/vtprd-rules-ui-framework.php:243
 msgid " - Choose a Buy Group Filter -"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:233
+#: admin/vtprd-rules-ui-framework.php:244
 msgid " - Choose a Discount Group Filter -"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:234
+#: admin/vtprd-rules-ui-framework.php:245
 msgid " - Choose a Catalog Discount Group Filter -"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:240
+#: admin/vtprd-rules-ui-framework.php:251
 msgid "Buy Any Product"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:241
+#: admin/vtprd-rules-ui-framework.php:252
 msgid "Discount Each Item"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:242
+#: admin/vtprd-rules-ui-framework.php:253
 msgid "Any Catalog Product"
-msgstr ""
-
-#: admin/vtprd-rules-ui-framework.php:248
-#: admin/vtprd-rules-ui-framework.php:249
-msgid "By Category / Logged-in Role ... (pro only) ...  "
-msgstr ""
-
-#: admin/vtprd-rules-ui-framework.php:250
-#: admin/vtprd-rules-ui-framework.php:251
-#: admin/vtprd-rules-ui-framework.php:612
-#: admin/vtprd-rules-ui-framework.php:613
-msgid "By Category / Logged-in Role / Plugin Category"
-msgstr ""
-
-#: admin/vtprd-rules-ui-framework.php:257
-#: admin/vtprd-rules-ui-framework.php:258
-msgid "By Single Product with Variations  ... (pro only) ... "
 msgstr ""
 
 #: admin/vtprd-rules-ui-framework.php:259
 #: admin/vtprd-rules-ui-framework.php:260
-msgid "By Single Product with Variations"
+msgid "By Category / Logged-in Role ... (pro only) ...  "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:266
-#: admin/vtprd-rules-ui-framework.php:267
-msgid "By Single Product ... (pro only) ... "
+#: admin/vtprd-rules-ui-framework.php:261
+#: admin/vtprd-rules-ui-framework.php:262
+#: admin/vtprd-rules-ui-framework.php:623
+#: admin/vtprd-rules-ui-framework.php:624
+msgid "By Category / Logged-in Role / Plugin Category"
 msgstr ""
 
 #: admin/vtprd-rules-ui-framework.php:268
 #: admin/vtprd-rules-ui-framework.php:269
-msgid "By Single Product"
+msgid ""
+"By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;"
+"&nbsp;   ... (pro only) ... "
+msgstr ""
+
+#: admin/vtprd-rules-ui-framework.php:270
+#: admin/vtprd-rules-ui-framework.php:271
+msgid ""
+"By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;"
+"&nbsp; "
+msgstr ""
+
+#: admin/vtprd-rules-ui-framework.php:277
+#: admin/vtprd-rules-ui-framework.php:278
+msgid ""
+"By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ... (pro "
+"only) ... "
 msgstr ""
 
 #: admin/vtprd-rules-ui-framework.php:279
+#: admin/vtprd-rules-ui-framework.php:280
+msgid "By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp; "
+msgstr ""
+
+#: admin/vtprd-rules-ui-framework.php:290
 msgid "Get Filter"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:282
-#: admin/vtprd-rules-ui-framework.php:285
+#: admin/vtprd-rules-ui-framework.php:293
+#: admin/vtprd-rules-ui-framework.php:296
 msgid "Inactive"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:288
+#: admin/vtprd-rules-ui-framework.php:299
 msgid "Get a Mouse (Free)"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:291
+#: admin/vtprd-rules-ui-framework.php:302
 msgid "Get them for a Group Price"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:294
+#: admin/vtprd-rules-ui-framework.php:305
 msgid "Get the Cheapest at a Discount"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:297
+#: admin/vtprd-rules-ui-framework.php:308
 msgid "Get the 6th one at a Discount"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:312
+#: admin/vtprd-rules-ui-framework.php:323
 msgid " - Choose a Get Group Filter - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:313
+#: admin/vtprd-rules-ui-framework.php:324
 msgid " - Choose a Discount Group Filter - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:320
+#: admin/vtprd-rules-ui-framework.php:331
 msgid "Discount Group Same as Buy Group"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:326
+#: admin/vtprd-rules-ui-framework.php:337
 msgid "Discount Any Product"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:332
+#: admin/vtprd-rules-ui-framework.php:343
 msgid "By Category / Plugin Category  ... (pro only) ...  "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:333
-#: admin/vtprd-rules-ui-framework.php:785
+#: admin/vtprd-rules-ui-framework.php:344
+#: admin/vtprd-rules-ui-framework.php:796
 msgid "By Category / Plugin Category"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:339
-msgid "By Single Product with Variations  ... (pro only) ...  "
+#: admin/vtprd-rules-ui-framework.php:350
+msgid ""
+"By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;"
+"&nbsp;   ... (pro only) ...  "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:340
-#: admin/vtprd-rules-ui-framework.php:622
-#: admin/vtprd-rules-ui-framework.php:792
-msgid "By Single Product with Variations "
+#: admin/vtprd-rules-ui-framework.php:351
+#: admin/vtprd-rules-ui-framework.php:633
+#: admin/vtprd-rules-ui-framework.php:803
+msgid ""
+"By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;"
+"&nbsp;  "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:346
-msgid "By Single Product  ... (pro only) ...  "
-msgstr ""
-
-#: admin/vtprd-rules-ui-framework.php:347
-#: admin/vtprd-rules-ui-framework.php:630
-#: admin/vtprd-rules-ui-framework.php:631
-#: admin/vtprd-rules-ui-framework.php:799
-msgid "By Single Product "
+#: admin/vtprd-rules-ui-framework.php:357
+msgid ""
+"By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;   ... (pro "
+"only) ...  "
 msgstr ""
 
 #: admin/vtprd-rules-ui-framework.php:358
+#: admin/vtprd-rules-ui-framework.php:641
+#: admin/vtprd-rules-ui-framework.php:642
+#: admin/vtprd-rules-ui-framework.php:810
+msgid "By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  "
+msgstr ""
+
+#: admin/vtprd-rules-ui-framework.php:369
 msgid "Basic Rule"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:366
+#: admin/vtprd-rules-ui-framework.php:377
 msgid "Advanced Rule"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:384
+#: admin/vtprd-rules-ui-framework.php:395
 msgid "Rule is ON"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:390
+#: admin/vtprd-rules-ui-framework.php:401
 msgid "Rule is ON Always"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:396
+#: admin/vtprd-rules-ui-framework.php:407
 msgid "Rule is OFF"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:415
+#: admin/vtprd-rules-ui-framework.php:426
 msgid "Wizard is On"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:421
+#: admin/vtprd-rules-ui-framework.php:432
 msgid "Wizard is Off"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:441
+#: admin/vtprd-rules-ui-framework.php:452
 msgid "msg_badge is On"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:447
+#: admin/vtprd-rules-ui-framework.php:458
 msgid "msg_badge is Off"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:505
-#: admin/vtprd-rules-ui-framework.php:560 admin/vtprd-setup-options.php:1555
+#: admin/vtprd-rules-ui-framework.php:516
+#: admin/vtprd-rules-ui-framework.php:571 admin/vtprd-setup-options.php:1555
 #: admin/vtprd-setup-options.php:1596 admin/vtprd-setup-options.php:1741
 #: admin/vtprd-setup-options.php:1842 admin/vtprd-setup-options.php:1858
 #: admin/vtprd-setup-options.php:1908 admin/vtprd-setup-options.php:1925
@@ -297,8 +309,8 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:511
-#: admin/vtprd-rules-ui-framework.php:566 admin/vtprd-setup-options.php:1554
+#: admin/vtprd-rules-ui-framework.php:522
+#: admin/vtprd-rules-ui-framework.php:577 admin/vtprd-setup-options.php:1554
 #: admin/vtprd-setup-options.php:1595 admin/vtprd-setup-options.php:1740
 #: admin/vtprd-setup-options.php:1841 admin/vtprd-setup-options.php:1857
 #: admin/vtprd-setup-options.php:1907 admin/vtprd-setup-options.php:1924
@@ -312,988 +324,1003 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:529
+#: admin/vtprd-rules-ui-framework.php:540
 msgid " No - if product already On Sale, no further discount  "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:535
+#: admin/vtprd-rules-ui-framework.php:546
 msgid " Yes - Apply Discount to Product Price, even if On Sale"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:541
+#: admin/vtprd-rules-ui-framework.php:552
 msgid "Apply Discount, if discounted Regular Price Less than Sale Price  "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:577
+#: admin/vtprd-rules-ui-framework.php:588
 msgid ""
 "Rule Application Priority, used if multiple rules process together (lower "
 "number processed first) "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:597
-#: admin/vtprd-rules-ui-framework.php:765
+#: admin/vtprd-rules-ui-framework.php:608
+#: admin/vtprd-rules-ui-framework.php:776
 msgid "- Group Filter Type -  "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:603
+#: admin/vtprd-rules-ui-framework.php:614
 msgid "Any Product  "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:604
+#: admin/vtprd-rules-ui-framework.php:615
 msgid "Any Catalog Product  "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:610
-#: admin/vtprd-rules-ui-framework.php:611
+#: admin/vtprd-rules-ui-framework.php:621
+#: admin/vtprd-rules-ui-framework.php:622
 msgid "By Category / Logged-in Role / Plugin Category ... (pro only) ..."
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:619
-#: admin/vtprd-rules-ui-framework.php:620
-#: admin/vtprd-rules-ui-framework.php:791
-msgid "By Single Product with Variations ... (pro only) ..."
+#: admin/vtprd-rules-ui-framework.php:630
+#: admin/vtprd-rules-ui-framework.php:631
+#: admin/vtprd-rules-ui-framework.php:802
+msgid ""
+"By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;"
+"&nbsp;  ... (pro only) ..."
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:621
-msgid "By Single Product with Variations  "
+#: admin/vtprd-rules-ui-framework.php:632
+msgid ""
+"By Single Product with Variations &nbsp;&nbsp; (+ Logged-in Role)&nbsp;"
+"&nbsp;   "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:628
-#: admin/vtprd-rules-ui-framework.php:629
-#: admin/vtprd-rules-ui-framework.php:798
-msgid "By Single Product ... (pro only) ..."
+#: admin/vtprd-rules-ui-framework.php:639
+#: admin/vtprd-rules-ui-framework.php:640
+#: admin/vtprd-rules-ui-framework.php:809
+msgid ""
+"By Single Product &nbsp;&nbsp; (+ Logged-in Role)&nbsp;&nbsp;  ... (pro "
+"only) ..."
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:658
-#: admin/vtprd-rules-ui-framework.php:827
+#: admin/vtprd-rules-ui-framework.php:669
+#: admin/vtprd-rules-ui-framework.php:838
 msgid " And"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:666
-#: admin/vtprd-rules-ui-framework.php:835
+#: admin/vtprd-rules-ui-framework.php:677
+#: admin/vtprd-rules-ui-framework.php:846
 msgid " Or"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:686
+#: admin/vtprd-rules-ui-framework.php:697
 msgid " - Applies to the Buy Population... - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:687
+#: admin/vtprd-rules-ui-framework.php:698
 msgid " - Applies to the Discount Population... - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:693
+#: admin/vtprd-rules-ui-framework.php:704
 msgid "Applies to all Buy Products as a group "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:694
+#: admin/vtprd-rules-ui-framework.php:705
 msgid "Applies to all Discount Products as a group "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:700
+#: admin/vtprd-rules-ui-framework.php:711
 msgid "Applies to each individual Buy Product "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:701
+#: admin/vtprd-rules-ui-framework.php:712
 msgid "Applies to each individual Discount Product "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:707
+#: admin/vtprd-rules-ui-framework.php:718
 msgid "Applies to each individual Buy Product, limited by a count "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:708
+#: admin/vtprd-rules-ui-framework.php:719
 msgid "Applies to each individual Discount Product, limited by a count "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:726
+#: admin/vtprd-rules-ui-framework.php:737
 msgid "Apply to Quantity Total "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:734
+#: admin/vtprd-rules-ui-framework.php:745
 msgid "Apply to Price "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:771
+#: admin/vtprd-rules-ui-framework.php:782
 msgid "Discount Group Same as Buy Group "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:778
+#: admin/vtprd-rules-ui-framework.php:789
 msgid "Any Product "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:784
+#: admin/vtprd-rules-ui-framework.php:795
 msgid "By Category / Plugin Category ... (pro only) ..."
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:855
+#: admin/vtprd-rules-ui-framework.php:866
 msgid "Applies to the Buy Population as a group "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:861
+#: admin/vtprd-rules-ui-framework.php:872
 msgid "Applies to each member of the Buy Population "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:867
+#: admin/vtprd-rules-ui-framework.php:878
 msgid "Applies to some members of the Buy Population, limited by a count "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:885
+#: admin/vtprd-rules-ui-framework.php:896
 msgid " Apply to Quantity Total"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:893
+#: admin/vtprd-rules-ui-framework.php:904
 msgid " Apply to Price"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:928
-#: admin/vtprd-rules-ui-framework.php:940
+#: admin/vtprd-rules-ui-framework.php:939
+#: admin/vtprd-rules-ui-framework.php:951
 msgid "Allow product"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:928
+#: admin/vtprd-rules-ui-framework.php:939
 msgid "In Rules as normal"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:934
-#: admin/vtprd-rules-ui-framework.php:946
+#: admin/vtprd-rules-ui-framework.php:945
+#: admin/vtprd-rules-ui-framework.php:957
 msgid "Exclude product"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:934
+#: admin/vtprd-rules-ui-framework.php:945
 msgid "From All Rules Forever"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:940
+#: admin/vtprd-rules-ui-framework.php:951
 msgid "In the Checked Rules below"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:946
+#: admin/vtprd-rules-ui-framework.php:957
 msgid "From the Checked Rules below"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:983
+#: admin/vtprd-rules-ui-framework.php:994
 msgid "- Please Choose a Pricing Deal Template Type -"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:989
+#: admin/vtprd-rules-ui-framework.php:1000
 msgid "Immediate Price Reduction - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:989
+#: admin/vtprd-rules-ui-framework.php:1000
 msgid "Catalog Display Pricing"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:995
-#: admin/vtprd-rules-ui-framework.php:1033
+#: admin/vtprd-rules-ui-framework.php:1006
+#: admin/vtprd-rules-ui-framework.php:1044
 msgid "Store-Wide Sale with a Percentage or $ Value Off"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:995
+#: admin/vtprd-rules-ui-framework.php:1006
 msgid "applied when PRODUCT DISPLAYS"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:995
-#: admin/vtprd-rules-ui-framework.php:1015
+#: admin/vtprd-rules-ui-framework.php:1006
+#: admin/vtprd-rules-ui-framework.php:1026
 msgid "- Realtime -"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1013
-#: admin/vtprd-rules-ui-framework.php:1051
+#: admin/vtprd-rules-ui-framework.php:1024
+#: admin/vtprd-rules-ui-framework.php:1062
 msgid "Simple Discount"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1014
-#: admin/vtprd-rules-ui-framework.php:1052
+#: admin/vtprd-rules-ui-framework.php:1025
+#: admin/vtprd-rules-ui-framework.php:1063
 msgid ""
 "(by Membership / Wholesale  / Product Category / Pricing Deal Category / "
 "Product / Variation)"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1027
+#: admin/vtprd-rules-ui-framework.php:1038
 msgid "Simple Deals for add to Cart Pricing"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1033
-#: admin/vtprd-rules-ui-framework.php:1053
+#: admin/vtprd-rules-ui-framework.php:1044
+#: admin/vtprd-rules-ui-framework.php:1064
 msgid "- Cart -"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1059
+#: admin/vtprd-rules-ui-framework.php:1070
 msgid "Discount for purchases *already in Cart*"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1065
+#: admin/vtprd-rules-ui-framework.php:1076
 msgid "Buy 5/$500, Get a discount for Some/All of Those 5"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1067
-#: admin/vtprd-rules-ui-framework.php:1095
+#: admin/vtprd-rules-ui-framework.php:1078
+#: admin/vtprd-rules-ui-framework.php:1106
 msgid "*BOGO*"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1073
+#: admin/vtprd-rules-ui-framework.php:1084
 msgid "Buy 5, Get them for the price of 4/$400"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1075
-#: admin/vtprd-rules-ui-framework.php:1103
+#: admin/vtprd-rules-ui-framework.php:1086
+#: admin/vtprd-rules-ui-framework.php:1114
 msgid "*PACKAGE PRICING*"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1081
+#: admin/vtprd-rules-ui-framework.php:1092
 msgid "Buy 5/$500, Get the cheapest/most expensive of those at a discount"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1087
+#: admin/vtprd-rules-ui-framework.php:1098
 msgid "Discount for *Next* Purchases added to Cart"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1093
+#: admin/vtprd-rules-ui-framework.php:1104
 msgid "Buy 6/$600, Get a discount on Next 4/$400 added to Cart"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1101
+#: admin/vtprd-rules-ui-framework.php:1112
 msgid "Buy 6/$600, Get Next 3 for the price of 2/$200"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1109
+#: admin/vtprd-rules-ui-framework.php:1120
 msgid ""
 "Buy 6/$600, Get a discount on the cheapest/most expensive in Next 5/$500 "
 "added to Cart"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1115
+#: admin/vtprd-rules-ui-framework.php:1126
 msgid "Buy 6/$600, Get the Next Nth added to Cart at a discount"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1163
-#: admin/vtprd-rules-ui-framework.php:1324
-#: admin/vtprd-rules-ui-framework.php:2982
-#: admin/vtprd-rules-ui-framework.php:3136
+#: admin/vtprd-rules-ui-framework.php:1174
+#: admin/vtprd-rules-ui-framework.php:1335
+#: admin/vtprd-rules-ui-framework.php:2993
+#: admin/vtprd-rules-ui-framework.php:3147
 msgid ""
 "\"Buy group amount\" - only \"No buy condition\" is allowed for this setup "
 "type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1168
-#: admin/vtprd-rules-ui-framework.php:1329
-#: admin/vtprd-rules-ui-framework.php:2987
-#: admin/vtprd-rules-ui-framework.php:3141
+#: admin/vtprd-rules-ui-framework.php:1179
+#: admin/vtprd-rules-ui-framework.php:1340
+#: admin/vtprd-rules-ui-framework.php:2998
+#: admin/vtprd-rules-ui-framework.php:3152
 msgid "\"Buy pool amount\" - no values allowed for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1183
-#: admin/vtprd-rules-ui-framework.php:1339
-#: admin/vtprd-rules-ui-framework.php:3002
-#: admin/vtprd-rules-ui-framework.php:3151
+#: admin/vtprd-rules-ui-framework.php:1194
+#: admin/vtprd-rules-ui-framework.php:1350
+#: admin/vtprd-rules-ui-framework.php:3013
+#: admin/vtprd-rules-ui-framework.php:3162
 msgid ""
 "\"Buy group min / max\" - only \"No Discount Group Amount Min / Max \" is "
 "allowed for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1188
-#: admin/vtprd-rules-ui-framework.php:1344
-#: admin/vtprd-rules-ui-framework.php:3007
-#: admin/vtprd-rules-ui-framework.php:3156
+#: admin/vtprd-rules-ui-framework.php:1199
+#: admin/vtprd-rules-ui-framework.php:1355
+#: admin/vtprd-rules-ui-framework.php:3018
+#: admin/vtprd-rules-ui-framework.php:3167
 msgid "\"Buy group min / max amount\" - no values allowed for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1193
+#: admin/vtprd-rules-ui-framework.php:1204
 msgid ""
 "\"Get group repeat\" - only \" No Repeats  (Apply Discount to Discount Group "
 "ONCE)\" is allowed for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1198
-#: admin/vtprd-rules-ui-framework.php:1354
-#: admin/vtprd-rules-ui-framework.php:3017
-#: admin/vtprd-rules-ui-framework.php:3166
+#: admin/vtprd-rules-ui-framework.php:1209
+#: admin/vtprd-rules-ui-framework.php:1365
+#: admin/vtprd-rules-ui-framework.php:3028
+#: admin/vtprd-rules-ui-framework.php:3177
 msgid "\"Get repeat amount\" - no values allowed for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1203
-#: admin/vtprd-rules-ui-framework.php:1359
-#: admin/vtprd-rules-ui-framework.php:3022
-#: admin/vtprd-rules-ui-framework.php:3171
+#: admin/vtprd-rules-ui-framework.php:1214
+#: admin/vtprd-rules-ui-framework.php:1370
+#: admin/vtprd-rules-ui-framework.php:3033
+#: admin/vtprd-rules-ui-framework.php:3182
 msgid ""
 "\"Get group amount\" - only \"Discount Each Unit\" is allowed for this setup "
 "type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1208
-#: admin/vtprd-rules-ui-framework.php:1364
-#: admin/vtprd-rules-ui-framework.php:3027
-#: admin/vtprd-rules-ui-framework.php:3176
+#: admin/vtprd-rules-ui-framework.php:1219
+#: admin/vtprd-rules-ui-framework.php:1375
+#: admin/vtprd-rules-ui-framework.php:3038
+#: admin/vtprd-rules-ui-framework.php:3187
 msgid "\"Get pool amount\" - no values allowed for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1213
-#: admin/vtprd-rules-ui-framework.php:1369
-#: admin/vtprd-rules-ui-framework.php:3032
-#: admin/vtprd-rules-ui-framework.php:3181
+#: admin/vtprd-rules-ui-framework.php:1224
+#: admin/vtprd-rules-ui-framework.php:1380
+#: admin/vtprd-rules-ui-framework.php:3043
+#: admin/vtprd-rules-ui-framework.php:3192
 msgid ""
 "\"Get pool amount applies to\" - only \"All action pool products\" is "
 "allowed for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1218
-#: admin/vtprd-rules-ui-framework.php:1374
-#: admin/vtprd-rules-ui-framework.php:3037
-#: admin/vtprd-rules-ui-framework.php:3186
+#: admin/vtprd-rules-ui-framework.php:1229
+#: admin/vtprd-rules-ui-framework.php:1385
+#: admin/vtprd-rules-ui-framework.php:3048
+#: admin/vtprd-rules-ui-framework.php:3197
 msgid ""
 "\"Get group min/mx - only \"No Discount Group Amount Min / Max \" is allowed "
 "for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1223
-#: admin/vtprd-rules-ui-framework.php:1379
-#: admin/vtprd-rules-ui-framework.php:3042
-#: admin/vtprd-rules-ui-framework.php:3191
+#: admin/vtprd-rules-ui-framework.php:1234
+#: admin/vtprd-rules-ui-framework.php:1390
+#: admin/vtprd-rules-ui-framework.php:3053
+#: admin/vtprd-rules-ui-framework.php:3202
 msgid "\"Get pool amount amount\" - no values allowed for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1228
-#: admin/vtprd-rules-ui-framework.php:1384
-#: admin/vtprd-rules-ui-framework.php:1533
-#: admin/vtprd-rules-ui-framework.php:1964
-#: admin/vtprd-rules-ui-framework.php:2179
-#: admin/vtprd-rules-ui-framework.php:2609
-#: admin/vtprd-rules-ui-framework.php:2824
-#: admin/vtprd-rules-ui-framework.php:3047
-#: admin/vtprd-rules-ui-framework.php:3196
+#: admin/vtprd-rules-ui-framework.php:1239
+#: admin/vtprd-rules-ui-framework.php:1395
+#: admin/vtprd-rules-ui-framework.php:1544
+#: admin/vtprd-rules-ui-framework.php:1975
+#: admin/vtprd-rules-ui-framework.php:2190
+#: admin/vtprd-rules-ui-framework.php:2620
+#: admin/vtprd-rules-ui-framework.php:2835
+#: admin/vtprd-rules-ui-framework.php:3058
+#: admin/vtprd-rules-ui-framework.php:3207
 msgid ""
 "\"Discount Type \" - \"For the price of\" is not allowed for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1236
-#: admin/vtprd-rules-ui-framework.php:1541
-#: admin/vtprd-rules-ui-framework.php:1972
-#: admin/vtprd-rules-ui-framework.php:2187
-#: admin/vtprd-rules-ui-framework.php:2617
-#: admin/vtprd-rules-ui-framework.php:2832
-#: admin/vtprd-rules-ui-framework.php:3055
-#: admin/vtprd-rules-ui-framework.php:3204
+#: admin/vtprd-rules-ui-framework.php:1247
+#: admin/vtprd-rules-ui-framework.php:1552
+#: admin/vtprd-rules-ui-framework.php:1983
+#: admin/vtprd-rules-ui-framework.php:2198
+#: admin/vtprd-rules-ui-framework.php:2628
+#: admin/vtprd-rules-ui-framework.php:2843
+#: admin/vtprd-rules-ui-framework.php:3066
+#: admin/vtprd-rules-ui-framework.php:3215
 msgid ""
 "When \"Discount Type\" is \"Fixed Price\" or \"Free\", \"Discount Applies To"
 "\" must be \"Each\", \"Cheapest\" or \"Most Expensive\" "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1248
-#: admin/vtprd-rules-ui-framework.php:1404
-#: admin/vtprd-rules-ui-framework.php:3067
-#: admin/vtprd-rules-ui-framework.php:3216
+#: admin/vtprd-rules-ui-framework.php:1259
+#: admin/vtprd-rules-ui-framework.php:1415
+#: admin/vtprd-rules-ui-framework.php:3078
+#: admin/vtprd-rules-ui-framework.php:3227
 msgid ""
 "\"Automatically Add Free Product to Cart\" not allowed for this deal type"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1258
-#: admin/vtprd-rules-ui-framework.php:1414
+#: admin/vtprd-rules-ui-framework.php:1269
+#: admin/vtprd-rules-ui-framework.php:1425
 msgid ""
 "\"Discount applies to\" - \"each product\" or \"all products\" only allowed "
 "for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1334
-#: admin/vtprd-rules-ui-framework.php:3146
+#: admin/vtprd-rules-ui-framework.php:1345
+#: admin/vtprd-rules-ui-framework.php:3157
 msgid ""
 "\"Buy pool amount applies to\" - only \"Each buy pool product\" is allowed "
 "for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1349
-#: admin/vtprd-rules-ui-framework.php:3012
-#: admin/vtprd-rules-ui-framework.php:3161
+#: admin/vtprd-rules-ui-framework.php:1360
+#: admin/vtprd-rules-ui-framework.php:3023
+#: admin/vtprd-rules-ui-framework.php:3172
 msgid ""
 "\"Get repeat condition\" - only \"Apply the Get Pool Once (No Repeats)\" is "
 "allowed for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1392
+#: admin/vtprd-rules-ui-framework.php:1403
 msgid ""
 "When \"Discount Type\" is \"Fixed Price\" or \"Free\", \"Discount Applies To"
 "\" must be \"Each\", \"Cheapest\" or \"Most Expensiv\" "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1473
+#: admin/vtprd-rules-ui-framework.php:1484
 msgid "Please choose a valid Group Amount Type"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1569
-#: admin/vtprd-rules-ui-framework.php:1785
-#: admin/vtprd-rules-ui-framework.php:2000
-#: admin/vtprd-rules-ui-framework.php:2215
-#: admin/vtprd-rules-ui-framework.php:2430
-#: admin/vtprd-rules-ui-framework.php:2645
-#: admin/vtprd-rules-ui-framework.php:2860
+#: admin/vtprd-rules-ui-framework.php:1580
+#: admin/vtprd-rules-ui-framework.php:1796
+#: admin/vtprd-rules-ui-framework.php:2011
+#: admin/vtprd-rules-ui-framework.php:2226
+#: admin/vtprd-rules-ui-framework.php:2441
+#: admin/vtprd-rules-ui-framework.php:2656
+#: admin/vtprd-rules-ui-framework.php:2871
 msgid ""
 "\"Get (Discount) Group Filter\" must be either a single product, or a single "
 "product variation, When \"Automatically Add Free Product to Cart\" is "
 "Selected."
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1569
-#: admin/vtprd-rules-ui-framework.php:1785
-#: admin/vtprd-rules-ui-framework.php:2000
-#: admin/vtprd-rules-ui-framework.php:2215
-#: admin/vtprd-rules-ui-framework.php:2430
-#: admin/vtprd-rules-ui-framework.php:2645
-#: admin/vtprd-rules-ui-framework.php:2860
+#: admin/vtprd-rules-ui-framework.php:1580
+#: admin/vtprd-rules-ui-framework.php:1796
+#: admin/vtprd-rules-ui-framework.php:2011
+#: admin/vtprd-rules-ui-framework.php:2226
+#: admin/vtprd-rules-ui-framework.php:2441
+#: admin/vtprd-rules-ui-framework.php:2656
+#: admin/vtprd-rules-ui-framework.php:2871
 msgid ""
 "Choose either \"Discount a Single Product Only\", or \"Discount a Single "
 "Product with Variations\" and select a *Single* Variation. "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1569
-#: admin/vtprd-rules-ui-framework.php:1785
-#: admin/vtprd-rules-ui-framework.php:2000
-#: admin/vtprd-rules-ui-framework.php:2215
-#: admin/vtprd-rules-ui-framework.php:2430
-#: admin/vtprd-rules-ui-framework.php:2645
-#: admin/vtprd-rules-ui-framework.php:2860
+#: admin/vtprd-rules-ui-framework.php:1580
+#: admin/vtprd-rules-ui-framework.php:1796
+#: admin/vtprd-rules-ui-framework.php:2011
+#: admin/vtprd-rules-ui-framework.php:2226
+#: admin/vtprd-rules-ui-framework.php:2441
+#: admin/vtprd-rules-ui-framework.php:2656
+#: admin/vtprd-rules-ui-framework.php:2871
 msgid "Otherwise the Auto add does not know which product to add. "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1577
-#: admin/vtprd-rules-ui-framework.php:1793
-#: admin/vtprd-rules-ui-framework.php:2008
-#: admin/vtprd-rules-ui-framework.php:2223
-#: admin/vtprd-rules-ui-framework.php:2438
-#: admin/vtprd-rules-ui-framework.php:2653
-#: admin/vtprd-rules-ui-framework.php:2868
+#: admin/vtprd-rules-ui-framework.php:1588
+#: admin/vtprd-rules-ui-framework.php:1804
+#: admin/vtprd-rules-ui-framework.php:2019
+#: admin/vtprd-rules-ui-framework.php:2234
+#: admin/vtprd-rules-ui-framework.php:2449
+#: admin/vtprd-rules-ui-framework.php:2664
+#: admin/vtprd-rules-ui-framework.php:2879
 msgid ""
 "\"Get (Discount) Group Amount\" may not be: \"Discount $$ Value\" or \"Nth "
 "Quantity\" , When \"Automatically Add Free Product to Cart\" is Selected"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1585
-#: admin/vtprd-rules-ui-framework.php:1801
-#: admin/vtprd-rules-ui-framework.php:2016
-#: admin/vtprd-rules-ui-framework.php:2231
-#: admin/vtprd-rules-ui-framework.php:2446
-#: admin/vtprd-rules-ui-framework.php:2661
-#: admin/vtprd-rules-ui-framework.php:2876
+#: admin/vtprd-rules-ui-framework.php:1596
+#: admin/vtprd-rules-ui-framework.php:1812
+#: admin/vtprd-rules-ui-framework.php:2027
+#: admin/vtprd-rules-ui-framework.php:2242
+#: admin/vtprd-rules-ui-framework.php:2457
+#: admin/vtprd-rules-ui-framework.php:2672
+#: admin/vtprd-rules-ui-framework.php:2887
 msgid ""
 "\"Discount Maximum for Rule\" may only be: \"No Discount Rule Max\" or "
 "\"Maximum Number of Times\" , When \"Automatically Add Free Product to Cart"
 "\" is Selected"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1593
-#: admin/vtprd-rules-ui-framework.php:1809
-#: admin/vtprd-rules-ui-framework.php:2024
-#: admin/vtprd-rules-ui-framework.php:2239
-#: admin/vtprd-rules-ui-framework.php:2454
-#: admin/vtprd-rules-ui-framework.php:2669
-#: admin/vtprd-rules-ui-framework.php:2884
+#: admin/vtprd-rules-ui-framework.php:1604
+#: admin/vtprd-rules-ui-framework.php:1820
+#: admin/vtprd-rules-ui-framework.php:2035
+#: admin/vtprd-rules-ui-framework.php:2250
+#: admin/vtprd-rules-ui-framework.php:2465
+#: admin/vtprd-rules-ui-framework.php:2680
+#: admin/vtprd-rules-ui-framework.php:2895
 msgid ""
 "\"Customer Rule Limit\" may only be: \"None\" or \"Max Rule Usage Count per "
 "Customer?\" , When \"Automatically Add Free Product to Cart\" is Selected"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1601
-#: admin/vtprd-rules-ui-framework.php:1817
-#: admin/vtprd-rules-ui-framework.php:2032
-#: admin/vtprd-rules-ui-framework.php:2247
-#: admin/vtprd-rules-ui-framework.php:2462
-#: admin/vtprd-rules-ui-framework.php:2677
-#: admin/vtprd-rules-ui-framework.php:2892
+#: admin/vtprd-rules-ui-framework.php:1612
+#: admin/vtprd-rules-ui-framework.php:1828
+#: admin/vtprd-rules-ui-framework.php:2043
+#: admin/vtprd-rules-ui-framework.php:2258
+#: admin/vtprd-rules-ui-framework.php:2473
+#: admin/vtprd-rules-ui-framework.php:2688
+#: admin/vtprd-rules-ui-framework.php:2903
 msgid ""
 "\"Discount per Product Maximum\" may only be: \"No Cumulative Product Max\" "
 "or \"Unit Quantity - Cumulative Product Max\" , When \"Automatically Add "
 "Free Product to Cart\" is Selected"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1609
-#: admin/vtprd-rules-ui-framework.php:1825
-#: admin/vtprd-rules-ui-framework.php:2040
-#: admin/vtprd-rules-ui-framework.php:2255
-#: admin/vtprd-rules-ui-framework.php:2470
-#: admin/vtprd-rules-ui-framework.php:2685
-#: admin/vtprd-rules-ui-framework.php:2900
+#: admin/vtprd-rules-ui-framework.php:1620
+#: admin/vtprd-rules-ui-framework.php:1836
+#: admin/vtprd-rules-ui-framework.php:2051
+#: admin/vtprd-rules-ui-framework.php:2266
+#: admin/vtprd-rules-ui-framework.php:2481
+#: admin/vtprd-rules-ui-framework.php:2696
+#: admin/vtprd-rules-ui-framework.php:2911
 msgid ""
 "\"Apply this Rule Discount in Addition to Coupon Discount\" must be: \"Yes"
 "\" , When \"Automatically Add Free Product to Cart\" is Selected."
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1611
-#: admin/vtprd-rules-ui-framework.php:1827
-#: admin/vtprd-rules-ui-framework.php:2042
-#: admin/vtprd-rules-ui-framework.php:2257
-#: admin/vtprd-rules-ui-framework.php:2472
-#: admin/vtprd-rules-ui-framework.php:2687
-#: admin/vtprd-rules-ui-framework.php:2902
+#: admin/vtprd-rules-ui-framework.php:1622
+#: admin/vtprd-rules-ui-framework.php:1838
+#: admin/vtprd-rules-ui-framework.php:2053
+#: admin/vtprd-rules-ui-framework.php:2268
+#: admin/vtprd-rules-ui-framework.php:2483
+#: admin/vtprd-rules-ui-framework.php:2698
+#: admin/vtprd-rules-ui-framework.php:2913
 msgid ""
 "In this case, the Rule will auto add the Free product, and the Coupon will "
 "be ignored. "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1619
-#: admin/vtprd-rules-ui-framework.php:1835
-#: admin/vtprd-rules-ui-framework.php:2050
-#: admin/vtprd-rules-ui-framework.php:2265
-#: admin/vtprd-rules-ui-framework.php:2480
-#: admin/vtprd-rules-ui-framework.php:2695
-#: admin/vtprd-rules-ui-framework.php:2910
+#: admin/vtprd-rules-ui-framework.php:1630
+#: admin/vtprd-rules-ui-framework.php:1846
+#: admin/vtprd-rules-ui-framework.php:2061
+#: admin/vtprd-rules-ui-framework.php:2276
+#: admin/vtprd-rules-ui-framework.php:2491
+#: admin/vtprd-rules-ui-framework.php:2706
+#: admin/vtprd-rules-ui-framework.php:2921
 msgid ""
 "\"Discount Group Repeat\" must be: \"No Repeats (Apply Discount to Discount "
 "Group ONCE)\" , When \"Automatically Add Free Product to Cart\" is Selected"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1689
-#: admin/vtprd-rules-ui-framework.php:2369
+#: admin/vtprd-rules-ui-framework.php:1700
+#: admin/vtprd-rules-ui-framework.php:2380
 msgid ""
 "\"Group Amount Type \" - Only \"buy Unit Quantity\" allowed for this setup "
 "type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1749
-#: admin/vtprd-rules-ui-framework.php:2394
+#: admin/vtprd-rules-ui-framework.php:1760
+#: admin/vtprd-rules-ui-framework.php:2405
 msgid ""
 "\"Discount Type \" - \"For the price of\" is required for this template "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1757
-#: admin/vtprd-rules-ui-framework.php:2402
+#: admin/vtprd-rules-ui-framework.php:1768
+#: admin/vtprd-rules-ui-framework.php:2413
 msgid ""
 "When \"For the price of\" is selected, \"Discount Applies To\" must be \"all"
 "\" "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:1764
-#: admin/vtprd-rules-ui-framework.php:2409
+#: admin/vtprd-rules-ui-framework.php:1775
+#: admin/vtprd-rules-ui-framework.php:2420
 msgid "\"for the price of units \" is required for this template "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:2062
-#: admin/vtprd-rules-ui-framework.php:2707
+#: admin/vtprd-rules-ui-framework.php:2073
+#: admin/vtprd-rules-ui-framework.php:2718
 msgid ""
 "\"Discount applies to\" - only \"Cheapest\" or \"Most Expensive\" allowed "
 "for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:2972
+#: admin/vtprd-rules-ui-framework.php:2983
 msgid ""
 "\"Buy Repeat\" - only \"Apply the Rule Once (No Repeats)\" is allowed for "
 "this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:2977
-#: admin/vtprd-rules-ui-framework.php:3131
+#: admin/vtprd-rules-ui-framework.php:2988
+#: admin/vtprd-rules-ui-framework.php:3142
 msgid "\"Rule repeat amount\" - no values allowed for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3077
-#: admin/vtprd-rules-ui-framework.php:3226
+#: admin/vtprd-rules-ui-framework.php:3088
+#: admin/vtprd-rules-ui-framework.php:3237
 msgid ""
 "\"Discount applies to\" - \"each product\" only allowed for this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3126
+#: admin/vtprd-rules-ui-framework.php:3137
 msgid ""
 "\"Rule repeat condition\" - only \"Just a Single Rule Usage\" is allowed for "
 "this setup type "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3279
-#: admin/vtprd-rules-ui-framework.php:3302 admin/vtprd-rules-ui.php:774
+#: admin/vtprd-rules-ui-framework.php:3290
+#: admin/vtprd-rules-ui-framework.php:3313 admin/vtprd-rules-ui.php:765
 msgid "Rule Usage Count"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3299
+#: admin/vtprd-rules-ui-framework.php:3310
 msgid "Buy Repeat Type"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3314
-#: admin/vtprd-rules-ui-framework.php:3323
-#: admin/vtprd-rules-ui-framework.php:3398
-#: admin/vtprd-rules-ui-framework.php:3407
-#: admin/vtprd-rules-ui-framework.php:3443
+#: admin/vtprd-rules-ui-framework.php:3325
+#: admin/vtprd-rules-ui-framework.php:3334
+#: admin/vtprd-rules-ui-framework.php:3409
+#: admin/vtprd-rules-ui-framework.php:3418
+#: admin/vtprd-rules-ui-framework.php:3454
 msgid "Group Amount Type"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3326
+#: admin/vtprd-rules-ui-framework.php:3337
 msgid "Group Amount Count"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3338
-#: admin/vtprd-rules-ui-framework.php:3422
+#: admin/vtprd-rules-ui-framework.php:3349
+#: admin/vtprd-rules-ui-framework.php:3433
 msgid "Group Amount Applies To"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3350
-#: admin/vtprd-rules-ui-framework.php:3434
+#: admin/vtprd-rules-ui-framework.php:3361
+#: admin/vtprd-rules-ui-framework.php:3445
 msgid "Group Amount Min/Max"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3362
+#: admin/vtprd-rules-ui-framework.php:3373
 msgid "Group Amount Min/Max Count"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3374 admin/vtprd-rules-ui.php:1001
+#: admin/vtprd-rules-ui-framework.php:3385 admin/vtprd-rules-ui.php:982
 msgid "Group Repeat"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3383
+#: admin/vtprd-rules-ui-framework.php:3394
 msgid "Group Repeat Type"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3386
+#: admin/vtprd-rules-ui-framework.php:3397
 msgid "Group Repeat Count"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3410
+#: admin/vtprd-rules-ui-framework.php:3421
 msgid "Group Amount Type Count"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3446
+#: admin/vtprd-rules-ui-framework.php:3457
 msgid " Group Amount Min/Max Count"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3458
+#: admin/vtprd-rules-ui-framework.php:3469
 msgid "Discount Amount Type"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3467
-#: admin/vtprd-rules-ui-framework.php:3479
+#: admin/vtprd-rules-ui-framework.php:3478
+#: admin/vtprd-rules-ui-framework.php:3490
 msgid "Discount Type"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3470
+#: admin/vtprd-rules-ui-framework.php:3481
 msgid "Discount Amount Count"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3482
+#: admin/vtprd-rules-ui-framework.php:3493
 msgid "Automatically Add Free Product to Cart"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3505 admin/vtprd-rules-ui.php:1111
+#: admin/vtprd-rules-ui-framework.php:3516 admin/vtprd-rules-ui.php:1092
 msgid "Discount Applies To"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3528
+#: admin/vtprd-rules-ui-framework.php:3539
 msgid "Maximum Rule Discount Type"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3537
-#: admin/vtprd-rules-ui-framework.php:3585
+#: admin/vtprd-rules-ui-framework.php:3548
+#: admin/vtprd-rules-ui-framework.php:3596
 msgid "Discount Maximum for Rule Type"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3540
+#: admin/vtprd-rules-ui-framework.php:3551
 msgid "Maximum Rule Discount Count "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3552
+#: admin/vtprd-rules-ui-framework.php:3563
 msgid "Maximum Lifetime Discount Type"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3561
+#: admin/vtprd-rules-ui-framework.php:3572
 msgid "Discount Maximum for Lifetime Type"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3564
+#: admin/vtprd-rules-ui-framework.php:3575
 msgid "Maximum Lifetime Discount Count "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3576
+#: admin/vtprd-rules-ui-framework.php:3587
 msgid "Maximum Rule Cumulative Discount Type"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3588
+#: admin/vtprd-rules-ui-framework.php:3599
 msgid "Maximum Rule Cumulative Discount Count "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3653
+#: admin/vtprd-rules-ui-framework.php:3664
 msgid " - Rule Usage Count Type - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3659
+#: admin/vtprd-rules-ui-framework.php:3670
 msgid "Apply Rule Once per Cart"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3660
+#: admin/vtprd-rules-ui-framework.php:3671
 msgid "Unlimited, Apply to All in Catalog Filter Group"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3669
+#: admin/vtprd-rules-ui-framework.php:3680
 msgid "Unlimited Rule Usage per Cart "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3675
+#: admin/vtprd-rules-ui-framework.php:3686
 msgid "Rule Usage Times, per Cart "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3727
+#: admin/vtprd-rules-ui-framework.php:3738
 msgid " - Group Amount Type - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3733
+#: admin/vtprd-rules-ui-framework.php:3744
 msgid "Buy Each Unit"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3734
+#: admin/vtprd-rules-ui-framework.php:3745
 msgid "Each Product in Catalog Filter Group"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3751
+#: admin/vtprd-rules-ui-framework.php:3762
 msgid "Buy Unit Quantity "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3758
+#: admin/vtprd-rules-ui-framework.php:3769
 msgid "Buy $$ Value "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3798
-#: admin/vtprd-rules-ui-framework.php:4070
+#: admin/vtprd-rules-ui-framework.php:3809
+#: admin/vtprd-rules-ui-framework.php:4081
 msgid " - Applies to Type - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3804
-#: admin/vtprd-rules-ui-framework.php:4076
-#: admin/vtprd-rules-ui-framework.php:4286
+#: admin/vtprd-rules-ui-framework.php:3815
+#: admin/vtprd-rules-ui-framework.php:4087
+#: admin/vtprd-rules-ui-framework.php:4297
 msgid "All Products"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3804
+#: admin/vtprd-rules-ui-framework.php:3815
 msgid "(total by group)"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3813
-#: admin/vtprd-rules-ui-framework.php:4083
-#: admin/vtprd-rules-ui-framework.php:4280
+#: admin/vtprd-rules-ui-framework.php:3824
+#: admin/vtprd-rules-ui-framework.php:4094
+#: admin/vtprd-rules-ui-framework.php:4291
 msgid "Each Product"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3813
+#: admin/vtprd-rules-ui-framework.php:3824
 msgid "(total by product)"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3838
-#: admin/vtprd-rules-ui-framework.php:4103
+#: admin/vtprd-rules-ui-framework.php:3849
+#: admin/vtprd-rules-ui-framework.php:4114
 msgid " - Min / Max Type - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3844
-#: admin/vtprd-rules-ui-framework.php:3845
-#: admin/vtprd-rules-ui-framework.php:4386
-#: admin/vtprd-rules-ui-framework.php:4440
-#: admin/vtprd-rules-ui-framework.php:4487
+#: admin/vtprd-rules-ui-framework.php:3855
+#: admin/vtprd-rules-ui-framework.php:3856
+#: admin/vtprd-rules-ui-framework.php:4397
+#: admin/vtprd-rules-ui-framework.php:4451
+#: admin/vtprd-rules-ui-framework.php:4498
 msgid "None "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3859
-#: admin/vtprd-rules-ui-framework.php:3860
+#: admin/vtprd-rules-ui-framework.php:3870
+#: admin/vtprd-rules-ui-framework.php:3871
 msgid "Minimum $$ Value "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3874
-#: admin/vtprd-rules-ui-framework.php:3875
+#: admin/vtprd-rules-ui-framework.php:3885
+#: admin/vtprd-rules-ui-framework.php:3886
 msgid "Maximum  $$ Value "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3920
+#: admin/vtprd-rules-ui-framework.php:3931
 msgid " - Group Repeat Type - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3926
-#: admin/vtprd-rules-ui-framework.php:4109
+#: admin/vtprd-rules-ui-framework.php:3937
+#: admin/vtprd-rules-ui-framework.php:4120
 msgid "None"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3932
+#: admin/vtprd-rules-ui-framework.php:3943
 msgid "Unlimited Discount Group Repeats"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3938
+#: admin/vtprd-rules-ui-framework.php:3949
 msgid "Discount Group Repeat Count"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:3995
-#: admin/vtprd-rules-ui-framework.php:4175
+#: admin/vtprd-rules-ui-framework.php:4006
+#: admin/vtprd-rules-ui-framework.php:4186
 msgid " - Discount Amount Type - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4001
+#: admin/vtprd-rules-ui-framework.php:4012
 msgid "Discount Each Unit"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4016
+#: admin/vtprd-rules-ui-framework.php:4027
 msgid "Discount Next One (single unit)"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4022
+#: admin/vtprd-rules-ui-framework.php:4033
 msgid "Discount Unit Quantity"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4023
+#: admin/vtprd-rules-ui-framework.php:4034
 msgid "Discount Next Unit Quantity"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4029
+#: admin/vtprd-rules-ui-framework.php:4040
 msgid "Discount $$ Value"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4030
+#: admin/vtprd-rules-ui-framework.php:4041
 msgid "Discount Next $$ Value"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4036
+#: admin/vtprd-rules-ui-framework.php:4047
 msgid "Discount Nth Unit"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4037
+#: admin/vtprd-rules-ui-framework.php:4048
 msgid "Discount Next Nth Unit"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4076
+#: admin/vtprd-rules-ui-framework.php:4087
 msgid "(total by group) "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4083
+#: admin/vtprd-rules-ui-framework.php:4094
 msgid "(total by product) "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4122
+#: admin/vtprd-rules-ui-framework.php:4133
 msgid "Minimum $$ Value"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4135
+#: admin/vtprd-rules-ui-framework.php:4146
 msgid "Maximum $$ Value"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4181
+#: admin/vtprd-rules-ui-framework.php:4192
 msgid "% Off "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4187
+#: admin/vtprd-rules-ui-framework.php:4198
 msgid "$$ Off "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4193
+#: admin/vtprd-rules-ui-framework.php:4204
 msgid "Fixed Unit Price $$ "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4200 admin/vtprd-rules-update.php:1204
+#: admin/vtprd-rules-ui-framework.php:4211 admin/vtprd-rules-update.php:1204
+#: woo-integration/vtprd-parent-cart-validation.php:1342
+#: woo-integration/vtprd-parent-cart-validation.php:1379
+#: woo-integration/vtprd-parent-cart-validation.php:1494
+#: woo-integration/vtprd-parent-cart-validation.php:1580
+#: woo-integration/vtprd-parent-functions.php:1964
+#: woo-integration/vtprd-parent-functions.php:2311
+#: woo-integration/vtprd-parent-functions.php:2631
+#: woo-integration/vtprd-parent-functions.php:2894
+#: woo-integration/vtprd-parent-functions.php:2953
 msgid "Free"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4200
+#: admin/vtprd-rules-ui-framework.php:4211
 msgid "[Discount = product price]"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4206
+#: admin/vtprd-rules-ui-framework.php:4217
 msgid "Package Price $$"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4214
+#: admin/vtprd-rules-ui-framework.php:4225
 msgid "Package Price by Unit Count Pricing"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4238
+#: admin/vtprd-rules-ui-framework.php:4249
 msgid "  Automatically Add Free Product to Cart"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4241
+#: admin/vtprd-rules-ui-framework.php:4252
 msgid "(discount group must be an individual product)"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4274
+#: admin/vtprd-rules-ui-framework.php:4285
 msgid " - Applies to Type -"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4280
+#: admin/vtprd-rules-ui-framework.php:4291
 msgid "(each product unit singly)"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4286
+#: admin/vtprd-rules-ui-framework.php:4297
 msgid "(all products as a group)"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4292
+#: admin/vtprd-rules-ui-framework.php:4303
 msgid "Cheapest Product"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4298
+#: admin/vtprd-rules-ui-framework.php:4309
 msgid "Most Expensive Product"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4380
+#: admin/vtprd-rules-ui-framework.php:4391
 msgid " - Cart Limit Type - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4386
-#: admin/vtprd-rules-ui-framework.php:4440
-#: admin/vtprd-rules-ui-framework.php:4487
+#: admin/vtprd-rules-ui-framework.php:4397
+#: admin/vtprd-rules-ui-framework.php:4451
+#: admin/vtprd-rules-ui-framework.php:4498
 msgid "- Unlimited Discount Usage"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4386
+#: admin/vtprd-rules-ui-framework.php:4397
 msgid " - Per Cart "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4392
+#: admin/vtprd-rules-ui-framework.php:4403
 msgid "Cart Discount Max - Percentage of Total Value"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4399
+#: admin/vtprd-rules-ui-framework.php:4410
 msgid "Cart Discount Max - Number of Times Used"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4406
+#: admin/vtprd-rules-ui-framework.php:4417
 msgid "Cart Discount Max - $$ Value"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4434
+#: admin/vtprd-rules-ui-framework.php:4445
 msgid " - Customer Lifetime Limit Type - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4440
+#: admin/vtprd-rules-ui-framework.php:4451
 msgid " - Per Customer "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4446
-#: admin/vtprd-rules-ui-framework.php:4447
+#: admin/vtprd-rules-ui-framework.php:4457
+#: admin/vtprd-rules-ui-framework.php:4458
 msgid "Max Rule repeats per Customer?"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4446
-#: admin/vtprd-rules-ui-framework.php:4447
-#: admin/vtprd-rules-ui-framework.php:4453
-#: admin/vtprd-rules-ui-framework.php:4454
+#: admin/vtprd-rules-ui-framework.php:4457
+#: admin/vtprd-rules-ui-framework.php:4458
+#: admin/vtprd-rules-ui-framework.php:4464
+#: admin/vtprd-rules-ui-framework.php:4465
 msgid "(Ever)"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4446
+#: admin/vtprd-rules-ui-framework.php:4457
 msgid " (pro only)"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4453
-#: admin/vtprd-rules-ui-framework.php:4454
+#: admin/vtprd-rules-ui-framework.php:4464
+#: admin/vtprd-rules-ui-framework.php:4465
 msgid "Max $$ Discount the Customer can receive?"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4453 admin/vtprd-rules-ui.php:1236
+#: admin/vtprd-rules-ui-framework.php:4464 admin/vtprd-rules-ui.php:1217
 msgid "(pro only)"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4481
+#: admin/vtprd-rules-ui-framework.php:4492
 msgid " - Product Limit Type - "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4487
+#: admin/vtprd-rules-ui-framework.php:4498
 msgid " - Per Product "
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4493
+#: admin/vtprd-rules-ui-framework.php:4504
 msgid "Product Discount Max - Percentage of Total Value"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4499
+#: admin/vtprd-rules-ui-framework.php:4510
 msgid "Product Discount Max - Number of Times Used"
 msgstr ""
 
-#: admin/vtprd-rules-ui-framework.php:4505
+#: admin/vtprd-rules-ui-framework.php:4516
 msgid "Product Discount Max - $$ Value"
 msgstr ""
 
@@ -1421,7 +1448,7 @@ msgstr ""
 msgid "Hover Help"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:546 admin/vtprd-setup-options.php:2581
+#: admin/vtprd-rules-ui.php:546 admin/vtprd-setup-options.php:2587
 msgid ""
 "%s - We recommend setting memory to at least 64MB. See: <a href=\"%s"
 "\">Increasing memory allocated to PHP</a>"
@@ -1431,7 +1458,7 @@ msgstr ""
 msgid "Buy Group "
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:585 admin/vtprd-rules-ui.php:820
+#: admin/vtprd-rules-ui.php:585 admin/vtprd-rules-ui.php:811
 msgid "(Discounted Group)"
 msgstr ""
 
@@ -1439,309 +1466,309 @@ msgstr ""
 msgid "Buy Group"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:600 admin/vtprd-rules-ui.php:834
+#: admin/vtprd-rules-ui.php:600 admin/vtprd-rules-ui.php:825
 msgid "Group Product Filter"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:630 admin/vtprd-rules-ui.php:863
-msgid "Product must be in the Filter Group"
-msgstr ""
-
-#: admin/vtprd-rules-ui.php:633 admin/vtprd-rules-ui.php:866
-msgid "to be valid for the Deal"
-msgstr ""
-
-#: admin/vtprd-rules-ui.php:649 admin/vtprd-rules-ui.php:696
-#: admin/vtprd-rules-ui.php:881 admin/vtprd-rules-ui.php:924
+#: admin/vtprd-rules-ui.php:640 admin/vtprd-rules-ui.php:687
+#: admin/vtprd-rules-ui.php:862 admin/vtprd-rules-ui.php:905
 msgid "Group Amount"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:676
+#: admin/vtprd-rules-ui.php:667
 msgid "Buy how many / how much"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:679 admin/vtprd-rules-ui.php:908
+#: admin/vtprd-rules-ui.php:670 admin/vtprd-rules-ui.php:889
 msgid "to get access to the Deal?"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:696 admin/vtprd-rules-ui.php:924
+#: admin/vtprd-rules-ui.php:687 admin/vtprd-rules-ui.php:905
 msgid "Applies to"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:714
+#: admin/vtprd-rules-ui.php:705
 msgid "How is the Buy"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:717 admin/vtprd-rules-ui.php:944
+#: admin/vtprd-rules-ui.php:708 admin/vtprd-rules-ui.php:925
 msgid "Group Amount counted?"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:734 admin/vtprd-rules-ui.php:962
+#: admin/vtprd-rules-ui.php:725 admin/vtprd-rules-ui.php:943
 msgid "Min / Max"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:755 admin/vtprd-rules-ui.php:984
+#: admin/vtprd-rules-ui.php:746 admin/vtprd-rules-ui.php:965
 msgid "Put an upper or lower "
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:758
+#: admin/vtprd-rules-ui.php:749
 msgid "limit on the Buy Group"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:796
+#: admin/vtprd-rules-ui.php:787
 msgid "How many times can the Rule "
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:799
+#: admin/vtprd-rules-ui.php:790
 msgid "be used per Cart?"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:820 admin/vtprd-rules-ui.php:823
+#: admin/vtprd-rules-ui.php:811 admin/vtprd-rules-ui.php:814
 msgid "Get Group "
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:823
+#: admin/vtprd-rules-ui.php:814
 msgid "(Inactive)"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:905
+#: admin/vtprd-rules-ui.php:886
 msgid "Get how many / how much"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:941
+#: admin/vtprd-rules-ui.php:922
 msgid "How is the Get"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:987
+#: admin/vtprd-rules-ui.php:968
 msgid "limit on the Get Group"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1022
+#: admin/vtprd-rules-ui.php:1003
 msgid "How many times may the Get Group be"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1025
+#: admin/vtprd-rules-ui.php:1006
 msgid "used (after Buy Group satisfied)?"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1049
-#: woo-integration/vtprd-parent-functions.php:1765
-#: woo-integration/vtprd-parent-functions.php:2430
-#: woo-integration/vtprd-parent-functions.php:2646
+#: admin/vtprd-rules-ui.php:1030
+#: woo-integration/vtprd-parent-functions.php:1821
+#: woo-integration/vtprd-parent-functions.php:2512
+#: woo-integration/vtprd-parent-functions.php:2744
 msgid "Discount Amount"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1070
+#: admin/vtprd-rules-ui.php:1051
 msgid "units "
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1070
+#: admin/vtprd-rules-ui.php:1051
 msgid " For the Price of "
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1075 admin/vtprd-rules-update.php:1024
+#: admin/vtprd-rules-ui.php:1056 admin/vtprd-rules-update.php:1024
 #: admin/vtprd-rules-update.php:1113
 msgid " units"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1095
+#: admin/vtprd-rules-ui.php:1076
 msgid "What kind of Discount is offered,"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1098
+#: admin/vtprd-rules-ui.php:1079
 msgid "and in what amount?"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1129
+#: admin/vtprd-rules-ui.php:1110
 msgid "How is the Discount "
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1132
+#: admin/vtprd-rules-ui.php:1113
 msgid "Amount counted?"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1154
+#: admin/vtprd-rules-ui.php:1135
 msgid "Discount Messages:"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1161
+#: admin/vtprd-rules-ui.php:1142
 msgid "Checkout Message"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1174
+#: admin/vtprd-rules-ui.php:1155
 msgid "Checkout Message shows only "
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1177
+#: admin/vtprd-rules-ui.php:1158
 msgid "for Cart Deals (not Catalog)"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1192
+#: admin/vtprd-rules-ui.php:1173
 msgid "Advertising Message"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1204
+#: admin/vtprd-rules-ui.php:1185
 msgid "Can be shown in your Website using"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1207 admin/vtprd-show-help-functions.php:2918
+#: admin/vtprd-rules-ui.php:1188 admin/vtprd-show-help-functions.php:2918
 #: admin/vtprd-show-help-functions.php:3975
 msgid "Shortcodes"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1210
+#: admin/vtprd-rules-ui.php:1191
 msgid "Shortcode Examples"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1234
+#: admin/vtprd-rules-ui.php:1215
 msgid "Discount Limits:"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1254
+#: admin/vtprd-rules-ui.php:1235
 msgid "Customer"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1254
+#: admin/vtprd-rules-ui.php:1235
 msgid "Rule Limit"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1287
+#: admin/vtprd-rules-ui.php:1268
 msgid "Limit by Customer - by Count or"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1290
+#: admin/vtprd-rules-ui.php:1271
 msgid "Discount value - Lifetime of rule"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1300 admin/vtprd-rules-ui.php:1359
-#: admin/vtprd-rules-ui.php:1413
+#: admin/vtprd-rules-ui.php:1281 admin/vtprd-rules-ui.php:1340
+#: admin/vtprd-rules-ui.php:1394
 msgid "Short Message When Max Applied (opt) "
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1321
+#: admin/vtprd-rules-ui.php:1302
 msgid "Cart Limit"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1344
+#: admin/vtprd-rules-ui.php:1325
 msgid "Limit by Cart - by Count or"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1347 admin/vtprd-rules-ui.php:1404
+#: admin/vtprd-rules-ui.php:1328 admin/vtprd-rules-ui.php:1385
 msgid "Discount $$ value or % value"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1377
+#: admin/vtprd-rules-ui.php:1358
 msgid "Product Limit"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1401
+#: admin/vtprd-rules-ui.php:1382
 msgid "Limit by Product - by Count or"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1426
+#: admin/vtprd-rules-ui.php:1407
 msgid "Discount Works Together With:"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1434
+#: admin/vtprd-rules-ui.php:1415
 msgid "Other"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1434
+#: admin/vtprd-rules-ui.php:1415
 msgid "Rule Discounts"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1452
+#: admin/vtprd-rules-ui.php:1433
 msgid "Priority"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1459 admin/vtprd-rules-ui.php:1492
+#: admin/vtprd-rules-ui.php:1440 admin/vtprd-rules-ui.php:1473
 msgid "Does this Rule apply its discount"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1462
+#: admin/vtprd-rules-ui.php:1443
 msgid "in addition to other Rules?"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1475
+#: admin/vtprd-rules-ui.php:1456
 msgid "Other <br>Coupon Discounts"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1495
+#: admin/vtprd-rules-ui.php:1476
 msgid "in addition to other Coupons?"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1508
-#: woo-integration/vtprd-parent-functions.php:1759
+#: admin/vtprd-rules-ui.php:1489
+#: woo-integration/vtprd-parent-functions.php:1815
 msgid "Product"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1508 admin/vtprd-show-help-functions.php:191
+#: admin/vtprd-rules-ui.php:1489 admin/vtprd-show-help-functions.php:191
 msgid "Sale Pricing"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1525
+#: admin/vtprd-rules-ui.php:1506
 msgid "Does this Rule discount apply at all,"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1528
+#: admin/vtprd-rules-ui.php:1509
 msgid "over top or in place of Sale Price?"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1567
+#: admin/vtprd-rules-ui.php:1548
 msgid "Buy Product ID Number"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1567 admin/vtprd-rules-ui.php:1707
+#: admin/vtprd-rules-ui.php:1548 admin/vtprd-rules-ui.php:1697
 msgid "Discount Product ID Number"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1573 admin/vtprd-rules-ui.php:1713
+#: admin/vtprd-rules-ui.php:1554 admin/vtprd-rules-ui.php:1703
 msgid "Product Name"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1583 admin/vtprd-rules-ui.php:1725
+#: admin/vtprd-rules-ui.php:1564 admin/vtprd-rules-ui.php:1715
 msgid "Enter Product ID"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1606 admin/vtprd-rules-ui.php:1748
+#: admin/vtprd-rules-ui.php:1587 admin/vtprd-rules-ui.php:1738
 msgid "Getting Variations ..."
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1612 admin/vtprd-rules-ui.php:1754
+#: admin/vtprd-rules-ui.php:1593 admin/vtprd-rules-ui.php:1744
 msgid "Refresh Variations"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1614 admin/vtprd-rules-ui.php:1756
+#: admin/vtprd-rules-ui.php:1595 admin/vtprd-rules-ui.php:1746
 msgid "Get Variations"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1629 admin/vtprd-rules-ui.php:1766
-#: admin/vtprd-rules-ui.php:2223 admin/vtprd-rules-ui.php:2237
+#: admin/vtprd-rules-ui.php:1610 admin/vtprd-rules-ui.php:1756
+#: admin/vtprd-rules-ui.php:2213 admin/vtprd-rules-ui.php:2227
 msgid "Product Variations"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1644 admin/vtprd-rules-ui.php:1780
+#: admin/vtprd-rules-ui.php:1625 admin/vtprd-rules-ui.php:1770
 msgid "Product Categories"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1653 admin/vtprd-rules-ui.php:1789
+#: admin/vtprd-rules-ui.php:1634 admin/vtprd-rules-ui.php:1779
 msgid "Or"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1655 admin/vtprd-rules-ui.php:1791
+#: admin/vtprd-rules-ui.php:1636 admin/vtprd-rules-ui.php:1781
 #: admin/vtprd-setup-options.php:80 admin/vtprd-setup-options.php:81
 msgid "Pricing Deals Categories"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1682
+#: admin/vtprd-rules-ui.php:1672
+msgid "- And -"
+msgstr ""
+
+#: admin/vtprd-rules-ui.php:1673
 msgid "Logged-in Role"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1821
+#: admin/vtprd-rules-ui.php:1674
+msgid "(optional)"
+msgstr ""
+
+#: admin/vtprd-rules-ui.php:1811
 msgid "How is the Rule applied to the search results?"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1822
+#: admin/vtprd-rules-ui.php:1812
 msgid ""
 "Once we've figured out the population we're working on (cart only or "
 "specified groups),\r\n"
@@ -1754,32 +1781,32 @@ msgid ""
 "          of the rule to a certain number of products?"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1830
+#: admin/vtprd-rules-ui.php:1820
 msgid "Select Rule Application Method"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1844
+#: admin/vtprd-rules-ui.php:1834
 msgid "*Any* applies to a *required*"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1845
+#: admin/vtprd-rules-ui.php:1835
 msgid "Maximum of:"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1847
+#: admin/vtprd-rules-ui.php:1837
 msgid "Products"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1852
+#: admin/vtprd-rules-ui.php:1842
 msgid "Treat the Selected Group as a Single Entity"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1852 admin/vtprd-rules-ui.php:1858
-#: admin/vtprd-rules-ui.php:1864
+#: admin/vtprd-rules-ui.php:1842 admin/vtprd-rules-ui.php:1848
+#: admin/vtprd-rules-ui.php:1854
 msgid "explained"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1853
+#: admin/vtprd-rules-ui.php:1843
 msgid ""
 "Using *All* as your method, you choose to look at all the products from your "
 "cart search results.  That means we add\r\n"
@@ -1787,11 +1814,11 @@ msgid ""
 "the cart, to test against the rule's requirements."
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1858
+#: admin/vtprd-rules-ui.php:1848
 msgid "Each in the Selected Group"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1859
+#: admin/vtprd-rules-ui.php:1849
 msgid ""
 "Using *Each* as your method, we apply the rule to each product from your "
 "cart search results.\r\n"
@@ -1799,11 +1826,11 @@ msgid ""
 "the cart as a whole receives an error message."
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1864
+#: admin/vtprd-rules-ui.php:1854
 msgid "Apply the rule to any Individual Product in the Cart"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1865
+#: admin/vtprd-rules-ui.php:1855
 msgid ""
 "Using *Any*, we can apply the rule to any product in the cart from your cart "
 "search results, similar to *Each*.  However, there is a\r\n"
@@ -1814,111 +1841,111 @@ msgid ""
 "cart based on cart order, up to the maximum limit supplied."
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1869
+#: admin/vtprd-rules-ui.php:1859
 msgid "For example, the rule might be something like:"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1871
+#: admin/vtprd-rules-ui.php:1861
 msgid ""
 "\"You may buy a maximum of $10 for each of any of 2 products from this group."
 "\""
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1889
+#: admin/vtprd-rules-ui.php:1879
 msgid "Plugin"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1889
+#: admin/vtprd-rules-ui.php:1879
 msgid "Documentation"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1891
+#: admin/vtprd-rules-ui.php:1881
 msgid "Back to Top"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1936
+#: admin/vtprd-rules-ui.php:1926
 msgid "Begin Date"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:1940
+#: admin/vtprd-rules-ui.php:1930
 msgid "End Date"
 msgstr ""
 
 #. translators: %s: add new taxonomy label
-#: admin/vtprd-rules-ui.php:2006
+#: admin/vtprd-rules-ui.php:1996
 msgid "+ %s"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2161
+#: admin/vtprd-rules-ui.php:2151
 msgid "No Product ID was supplied."
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2166 admin/vtprd-rules-ui.php:2169
-#: admin/vtprd-rules-ui.php:2178 admin/vtprd-rules-ui.php:2195
-#: admin/vtprd-rules-ui.php:2205
+#: admin/vtprd-rules-ui.php:2156 admin/vtprd-rules-ui.php:2159
+#: admin/vtprd-rules-ui.php:2168 admin/vtprd-rules-ui.php:2185
+#: admin/vtprd-rules-ui.php:2195
 msgid "<br><br>Product ID in error = <span id=\"varProdID-error-ID\">"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2166 admin/vtprd-rules-ui.php:2169
-#: admin/vtprd-rules-ui.php:2178 admin/vtprd-rules-ui.php:2195
-#: admin/vtprd-rules-ui.php:2205
+#: admin/vtprd-rules-ui.php:2156 admin/vtprd-rules-ui.php:2159
+#: admin/vtprd-rules-ui.php:2168 admin/vtprd-rules-ui.php:2185
+#: admin/vtprd-rules-ui.php:2195
 msgid "</span>"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2176
+#: admin/vtprd-rules-ui.php:2166
 msgid "Product ID was not found. >"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2193 admin/vtprd-rules-ui.php:2203
+#: admin/vtprd-rules-ui.php:2183 admin/vtprd-rules-ui.php:2193
 msgid "Product has no Variations. Product Name = "
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2193 admin/vtprd-rules-ui.php:2203
+#: admin/vtprd-rules-ui.php:2183 admin/vtprd-rules-ui.php:2193
 msgid "<br><br> Please use \"Single Product Only\" option, above."
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2254 admin/vtprd-rules-ui.php:2256
+#: admin/vtprd-rules-ui.php:2244 admin/vtprd-rules-ui.php:2246
 msgid "Pricing Deals: Product Include or Exclude"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2256
+#: admin/vtprd-rules-ui.php:2246
 msgid "(Available with the Pro plugin)"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2285
+#: admin/vtprd-rules-ui.php:2275
 msgid "Pricing Deals Include or Exclude"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2286
+#: admin/vtprd-rules-ui.php:2276
 msgid "Product Include or Exclude"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2289
+#: admin/vtprd-rules-ui.php:2279
 msgid "*Include or Exclude Product*"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2289
+#: admin/vtprd-rules-ui.php:2279
 msgid ""
 " in Pricing Deals Rule processing, based on the Options and Rule List below"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2291
+#: admin/vtprd-rules-ui.php:2281
 msgid "Product Options:"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2304
+#: admin/vtprd-rules-ui.php:2294
 msgid "These selections do not "
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2304
+#: admin/vtprd-rules-ui.php:2294
 msgid "force"
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2305
+#: admin/vtprd-rules-ui.php:2295
 msgid " the product into a rule.  "
 msgstr ""
 
-#: admin/vtprd-rules-ui.php:2305
+#: admin/vtprd-rules-ui.php:2295
 msgid ""
 "Inclusion only applies if the product naturally falls\r\n"
 "                into the specified rule populations already."
@@ -2637,7 +2664,7 @@ msgid "Unit Price Discount"
 msgstr ""
 
 #: admin/vtprd-setup-options.php:515
-msgid "or Coupon Discount?"
+msgid "or Coupon Discount"
 msgstr ""
 
 #: admin/vtprd-setup-options.php:520 admin/vtprd-setup-options.php:534
@@ -2655,7 +2682,7 @@ msgid "Show original Unit Price "
 msgstr ""
 
 #: admin/vtprd-setup-options.php:549
-msgid "Crossed Out in the Cart? "
+msgid "Crossed Out in the Cart "
 msgstr ""
 
 #: admin/vtprd-setup-options.php:555
@@ -6576,15 +6603,15 @@ msgid ""
 "JS and JQuery resources.  Thanks for using the Pricing Deals plugin."
 msgstr ""
 
-#: core/vtprd-apply-rules.php:1682
+#: core/vtprd-apply-rules.php:1824
 msgid "Discount Applied"
 msgstr ""
 
-#: core/vtprd-apply-rules.php:2377
+#: core/vtprd-apply-rules.php:2524
 msgid " \""
 msgstr ""
 
-#: core/vtprd-apply-rules.php:2379
+#: core/vtprd-apply-rules.php:2526
 msgid "\"  "
 msgstr ""
 
@@ -6686,97 +6713,93 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: vt-pricing-deals.php:574
+#: vt-pricing-deals.php:598
 msgid "Varktech Pricing Deals for WooCommerce has been updated / activated."
 msgstr ""
 
-#: vt-pricing-deals.php:575
+#: vt-pricing-deals.php:599
 msgid ""
 "Please Re-Activate  ** Varktech Pricing Deals PRO for WooCommerce **, if "
 "desired."
 msgstr ""
 
-#: vt-pricing-deals.php:592
+#: vt-pricing-deals.php:616
 msgid "Please also update plugin: "
 msgstr ""
 
-#: vt-pricing-deals.php:593
+#: vt-pricing-deals.php:617
 msgid "Your Pro Version = "
 msgstr ""
 
-#: vt-pricing-deals.php:593
-msgid " The Minimum Required Pro Version = "
+#: vt-pricing-deals.php:617
+msgid " The minimum required Pro Version = "
 msgstr ""
 
-#: vt-pricing-deals.php:594
+#: vt-pricing-deals.php:618
 msgid ""
 "Please delete the old Pro plugin from your installation (no rules will be "
 "affected)."
 msgstr ""
 
-#: vt-pricing-deals.php:595
+#: vt-pricing-deals.php:619
 msgid ""
 "Use your original download credentials, or your name and email address, and"
 msgstr ""
 
-#: vt-pricing-deals.php:596
+#: vt-pricing-deals.php:620
 msgid "Go to "
 msgstr ""
 
-#: vt-pricing-deals.php:598
+#: vt-pricing-deals.php:622
 msgid ", download and install the newest <strong>"
 msgstr ""
 
-#: vt-pricing-deals.php:613
+#: vt-pricing-deals.php:639
 msgid ""
 "In order for the \"Pricing Deals\" plugin to function successfully, the Woo "
 "Coupons Setting must be on, and it is currently off."
 msgstr ""
 
-#: vt-pricing-deals.php:614 woo-integration/vtprd-parent-functions.php:4127
+#: vt-pricing-deals.php:640 woo-integration/vtprd-parent-functions.php:4321
 msgid ""
 "Please go to the Woocommerce/Settings page.  Under the \"Checkout\" tab, "
 "check the box next to \"Enable the use of coupons\" and click on the \"Save "
 "Changes\" button."
 msgstr ""
 
-#: vt-pricing-deals.php:642
+#: vt-pricing-deals.php:668
 msgid "Settings"
 msgstr ""
 
-#: vt-pricing-deals.php:643
+#: vt-pricing-deals.php:669
 msgid "Docs"
 msgstr ""
 
-#: vt-pricing-deals.php:753
+#: vt-pricing-deals.php:779
 msgid "Wholesale Buyer"
 msgstr ""
 
-#: vt-pricing-deals.php:754
+#: vt-pricing-deals.php:780
 msgid "Wholesale Tax Free"
 msgstr ""
 
-#: woo-integration/vtprd-parent-cart-validation.php:300
+#: woo-integration/vtprd-parent-cart-validation.php:311
 msgid "Purchase error found."
 msgstr ""
 
-#: woo-integration/vtprd-parent-cart-validation.php:1248
-msgid "Free!"
-msgstr ""
-
-#: woo-integration/vtprd-parent-cart-validation.php:2083
+#: woo-integration/vtprd-parent-cart-validation.php:2413
 msgid "Coupon code applied successfully."
 msgstr ""
 
-#: woo-integration/vtprd-parent-cart-validation.php:2631
+#: woo-integration/vtprd-parent-cart-validation.php:2987
 msgid "Discount Quantity"
 msgstr ""
 
-#: woo-integration/vtprd-parent-cart-validation.php:2647
+#: woo-integration/vtprd-parent-cart-validation.php:3003
 msgid "Total Shipping:"
 msgstr ""
 
-#: woo-integration/vtprd-parent-cart-validation.php:2814
+#: woo-integration/vtprd-parent-cart-validation.php:3172
 msgid "Pricing Deal Discount"
 msgstr ""
 
@@ -6800,165 +6823,165 @@ msgstr ""
 msgid "Get 10% off Laptops Today! (sample)"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:545
+#: woo-integration/vtprd-parent-functions.php:577
 msgid "One of these are on Sale"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:548
+#: woo-integration/vtprd-parent-functions.php:580
 msgid "Some of these are on Sale"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:1452
+#: woo-integration/vtprd-parent-functions.php:1508
 msgid "Discounts"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:1644
+#: woo-integration/vtprd-parent-functions.php:1700
 msgid "(ex. VAT)"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:1761
+#: woo-integration/vtprd-parent-functions.php:1817
 msgid "Discount Qty"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:1767
-#: woo-integration/vtprd-parent-functions.php:1878
-#: woo-integration/vtprd-parent-functions.php:2432
-#: woo-integration/vtprd-parent-functions.php:2648
+#: woo-integration/vtprd-parent-functions.php:1823
+#: woo-integration/vtprd-parent-functions.php:1936
+#: woo-integration/vtprd-parent-functions.php:2514
+#: woo-integration/vtprd-parent-functions.php:2746
 msgid "Discount"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:1767
-#: woo-integration/vtprd-parent-functions.php:2297
-#: woo-integration/vtprd-parent-functions.php:2432
-#: woo-integration/vtprd-parent-functions.php:2648
+#: woo-integration/vtprd-parent-functions.php:1823
+#: woo-integration/vtprd-parent-functions.php:2379
+#: woo-integration/vtprd-parent-functions.php:2514
+#: woo-integration/vtprd-parent-functions.php:2746
 msgid "( in Unit Price )"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:2105
-#: woo-integration/vtprd-parent-functions.php:2426
-#: woo-integration/vtprd-parent-functions.php:2641
+#: woo-integration/vtprd-parent-functions.php:2170
+#: woo-integration/vtprd-parent-functions.php:2508
+#: woo-integration/vtprd-parent-functions.php:2739
 msgid "Discount Product"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:2106
-#: woo-integration/vtprd-parent-functions.php:2642
+#: woo-integration/vtprd-parent-functions.php:2171
+#: woo-integration/vtprd-parent-functions.php:2740
 msgid "Quantity"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:2107
+#: woo-integration/vtprd-parent-functions.php:2172
 msgid "Amount"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:2113
+#: woo-integration/vtprd-parent-functions.php:2178
 msgid "Discounts "
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:2168
+#: woo-integration/vtprd-parent-functions.php:2233
 msgid "Coupon Discount"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:2172
+#: woo-integration/vtprd-parent-functions.php:2237
 msgid "Coupon Discount: "
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:2287
+#: woo-integration/vtprd-parent-functions.php:2369
 msgid "Product: "
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:2289
+#: woo-integration/vtprd-parent-functions.php:2371
 msgid " Discount Units: "
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:2295
+#: woo-integration/vtprd-parent-functions.php:2377
 msgid " Discount Amount: "
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:2297
+#: woo-integration/vtprd-parent-functions.php:2379
 msgid "  Discount"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:2421
+#: woo-integration/vtprd-parent-functions.php:2503
 msgid "Cart Discount Details"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:3410
+#: woo-integration/vtprd-parent-functions.php:3523
 msgid ""
 "Message from Pricing Deals Plugin => WooCommerce setting \"Enable the use of "
 "coupons\" checkbox must be checked, as Pricing Deal cart discounts are "
 "applied using the coupon system."
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:3412
+#: woo-integration/vtprd-parent-functions.php:3525
 msgid "\"Enable the use of coupons\" reset to Checked."
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:3966
+#: woo-integration/vtprd-parent-functions.php:4077
 msgid "Pricing Deals User Tax Free"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:3970
+#: woo-integration/vtprd-parent-functions.php:4081
 msgid "User Transactions are Tax-Free"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:4061
+#: woo-integration/vtprd-parent-functions.php:4255
 msgid ""
 "Looks like you're running an older version of WordPress, you need to be "
 "running at least WordPress 3.3 to use the Varktech Pricing Deals plugin."
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:4062
+#: woo-integration/vtprd-parent-functions.php:4256
 msgid "Current Wordpress Version = "
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:4074
+#: woo-integration/vtprd-parent-functions.php:4268
 msgid ""
 "Looks like you're running an older version of PHP.   - your PHP version = "
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:4075
+#: woo-integration/vtprd-parent-functions.php:4269
 msgid ""
 "You need to be running **at least PHP version 5** to use this plugin. Please "
 "contact your host and request an upgrade to PHP 5+ .  Once that has been "
 "installed, you can activate this plugin."
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:4091
+#: woo-integration/vtprd-parent-functions.php:4285
 msgid ""
 "Looks like you're running an older version of WooCommerce. You need to be "
 "running at least ** WooCommerce 2.0 **, to use the Varktech Pricing Deals "
 "plugin"
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:4092
+#: woo-integration/vtprd-parent-functions.php:4286
 msgid "Your current WooCommerce version = "
 msgstr ""
 
-#: woo-integration/vtprd-parent-functions.php:4126
+#: woo-integration/vtprd-parent-functions.php:4320
 msgid ""
 "In order for the \"Pricing Deals\" plugin to function successfully when the "
 "\"Coupon Discount\" setting is selected, the Woo Coupons Setting must be on, "
 "and it is currently off."
 msgstr ""
 
-#: woo-integration/vtprd-parent-theme-functions.php:1100
+#: woo-integration/vtprd-parent-theme-functions.php:1233
 msgid "Old Price: %s"
 msgstr ""
 
-#: woo-integration/vtprd-parent-theme-functions.php:1101
+#: woo-integration/vtprd-parent-theme-functions.php:1234
 msgid "Price: %s"
 msgstr ""
 
-#: woo-integration/vtprd-parent-theme-functions.php:1103
+#: woo-integration/vtprd-parent-theme-functions.php:1236
 msgid "You save: %s"
 msgstr ""
 
-#: woo-integration/vtprd-parent-theme-functions.php:1251
-#: woo-integration/vtprd-parent-theme-functions.php:1258
+#: woo-integration/vtprd-parent-theme-functions.php:1384
+#: woo-integration/vtprd-parent-theme-functions.php:1391
 msgid "Old Price"
 msgstr ""
 
-#: woo-integration/vtprd-parent-theme-functions.php:1328
-#: woo-integration/vtprd-parent-theme-functions.php:1335
+#: woo-integration/vtprd-parent-theme-functions.php:1461
+#: woo-integration/vtprd-parent-theme-functions.php:1468
 msgid "You save"
 msgstr ""
 
@@ -6966,9 +6989,9 @@ msgstr ""
 msgid "VarkTech Pricing Deals for WooCommerce"
 msgstr ""
 
-#. #-#-#-#-#  plugin.pot (VarkTech Pricing Deals for WooCommerce 1.0.9.3)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (VarkTech Pricing Deals for WooCommerce 1.1.0.6)  #-#-#-#-#
 #. Plugin URI of the plugin/theme
-#. #-#-#-#-#  plugin.pot (VarkTech Pricing Deals for WooCommerce 1.0.9.3)  #-#-#-#-#
+#. #-#-#-#-#  plugin.pot (VarkTech Pricing Deals for WooCommerce 1.1.0.6)  #-#-#-#-#
 #. Author URI of the plugin/theme
 msgid "http://varktech.com"
 msgstr ""
