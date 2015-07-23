@@ -1746,7 +1746,7 @@ h4#vtprd-test-warning {font-size:1.2em;color:#222222;letter-spacing: 0.02em;}
 	padding:6px 15px; /*changed*/
 	text-decoration:none;
 	/*text-shadow:1px 1px 0px #aade7c; */
-
+  width: 90%; /* v1.1.0.7 */
 }
 
 #upgrade-title-area .buy-button:hover {

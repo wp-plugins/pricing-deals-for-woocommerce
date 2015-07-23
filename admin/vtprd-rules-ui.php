@@ -19,12 +19,15 @@ class VTPRD_Rules_UI{
 
     add_action( 'add_meta_boxes_vtprd-rule', array($this, 'vtprd_remove_all_in_one_seo_aiosp') ); 
     
+    
     //AJAX actions
     //   uses the action name from the js....
     add_action( 'wp_ajax_vtprd_ajax_load_variations_in',         array(&$this, 'vtprd_ajax_load_variations_in') ); 
     add_action( 'wp_ajax_vtprd_ajax_load_variations_out',        array(&$this, 'vtprd_ajax_load_variations_out') );
     add_action( 'wp_ajax_noprov_vtprd_ajax_load_variations_in',  array(&$this, 'vtprd_ajax_load_variations_in') );      
-    add_action( 'wp_ajax_noprov_vtprd_ajax_load_variations_out', array(&$this, 'vtprd_ajax_load_variations_out') );     
+    add_action( 'wp_ajax_noprov_vtprd_ajax_load_variations_out', array(&$this, 'vtprd_ajax_load_variations_out') );         
+          
+    add_action( 'post_submitbox_misc_actions', array( $this, 'vtprd_product_data_visibility' ) ); //v1.1.0.7 
       
     //add a metabox to the **parent product custom post type page**
     //v1.0.7.1 begin  ==>> all in one seo conflicts with this box, don't show when that plugin is active
@@ -47,7 +50,7 @@ class VTPRD_Rules_UI{
         wp_register_script('jquery-qtip', VTPRD_URL.'/admin/js/vtprd.qtip.min.js' );  
         wp_enqueue_script ('jquery-qtip', array('jquery'), false, true);
 
-        wp_register_style ('vtprd-admin-style', VTPRD_URL.'/admin/css/vtprd-admin-style-v002.css' );  //v1.1
+        wp_register_style ('vtprd-admin-style', VTPRD_URL.'/admin/css/vtprd-admin-style-' .VTPRD_ADMIN_CSS_FILE_VERSION. '.css' );  //v1.1.0.7
         wp_enqueue_style  ('vtprd-admin-style');
         
         wp_register_script('vtprd-admin-script', VTPRD_URL.'/admin/js/vtprd-admin-script-v002.js' );  //v1.1
@@ -104,8 +107,32 @@ class VTPRD_Rules_UI{
       } 
  
   }
- 
-        
+         
+  //v1.1.0.7  New Function - 
+  //    add wholesale Product tickbox in PUBLISH metabox for Parent Product
+  public  function vtprd_product_data_visibility() {
+      global $post, $vtprd_info, $vtprd_rule, $vtprd_rules_set;        
+
+      //only do this for PRODUCT
+      if( get_post_type() != $vtprd_info['parent_plugin_cpt'] ){  
+        return;
+      } 
+      
+      $current_visibility = get_post_meta( $post->ID, 'vtprd_wholesale_visibility', true );
+      
+      ?> 
+      &nbsp; &nbsp; 
+      <span id="vtprd-wholesale">
+      <label class="selectit vtprd-wholesale-visibility-label">
+        <input id="vtprd-wholesale-visibility" class="vtprd-wholesale-visibility-class" name="vtprd-wholesale-visibility" value="yes" <?php if ($current_visibility == 'yes'){echo ' checked="checked" ';} ?>  type="checkbox">
+        <strong>&nbsp; <?php _e('Wholesale Product', 'vtprd') ?></strong>
+      </label>
+      </span>
+      <?php 
+      
+      return;
+  }
+          
   public  function vtprd_add_metaboxes() {
       global $post, $vtprd_info, $vtprd_rule, $vtprd_rules_set;        
 
@@ -2246,7 +2273,9 @@ class VTPRD_Rules_UI{
         $metabox_title =  __('Pricing Deals: Product Include or Exclude', 'vtprd') . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . __('(Available with the Pro plugin)', 'vtprd') ;
       }
       
-      add_meta_box('vtprd-pricing-deal-info', $metabox_title , array(&$this, 'vtprd_add_parent_product_meta_box'), $vtprd_info ['parent_plugin_cpt'], 'normal', 'low');                           
+      add_meta_box('vtprd-pricing-deal-info', $metabox_title , array(&$this, 'vtprd_add_parent_product_meta_box'), $vtprd_info ['parent_plugin_cpt'], 'normal', 'low');
+
+                        
   }                   
   /*
   // *********************************************************

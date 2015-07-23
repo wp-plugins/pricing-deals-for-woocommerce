@@ -443,6 +443,16 @@ if  ($vtprd_cart_item->db_unit_price_special <= 0 ) {
       ***  fill in include/exclude arrays if selected on the PRODUCT Screen (parent plugin)
       ************************************ */
       //v1.0.7.6 TEMPORARY removal
+
+      //v1.1.0.7 begin        
+      if ( ($vtprd_cart_item->db_unit_price_special != null) && 
+           ($vtprd_cart_item->db_unit_price_special >= 0) &&
+           ($vtprd_cart_item->db_unit_price_special < $vtprd_cart_item->db_unit_price_list ) ) {
+      //v1.1.0.4 end
+          $vtprd_cart_item->product_is_on_special = 'yes';
+      
+      }
+      //v1.1.0.7 end 
       
       $vtprd_includeOrExclude_meta  = get_post_meta($use_this_id, $vtprd_info['product_meta_key_includeOrExclude'], true);   //v1.0.7.8  exclusions are on the Parent!
          
@@ -1441,7 +1451,7 @@ error_log( print_r(  'product_session_info= ' , true ) );
     }
     
     //check role-level tax exemption (plugin-specific role capability)
-    if ( current_user_can( 'buy_tax_free', $user_id ) ) {
+    if ( current_user_can( 'buy_tax_free', $current_user->ID, ) ) {
        $vtprd_info['user_is_tax_exempt']  =  true;
     }
 
@@ -3584,6 +3594,7 @@ error_log( print_r(  'product_session_info= ' , true ) );
   
   //v1.0.7 change
   function vtprd_debug_options(){     
+ 
     global $vtprd_setup_options;
     if ( ( isset( $vtprd_setup_options['debugging_mode_on'] )) &&
          ( $vtprd_setup_options['debugging_mode_on'] == 'yes' ) ) {  
@@ -3602,7 +3613,8 @@ error_log( print_r(  'product_session_info= ' , true ) );
       global $woocommerce;
       $woocommerce = WC();
     }
-    //v1.0.7.8 end            
+    //v1.0.7.8 end  
+              
   }
   
   //****************************************
@@ -4063,29 +4075,41 @@ error_log( print_r(  'product_session_info= ' , true ) );
     return $apply_before_tax;
   }
         
-      //v1.0.9.0  begin
-      add_action( 'show_user_profile', 'vtprd_my_show_extra_profile_fields' );
-      add_action( 'edit_user_profile', 'vtprd_my_show_extra_profile_fields' );
-      
-      function vtprd_my_show_extra_profile_fields( $user ) { 
-      
-      		if ( current_user_can( 'edit_user', $user->ID ) ) {
-      			?>
-      				<table class="form-table">
-      					<tbody>
-      						<tr>
-      							<th><label for="vtprd_user_is_tax_exempt"><?php _e( 'Pricing Deals User Tax Free', 'vtprd' ); ?></label></th>
-      							<td>
-      								<?php //if ( empty( $user->woocommerce_api_consumer_key ) ) : ?>
-      									<input name="vtprd_user_is_tax_exempt" type="checkbox" id="vtprd_user_is_tax_exempt" value="0" />
-      									<span class="description"><?php _e( 'User Transactions are Tax-Free', 'vtprd' ); ?></span>
-      							</td>
-      						</tr>
-      					</tbody>
-      				</table>
-      			<?php
-      		}
-      }
+    //****************************************  
+    //v1.0.9.0  begin
+    // new functions
+    //****************************************
+    add_action( 'show_user_profile', 'vtprd_my_show_extra_profile_fields' );
+    add_action( 'edit_user_profile', 'vtprd_my_show_extra_profile_fields' );
+    
+    function vtprd_my_show_extra_profile_fields( $user ) { 
+       		
+        if ( current_user_can( 'edit_user', $user->ID ) ) {
+    			//v1.1.0.7 begin
+          global $current_user;
+          if (get_user_meta( $current_user->ID, 'vtprd_user_is_tax_exempt', true ) == 'yes') {
+            $checked =  ' checked="checked" ';
+          } else {
+            $checked =  '';
+          }
+          //v1.1.0.7 end
+          ?>
+    				<table class="form-table">
+    					<tbody>
+    						<tr>
+    							<th><label for="vtprd_user_is_tax_exempt"><?php _e( 'Pricing Deals User Tax Free', 'vtprd' ); ?></label></th>
+    							<td>
+    								<?php //if ( empty( $user->woocommerce_api_consumer_key ) ) : ?>
+    									<input name="vtprd_user_is_tax_exempt" type="checkbox" <?php echo $checked; //v1.1.0.7  ?> id="vtprd_user_is_tax_exempt" value="yes" />
+    									<span class="description"><?php _e( 'User Transactions are Tax-Free', 'vtprd' ); ?></span>
+    							</td>
+    						</tr>
+    					</tbody>
+    				</table>
+    			<?php
+    		}
+        return;
+    }
       
       add_action( 'personal_options_update',  'vtprd_my_save_extra_profile_fields' );
       add_action( 'edit_user_profile_update', 'vtprd_my_save_extra_profile_fields' );
@@ -4095,7 +4119,7 @@ error_log( print_r(  'product_session_info= ' , true ) );
       	if ( !current_user_can( 'edit_user', $user_id ) )
       		return false;
       
-      	update_usermeta( $user_id, 'vtprd_user_is_tax_exempt', $_POST['vtprd_user_is_tax_exempt'] );
+      	update_usermeta( $user_id, 'vtprd_user_is_tax_exempt', $_REQUEST['vtprd_user_is_tax_exempt'] );
       }
       //v1.0.9.0  end
           

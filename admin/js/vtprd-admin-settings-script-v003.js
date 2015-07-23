@@ -525,6 +525,36 @@
           });          
            $("#help55").click(function(){
               $("#help55-text").toggle("slow");                           
+          }); 
+           $("#help56").click(function(){
+              $("#help56-text").toggle("slow");                           
+          });           
+           $("#help57").click(function(){
+              $("#help57-text").toggle("slow");                           
+          });           
+           $("#help58").click(function(){
+              $("#help58-text").toggle("slow");                           
+          });           
+           $("#help59").click(function(){
+              $("#help59-text").toggle("slow");                           
+          });           
+           $("#help60").click(function(){
+              $("#help60-text").toggle("slow");                           
+          }); 
+           $("#help61").click(function(){
+              $("#help61-text").toggle("slow");                           
+          });          
+           $("#help62").click(function(){
+              $("#help62-text").toggle("slow");                           
+          });          
+           $("#help63").click(function(){
+              $("#help63-text").toggle("slow");                           
+          });          
+           $("#help64").click(function(){
+              $("#help64-text").toggle("slow");                           
+          });          
+           $("#help65").click(function(){
+              $("#help65-text").toggle("slow");                           
           });          
           //v1.0.9.3 bend                         
       });  

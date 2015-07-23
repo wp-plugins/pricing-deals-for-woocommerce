@@ -1000,6 +1000,18 @@ function vtprd_initialize_options() {
 	);
 
  	  		
+	add_settings_field(	           //opt54
+		'wholesale_products_display',						// ID used to identify the field throughout the theme
+		__( 'Wholesale Products Display Options', 'vtprd' ),		// The label to the left of the option interface element        
+		array(&$this, 'vtprd_wholesale_products_display_callback'), // The name of the function responsible for rendering the option interface
+		'vtprd_setup_options_page',	// The page on which this option will be displayed
+		'processing_settings_section',			// The name of the section to which this field belongs
+		array(								// The array of arguments to pass to the callback. In this case, just a description.
+			 __( 'Wholesale Products Display Options', 'vtprd' )
+		)
+	);	  
+   
+ /*	  	No Longer USED	
 	add_settings_field(	           //opt47
 		'bogo_auto_add_the_same_product_type',						// ID used to identify the field throughout the theme
 		__( 'BOGO Behavior for Auto Add of Same Product', 'vtprd' ),		// The label to the left of the option interface element        
@@ -1010,7 +1022,7 @@ function vtprd_initialize_options() {
 			 __( 'BOGO Behavior for Auto Add of Same Product', 'vtprd' )
 		)
 	);	  
-  
+*/  
     add_settings_field(	         //opt3
 		'discount_floor_pct_per_single_item',						// ID used to identify the field throughout the theme
 		__( 'Product Discount Max % Override', 'vtprd' ),							// The label to the left of the option interface element
@@ -1317,7 +1329,8 @@ function vtprd_set_default_options() {
           'show_price_suffix' => '',  //opt50
           'show_unit_price_cart_discount_crossout' => 'yes',  //opt51
           'show_unit_price_cart_discount_computation' => 'no',  //opt52
-          'unit_price_cart_savings_message' => __('You Saved ', 'vtprd') .'{cart_save_amount}'  //opt53  shown in cartpage, checkout and thankyou
+          'unit_price_cart_savings_message' => __('You Saved ', 'vtprd') .'{cart_save_amount}',  //opt53  shown in cartpage, checkout and thankyou
+          'wholesale_products_display' =>'',  //opt54  'noAction', 'respective' = show retail to retail, wholesale to wholesale   'wholesaleAll = show retail to retail, wholesale sees all   'normal'
      );
      return $options;
 }
@@ -1407,12 +1420,7 @@ function vtprd_nav_callback() {
                   <a href="#vtprd-catalog-options-anchor" title="Discount Catalog Display"><?php _e('Price Display', 'vtprd'); ?></a>
                   <span>|</span>
                 </li>  
-                
-                <li>
-                  <a href="#vtprd-discount-messaging-anchor" title="Discount Theme Messaging"><?php _e('Messages', 'vtprd'); ?></a>
-                  <span>|</span>
-                </li> 
-                
+
                 <li>
                   <a href="#vtprd-processing-options-anchor" title="Processing Options"><?php _e('Processing Options', 'vtprd'); ?></a>
                   <span>|</span>
@@ -1430,12 +1438,8 @@ function vtprd_nav_callback() {
 
                 <li>
                   <a href="#vtprd-system-buttons-anchor" title="System Buttons"><?php _e('System Buttons', 'vtprd'); ?></a>
-                  <span>|</span>
                 </li>  
-              
-                <li>
-                <a href="#vtprd-plugin-info-anchor" title="Plugin Info"><?php _e('Plugin Info', 'vtprd'); ?></a>
-                </li>  
+               
                 <!-- last li does not have spacer at end... -->          
               </ul> 
       <?php        
@@ -1678,7 +1682,38 @@ function vtprd_use_this_timeZone_callback() {    //opt20
 }
 
 
+function vtprd_wholesale_products_display_callback() {   //opt57
+	$options = get_option( 'vtprd_setup_options' );	
+	$html = '<select id="wholesale_products_display" name="vtprd_setup_options[wholesale_products_display]">';
+	$html .= '<option value="noAction"'      . selected( $options['wholesale_products_display'], 'noAction', false)      . '>'   . __('Show All', 'vtprd') .  '&nbsp;</option>';
+	$html .= '<option value="respective"'    . selected( $options['wholesale_products_display'], 'respective', false)    . '>'   . __('Show Retail Products to Retail, Wholesale products to Wholesale', 'vtprd') . '</option>';
+  $html .= '<option value="wholesaleAll"'  . selected( $options['wholesale_products_display'], 'wholesaleAll', false)  . '>'   . __('Show Retail Products to Retail, All products to Wholesale', 'vtprd') . '</option>';
+	$html .= '</select>';  
+  
 
+  $html .= '<a id="help57" class="help-anchor" href="javascript:void(0);" >'   . __('More Info', 'vtprd') .  '</a>';
+  $html .= '<br><br><strong><em>&nbsp;&nbsp;';
+  $html .= __('(Uses **Wholesale Capability**', 'vtprd');
+  $html .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;';
+  $html .= __('to control display of Retail/Wholesale products  ==>> manage this in your ROLE MANAGER)', 'vtprd');
+  $html .=  '</em></strong>';
+     
+  $html .= '<p id="help57-text" class = "help-text" >'; 
+  $html .= __('Wholesale Product Visibility', 'vtprd') .'<br>';
+  $html .= __('- Product screen now has a "wholesale product" checkbox in the PUBLISH box') .'<br>';
+  $html .= __('- Commbined with this switch, you have complete control over when Retail and Wholesale Products display.
+              Label all of the Wholesale products in the Product screen, then select the appropriate option above.  Wehn a Retail
+              or Wholesale customer views the products, they will receive the list tailored to the selection above.') .'<br>';
+  $html .= '<strong>';   
+  $html .= __('NB => (Not logged in = Retail)');
+  $html .= '</strong>'; 
+  
+  $html .= '</p><br><br>';   
+            
+	echo $html;
+}
+
+/* no longer used!
 function vtprd_bogo_auto_add_the_same_product_type_callback() {    //opt47                                
 	$options = get_option( 'vtprd_setup_options' );	
   $html = '<select id="bogo_auto_add_the_same_product_type" name="vtprd_setup_options[bogo_auto_add_the_same_product_type]">';
@@ -1712,7 +1747,8 @@ function vtprd_bogo_auto_add_the_same_product_type_callback() {    //opt47
   $html .= '</p>';  
   
 	echo $html;
-}	  	
+}	
+*/  	
 
 /*  
 function vtprd_register_under_tools_menu_callback() {   //opt1
@@ -2479,15 +2515,7 @@ function vtprd_discount_taken_where_callback () {    //opt48
   $html .= '</p>';
 
 	echo $html;
-/*  MWNTEST REmove  
-  if ($vtprd_setup_options['discount_taken_where'] == 'discountCoupon') { 
-    //always check if the manually created coupon codes are there - if not create them.
-    vtprd_woo_maybe_create_coupon_types();
-  } 
-      
-  //clear any session variables which could affect things after this update...
-  $this->vtprd_destroy_session(); 
-*/
+
 }
 
 function vtprd_give_more_or_less_discount_callback () {    //opt49
@@ -2608,12 +2636,12 @@ function vtprd_destroy_session() {
       case 'vtprd-rule_page_vtprd_setup_options_page':  
       case 'vtprd-rule_page_vtprd_show_help_page':  
       case 'vtprd-rule_page_vtprd_show_faq_page':              
-        wp_register_style('vtprd-admin-style', VTPRD_URL.'/admin/css/vtprd-admin-style-v002.css' );  //v1.1
+        wp_register_style('vtprd-admin-style', VTPRD_URL.'/admin/css/vtprd-admin-style-' .VTPRD_ADMIN_CSS_FILE_VERSION. '.css' );  //v1.1.0.7
         wp_enqueue_style ('vtprd-admin-style');
         wp_register_style('vtprd-admin-settings-style', VTPRD_URL.'/admin/css/vtprd-admin-settings-style.css' );  
         wp_enqueue_style ('vtprd-admin-settings-style');
-        wp_register_script('vtprd-admin-settings-script-'.VTPRD_FILE_VERSION, VTPRD_URL.'/admin/js/vtprd-admin-settings-script-'.VTPRD_FILE_VERSION.'.js' );  
-        wp_enqueue_script ('vtprd-admin-settings-script-'.VTPRD_FILE_VERSION);
+        wp_register_script('vtprd-admin-settings-script', VTPRD_URL.'/admin/js/vtprd-admin-settings-script-v003.js' );  
+        wp_enqueue_script ('vtprd-admin-settings-script');
       break;
     }
   }    

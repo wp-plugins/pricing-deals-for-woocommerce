@@ -3,7 +3,7 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.1.0.6 
+Version: 1.1.0.7 
 Author: Vark
 Author URI: http://varktech.com
 */
@@ -51,16 +51,17 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.1.0.6');
+		define('VTPRD_VERSION',                               '1.1.0.7');
     define('VTPRD_MINIMUM_PRO_VERSION',                   '1.1.0.6');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2015-07-07');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2015-07-21');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
     define('VTPRD_EARLIEST_ALLOWED_PHP_VERSION',          '5');
     define('VTPRD_PLUGIN_SLUG',                           plugin_basename(__FILE__));
     define('VTPRD_PRO_PLUGIN_NAME',                      'Varktech Pricing Deals Pro for WooCommerce');    //v1.0.7.1
-    define('VTPRD_FILE_VERSION',                          'v002'); //V1.0.9.3  ==> use to FORCE pickup of new JS files and the like - JS actual file must be renamed as well
+    define('VTPRD_ADMIN_CSS_FILE_VERSION',                'v002'); //V1.1.0.7 ==> use to FORCE pickup of new CSS
+    define('VTPRD_ADMIN_JS_FILE_VERSION',                 'v003'); //V1.1.0.7   ==> use to FORCE pickup of new CSS
    
     require_once ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-definitions.php');
             
@@ -556,7 +557,11 @@ class VTPRD_Controller{
       } else {
         add_post_meta($post->ID, $vtprd_info['product_meta_key_includeOrExclude'], $vtprd_includeOrExclude, true);
       }
-
+      
+      //v1.1.0.7 begin
+      //Update from product Publish box checkbox, labeled 'wholesale product'
+      update_post_meta($post->ID, 'vtprd_wholesale_visibility', $_REQUEST['vtprd-wholesale-visibility']);
+      //v1.1.0.7 end
       
   }
  
@@ -784,16 +789,41 @@ class VTPRD_Controller{
 
       If ( !get_role( $wholesale_buyer_role_name ) ) {
     			add_role ('wholesale_buyer', $wholesale_buyer_role_name, $capabilities );    
-    			$role = get_role( 'wholesale_buyer' ); 
-    			$role->add_cap( 'buy_wholesale' );
-      }
+    			$role = get_role( 'wholesale_buyer' );
+          $role->add_cap( 'buy_wholesale' ); 
+    			$role->add_cap( 'wholesale' ); //v1.1.0.7
+      } else { //v1.1.0.7 begin
+    			$role = get_role( 'wholesale_buyer' );
+          $role->add_cap( 'wholesale' );     
+      }  //v1.1.0.7 end
 
       If ( !get_role(  $wholesale_tax_free_role_name ) ) {
     			add_role ('wholesale_tax_free',  $wholesale_tax_free_role_name, $capabilities );    
     			$role = get_role( 'wholesale_tax_free' ); 
     			$role->add_cap( 'buy_tax_free' );
+          $role->add_cap( 'wholesale' ); //v1.1.0.7
+      } else { //v1.1.0.7 begin
+    			$role = get_role( 'wholesale_tax_free' ); 
+          $role->add_cap( 'wholesale' ); 
+      }  //v1.1.0.7 end
+/*
+      //v1.1.0.7 begin
+      $admin = __('administrator' , 'vtprd');
+      If ( get_role(  $admin ) ) {
+        $role = get_role( $admin );
+        $role->add_cap( 'buy_wholesale' );      
+  			$role->add_cap( 'buy_tax_free' );
+        $role->add_cap( 'wholesale' ); 
       }
-
+      $admin = __('admin' , 'vtprd');
+      If ( get_role(  $admin ) ) {
+        $role = get_role( $admin );
+        $role->add_cap( 'buy_wholesale' );      
+  			$role->add_cap( 'buy_tax_free' );
+        $role->add_cap( 'wholesale' ); 
+      }  
+      */    
+      //v1.1.0.7 end
 		}
        
     return;

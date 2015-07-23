@@ -1,10 +1,10 @@
 === Pricing Deals for WooCommerce ===
 Contributors: vark
 Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/
-Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, group pricing, wholesale, membership, role, promotion, bogo
+Tags: dynamic pricing,  WooCommerce, ecommerce, e commerce, e-commerce, commerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
-Tested up to: 4.2.2
-Stable tag: 1.1.0.6
+Tested up to: 4.2.3
+Stable tag: 1.1.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,7 +12,7 @@ Dynamic Pricing, Wholesale Pricing,  BOGO Deals and more - Pricing Deals can do 
 
 == Description ==
 
-Power your store to greater success with pricing deals and sales promotions! Just about any type of pricing deal you can think of, Pricing Deals for WooCommerce is your one-stop shop to accomplish it.
+Power your store to greater success with pricing deals and sales promotions! Just about any type of dynamic Pricing Deal you can think of, Pricing Deals for WooCommerce is your one-stop shop to accomplish it.
 
 = What can you do with Pricing Deals? =
 
@@ -26,15 +26,6 @@ Power your store to greater success with pricing deals and sales promotions! Jus
 *   Product and Variation Pricing
 *   Schedulable
 *   Works with WooCommerce 2.3+
-
-
-= New Features =
-
-*   Create rules by Product + Logged-in Role, or Variation + Logged-in Role (pro).
-*   Show a Cart Rule dynamic discount directly in the Unit Price, or as an automatic Woo Coupon
-     - Select Unit Price discount, and you can show the dynamic discount with or without an original price crossout
-*   Catalog (Wholesale) Pricing Additional Messages - add a message after the price - "Save 25%"
-*   "Wholesale Tax Free" Role now available, as well as a "buy_tax_free" Role Capability
 
 
 = Unparalleled Customer Service =
@@ -136,6 +127,16 @@ The Pro version  gives you incredible control over rule groups - by category, pr
 
 
 
+= New Features =
+
+*   Wholesale product visibility - if product marked as Wholesale, you can set a setting to *not* display the product to Retail customers (see changelog for instructions).
+*   Create rules by Product + Logged-in Role, or Variation + Logged-in Role (pro).
+*   Show a Cart Rule dynamic discount directly in the Unit Price, or as an automatic Woo Coupon
+     - Select Unit Price discount, and you can show the dynamic discount with or without an original price crossout
+*   Catalog (Wholesale) Pricing Additional Messages - add a message after the price - "Save 25%"
+*   "Wholesale Tax Free" Role now available, as well as a "buy_tax_free" Role Capability
+
+
 
 = Additional Plugins by VarkTech.com =
 1. [Wholesale Pricing for WooCommerce](http://wordpress.org/extend/plugins/wholesale-pricing-for-woocommerce) .. (skinnier pricing deals plugin)
@@ -180,6 +181,20 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Changelog ==
+
+= 1.1.0.7 - 2015-07-21 =
+* Fix - User screen tax exempt flag. 
+* Fix - "Discount applied to list price, taken if it is less than sale price" now works with Catalog rules also. 
+* Fix - buy_tax_free capability applied globally...
+* Enhancement - Wholesale Product Visibility (pro):
+		- Product screen now has a 'wholesale product' checkbox in the PUBLISH box
+			- Label all wholesale products as wholesale
+		- Settings Page now has "Wholesale Products Display Options"
+			- Choose the Retail/Wholesale display option you want
+		- Then as each Retail or Wholesale Capability user logs in, they will see
+			- a tailored list (Not logged in = Retail)
+		- NOTE when testing, use the Members plugin to control the new 'wholesale' capability!			
+* Note - Now recommend Members plugin by Justin Tadlock, rather than User Role Editor
 
 = 1.1.0.6 - 2015-07-07 =
 * Fix - Auto add free item function. 
@@ -440,6 +455,20 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.1.0.7 - 2015-07-21 =
+* Fix - User screen tax exempt flag. 
+* Fix - "Discount applied to list price, taken if it is less than sale price" now works with Catalog rules also. 
+* Fix - buy_tax_free capability applied globally...
+* Enhancement - Wholesale Product Visibility (pro):
+		- Product screen now has a 'wholesale product' checkbox in the PUBLISH box
+			- Label all wholesale products as wholesale
+		- Settings Page now has "Wholesale Products Display Options"
+			- Choose the Retail/Wholesale display option you want
+		- Then as each Retail or Wholesale Capability user logs in, they will see
+			- a tailored list (Not logged in = Retail)
+		- NOTE when testing, use the Members plugin to control the new 'wholesale' capability!			
+* Note - Now recommend Members plugin by Justin Tadlock, rather than User Role Editor
 
 = 1.1.0.6 - 2015-07-07 =
 * Fix - Auto add free item function. 

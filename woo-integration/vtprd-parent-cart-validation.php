@@ -122,7 +122,9 @@ class VTPRD_Parent_Cart_Validation {
        add_action('woocommerce_before_calculate_totals',     array(&$this, 'vtprd_maybe_before_calculate_totals'), 10, 1  );
       
       //Pick up the plugin user tax exempt flag/and/or the Role cap "buy_tax_free"   and apply it UNIVERSALLY!! 
-       add_action('woocommerce_init',                        array(&$this, 'vtprd_set_woo_customer_tax_exempt'), 10, 1  );
+       add_action('wp_loaded',                               array(&$this, 'vtprd_set_woo_customer_tax_exempt'), 10  );
+       //add_action('woocommerce_init',                        array(&$this, 'vtprd_set_woo_customer_tax_exempt'), 10  );
+       
        
        //v1.0.9.3  Supply discountUnitPrice crossout
        add_action('woocommerce_cart_item_price',             array(&$this, 'vtprd_maybe_cart_item_price_html'), 10, 3  );
@@ -264,7 +266,7 @@ class VTPRD_Parent_Cart_Validation {
           
      //v1.1.0.3 add crossouts to subtotals when order placed, to order-details and emails
      add_filter('woocommerce_order_formatted_line_subtotal', array( &$this, 'vtprd_maybe_order_formatted_line_subtotal' ), 10,3);
-     
+
     
 	} //end constructor
   
@@ -1508,8 +1510,8 @@ break;
       return $subtotal;    
     } 
   
-    global $wp_query;
-    $page_id = $wp_query->post->ID; 
+    //global $wp_query; //v1.1.0.7
+    //$page_id = $wp_query->post->ID;  //v1.1.0.7
     //if ( get_the_ID () == get_option ( "woocommerce_cart_page_id" ) ) {
     //******
     //DO NOT do subtotal crossoutss on the Cart page product line, already doing the Unit Price crossouts.
@@ -1518,7 +1520,9 @@ break;
  // error_log( print_r(  '$wp_query', true ) );
 // error_log( var_export($wp_query, true ) );
  
-    if ( $page_id == get_option ( "woocommerce_cart_page_id" ) ) {
+    //if ( $page_id == get_option ( "woocommerce_cart_page_id" ) ) { //v1.1.0.7
+    $cart_page = get_option ( "woocommerce_cart_page_id" );    //v1.1.0.7
+    if ( is_page($cart_page)) { //v1.1.0.7
       return $subtotal;    
     }
 
@@ -2036,8 +2040,135 @@ public function vtprd_get_product_catalog_price_add_to_cart( $product_id, $param
     }
 
   } 
- 
-   
+    
+  /* ************************************************
+  ** v1.1.0.7 new function
+  *** PURCHASABLE JUST makes things HAVE NOT PRICE   
+  *************************************************** */
+	public function vtprd_maybe_woocommerce_is_purchasable($purchasable, $product){
+    global $vtprd_setup_options,$current_user; 
+    
+//error_log( print_r(  '$purchasable= ', true ) );
+//error_log( var_export($purchasable, true ) );
+//error_log( print_r(  '$product= ', true ) );
+//error_log( var_export($product, true ) );
+
+   if ( ( $vtprd_setup_options['wholesale_products_display'] == '' ) ||
+        ( $vtprd_setup_options['wholesale_products_display'] == 'noAction' ) ) {
+//error_log( print_r(  'EXIT 001', true ) );        
+      return true;  
+   }
+
+    /*?? Can customer SEE wholesale/retail?
+    	'respective'   ==> 'Show Retail Products to Retail, Wholesale products to Wholesale'
+      'wholesaleAll' ==> 'Show Retail Products to Retail, All products to Wholesale'
+    */     
+    $user_role = vtprd_get_current_user_role();
+    if (($user_role == 'Wholesale Buyer') ||
+        ($user_role == 'Wholesale Tax Free') ||
+        (current_user_can( 'wholesale')) ) {
+       //$customer_is_retail_or_wholesale = 'wholesale'; 
+       if ( $vtprd_setup_options['wholesale_products_display'] == 'respective' ) {
+          $customer_may_see = 'wholesale';
+       } else {
+          $customer_may_see = 'both';            
+       }
+    } else {
+       //$customer_is_retail_or_wholesale = 'retail'; 
+       $customer_may_see = 'retail';   
+    }
+
+    $product_is_wholesale = get_post_meta( $product->id, 'vtprd_wholesale_visibility', true );
+
+    if ($product_is_wholesale == 'yes') {
+      if ( ($customer_may_see == 'wholesale') ||
+           ($customer_may_see == 'both') ) {
+//error_log( print_r(  'EXIT 002', true ) ); 
+        return true;    
+      } else {
+//error_log( print_r(  'EXIT 003', true ) );         
+        return false;
+      }
+    } else {
+      if ( ($customer_may_see == 'retail') ||
+           ($customer_may_see == 'both') ) {
+//error_log( print_r(  'EXIT 004', true ) );            
+        return true;    
+      } else {
+//error_log( print_r(  'EXIT 005', true ) );       
+        return false;
+      }    
+    }
+//error_log( print_r(  'EXIT 006', true ) ); 
+  } 
+    
+  /* ************************************************
+  ** v1.1.0.7 new function
+  ** visible makes things INVISIBLE  
+  *************************************************** */
+	public function vtprd_maybe_woocommerce_is_visible($visible, $id){
+    global $vtprd_setup_options,$current_user; 
+    
+//error_log( print_r(  '$visible= ', true ) );
+//error_log( var_export($visible, true ) );
+//error_log( print_r(  'id= ', true ) );
+//error_log( var_export($id, true ) );
+
+   if ( ( $vtprd_setup_options['wholesale_products_display'] == '' ) ||
+        ( $vtprd_setup_options['wholesale_products_display'] == 'noAction' ) ) {
+//error_log( print_r(  'EXIT 001', true ) );        
+      return true;  
+   }
+
+    /*?? Can customer SEE wholesale/retail?
+    	'respective'   ==> 'Show Retail Products to Retail, Wholesale products to Wholesale'
+      'wholesaleAll' ==> 'Show Retail Products to Retail, All products to Wholesale'
+    */     
+    $user_role = vtprd_get_current_user_role();
+    if (($user_role == 'Wholesale Buyer') ||
+        ($user_role == 'Wholesale Tax Free') ||
+        (current_user_can( 'wholesale')) ) {
+       //$customer_is_retail_or_wholesale = 'wholesale'; 
+       if ( $vtprd_setup_options['wholesale_products_display'] == 'respective' ) {
+          $customer_may_see = 'wholesale';
+       } else {
+          $customer_may_see = 'both';            
+       }
+    } else {
+       //$customer_is_retail_or_wholesale = 'retail'; 
+       $customer_may_see = 'retail';   
+    }
+
+//error_log( print_r(  '$user_role= ' .$user_role, true ) );
+//error_log( print_r(  '$customer_may_see= ' .$customer_may_see, true ) );
+
+    $product_is_wholesale = get_post_meta( $id, 'vtprd_wholesale_visibility', true );
+    
+//error_log( print_r(  '$product_is_wholesale = ' .$product_is_wholesale , true ) );
+
+    if ($product_is_wholesale == 'yes') {
+      if ( ($customer_may_see == 'wholesale') ||
+           ($customer_may_see == 'both') ) {
+//error_log( print_r(  'EXIT 002', true ) ); 
+        return true;    
+      } else {
+//error_log( print_r(  'EXIT 003', true ) );         
+        return false;
+      }
+    } else {
+      if ( ($customer_may_see == 'retail') ||
+           ($customer_may_see == 'both') ) {
+//error_log( print_r(  'EXIT 004', true ) );            
+        return true;    
+      } else {
+//error_log( print_r(  'EXIT 005', true ) );       
+        return false;
+      }    
+    }
+//error_log( print_r(  'EXIT 006', true ) ); 
+  } 
+
+      
   /* ************************************************
   ** Template Tag / Filter -  full_msg_line   => can be accessed by both display and cart rule types    
   *************************************************** */
@@ -3326,10 +3457,24 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
   // v1.0.9.0  New function - set WOO tax exemption flag 
   //********************************************************
 	public function vtprd_set_woo_customer_tax_exempt(){  
-		global $woocommerce, $current_user;
+		global $woocommerce, $current_user, $vtprd_setup_options;    
+     vtprd_debug_options();  //v1.1            
     
-    vtprd_debug_options();  //v1.1
+    //********************
+    //v1.1.0.7 begin  
+    if ( ($vtprd_setup_options['wholesale_products_display'] == '' ) ||
+         ($vtprd_setup_options['wholesale_products_display'] == 'noAction') ) {
+      $skip_this = true;  
+    } else {
+      if(defined('VTPRD_PRO_DIRNAME')) {
+        //add_filter( 'woocommerce_is_purchasable',  array( &$this, 'vtprd_maybe_woocommerce_is_purchasable' ),  10, 2 );
+        add_filter( 'woocommerce_product_is_visible',  array( &$this, 'vtprd_maybe_woocommerce_is_visible' ),  10, 2 ); 
+      }  
+    }
 
+    //v1.1.0.7 end
+    //********************
+     
     if ( (!is_object($woocommerce->customer) ) ||
          (empty( $woocommerce->customer) )     ||
          ($woocommerce->customer->is_vat_exempt() ) ) {   
@@ -3348,8 +3493,8 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
     }
     
     //check role-level tax exemption (plugin-specific role capability)
-    if ( current_user_can( 'buy_tax_free', $user_id ) ) {
-       $woocommerce->customer->is_vat_exempt == true;
+    if ( current_user_can( 'buy_tax_free') ) {
+       $woocommerce->customer->is_vat_exempt = true;
     }    
     
     return;   
