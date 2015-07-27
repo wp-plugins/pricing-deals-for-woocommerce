@@ -187,6 +187,7 @@ Direct support requests can be made here on the support tab, or at the [Support]
 	switch to advanced rule in update process to expose errored field. 
 * Fix - fix to user tax exempt status on User Screen - save to user updated, not user making the update!
 * Enhancement - New Rule Option => Rule Discounts activated by Coupon
+		- http://www.varktech.com/documentation/pricing-deals/introrule/#discount.discountcoupon
 		- A Woocommerce Coupon code may be included on a Pricing Deals Rule 
 		- if the rule has a Woocommerce coupon code included, that rule's discount will only be applied 
 			once the same coupon code is redeemed in the cart.
@@ -197,13 +198,14 @@ Direct support requests can be made here on the support tab, or at the [Support]
 		- Coupon code (Coupon Title) may be entered in the Discount box area at "Discount Coupon Code"
 		- With a Coupon code in the rule, the rule discount will only apply 
 			when the matching Coupon Code is presented in the Cart
-		- http://www.varktech.com/documentation/pricing-deals/introrule/#discount.discountcoupon
+
 
 = 1.1.0.7 - 2015-07-21 =
 * Fix - User screen tax exempt flag. 
 * Fix - "Discount applied to list price, taken if it is less than sale price" now works with Catalog rules also. 
 * Fix - buy_tax_free capability applied globally...
 * Enhancement - Wholesale Product Visibility (pro):
+		- http://www.varktech.com/documentation/pricing-deals/introrule/#rolesetup.productvisibility
 		- Product screen now has a 'wholesale product' checkbox in the PUBLISH box
 			- Label all wholesale products as wholesale
 		- Settings Page now has "Wholesale Products Display Options"
