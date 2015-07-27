@@ -43,6 +43,7 @@ class VTPRD_Parent_Definitions {
     $coupon_code_discount_deal_title  = __('deals', 'vtprd');
     $default_short_msg  =  __('Short checkout message required', 'vtprd');
     $default_full_msg   =  __('Get 10% off Laptops Today! (sample)', 'vtprd');
+    $default_coupon_msg =  __('Optional - Discount applied *only* with Coupon Code', 'vtprd'); //v1.1.0.8
     
     $vtprd_info = array(                                                                    
       	'parent_plugin' => 'woo',
@@ -154,8 +155,8 @@ class VTPRD_Parent_Definitions {
         'default_full_msg'  => $default_full_msg,
         'user_is_tax_exempt'  => '',  //v1.0.9.0
         'product_catalog_price_array' => array (),
-        'previous_auto_add_array' => ''  //v1.1.0.6  added - init to spaces so is_array test can be used
-
+        'previous_auto_add_array' => '',  //v1.1.0.6  added - init to spaces so is_array test can be used
+        'default_coupon_msg'  => $default_coupon_msg //v1.1.0.8
       ); //end vtprd_info      
       
     if ($vtprd_info['purchaser_ip_address'] <= ' ' ) {

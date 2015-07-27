@@ -434,6 +434,14 @@ class VTPRD_Rules_UI_Framework {
                  )
             ),
 
+          //v1.1.0.8          
+          'only_for_this_coupon_name' => array (   
+              'id'    => 'only_for_this_coupon_name',
+              'class'  => 'msg-text',
+              'type'  => 'text',
+              'name'  => 'only_for_this_coupon_name'
+            ),
+            
           //v1.0.9.0            
           'msg_badge_on_off_sw_select' =>  array ( 
               //dropdown select info

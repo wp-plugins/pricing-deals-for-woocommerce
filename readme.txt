@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: dynamic pricing,  WooCommerce, ecommerce, e commerce, e-commerce, commerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 4.2.3
-Stable tag: 1.1.0.7
+Stable tag: 1.1.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -181,6 +181,23 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Changelog ==
+
+= 1.1.0.8 - 2015-07-25 =
+* Fix - Wp-admin Rule editing - if advanced field in error and basic rule showing, 
+	switch to advanced rule in update process to expose errored field. 
+* Fix - fix to user tax exempt status on User Screen - save to user updated, not user making the update!
+* Enhancement - New Rule Option => Rule Discounts activated by Coupon
+		- A Woocommerce Coupon code may be included on a Pricing Deals Rule 
+		- if the rule has a Woocommerce coupon code included, that rule's discount will only be applied 
+			once the same coupon code is redeemed in the cart.
+		- May only be used in a Cart Rule.
+		Directions:
+		- Create a Woocommerce coupon => set to 'Cart Discount' and 'coupon amount' = 0.
+		- In the Pricing Deals rule screen, select 'Advanced Rule' in the Blueprint Area
+		- Coupon code (Coupon Title) may be entered in the Discount box area at "Discount Coupon Code"
+		- With a Coupon code in the rule, the rule discount will only apply 
+			when the matching Coupon Code is presented in the Cart
+		- http://www.varktech.com/documentation/pricing-deals/introrule/#discount.discountcoupon
 
 = 1.1.0.7 - 2015-07-21 =
 * Fix - User screen tax exempt flag. 
@@ -455,6 +472,17 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.1.0.8 - 2015-07-25 =
+* Fix - Wp-admin Rule editing - if advanced field in error and basic rule showing, 
+	switch to advanced to expose errored field. 
+* Fix - fix to user tax exempt status - saved to user updated, not user making the update!
+* Enhancement - New Advanced Rule Option - Rule Discount applies only 
+			when a specific Coupon Code is redeemed for the cart:
+		- Coupon code is entered in the Pricing Deals Rule in the Discount box area (opotional!)
+		- The rule discount will not activate in the Cart for a client purchase, 
+			until the correct coupon code is presented.
+		- Best to use a coupon set to 'Cart Discount' and 'coupon amount' = 0.
 
 = 1.1.0.7 - 2015-07-21 =
 * Fix - User screen tax exempt flag. 

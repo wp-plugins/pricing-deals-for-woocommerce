@@ -196,6 +196,25 @@ wp_die( __('<strong>Looks like</strong>', 'vtmin'), __('VT Minimum Purchase not 
     $sizeof_rules_set = sizeof($vtprd_rules_set);
     for($i=0; $i < $sizeof_rules_set; $i++) {                                                               
 
+      //v1.1.0.8 begin
+      //only activate if coupon presented
+      //in wp-admin, new coupon should be created as a 'cart discount' with a 'coupon amount'.  (just used to activate the rule)
+      if ($vtprd_rules_set[$i]->only_for_this_coupon_name > ' ') {
+        $coupon_found = false;
+        $applied_coupons = WC()->cart->get_coupons();
+        foreach ( $applied_coupons as $code => $coupon ) {
+          if ( $code == $vtprd_rules_set[$i]->only_for_this_coupon_name ) {
+            $coupon_found = true;
+            break;
+          }	        
+        }
+        if (!$coupon_found) {
+          $vtprd_rules_set[$i]->rule_status = 'noCouponFound';
+        }
+      }   
+      //v1.1.0.8 end
+
+      
       //pick up existing invalid rules
       if ( $vtprd_rules_set[$i]->rule_status != 'publish' ) { 
         continue;  //skip out of this for loop iteration
@@ -564,6 +583,20 @@ wp_die( __('<strong>Looks like</strong>', 'vtmin'), __('VT Minimum Purchase not 
       } 
       */     
       //v1.0.8.4 begin  
+
+      //v1.1.0.8 begin
+      //only activate if coupon presented
+      // coupon_activated_discount for later use in parent-cart-validation during remove_coupon, as needed
+      if ( ($vtprd_rules_set[$i]->only_for_this_coupon_name > ' ')  &&
+           ($vtprd_rules_set[$i]->discount_total_amt_for_rule > 0) ) {
+        if(!isset($_SESSION)){
+            session_start();
+            header("Cache-Control: no-cache");
+            header("Pragma: no-cache");
+          }
+          $_SESSION['coupon_activated_discount'] = true;
+      }
+      //v1.1.0.8 end
                   
     }  //ruleset for loop
     return;    

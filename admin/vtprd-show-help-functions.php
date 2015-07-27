@@ -2415,7 +2415,10 @@
         break;        
       case 'discount_rule_cum_max_amt_type':
           echo "http://www.varktech.com/documentation/pricing-deals/introrule/#limits.perproduct";            
-        break;                
+        break; 
+      case 'only_for_this_coupon_name':  //v1.1.0.8
+          echo "http://www.varktech.com/documentation/pricing-deals/introrule/#only.coupon";            
+        break;      
       case 'cumulativeRulePricing':
           echo "http://www.varktech.com/documentation/pricing-deals/introrule/#workingwith.otherrules";            
         break;        
@@ -2569,7 +2572,20 @@
  
           <?php             
         break;
-                           
+          
+      //v1.1.0.8
+      case 'only_for_this_coupon_name':
+          ?>       
+          <!-- only_for_this_coupon_name-->
+          <div class="section">
+            <a name="blueprint.only_for_this_coupon_name" data-type="group"></a><h2>Acivate by Coupon Only</h2>
+            <p class="narrower-paragraph larger-strong">
+                <strong>With a coupon name entered here, the rule can only be activated when this coupon has been redeemed in the order.</strong>             
+            </p>
+          </div>  <!-- //only_for_this_coupon_name--> 
+          <?php             
+        break;
+                                
       case 'rule-type-select':
           ?>  
           
@@ -4142,6 +4158,39 @@
           <?php             
         break;
         
+      //v1.1.0.8 new entry  
+      case 'only_for_this_coupon_name':
+          ?>  
+      
+          <div class="section">
+            <a name="only.coupon" data-type="group"></a><h2>Discount only when This Coupon Code is Presented</h2>
+            <p class="larger-strong">
+                 <strong>When a coupon code is entered in the rule, <br> - the rule discount will not activate in the Cart <br> - until the coupon code is redeemed in the cart.</strong>                                              
+            </p>
+           <p>
+                 <h3 class="subtitle-h3">Coupon Setup: </h3>
+                 <ol class="">
+                    <li><em>Go to Woocommerce/Coupons</em> </strong></li>
+                    <li><em>Click on Add Coupon at top of screen.</em> </strong></li>
+                    <li><em>Enter the Coupon Title (this will be your Coupon Code!!).</em></li>
+                    <li><em>'Discount Type' = Cart Discount.</em></li>
+                    <li><em>'Coupon Amount' = 0.</em></li>
+                    <li><em>Enter what other criteria you desire</em></li>
+                    <li><em>Publish</em></li>
+                 </ol>                                            
+            </p>
+
+
+            <p>
+                Discount Coupon Code &nbsp; is an <em>optional field,</em>&nbsp; available under <em>Advanced Rule.</em>   &nbsp;&nbsp;Default &nbsp;=&nbsp; <b>"[blank]"</b>     
+            </p>            
+                                                              
+          </div> 
+          
+          <?php             
+        break;
+        
+               
         
       case 'cumulativeRulePricing':
           ?>  

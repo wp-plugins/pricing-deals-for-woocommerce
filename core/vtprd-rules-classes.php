@@ -320,6 +320,8 @@ class VTPRD_Rule {
      //******************************************
      public  $shipOnWhichPrice;    //reduced price/original price 
 
+     public  $only_for_this_coupon_name;    //v1.1.0.8  only apply if matching coupon PRESENTED at checkout
+
 /*
      WHAT ABOUT TAXATION?  IF TAXES ARE INCLUDED IN THE PRICING, HOW DOES THAT WORK???
      
@@ -656,7 +658,9 @@ class VTPRD_Rule {
       $this->auto_add_inserted_array = array();
       $this->coupons_amount_without_rule_discounts = 0;  //TOTAL $$ value of USER-ENTERED coupons (only the 0 iteration is used) 
       $this->auto_add_count_for_rule_repeat = 0;  //v1.1.0.6  ==> cleared at begine of each rule repeat
-      $this->auto_add_count_for_rule = 0;   //v1.1.0.6      
+      $this->auto_add_count_for_rule = 0;   //v1.1.0.6 
+      
+      $this->only_for_this_coupon_name = '';    //v1.1.0.8  only apply if matching coupon PRESENTED at checkout     
   } //end function 
     
 } //end class    

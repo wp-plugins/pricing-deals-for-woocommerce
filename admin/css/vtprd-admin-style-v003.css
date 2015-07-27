@@ -218,7 +218,7 @@
                 height: 14px;
                 width: 14px;
             }
-            #maximums_box select {width: 51.5%;} 
+            #maximums_box select {width: 62%;} 
             #cumulativeSalePricing {width:53%;}   
             .blue-dropdown, .get-and-buy-message2 {
                /* background: url("http://demo.varktech.com/wp-content/plugins/pricing-deals-for-wp-e-commerce/admin/images/groupingLine.gif") no-repeat scroll right top transparent;  */
@@ -251,8 +251,9 @@
             .scheduling-label,  .date-line-area {float:left;}
             .date-line-area {margin-top:5px;}
             .scheduling-label {}
-            .date-line {margin-left:2px;} 
+            .date-line {margin-left:2px;width:60%;} 
             .scheduling-group {width: auto; margin-right:0px;}
+            #deal_schedule_comment {margin-top: 22px;margin-left: 0px;} /*v1.1.0.8*/
             #wizard-select-area {float: left; width: auto;margin-left: 20px;}
             #wizard-on-off-sw-select {margin-top:-2px;font-weight: normal;}
             .scheduling-label {margin-bottom:-5px;}
@@ -383,7 +384,7 @@
             .column-width1  {width:260px;}
             .column-width2  {width:420px;}
             .column-width2a {width:418px;}
-            .column-width50  {width:50%;float:left;}
+            .column-width50  {width:60%;float:left;}
             .blue-line-right-column {width:40%;}
            /* .blue-line-right-column2 {width:auto !important;}  */
             #show-all-boxes-checkbox {
@@ -1722,7 +1723,7 @@ h4#vtprd-test-warning {font-size:1.2em;color:#222222;letter-spacing: 0.02em;}
       margin-left:1%;
       margin-top: 12px;      
       color: #21759B;
-      margin-right: 10%;
+      margin-right: 1%;
       font-size: 13px;
       /*  opacity:0.8;
         filter:alpha(opacity=80);*/ /* For IE8 and earlier */       
@@ -2002,7 +2003,7 @@ div#inPop-varProdID-cntl, div#actionPop-varProdID-cntl {
     width: 85%; /*v1.1  */
 }
 #inVarProdID, #outVarProdID {width:100px;}
-#discount_product_short_msg{width:100%;}
+#discount_product_short_msg, #only_for_this_coupon_name{width:100%;}
 
 #maximums_box {max-width:93%;} /*Odd Fix Required...*/
 

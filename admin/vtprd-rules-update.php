@@ -221,10 +221,11 @@ action amt condition can be an amt or $$
     }    
 
     $vtprd_rule->discount_product_full_msg = $_REQUEST['discount_product_full_msg']; 
-    //if default msg, get rid of it!!!!!!!!!!!!!!
+    //if default msg, get rid of it!!!!!!!!!!!!!!  //v1.1.0.8 reworked the IF
+    $vtprd_rule->discount_product_full_msg = stripslashes($vtprd_rule->discount_product_full_msg); //v1.0.9.0
     if ( $vtprd_rule->discount_product_full_msg == $vtprd_info['default_full_msg'] ) {
-       $vtprd_rule->discount_product_full_msg == ' ';
-    }          
+       $vtprd_rule->discount_product_full_msg = ' ';
+    }         
     /* full msg now OPTIONAL
     if ( ($vtprd_rule->discount_product_full_msg <= ' ') || 
          ($vtprd_rule->discount_product_full_msg == $_REQUEST['fullMsg'] )){
@@ -525,6 +526,36 @@ action amt condition can be an amt or $$
        } //end if discountAppliesTo
 
 
+                                                    
+       //v1.1.0.8 begin
+       //only_for_this_coupon_name
+       $vtprd_rule->only_for_this_coupon_name   = $_REQUEST['only_for_this_coupon_name'];
+
+       if ( $vtprd_rule->only_for_this_coupon_name == $vtprd_info['default_coupon_msg'] ) {
+         $vtprd_rule->only_for_this_coupon_name = ' ';     
+       }
+       if ($vtprd_rule->only_for_this_coupon_name > ' ') {
+          vtprd_woo_ensure_coupons_are_allowed();
+		  if ($vtprd_rule->cart_or_catalog_select == 'catalog') {
+            $vtprd_rule->rule_error_message[] = array( 
+                  'insert_error_before_selector' => '#only_for_this_coupon_box_0',  
+                  'error_msg'  => __('Discount Coupon Code option not valid for Catalog rule type - please remove coupon code.', 'vtprd') );
+            $vtprd_rule->rule_error_red_fields[] = '#only_for_this_coupon_anchor';          
+          } else {
+            $coupon = $vtprd_rule->only_for_this_coupon_name;        
+            //from woocommerce/includes/admin/mtea-boxes/views/html-order-items.php
+            $post_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_title = %s AND post_type = 'shop_coupon' AND post_status = 'publish' LIMIT 1;", $coupon ) );
+            
+            if (!$post_id) {
+              $vtprd_rule->rule_error_message[] = array( 
+                    'insert_error_before_selector' => '#only_for_this_coupon_box_0',  
+                    'error_msg'  => __('Discount Coupon Code not found - must be a valid coupon code or blank.', 'vtprd') );
+              $vtprd_rule->rule_error_red_fields[] = '#only_for_this_coupon_anchor';
+            }                     
+          }               
+       }
+       //v1.1.0.8 end
+  
     
       //********************************************************************************************************************
       //The WPSC Realtime Catalog repricing action does not pass variation-level info, so these options are disallowed
@@ -806,6 +837,17 @@ action amt condition can be an amt or $$
     } else {
       $vtprd_rule->rule_status = 'publish';
     }
+    
+    //v1.1.0.8 begin
+    if ( (sizeof($vtprd_rule->rule_error_message) > 0 ) &&
+         ($vtprd_rule->rule_type_select == 'basic') ) {        
+      if ( (in_array('#discount_applies_to_box_0',  $vtprd_rule->rule_error_red_fields)) ||
+           (in_array('#only_for_this_coupon_anchor', $vtprd_rule->rule_error_red_fields)) ) {
+          //can't see the Discount error fields in basic!
+          $vtprd_rule->rule_type_select = 'advanced';
+      }   
+    }
+    //v1.1.0.8 end
 
     $rules_set_found = false;
     $vtprd_rules_set = get_option( 'vtprd_rules_set' ); 

@@ -53,7 +53,7 @@ class VTPRD_Rules_UI{
         wp_register_style ('vtprd-admin-style', VTPRD_URL.'/admin/css/vtprd-admin-style-' .VTPRD_ADMIN_CSS_FILE_VERSION. '.css' );  //v1.1.0.7
         wp_enqueue_style  ('vtprd-admin-style');
         
-        wp_register_script('vtprd-admin-script', VTPRD_URL.'/admin/js/vtprd-admin-script-v002.js' );  //v1.1
+        wp_register_script('vtprd-admin-script', VTPRD_URL.'/admin/js/vtprd-admin-script-' .VTPRD_ADMIN_JS_FILE_VERSION. '.js' );  //v1.1
         //create ajax resource
         wp_localize_script('vtprd-admin-script', 'variationsInAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )  ));        
         //create ajax resource
@@ -253,7 +253,19 @@ class VTPRD_Rules_UI{
       } 
     
       $currency_symbol = vtprd_get_currency_symbol();
-    
+      
+      //v1.1.0.8 begin ==>>  init messages with default value, if blank (cleared out in rules_update )
+      if ($vtprd_rule->discount_product_short_msg <= ' ') {
+        $vtprd_rule->discount_product_short_msg = $vtprd_info['default_short_msg']; 
+      }
+      if ($vtprd_rule->discount_product_full_msg <= ' ') {
+        $vtprd_rule->discount_product_full_msg = $vtprd_info['default_full_msg']; 
+      }
+      if ($vtprd_rule->only_for_this_coupon_name <= ' ') {
+        $vtprd_rule->only_for_this_coupon_name = $vtprd_info['default_coupon_msg']; 
+      }
+      //v1.1.0.8 end
+           
       //**********************************************************************
       //IE CSS OVERRIDES, done here to ensure they're last in line...
       //**********************************************************************
@@ -390,7 +402,8 @@ class VTPRD_Rules_UI{
         
         <?php //pass these two messages up to JS, translated here if necessary ?>
         <input type="hidden" id="fullMsg" name="fullMsg" value="<?php echo $vtprd_info['default_full_msg'];?>" />    
-        <input type="hidden" id="shortMsg" name="shortMsg" value="<?php echo $vtprd_info['default_short_msg'];?>" /> 
+        <input type="hidden" id="shortMsg" name="shortMsg" value="<?php echo $vtprd_info['default_short_msg'];?>" />
+        <input type="hidden" id="couponMsg" name="couponMsg" value="<?php echo $vtprd_info['default_coupon_msg'];?>" />   <?php //v1.1.0.8  ?>
   
         <input id="pluginVersion" type="hidden" value="<?php if(defined('VTPRD_PRO_DIRNAME')) { echo "proVersion"; } else { echo "freeVersion"; } ?>" name="pluginVersion" />  
         <input id="rule_template_framework" type="hidden" value="<?php echo $vtprd_rule->rule_template;  ?>" name="rule_template_framework" />
@@ -512,7 +525,7 @@ class VTPRD_Rules_UI{
                 </span> 
                    
 
-                  <span class="shortIntro"  id="buy_group_filter_comment">
+                  <span class="shortIntro"  id="deal_schedule_comment">
                     <em>
                     <?php _e('Active When?', 'vtprd');?>
                     <br>
@@ -524,7 +537,7 @@ class VTPRD_Rules_UI{
                   </span>                                                      
               </span>      
           </div> <?php //end blue-line ?>
-                
+
           <div class="blue-line  clear-left">
               <span class="left-column">                                                      
                 &nbsp;
@@ -558,7 +571,7 @@ class VTPRD_Rules_UI{
                      
               </span>
           </div> <?php //end blue-line ?>
-                
+    
           <?php //v1.0.9.0 begin  
            $memory = wc_let_to_num( WP_MEMORY_LIMIT );
       
@@ -1146,6 +1159,38 @@ class VTPRD_Rules_UI{
               </span>
           </div><!-- //discount_applies_to_box -->
 
+
+          <?php //v1.1.0.8 New  BOX - only by coupon ;?>  
+          <div class="screen-box only_for_this_coupon_box only_for_this_coupon_box_class<?php echo '_' .$k; ?>" id="only_for_this_coupon_box<?php echo '_' .$k; ?>" >     <?php //Rule repeat shifted to end of action area, although processed first ?> 
+            <span class="left-column">
+                <span class="title  third-level-title  hasWizardHelpRight" id="only_for_this_coupon_title">
+                   <a id="only_for_this_coupon_anchor" class="title-anchors third-level-title" href="javascript:void(0);"><?php _e('Discount Coupon Code', 'vtprd');  //_e('Apply Discount only with', 'vtprd'); echo '<br>'; _e('This Coupon Code', 'vtprd');  // _e('Discount Only with Coupon Code (optional)', 'vtprd'); ?> </a>
+                </span>
+                <?php vtprd_show_object_hover_help ('only_for_this_coupon_name', 'wizard') ?>
+            </span>
+            
+            <span class="dropdown buy_repeat right-column only_for_this_coupon_name-column" id="only_for_this_coupon_name_dropdown">              
+                     <span class="column-width50">
+                         <textarea rows="1" cols="50" id="<?php echo $vtprd_rule_display_framework['only_for_this_coupon_name']['id']; ?>" class="<?php echo $vtprd_rule_display_framework['only_for_this_coupon_name']['class']; ?>  right-column" type="<?php echo $vtprd_rule_display_framework['only_for_this_coupon_name']['type']; ?>" name="<?php echo $vtprd_rule_display_framework['only_for_this_coupon_name']['name']; ?>" ><?php echo $vtprd_rule->only_for_this_coupon_name; ?></textarea>
+                         
+                     </span>              
+                     <span class="shortIntro" >
+                        <em>
+                        <?php _e('Apply Rule Only if Coupon Code', 'vtprd');?>
+                        </em><br>
+                        <em>
+                        <?php _e('is Presented (optional)', 'vtprd');?>
+                        </em>                   
+                      &nbsp;
+                        <img  class="hasHoverHelp2" width="11px" alt=""  src="<?php echo VTPRD_URL;?>/admin/images/help.png" /> 
+                        <?php vtprd_show_object_hover_help ('only_for_this_coupon_name', 'small') ?>
+                     </span>                               
+                               
+                       
+            </span>
+                     
+         </div><!-- //only_for_this_coupon_box-->  
+                            
                   
         </div> <!-- //discount_info -->
   

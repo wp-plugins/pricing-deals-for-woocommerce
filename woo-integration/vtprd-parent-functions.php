@@ -4086,9 +4086,9 @@ error_log( print_r(  'product_session_info= ' , true ) );
        		
         if ( current_user_can( 'edit_user', $user->ID ) ) {
     			//v1.1.0.7 begin
-          global $current_user;
-          if (get_user_meta( $current_user->ID, 'vtprd_user_is_tax_exempt', true ) == 'yes') {
-            $checked =  ' checked="checked" ';
+          //global $current_user; //v1.1.0.8 unnecessary
+          if (get_user_meta( $user->ID, 'vtprd_user_is_tax_exempt', true ) == 'yes') {  //v1.1.0.8 changed to $user->ID
+            $checked =  ' checked="checked" '; 
           } else {
             $checked =  '';
           }

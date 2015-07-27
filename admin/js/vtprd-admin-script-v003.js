@@ -109,15 +109,19 @@ DITTO ie10!!
                                 jQuery('.top-box select #cart-or-catalog-select').css('color', 'grey');
                                 //Set the cursor for the 3 LIMIT switches
                              };
-                              
-                             //If the saved msg = the default, user hasn't entered a msg, make it italic!
+
+                             //If the saved msg = the default, user hasn't entered a msg, make it italic!                             
                              if ($("#discount_product_full_msg").val() == $("#fullMsg").val() ) {
-                               jQuery('#discount_product_full_msg').css('color', '#666 !important').css("font-style","italic");                                                     
+                               jQuery('#discount_product_full_msg').css('color', 'rgb(152, 152, 152) !important').css("font-style","italic");                                                     
                              };                                                          
                              if ($("#discount_product_short_msg").val() == $("#shortMsg").val() ) {
-                               jQuery('#discount_product_short_msg').css('color', '#666 !important').css("font-style","italic");                                                     
+                               jQuery('#discount_product_short_msg').css('color', 'rgb(152, 152, 152) !important').css("font-style","italic");                                                     
+                             };                                
+                              //v1.1.0.8
+                             if ($("#only_for_this_coupon_name").val() == $("#couponMsg").val() ) {
+                               jQuery('#only_for_this_coupon_name').css('color', 'rgb(152, 152, 152) !important').css("font-style","italic");                                                     
                              };  
-                                                                  
+                                                                 
                              //HIDE the FUTURE enhancement UPCHARGE option
                              $("#pricing-type-Upcharge").hide();
                             
@@ -767,6 +771,8 @@ DITTO ie10!!
                               jQuery('.buy_group_title-area').css('opacity', '0.4').css('filter', 'alpha(opacity=40)');
                               jQuery('.get_group_title-area').css('opacity', '0.4').css('filter', 'alpha(opacity=40)');
                               jQuery('#discount_amt_title_0').css('opacity', '0.4').css('filter', 'alpha(opacity=40)');
+                              
+                              $("#only_for_this_coupon_box_0").hide("slow"); //v1.1.0.8
 
                           };
                                                                            
@@ -793,7 +799,9 @@ DITTO ie10!!
                               $("#discount_msgs_title").show("slow"); 
                               jQuery('.buy_group_title-area').css('opacity', '1').css('filter', 'alpha(opacity=100)');
                               jQuery('.get_group_title-area').css('opacity', '1').css('filter', 'alpha(opacity=100)');
-                              jQuery('#discount_amt_title_0').css('opacity', '1').css('filter', 'alpha(opacity=100)');                                  
+                              jQuery('#discount_amt_title_0').css('opacity', '1').css('filter', 'alpha(opacity=100)'); 
+                              
+                              $("#only_for_this_coupon_box_0").show("slow"); //v1.1.0.8                                 
                           };
                                                    
                          //***********************************************
@@ -1217,17 +1225,22 @@ DITTO ie10!!
                               
                               var elem = document.getElementById("discount_product_full_msg");
                               elem.value = $("#fullMsg").val();//hidden field with lit
-                              jQuery('#discount_product_full_msg').css('color', '#666 !important').css("font-style","italic");
+                              jQuery('#discount_product_full_msg').css('color', 'rgb(152, 152, 152) !important').css("font-style","italic");
                               
                               var elem = document.getElementById("discount_product_short_msg");
                               if ( $("#cart-or-catalog-select").val()  ==  "cart" ) {                                 
                                 elem.value = $("#shortMsg").val();//hidden field with lit
-                                jQuery('#discount_product_short_msg').css('color', '#666 !important').css("font-style","italic");
+                                jQuery('#discount_product_short_msg').css('color', 'rgb(152, 152, 152) !important').css("font-style","italic");
                               } else {
                                 //set Checkout Message  =  "Unused for Catalog Discount"
                                 elem.value = $("#catalogCheckoutMsg").val();//hidden field with lit
                               }
                               
+                              //v1.1.0.8
+                              var elem = document.getElementById("only_for_this_coupon_name");
+                              elem.value = $("#couponMsg").val();//hidden field with lit
+                              jQuery('#only_for_this_coupon_name').css('color', 'rgb(152, 152, 152) !important').css("font-style","italic");
+                                                            
                             };                                                      
 
                             function blockAllButSimpleOptions() { 
@@ -1969,7 +1982,8 @@ DITTO ie10!!
            
             //Prompt messages for required fields        
                       	// input on focus  FUNCTION - REMOVE msg so they can type
-                    		jQuery("#discount_product_full_msg[type=text], #discount_product_short_msg[type=text]").focus(function() {
+                    		//v1.1.0.8 update list in jquery stmt
+                        jQuery("#discount_product_full_msg[type=text], #discount_product_short_msg[type=text], #only_for_this_coupon_name[type=text]").focus(function() {
                     			
                      //     var default_value = this.value;			
                     //			if(this.value === default_value) {
@@ -1986,7 +2000,14 @@ DITTO ie10!!
                     				if (this.value === $("#shortMsg").val()) {
                               this.value = '';
                             }
-                    			}                          
+                    			} 
+                          //v1.1.0.8
+                          if (id == 'only_for_this_coupon_name') {
+                    				if (this.value === $("#couponMsg").val()) {
+                              this.value = '';
+                            }
+                    			} 
+                                                   
                     			//jQuery(this).removeClass('blur');
                     			//return css to normal!!
                           jQuery(this).css("color","#000").css("font-style","normal");
@@ -1994,18 +2015,22 @@ DITTO ie10!!
                        
                         
                         //FUNCTION - put msg back if nothing is there!!!
-                    		jQuery("#discount_product_full_msg[type=text], #discount_product_short_msg[type=text]").blur(function() {                    				
+                    		jQuery("#discount_product_full_msg[type=text], #discount_product_short_msg[type=text], #only_for_this_coupon_name[type=text]").blur(function() {                    				
                           var id = jQuery(this).attr('id');
                     			if (id == 'discount_product_full_msg') {
                     				var default_value = $("#fullMsg").val();
                     			} 
                           if (id == 'discount_product_short_msg') {
                     				var default_value = $("#shortMsg").val();
-                    			} 
+                    			}
+                          //v1.1.0.8 
+                          if (id == 'only_for_this_coupon_name') {
+                    				var default_value = $("#couponMsg").val();
+                    			}                           
                     			if(this.value === '') {
                     				this.value = default_value;
-                    			//return css to normal!!
-                          jQuery(this).css("color","#666666").css("font-style","italic");
+                    			//return css to light grey!!
+                          jQuery(this).css("color","rgb(152, 152, 152)").css("font-style","italic");
                     			}                    			
                     		});          
              

@@ -3,7 +3,7 @@
 Plugin Name: VarkTech Pricing Deals for WooCommerce
 Plugin URI: http://varktech.com
 Description: An e-commerce add-on for WooCommerce, supplying Pricing Deals functionality.
-Version: 1.1.0.7 
+Version: 1.1.0.8 
 Author: Vark
 Author URI: http://varktech.com
 */
@@ -51,17 +51,17 @@ class VTPRD_Controller{
       header("Pragma: no-cache");
     } 
     
-		define('VTPRD_VERSION',                               '1.1.0.7');
-    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.1.0.6');
-    define('VTPRD_LAST_UPDATE_DATE',                      '2015-07-21');
+		define('VTPRD_VERSION',                               '1.1.0.8');
+    define('VTPRD_MINIMUM_PRO_VERSION',                   '1.1.0.8');
+    define('VTPRD_LAST_UPDATE_DATE',                      '2015-07-27');
     define('VTPRD_DIRNAME',                               ( dirname( __FILE__ ) ));
     define('VTPRD_URL',                                   plugins_url( '', __FILE__ ) );
     define('VTPRD_EARLIEST_ALLOWED_WP_VERSION',           '3.3');   //To pick up wp_get_object_terms fix, which is required for vtprd-parent-functions.php
     define('VTPRD_EARLIEST_ALLOWED_PHP_VERSION',          '5');
     define('VTPRD_PLUGIN_SLUG',                           plugin_basename(__FILE__));
     define('VTPRD_PRO_PLUGIN_NAME',                      'Varktech Pricing Deals Pro for WooCommerce');    //v1.0.7.1
-    define('VTPRD_ADMIN_CSS_FILE_VERSION',                'v002'); //V1.1.0.7 ==> use to FORCE pickup of new CSS
-    define('VTPRD_ADMIN_JS_FILE_VERSION',                 'v003'); //V1.1.0.7   ==> use to FORCE pickup of new CSS
+    define('VTPRD_ADMIN_CSS_FILE_VERSION',                'v003'); //V1.1.0.8 ==> use to FORCE pickup of new CSS
+    define('VTPRD_ADMIN_JS_FILE_VERSION',                 'v003'); //V1.1.0.8   ==> use to FORCE pickup of new JS
    
     require_once ( VTPRD_DIRNAME . '/woo-integration/vtprd-parent-definitions.php');
             
