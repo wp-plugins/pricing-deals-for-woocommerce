@@ -99,6 +99,7 @@ Pricing Deals is many plugins in one!
 *   Begin date / End date scheduling
 *   Discount info *both* at Checkout and in the Cart Widget for Cart Discounts
 *   Theme *Sales and Promotions Marketing* by displaying the Rule message via shortcode ("One Day Sale!) 
+*   Rule Discounts Activated by Coupon!!
 *   Price reductions can show as the product displays, for display Rule type
 *   "Old Price" and "You Save $$" can show as the product displays (for Catalog discounts)
 *   Audit Trail log of purchases made with Pricing Deal Rule discounts
@@ -117,6 +118,7 @@ The Pro version  gives you incredible control over rule groups - by category, pr
 *   Product-level Deal Exclusion
 *   Per Customer Discount limit
 *   Pricing Deal Custom Categories (a custom Product taxonomy, allowing custom product groups)
+*   Retail / Wholesale Product Visibility control!
 *   and more!
 
 *[Vist the Pro Version](http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/)*
