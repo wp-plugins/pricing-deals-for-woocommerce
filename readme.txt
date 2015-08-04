@@ -3,7 +3,7 @@ Contributors: vark
 Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-discounts-pro/
 Tags: dynamic pricing,  WooCommerce, ecommerce, e commerce, e-commerce, commerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
-Tested up to: 4.2.3
+Tested up to: 4.2.4
 Stable tag: 1.1.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
