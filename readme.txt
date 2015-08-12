@@ -4,7 +4,7 @@ Donate link: http://www.varktech.com/woocommerce/woocommerce-dynamic-pricing-dis
 Tags: dynamic pricing,  WooCommerce, ecommerce, e commerce, e-commerce, commerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, group pricing, wholesale, membership, role, promotion, bogo
 Requires at least: 3.3
 Tested up to: 4.3
-Stable tag: 1.1.0.8
+Stable tag: 1.1.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -183,6 +183,8 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Changelog ==
+= 1.1.0.9 - 2015-08-12 = 
+* Fix - Variation product discount pricing display due to woo 2.4 changes
 
 = 1.1.0.8 - 2015-07-25 =
 * Fix - Wp-admin Rule editing - if advanced field in error and basic rule showing, 
@@ -476,6 +478,9 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.1.0.9 - 2015-08-12 = 
+* Fix - Variation product discount pricing display due to woo 2.4 changes
 
 = 1.1.0.8 - 2015-07-25 =
 * Fix - Wp-admin Rule editing - if advanced field in error and basic rule showing, 
